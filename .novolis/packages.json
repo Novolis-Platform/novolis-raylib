@@ -1,0 +1,14 @@
+{
+  "packages": {
+    "Novolis.Raylib": {
+      "paths": [
+        "src/Novolis.Raylib/**",
+        "tests/**",
+        "Directory.Build.props",
+        "Directory.Packages.props",
+        "global.json"
+      ],
+      "project": "src/Novolis.Raylib/Novolis.Raylib.csproj"
+    }
+  }
+}
