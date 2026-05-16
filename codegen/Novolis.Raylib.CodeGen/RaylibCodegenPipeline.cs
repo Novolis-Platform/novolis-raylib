@@ -25,6 +25,8 @@ internal sealed class RaylibCodegenPipeline
         EmitRayguiInterop();
         EmitDebugHooks();
         EmitFacades();
+        EmitHud();
+        EmitGui();
         return 0;
     }
 
@@ -116,7 +118,7 @@ internal sealed class RaylibCodegenPipeline
 
         foreach (var facadeType in types)
         {
-            var outPath = Path.Combine(RepoPaths.BindingsDir(_repoRoot), facadeType.Folder, $"{facadeType.Name}.g.cs");
+            var outPath = Path.Combine(RepoPaths.RuntimeDir(_repoRoot), facadeType.Folder, $"{facadeType.Name}.g.cs");
             var source = FacadeEmitter.EmitType(facadeType, manifestSha256);
             var context = new RaylibCodegenContext
             {
@@ -132,6 +134,54 @@ internal sealed class RaylibCodegenPipeline
 
             WriteUnit(source, context);
             Console.WriteLine($"Wrote façade {facadeType.Name} to {outPath}");
+        }
+    }
+
+    public void EmitHud()
+    {
+        EmitManifestTypes("hud.manifest.json", "Hud");
+    }
+
+    public void EmitGui()
+    {
+        EmitManifestTypes("gui.manifest.json", "Gui");
+    }
+
+    private void EmitManifestTypes(string manifestFileName, string label)
+    {
+        var manifestPath = Path.Combine(RepoPaths.PipelineDir(_repoRoot), manifestFileName);
+        if (!File.Exists(manifestPath))
+        {
+            Console.WriteLine($"{manifestFileName} not found; skipping {label} emit.");
+            return;
+        }
+
+        var manifestBytes = File.ReadAllBytes(manifestPath);
+        var manifestSha256 = Sha256Hex(manifestBytes);
+        var types = FacadeManifestModels.LoadTypes(manifestPath);
+        var raylibManifestPath = Path.Combine(RepoPaths.PipelineDir(_repoRoot), "raylib-exports.manifest.json");
+        var facadeMethodImpl = File.Exists(raylibManifestPath)
+            ? RaylibManifestModels.LoadInteropPolicy(raylibManifestPath).FacadeMethodImpl
+            : null;
+
+        foreach (var facadeType in types)
+        {
+            var outPath = Path.Combine(RepoPaths.RuntimeDir(_repoRoot), facadeType.Folder, $"{facadeType.Name}.g.cs");
+            var source = FacadeEmitter.EmitType(facadeType, manifestSha256);
+            var context = new RaylibCodegenContext
+            {
+                RepoRoot = _repoRoot,
+                Phase = RaylibCodegenPhase.Facade,
+                OutputPath = outPath,
+                ManifestPath = manifestPath,
+                ManifestSha256 = manifestSha256,
+                RegenerateHint = "dotnet run --project codegen/Novolis.Raylib.CodeGen -- generate",
+                FacadeTypeName = facadeType.Name,
+                FacadeMethodImpl = facadeMethodImpl,
+            };
+
+            WriteUnit(source, context);
+            Console.WriteLine($"Wrote {label} façade {facadeType.Name} to {outPath}");
         }
     }
 

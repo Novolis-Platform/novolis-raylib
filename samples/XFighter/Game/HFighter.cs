@@ -49,7 +49,7 @@ internal sealed class HFighter
     public void Draw(RayGameContext ctx) => DrawInternal(ctx.DrawShipBox, ctx.DrawShipWires, ctx.DrawGlowSphere);
 
     public void DrawHarness() =>
-        DrawInternal(World3D.DrawCubeV, World3D.DrawCubeWiresV, World3D.DrawSphere);
+        DrawInternal(World.DrawCubeV, World.DrawCubeWiresV, World.DrawSphere);
 
     private void DrawInternal(
         Action<Vector3, Vector3, Color> drawBox,

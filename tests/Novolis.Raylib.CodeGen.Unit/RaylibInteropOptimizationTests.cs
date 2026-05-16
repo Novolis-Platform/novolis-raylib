@@ -60,7 +60,7 @@ public sealed class RaylibInteropOptimizationTests
         var graphics = await File.ReadAllTextAsync(Path.Combine(
             root,
             "src",
-            "Novolis.Raylib.Bindings",
+            "Novolis.Raylib.Runtime",
             "Rendering",
             "Graphics.g.cs"));
 

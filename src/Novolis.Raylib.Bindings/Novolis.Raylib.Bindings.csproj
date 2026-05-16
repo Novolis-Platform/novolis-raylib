@@ -11,7 +11,7 @@
     <PackageId>Novolis.Raylib.Bindings</PackageId>
     <IsPackable>true</IsPackable>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <Description>Generated raylib 6 + raygui P/Invoke and façades (manifest-driven; do not hand-edit *.g.cs).</Description>
+    <Description>Generated raylib 6 + raygui P/Invoke (manifest-driven; do not hand-edit Interop/*.g.cs).</Description>
   </PropertyGroup>
 
   <ItemGroup>

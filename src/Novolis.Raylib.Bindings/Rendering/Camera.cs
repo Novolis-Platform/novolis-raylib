@@ -2,8 +2,8 @@ using System.Numerics;
 
 namespace Novolis.Raylib.Rendering;
 
-/// <summary>3D camera (raylib <c>Camera3D</c> layout; no BCL equivalent).</summary>
-public struct Camera3D
+/// <summary>Scene camera (raylib <c>Camera3D</c> layout).</summary>
+public struct Camera
 {
     public Vector3 Position;
     public Vector3 Target;
@@ -11,7 +11,7 @@ public struct Camera3D
     public float Fovy;
     public int Projection;
 
-    public static Camera3D Perspective(Vector3 position, Vector3 target, Vector3 up, float fovyDegrees = 60f) =>
+    public static Camera Perspective(Vector3 position, Vector3 target, Vector3 up, float fovyDegrees = 60f) =>
         new()
         {
             Position = position,

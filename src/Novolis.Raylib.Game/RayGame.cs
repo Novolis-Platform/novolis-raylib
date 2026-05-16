@@ -77,46 +77,46 @@ public sealed class RayGameContext
         _dt = dt;
     }
 
-    public void Clear(Color color) => Graphics.ClearBackground(color);
+    public void Clear(Color color) => Hud.Clear(color);
 
-    public void BeginWorld3D(Camera3D camera) => World3D.Begin(camera);
+    public void BeginWorld(Camera camera) => World.Begin(camera);
 
-    public void EndWorld3D() => World3D.End();
+    public void EndWorld() => World.End();
 
     public void DrawShipBox(Vector3 position, Vector3 size, Color color) =>
-        World3D.DrawCubeV(position, size, color);
+        World.DrawCubeV(position, size, color);
 
     public void DrawShipWires(Vector3 position, Vector3 size, Color color) =>
-        World3D.DrawCubeWiresV(position, size, color);
+        World.DrawCubeWiresV(position, size, color);
 
     public void DrawBolt(Vector3 from, Vector3 to, Color color) =>
-        World3D.DrawLine3D(from, to, color);
+        World.DrawLine(from, to, color);
 
     public void DrawLaserBolt(Vector3 from, Vector3 to, Color color)
     {
-        World3D.DrawLine3D(from, to, color);
+        World.DrawLine(from, to, color);
         var dir = Vector3.Normalize(to - from);
         var mid = from + dir * (Vector3.Distance(from, to) * 0.5f);
-        World3D.DrawSphere(mid, 0.12f, color);
+        World.DrawSphere(mid, 0.12f, color);
     }
 
     public void DrawGlowSphere(Vector3 center, float radius, Color color) =>
-        World3D.DrawSphere(center, radius, color);
+        World.DrawSphere(center, radius, color);
 
     public void DrawGlowSphereWires(Vector3 center, float radius, Color color) =>
-        World3D.DrawSphereWires(center, radius, 8, 12, color);
+        World.DrawSphereWires(center, radius, 8, 12, color);
 
     public void DrawHudTexture(Texture texture, RectangleF dest, Color tint) =>
-        Textures.DrawPro(texture, new RectangleF(0, 0, texture.Width, texture.Height), dest, default, 0f, tint);
+        Hud.DrawTexturePro(texture, new RectangleF(0, 0, texture.Width, texture.Height), dest, default, 0f, tint);
 
     public void HudText(string text, int x, int y, int fontSize, Color color) =>
-        Graphics.DrawText(text, x, y, fontSize, color);
+        Hud.Text(text, x, y, fontSize, color);
 
     public void HudRect(int x, int y, int w, int h, Color color) =>
-        Graphics.DrawRectangle(x, y, w, h, color);
+        Hud.Rect(x, y, w, h, color);
 
     public void HudLine(int x1, int y1, int x2, int y2, Color color) =>
-        Graphics.DrawLine(x1, y1, x2, y2, color);
+        Hud.Line(x1, y1, x2, y2, color);
 
     public bool IsKeyDown(KeyboardKey key) => Input.IsKeyDown(key);
 

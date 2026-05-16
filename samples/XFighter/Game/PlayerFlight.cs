@@ -30,10 +30,10 @@ internal sealed class PlayerFlight
         Position += Forward * (Speed * dt);
     }
 
-    public Camera3D BuildCamera()
+    public Camera BuildCamera()
     {
         var eye = Position + new Vector3(0, 0.35f, 0);
         var target = eye + Forward * 10f;
-        return Camera3D.Perspective(eye, target, new Vector3(0, 1, 0), 72f);
+        return Camera.Perspective(eye, target, new Vector3(0, 1, 0), 72f);
     }
 }

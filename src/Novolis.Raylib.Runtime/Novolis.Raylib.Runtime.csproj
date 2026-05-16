@@ -2,6 +2,7 @@
 
   <Import Project="$(MSBuildThisFileDirectory)..\..\build\Novolis.Raylib.Packaging.props" />
 
+
   <PropertyGroup>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <RootNamespace>Novolis.Raylib</RootNamespace>
@@ -9,7 +10,7 @@
     <PackageId>Novolis.Raylib.Runtime</PackageId>
     <IsPackable>true</IsPackable>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <Description>raylib window shell, logging, debug, and raygui helpers for .NET (hand-crafted; interop is in Novolis.Raylib.Bindings).</Description>
+    <Description>Generated raylib façades, HUD, and GUI; hand-crafted shell, logging, and debug (interop in Novolis.Raylib.Bindings).</Description>
   </PropertyGroup>
 
   <ItemGroup>

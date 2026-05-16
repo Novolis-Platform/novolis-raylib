@@ -190,7 +190,7 @@ internal static class RaylibInteropEmitter
                 break;
             case "void_camera3d":
                 Li(sb, suppress, utf8, policy);
-                sb.AppendLine($"    internal static partial void {name}(Camera3D camera);");
+                sb.AppendLine($"    internal static partial void {name}(Camera camera);");
                 sb.AppendLine();
                 break;
             case "void_vector3_float_float_float_color":

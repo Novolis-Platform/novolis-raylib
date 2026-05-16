@@ -62,10 +62,10 @@ internal sealed class XFighterGame
 
         ctx.Clear(SpaceBlack);
         var camera = _player.BuildCamera();
-        ctx.BeginWorld3D(camera);
+        ctx.BeginWorld(camera);
         _starfield.Draw(ctx, _player.Position);
         DrawWorld(ctx);
-        ctx.EndWorld3D();
+        ctx.EndWorld();
         _hud.Draw(ctx, _player, _score, CountActiveEnemies(), _shield);
     }
 

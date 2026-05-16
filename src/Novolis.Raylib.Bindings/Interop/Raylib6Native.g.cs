@@ -39,7 +39,7 @@ internal static partial class Raylib6Native
     [LibraryImport(RaylibDll)]
     internal static partial void BeginDrawing();
     [LibraryImport(RaylibDll)]
-    internal static partial void BeginMode3D(Camera3D camera);
+    internal static partial void BeginMode3D(Camera camera);
     [LibraryImport(RaylibDll)]
     internal static partial void BeginScissorMode(int x, int y, int width, int height);
     [LibraryImport(RaylibDll)]

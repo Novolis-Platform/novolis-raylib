@@ -19,7 +19,7 @@ jobs:
       - name: Regenerate bindings
         run: dotnet run --project codegen/Novolis.Raylib.CodeGen -- generate
       - name: Assert no drift
-        run: git diff --exit-code src/Novolis.Raylib.Bindings/
+        run: git diff --exit-code src/Novolis.Raylib.Bindings/ src/Novolis.Raylib.Runtime/
 
   build-test:
     runs-on: windows-latest

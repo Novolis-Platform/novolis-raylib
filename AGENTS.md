@@ -4,7 +4,7 @@ Guidance for AI agents and contributors working in **novolis-raylib**.
 
 ## What this repo is
 
-Multi-package **.NET 10** bindings for [raylib](https://www.raylib.com/) 6 and raygui, published as NuGet packages under the `Novolis.Raylib.*` id prefix. Bindings are **manifest-driven**: JSON under `pipeline/raylib6/` drives Roslyn codegen into committed `*.g.cs` files in `src/Novolis.Raylib.Bindings/` (native interop layer). Hand-crafted shell/helpers live in `Novolis.Raylib.Runtime/`.
+Multi-package **.NET 10** bindings for [raylib](https://www.raylib.com/) 6 and raygui, published as NuGet packages under the `Novolis.Raylib.*` id prefix. Bindings are **manifest-driven**: JSON under `pipeline/raylib6/` drives Roslyn codegen. **Interop** (`*.g.cs` in `Novolis.Raylib.Bindings`) and **public API** (façades, `Hud`, `Gui` in `Novolis.Raylib.Runtime`) are generated. Hand-crafted shell/debug live in `Runtime/` beside generated code.
 
 **Consumer entry point:** `Novolis.Raylib` (meta package). Do not tell app authors to reference `Novolis.Raylib.Native` or `Novolis.Raylib.Abstractions` directly.
 
@@ -13,8 +13,8 @@ Multi-package **.NET 10** bindings for [raylib](https://www.raylib.com/) 6 and r
 | Path | Role |
 |------|------|
 | `src/Novolis.Raylib/` | Meta package — install this in games/apps |
-| `src/Novolis.Raylib.Bindings/` | Generated interop (`Raylib6Native`), façades (`Graphics`, `World3D`, …), shared blittable types |
-| `src/Novolis.Raylib.Runtime/` | Hand-crafted shell, logging, debug, framebuffer capture, raygui host |
+| `src/Novolis.Raylib.Bindings/` | Generated interop (`Raylib6Native`), shared types (`Camera`, `Texture`, …) |
+| `src/Novolis.Raylib.Runtime/` | Generated façades (`Graphics`, `World`, `Hud`, `Gui`, …) + hand-crafted shell, logging, debug |
 | `src/Novolis.Raylib.Native/` | Native DLL assets per RID (transitive; not C# bindings) |
 | `src/Novolis.Raylib.Game/` | `RayGame.Run` jam API |
 | `src/Novolis.Raylib.Hosting/` | `IHost` + phased game-loop systems |
@@ -41,8 +41,8 @@ Solution file: `Novolis.Raylib.slnx`. Central package versions: `Directory.Packa
 Novolis.Raylib
 ├── Novolis.Raylib.Game
 ├── Novolis.Raylib.Hosting
-├── Novolis.Raylib.Runtime  ← hand-crafted shell
-│   ├── Novolis.Raylib.Bindings  ← codegen runs here (BeforeTargets CoreCompile)
+├── Novolis.Raylib.Runtime  ← generated API + shell
+│   ├── Novolis.Raylib.Bindings  ← generated interop (codegen triggered from Bindings build)
 │   │   └── Novolis.Raylib.Native (DLL assets only)
 │   └── Novolis.Raylib.Abstractions
 └── (transitive via Runtime)
@@ -57,14 +57,16 @@ Novolis.Raylib.Testing  → references Runtime + Game patterns (test projects on
 | Quick prototype / jam game | `RayGame.Run(title, w, h, loop)` | `Novolis.Raylib.Game`, `Novolis.Raylib.Colors` |
 | Full app with DI / phases | `RaylibHost.CreateApplicationBuilder()` + `AddRaylib` / `AddRaylibSystem<T>()` | `Novolis.Raylib.Hosting`, implement `IRenderSystem`, `IUpdateSystem`, … |
 | Low-level drawing without Game | `RaylibRuntimeShell.RunShellFrame` + `IRaylibFrameRenderer` | `Novolis.Raylib.Shell` |
-| Drawing calls | Static façades | `Graphics`, `Window`, `Input`, `World3D`, `Textures` in `Novolis.Raylib.Bindings` |
+| Drawing / scene | Static façades | `Graphics`, `World`, `Window`, `Input`, `Textures` in `Novolis.Raylib.Runtime` |
+| HUD overlay (2D) | `Hud` | `Novolis.Raylib` (generated) |
+| GUI widgets (raygui) | `Gui` | `Novolis.Raylib` (generated) |
 
 Hand-written shell code lives in `Runtime/` (`Shell/`, `Debug/`, …). Shared types used by façades (`Color`, `Vector3`, …) live in `Bindings/`. **Do not hand-edit `*.g.cs`.**
 
 ## Codegen rules (read before touching bindings)
 
 1. **Source of truth:** `pipeline/raylib6/*.manifest.json` (exports, raygui, debug hooks, façades).
-2. **Generated output:** `src/Novolis.Raylib.Bindings/**/*.g.cs` — each file has `ManifestSha256` in the header.
+2. **Generated output:** `src/Novolis.Raylib.Bindings/Interop/*.g.cs` and `src/Novolis.Raylib.Runtime/**/*.g.cs` — each file has `ManifestSha256` in the header.
 3. **Regenerate:**
    ```bash
    dotnet run --project codegen/Novolis.Raylib.CodeGen -- generate

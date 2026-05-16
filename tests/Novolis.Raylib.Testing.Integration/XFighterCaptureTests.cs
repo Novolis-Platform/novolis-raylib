@@ -20,23 +20,23 @@ public sealed class XFighterCaptureTests
 
         var renderer = new DelegateRaylibFrameRenderer((_, w, h) =>
         {
-            var camera = Camera3D.Perspective(
+            var camera = Camera.Perspective(
                 Vector3.Zero,
                 new Vector3(0, 0, -10),
                 new Vector3(0, 1, 0),
                 72f);
 
             Graphics.ClearBackground(SpaceBlack);
-            World3D.Begin(camera);
+            World.Begin(camera);
 
             var center = new Vector3(0, 0, -40);
-            World3D.DrawCubeV(center, new Vector3(1.2f, 0.9f, 1.8f), Hull);
-            World3D.DrawCubeV(center + new Vector3(2.8f, 0, 0), new Vector3(0.35f, 0.2f, 2.4f), Wing);
-            World3D.DrawCubeV(center - new Vector3(2.8f, 0, 0), new Vector3(0.35f, 0.2f, 2.4f), Wing);
-            World3D.DrawLine3D(new Vector3(0, 0, -2), new Vector3(0, 0, -25), LaserRed);
-            World3D.DrawSphere(new Vector3(0, 0, -30), 1.5f, Color.FromArgb(255, 255, 200, 80));
+            World.DrawCubeV(center, new Vector3(1.2f, 0.9f, 1.8f), Hull);
+            World.DrawCubeV(center + new Vector3(2.8f, 0, 0), new Vector3(0.35f, 0.2f, 2.4f), Wing);
+            World.DrawCubeV(center - new Vector3(2.8f, 0, 0), new Vector3(0.35f, 0.2f, 2.4f), Wing);
+            World.DrawLine(new Vector3(0, 0, -2), new Vector3(0, 0, -25), LaserRed);
+            World.DrawSphere(new Vector3(0, 0, -30), 1.5f, Color.FromArgb(255, 255, 200, 80));
 
-            World3D.End();
+            World.End();
             Graphics.DrawText("X-Fighter capture", 24, 24, 20, Color.White);
             _ = w;
             _ = h;

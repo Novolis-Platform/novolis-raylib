@@ -48,8 +48,8 @@ flowchart TB
 | **Novolis.Raylib** | Meta package — one install for the full stack | Game, Hosting, Runtime, Abstractions, Native |
 | **Novolis.Raylib.Game** | `RayGame.Run` jam API | Runtime |
 | **Novolis.Raylib.Hosting** | `IHost` + phased systems (`IRenderSystem`, …) | Runtime |
-| **Novolis.Raylib.Runtime** | Window shell, logging, debug, raygui host, framebuffer capture | Bindings, Abstractions, Native (assets) |
-| **Novolis.Raylib.Bindings** | Generated P/Invoke + façades (`Graphics`, `World3D`, …); shared blittable types | Native (assets) |
+| **Novolis.Raylib.Runtime** | Generated façades (`Graphics`, `World`, `Hud`, `Gui`, …), window shell, logging, debug | Bindings, Abstractions, Native (assets) |
+| **Novolis.Raylib.Bindings** | Generated P/Invoke + shared types (`Camera`, `Texture`, …) | Native (assets) |
 | **Novolis.Raylib.Abstractions** | Frame/shell contracts (transitive) | Native (assets) |
 | **Novolis.Raylib.Native** | `raylib` + `novolis_raygui` binaries per RID (no managed code) | — |
 | **Novolis.Raylib.Testing** | Offscreen harness, deterministic clock (tests only) | Novolis.Raylib |
