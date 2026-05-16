@@ -186,6 +186,67 @@ internal static class RaylibInteropEmitter
                 sb.AppendLine($"    internal static partial void {name}(nint ptr);");
                 sb.AppendLine();
                 break;
+            case "void_camera3d":
+                Li(sb, suppress, utf8, policy);
+                sb.AppendLine($"    internal static partial void {name}(Camera3D camera);");
+                sb.AppendLine();
+                break;
+            case "void_vector3_float_float_float_color":
+                Li(sb, suppress, utf8, policy);
+                sb.AppendLine($"    internal static partial void {name}(Vector3 position, float width, float height, float length, Color color);");
+                sb.AppendLine();
+                break;
+            case "void_vector3_vector3_color":
+                Li(sb, suppress, utf8, policy);
+                sb.AppendLine($"    internal static partial void {name}(Vector3 position, Vector3 size, Color color);");
+                sb.AppendLine();
+                break;
+            case "void_vector3_float_color":
+                Li(sb, suppress, utf8, policy);
+                sb.AppendLine($"    internal static partial void {name}(Vector3 centerPos, float radius, Color color);");
+                sb.AppendLine();
+                break;
+            case "void_vector3_float_int_int_color":
+                Li(sb, suppress, utf8, policy);
+                sb.AppendLine($"    internal static partial void {name}(Vector3 centerPos, float radius, int rings, int slices, Color color);");
+                sb.AppendLine();
+                break;
+            case "void_vector3_float_float_float_int_color":
+                Li(sb, suppress, utf8, policy);
+                sb.AppendLine($"    internal static partial void {name}(Vector3 position, float radiusTop, float radiusBottom, float height, int slices, Color color);");
+                sb.AppendLine();
+                break;
+            case "void_int_float":
+                Li(sb, suppress, utf8, policy);
+                sb.AppendLine($"    internal static partial void {name}(int slices, float spacing);");
+                sb.AppendLine();
+                break;
+            case "texture_string_utf8":
+                Li(sb, suppress, utf8: true, policy);
+                sb.AppendLine($"    internal static partial Raylib6NativeTexture {name}({Utf8Param(policy)}string fileName);");
+                sb.AppendLine();
+                break;
+            case "void_texture":
+                Li(sb, suppress, utf8, policy);
+                sb.AppendLine($"    internal static partial void {name}(Raylib6NativeTexture texture);");
+                sb.AppendLine();
+                break;
+            case "bool_texture":
+                Li(sb, suppress, utf8, policy);
+                sb.AppendLine("    [return: MarshalAs(UnmanagedType.I1)]");
+                sb.AppendLine($"    internal static partial bool {name}(Raylib6NativeTexture texture);");
+                sb.AppendLine();
+                break;
+            case "void_texture_int_int_color":
+                Li(sb, suppress, utf8, policy);
+                sb.AppendLine($"    internal static partial void {name}(Raylib6NativeTexture texture, int posX, int posY, Color tint);");
+                sb.AppendLine();
+                break;
+            case "void_texture_rectangle_rectangle_vector2_float_color":
+                Li(sb, suppress, utf8, policy);
+                sb.AppendLine($"    internal static partial void {name}(Raylib6NativeTexture texture, Rectangle source, Rectangle dest, Vector2 origin, float rotation, Color tint);");
+                sb.AppendLine();
+                break;
             default:
                 throw new InvalidOperationException($"Unknown template '{template}' for import '{name}'.");
         }

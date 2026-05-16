@@ -32,4 +32,8 @@ public struct Color : IEquatable<Color>
     public static Color RayWhite => new(245, 245, 245, 255);
 
     public static Color DarkGray => new(80, 80, 80, 255);
+
+    public static Color White => new(255, 255, 255, 255);
+
+    public static Color Black => new(0, 0, 0, 255);
 }

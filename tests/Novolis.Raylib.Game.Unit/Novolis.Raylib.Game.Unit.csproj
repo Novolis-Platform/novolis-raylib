@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Novolis.Raylib.Game\Novolis.Raylib.Game.csproj" />
+    <ProjectReference Include="..\..\samples\XFighter\XFighter.csproj" />
   </ItemGroup>
 
 </Project>

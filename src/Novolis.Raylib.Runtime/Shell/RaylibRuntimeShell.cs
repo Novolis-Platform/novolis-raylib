@@ -26,7 +26,8 @@ public static class RaylibRuntimeShell
         int width,
         int height,
         IRaylibFrameRenderer frameRenderer,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default,
+        bool showFps = true)
     {
         ArgumentNullException.ThrowIfNull(frameRenderer);
 
@@ -53,7 +54,8 @@ public static class RaylibRuntimeShell
                 var h = Window.GetScreenHeight();
                 Graphics.BeginDrawing();
                 frameRenderer.OnFrame(dt, w, h);
-                Graphics.DrawFPS(8, 8);
+                if (showFps)
+                    Graphics.DrawFPS(8, 8);
                 Graphics.EndDrawing();
             }
         }

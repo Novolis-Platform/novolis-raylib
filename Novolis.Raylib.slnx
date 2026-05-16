@@ -23,5 +23,6 @@
     <Project Path="samples/HelloRuntime/HelloRuntime.csproj" />
     <Project Path="samples/HelloHosting/HelloHosting.csproj" />
     <Project Path="samples/HelloTesting/HelloTesting.csproj" />
+    <Project Path="samples/XFighter/XFighter.csproj" />
   </Folder>
 </Solution>

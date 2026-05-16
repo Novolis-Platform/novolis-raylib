@@ -96,7 +96,49 @@
         { "name": "IsMouseButtonDown", "signature": "bool IsMouseButtonDown(MouseButton button)", "body": "Raylib6Native.IsMouseButtonDown((int)button)" },
         { "name": "GetMouseWheelMove", "signature": "float GetMouseWheelMove()", "body": "Raylib6Native.GetMouseWheelMove()" },
         { "name": "GetMousePosition", "signature": "Vector2 GetMousePosition()", "body": "Raylib6Native.GetMousePosition()" },
-        { "name": "GetMouseDelta", "signature": "Vector2 GetMouseDelta()", "body": "Raylib6Native.GetMouseDelta()" }
+        { "name": "GetMouseDelta", "signature": "Vector2 GetMouseDelta()", "body": "Raylib6Native.GetMouseDelta()" },
+        { "name": "DisableCursor", "signature": "void DisableCursor()", "body": "Raylib6Native.DisableCursor()" },
+        { "name": "EnableCursor", "signature": "void EnableCursor()", "body": "Raylib6Native.EnableCursor()" },
+        { "name": "SetMousePosition", "signature": "void SetMousePosition(int x, int y)", "body": "Raylib6Native.SetMousePosition(x, y)" }
+      ]
+    },
+    {
+      "name": "World3D",
+      "namespace": "Novolis.Raylib.Rendering",
+      "folder": "Rendering",
+      "usings": [
+        "Novolis.Raylib.Colors",
+        "Novolis.Raylib.Interop",
+        "Novolis.Raylib.Transformations"
+      ],
+      "methods": [
+        { "name": "Begin", "signature": "void Begin(Camera3D camera)", "body": "Raylib6Native.BeginMode3D(camera)" },
+        { "name": "End", "signature": "void End()", "body": "Raylib6Native.EndMode3D()" },
+        { "name": "DrawCube", "signature": "void DrawCube(Vector3 position, float width, float height, float length, Color color)", "body": "Raylib6Native.DrawCube(position, width, height, length, color)" },
+        { "name": "DrawCubeV", "signature": "void DrawCubeV(Vector3 position, Vector3 size, Color color)", "body": "Raylib6Native.DrawCubeV(position, size, color)" },
+        { "name": "DrawCubeWiresV", "signature": "void DrawCubeWiresV(Vector3 position, Vector3 size, Color color)", "body": "Raylib6Native.DrawCubeWiresV(position, size, color)" },
+        { "name": "DrawSphere", "signature": "void DrawSphere(Vector3 centerPos, float radius, Color color)", "body": "Raylib6Native.DrawSphere(centerPos, radius, color)" },
+        { "name": "DrawSphereWires", "signature": "void DrawSphereWires(Vector3 centerPos, float radius, int rings, int slices, Color color)", "body": "Raylib6Native.DrawSphereWires(centerPos, radius, rings, slices, color)" },
+        { "name": "DrawLine3D", "signature": "void DrawLine3D(Vector3 startPos, Vector3 endPos, Color color)", "body": "Raylib6Native.DrawLine3D(startPos, endPos, color)" },
+        { "name": "DrawCylinder", "signature": "void DrawCylinder(Vector3 position, float radiusTop, float radiusBottom, float height, int slices, Color color)", "body": "Raylib6Native.DrawCylinder(position, radiusTop, radiusBottom, height, slices, color)" },
+        { "name": "DrawGrid", "signature": "void DrawGrid(int slices, float spacing)", "body": "Raylib6Native.DrawGrid(slices, spacing)" }
+      ]
+    },
+    {
+      "name": "Textures",
+      "namespace": "Novolis.Raylib.Rendering",
+      "folder": "Rendering",
+      "usings": [
+        "Novolis.Raylib.Colors",
+        "Novolis.Raylib.Interop",
+        "Novolis.Raylib.Transformations"
+      ],
+      "methods": [
+        { "name": "Load", "signature": "Texture Load(string fileName)", "body": "Texture.FromNative(Raylib6Native.LoadTexture(fileName))" },
+        { "name": "Unload", "signature": "void Unload(Texture texture)", "body": "Raylib6Native.UnloadTexture(texture.Native)" },
+        { "name": "IsValid", "signature": "bool IsValid(Texture texture)", "body": "Raylib6Native.IsTextureValid(texture.Native)" },
+        { "name": "Draw", "signature": "void Draw(Texture texture, int posX, int posY, Color tint)", "body": "Raylib6Native.DrawTexture(texture.Native, posX, posY, tint)" },
+        { "name": "DrawPro", "signature": "void DrawPro(Texture texture, Rectangle source, Rectangle dest, Vector2 origin, float rotation, Color tint)", "body": "Raylib6Native.DrawTexturePro(texture.Native, source, dest, origin, rotation, tint)" }
       ]
     },
     {
