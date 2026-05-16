@@ -1,0 +1,27 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Novolis.Raylib.CodeGen.Abstractions/Novolis.Raylib.CodeGen.Abstractions.csproj" />
+    <Project Path="src/Novolis.Raylib.CodeGen.Hooks/Novolis.Raylib.CodeGen.Hooks.csproj" />
+    <Project Path="src/Novolis.Raylib.CodeGen/Novolis.Raylib.CodeGen.csproj" />
+    <Project Path="src/Novolis.Raylib.Native/Novolis.Raylib.Native.csproj" />
+    <Project Path="src/Novolis.Raylib.Abstractions/Novolis.Raylib.Abstractions.csproj" />
+    <Project Path="src/Novolis.Raylib.Runtime/Novolis.Raylib.Runtime.csproj" />
+    <Project Path="src/Novolis.Raylib.Hosting/Novolis.Raylib.Hosting.csproj" />
+    <Project Path="src/Novolis.Raylib.Game/Novolis.Raylib.Game.csproj" />
+    <Project Path="src/Novolis.Raylib/Novolis.Raylib.csproj" />
+    <Project Path="src/Novolis.Raylib.Testing/Novolis.Raylib.Testing.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Novolis.Raylib.CodeGen.Unit/Novolis.Raylib.CodeGen.Unit.csproj" />
+    <Project Path="tests/Novolis.Raylib.Runtime.Unit/Novolis.Raylib.Runtime.Unit.csproj" />
+    <Project Path="tests/Novolis.Raylib.Hosting.Unit/Novolis.Raylib.Hosting.Unit.csproj" />
+    <Project Path="tests/Novolis.Raylib.Game.Unit/Novolis.Raylib.Game.Unit.csproj" />
+    <Project Path="tests/Novolis.Raylib.Testing.Integration/Novolis.Raylib.Testing.Integration.csproj" />
+  </Folder>
+  <Folder Name="/samples/">
+    <Project Path="samples/HelloGame/HelloGame.csproj" />
+    <Project Path="samples/HelloRuntime/HelloRuntime.csproj" />
+    <Project Path="samples/HelloHosting/HelloHosting.csproj" />
+    <Project Path="samples/HelloTesting/HelloTesting.csproj" />
+  </Folder>
+</Solution>

@@ -1,7 +1,13 @@
 bin/
 obj/
+out/
 artifacts/
-.vs/
 *.user
 *.suo
-.DS_Store
+.vs/
+vendor/raylib-6/prebuilt/
+native/raylib6-with-raygui/build/
+*.dll
+*.so
+*.dylib
+!src/Novolis.Raylib.Native/runtimes/**

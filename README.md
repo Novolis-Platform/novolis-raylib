@@ -1,32 +1,38 @@
-# Raylib
+# Novolis.Raylib
 
-## What it is
-
-Raylib in the Novolis ecosystem.
-
-## Current status
-
-This repository is reserved for the Novolis Raylib package.
-Implementation will be migrated or built in later steps.
+Multi-package .NET bindings for [raylib](https://www.raylib.com/) 6 + raygui.
 
 ## Install
 
-Not yet published.
+```bash
+dotnet add package Novolis.Raylib
+```
 
-## Quick start
+Test projects:
 
-Not yet available.
+```bash
+dotnet add package Novolis.Raylib.Testing
+```
 
-## Documentation
+## Quick start (Game)
 
-- [Getting started](docs/getting-started.md)
-- [Design](docs/design.md)
-- [Release](docs/release.md)
+```csharp
+using Novolis.Raylib.Colors;
+using Novolis.Raylib.Game;
 
-## Contributing
+RayGame.Run("Demo", 800, 600, ctx =>
+{
+    ctx.Clear(Color.RayWhite);
+    ctx.Text("Hello", 12, 12, 20, Color.DarkGray);
+});
+```
 
-See [CONTRIBUTING.md](CONTRIBUTING.md).
+## Maintainer pipeline
 
-## Security
+```bash
+dotnet run pipeline/raylib6/run.cs all   # fetch + native + codegen
+dotnet build Novolis.Raylib.slnx
+./scripts/raylib-codegen-check.ps1
+```
 
-See [SECURITY.md](SECURITY.md).
+See [docs/codegen.md](docs/codegen.md) and [docs/testing.md](docs/testing.md).

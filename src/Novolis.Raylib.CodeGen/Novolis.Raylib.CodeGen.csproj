@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Novolis.Raylib.CodeGen</RootNamespace>
+    <AssemblyName>Novolis.Raylib.CodeGen</AssemblyName>
+    <Description>Roslyn raylib 6 + raygui bindings codegen.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Novolis.Raylib.CodeGen.Unit" />
+    <ProjectReference Include="..\Novolis.Raylib.CodeGen.Abstractions\Novolis.Raylib.CodeGen.Abstractions.csproj" />
+    <ProjectReference Include="..\Novolis.Raylib.CodeGen.Hooks\Novolis.Raylib.CodeGen.Hooks.csproj" />
+  </ItemGroup>
+
+</Project>

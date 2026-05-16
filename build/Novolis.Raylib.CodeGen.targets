@@ -1,0 +1,37 @@
+<Project>
+  <PropertyGroup>
+    <RaylibCodegenProject>$(MSBuildThisFileDirectory)..\src\Novolis.Raylib.CodeGen\Novolis.Raylib.CodeGen.csproj</RaylibCodegenProject>
+    <RaylibCodegenRepoRoot>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\'))</RaylibCodegenRepoRoot>
+    <RunRaylibCodegen Condition="'$(RunRaylibCodegen)' == ''">true</RunRaylibCodegen>
+  </PropertyGroup>
+
+  <Target Name="DisableRaylibCodegenForPack" BeforeTargets="GenerateRaylibBindings" Condition="'$(IsPacking)' == 'true'">
+    <PropertyGroup>
+      <RunRaylibCodegen>false</RunRaylibCodegen>
+    </PropertyGroup>
+  </Target>
+
+  <ItemGroup>
+    <RaylibCodegenInput Include="$(RaylibCodegenRepoRoot)pipeline\raylib6\*.manifest.json" />
+    <RaylibCodegenInput Include="$(RaylibCodegenRepoRoot)src\Novolis.Raylib.CodeGen\**\*.cs" />
+    <RaylibCodegenInput Include="$(RaylibCodegenRepoRoot)src\Novolis.Raylib.CodeGen.Abstractions\**\*.cs" />
+    <RaylibCodegenInput Include="$(RaylibCodegenRepoRoot)src\Novolis.Raylib.CodeGen.Hooks\**\*.cs" />
+    <RaylibCodegenOutput Include="$(MSBuildProjectDirectory)\Interop\*.g.cs" />
+    <RaylibCodegenOutput Include="$(MSBuildProjectDirectory)\Rendering\*.g.cs" />
+    <RaylibCodegenOutput Include="$(MSBuildProjectDirectory)\Windowing\*.g.cs" />
+    <RaylibCodegenOutput Include="$(MSBuildProjectDirectory)\Interact\*.g.cs" />
+    <RaylibCodegenOutput Include="$(MSBuildProjectDirectory)\Timing\*.g.cs" />
+    <RaylibCodegenOutput Include="$(MSBuildProjectDirectory)\Audio\*.g.cs" />
+  </ItemGroup>
+
+  <Target Name="GenerateRaylibBindings"
+          BeforeTargets="CoreCompile"
+          Condition="'$(RunRaylibCodegen)' == 'true' and '$(DesignTimeBuild)' != 'true'"
+          Inputs="@(RaylibCodegenInput)"
+          Outputs="@(RaylibCodegenOutput)">
+    <Exec Command="dotnet run --project &quot;$(RaylibCodegenProject)&quot; -- generate"
+          WorkingDirectory="$(RaylibCodegenRepoRoot)"
+          StandardOutputImportance="high"
+          StandardErrorImportance="high" />
+  </Target>
+</Project>

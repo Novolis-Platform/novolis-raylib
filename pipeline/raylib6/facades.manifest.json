@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "description": "Public raylib façade methods (generated *.g.cs). Hooks may rewrite specific methods (e.g. EndDrawing).",
+  "types": [
+    {
+      "name": "Graphics",
+      "namespace": "Novolis.Raylib.Rendering",
+      "folder": "Rendering",
+      "usings": [
+        "Novolis.Raylib.Colors",
+        "Novolis.Raylib.Interop",
+        "Novolis.Raylib.Transformations"
+      ],
+      "methods": [
+        { "name": "BeginDrawing", "signature": "void BeginDrawing()", "body": "Raylib6Native.BeginDrawing()" },
+        { "name": "EndDrawing", "signature": "void EndDrawing()", "body": "Raylib6Native.EndDrawing()" },
+        { "name": "ClearBackground", "signature": "void ClearBackground(Color color)", "body": "Raylib6Native.ClearBackground(color)" },
+        { "name": "DrawText", "signature": "void DrawText(string text, int posX, int posY, int fontSize, Color color)", "body": "Raylib6Native.DrawText(text, posX, posY, fontSize, color)" },
+        { "name": "MeasureText", "signature": "int MeasureText(string text, int fontSize)", "body": "Raylib6Native.MeasureText(text, fontSize)" },
+        { "name": "DrawRectangle", "signature": "void DrawRectangle(int posX, int posY, int width, int height, Color color)", "body": "Raylib6Native.DrawRectangle(posX, posY, width, height, color)" },
+        { "name": "DrawRectangleRec", "signature": "void DrawRectangleRec(Rectangle rec, Color color)", "body": "Raylib6Native.DrawRectangleRec(rec, color)" },
+        { "name": "DrawRectangleLines", "signature": "void DrawRectangleLines(int posX, int posY, int width, int height, Color color)", "body": "Raylib6Native.DrawRectangleLines(posX, posY, width, height, color)" },
+        { "name": "DrawLine", "signature": "void DrawLine(int startPosX, int startPosY, int endPosX, int endPosY, Color color)", "body": "Raylib6Native.DrawLine(startPosX, startPosY, endPosX, endPosY, color)" },
+        { "name": "BeginScissorMode", "signature": "void BeginScissorMode(int x, int y, int width, int height)", "body": "Raylib6Native.BeginScissorMode(x, y, width, height)" },
+        { "name": "EndScissorMode", "signature": "void EndScissorMode()", "body": "Raylib6Native.EndScissorMode()" },
+        { "name": "DrawCircle", "signature": "void DrawCircle(int centerX, int centerY, float radius, Color color)", "body": "Raylib6Native.DrawCircle(centerX, centerY, radius, color)" },
+        { "name": "DrawFPS", "signature": "void DrawFPS(int posX, int posY)", "body": "Raylib6Native.DrawFPS(posX, posY)" }
+      ]
+    },
+    {
+      "name": "Window",
+      "namespace": "Novolis.Raylib.Windowing",
+      "folder": "Windowing",
+      "usings": [
+        "Novolis.Raylib.Interop",
+        "Novolis.Raylib.Interact"
+      ],
+      "methods": [
+        {
+          "name": "SetConfigFlags",
+          "signature": "void SetConfigFlags(uint flags)",
+          "body": "Raylib6Native.SetConfigFlags(flags)",
+          "summary": "raylib SetConfigFlags — call before Init for pre-window flags (e.g. WindowStateFlags.Hidden / FLAG_WINDOW_HIDDEN)."
+        },
+        { "name": "Init", "signature": "void Init(int width, int height, string title)", "body": "Raylib6Native.InitWindow(width, height, title)" },
+        { "name": "ShouldClose", "signature": "bool ShouldClose()", "body": "Raylib6Native.WindowShouldClose()" },
+        { "name": "Close", "signature": "void Close()", "body": "Raylib6Native.CloseWindow()" },
+        { "name": "IsReady", "signature": "bool IsReady()", "body": "Raylib6Native.IsWindowReady()" },
+        { "name": "IsHidden", "signature": "bool IsHidden()", "body": "Raylib6Native.IsWindowHidden()" },
+        { "name": "GetScreenWidth", "signature": "int GetScreenWidth()", "body": "Raylib6Native.GetScreenWidth()" },
+        { "name": "GetScreenHeight", "signature": "int GetScreenHeight()", "body": "Raylib6Native.GetScreenHeight()" },
+        { "name": "SetTitle", "signature": "void SetTitle(string title)", "body": "Raylib6Native.SetWindowTitle(title)" },
+        { "name": "ToggleFullscreen", "signature": "void ToggleFullscreen()", "body": "Raylib6Native.ToggleFullscreen()" },
+        { "name": "IsFullscreen", "signature": "bool IsFullscreen()", "body": "Raylib6Native.IsWindowFullscreen()" },
+        {
+          "name": "SetState",
+          "signature": "void SetState(uint flags)",
+          "body": "Raylib6Native.SetWindowState(flags)",
+          "summary": "raylib SetWindowState (e.g. FLAG_WINDOW_RESIZABLE from raylib headers)."
+        },
+        { "name": "PollInputEvents", "signature": "void PollInputEvents()", "body": "Raylib6Native.PollInputEvents()" },
+        {
+          "name": "SetExitKey",
+          "signature": "void SetExitKey(KeyboardKey key)",
+          "body": "Raylib6Native.SetExitKey((int)key)",
+          "summary": "Sets the key that closes the window (default Escape / KeyboardKey.Escape)."
+        }
+      ]
+    },
+    {
+      "name": "Input",
+      "namespace": "Novolis.Raylib.Interact",
+      "folder": "Interact",
+      "usings": [
+        "Novolis.Raylib.Interop",
+        "Novolis.Raylib.Transformations"
+      ],
+      "methods": [
+        { "name": "IsKeyPressed", "signature": "bool IsKeyPressed(KeyboardKey key)", "body": "Raylib6Native.IsKeyPressed((int)key)" },
+        { "name": "IsKeyDown", "signature": "bool IsKeyDown(KeyboardKey key)", "body": "Raylib6Native.IsKeyDown((int)key)" },
+        { "name": "IsKeyReleased", "signature": "bool IsKeyReleased(KeyboardKey key)", "body": "Raylib6Native.IsKeyReleased((int)key)" },
+        {
+          "name": "GetCharPressed",
+          "signature": "int GetCharPressed()",
+          "body": "Raylib6Native.GetCharPressed()",
+          "summary": "Unicode codepoint from the last key pressed with Alt or Ctrl (raylib GetCharPressed)."
+        },
+        {
+          "name": "GetKeyPressed",
+          "signature": "int GetKeyPressed()",
+          "body": "Raylib6Native.GetKeyPressed()",
+          "summary": "Next keycode from the key queue (raylib GetKeyPressed); returns 0 when empty."
+        },
+        { "name": "IsCursorOnScreen", "signature": "bool IsCursorOnScreen()", "body": "Raylib6Native.IsCursorOnScreen()" },
+        { "name": "IsMouseButtonPressed", "signature": "bool IsMouseButtonPressed(MouseButton button)", "body": "Raylib6Native.IsMouseButtonPressed((int)button)" },
+        { "name": "IsMouseButtonDown", "signature": "bool IsMouseButtonDown(MouseButton button)", "body": "Raylib6Native.IsMouseButtonDown((int)button)" },
+        { "name": "GetMouseWheelMove", "signature": "float GetMouseWheelMove()", "body": "Raylib6Native.GetMouseWheelMove()" },
+        { "name": "GetMousePosition", "signature": "Vector2 GetMousePosition()", "body": "Raylib6Native.GetMousePosition()" },
+        { "name": "GetMouseDelta", "signature": "Vector2 GetMouseDelta()", "body": "Raylib6Native.GetMouseDelta()" }
+      ]
+    },
+    {
+      "name": "Time",
+      "namespace": "Novolis.Raylib.Timing",
+      "folder": "Timing",
+      "usings": ["Novolis.Raylib.Interop"],
+      "methods": [
+        { "name": "SetTargetFPS", "signature": "void SetTargetFPS(int fps)", "body": "Raylib6Native.SetTargetFPS(fps)" },
+        { "name": "GetFrameTime", "signature": "float GetFrameTime()", "body": "Raylib6Native.GetFrameTime()" }
+      ]
+    },
+    {
+      "name": "AudioDevice",
+      "namespace": "Novolis.Raylib.Audio",
+      "folder": "Audio",
+      "usings": ["Novolis.Raylib.Interop"],
+      "methods": [
+        { "name": "Init", "signature": "void Init()", "body": "Raylib6Native.InitAudioDevice()" },
+        { "name": "Close", "signature": "void Close()", "body": "Raylib6Native.CloseAudioDevice()" }
+      ]
+    }
+  ]
+}

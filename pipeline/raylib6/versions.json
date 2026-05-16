@@ -1,0 +1,9 @@
+{
+  "raylibGitTag": "6.0",
+  "rayguiGitTag": "4.0",
+  "prebuilt": {
+    "windows-x64": "https://github.com/raysan5/raylib/releases/download/6.0/raylib-6.0_win64_msvc16.zip",
+    "linux-x64": "https://github.com/raysan5/raylib/releases/download/6.0/raylib-6.0_linux_amd64.tar.gz"
+  },
+  "rayguiHeaderUrl": "https://raw.githubusercontent.com/raysan5/raygui/4.0/src/raygui.h"
+}

@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Novolis.Raylib.Packaging.props" />
+
+  <PropertyGroup>
+    <RootNamespace>Novolis.Raylib.Game</RootNamespace>
+    <AssemblyName>Novolis.Raylib.Game</AssemblyName>
+    <PackageId>Novolis.Raylib.Game</PackageId>
+    <IsPackable>true</IsPackable>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Description>Low-ceremony jam and tutorial API for Novolis.Raylib.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" Condition="Exists('README.md')" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Novolis.Raylib.Runtime\Novolis.Raylib.Runtime.csproj" />
+  </ItemGroup>
+
+</Project>

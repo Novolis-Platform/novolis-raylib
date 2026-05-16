@@ -1,11 +1,50 @@
 name: CI
+
 on:
   push:
-    branches: [main]
+    branches: [main, master]
   pull_request:
-    branches: [main]
-permissions:
-  contents: read
+    branches: [main, master]
+
 jobs:
-  ci:
-    uses: Novolis-Platform/novolis-workflows/.github/workflows/dotnet-ci.yml@main
+  codegen-drift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Fetch vendor headers
+        run: dotnet run pipeline/raylib6/fetch-sources.cs
+      - name: Regenerate bindings
+        run: dotnet run --project src/Novolis.Raylib.CodeGen -- generate
+      - name: Assert no drift
+        run: git diff --exit-code src/Novolis.Raylib.Runtime/
+
+  build-test:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Fetch sources
+        run: dotnet run pipeline/raylib6/fetch-sources.cs
+      - name: Build native shim
+        run: dotnet run pipeline/raylib6/run.cs native
+      - name: Build solution
+        run: dotnet build Novolis.Raylib.slnx -c Release
+      - name: Test (unit, no native)
+        run: dotnet test Novolis.Raylib.slnx -c Release --filter "Category!=Native" -- --maximum-parallel-tests 1
+
+  pack-smoke:
+    runs-on: ubuntu-latest
+    needs: build-test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - run: dotnet run pipeline/raylib6/fetch-sources.cs
+      - run: dotnet pack Novolis.Raylib.slnx -c Release -o artifacts
+      - run: ls artifacts

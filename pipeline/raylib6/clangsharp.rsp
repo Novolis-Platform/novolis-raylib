@@ -1,0 +1,9 @@
+# Stub for ClangSharp PInvokeGenerator (expand include paths after fetch-sources).
+# Example invocation (from repo root, after dotnet tool restore in this directory):
+#   dotnet tool run ClangSharpPInvokeGenerator @tools/raylib6-pipeline/clangsharp.rsp
+#
+# -f path/to/raylib.h
+# -n StarConflictsRevolt.Raylib.Interop
+# -o src/lib/bindings/StarConflictsRevolt.Bindings.Raylib6/Generated
+# --config compatible-codegen
+# --with-type namespaced

@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Novolis.Raylib.CodeGen.Unit</RootNamespace>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="TUnit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Novolis.Raylib.Runtime\Novolis.Raylib.Runtime.csproj" />
+    <ProjectReference Include="..\..\src\Novolis.Raylib.CodeGen\Novolis.Raylib.CodeGen.csproj" />
+    <ProjectReference Include="..\..\src\Novolis.Raylib.CodeGen.Hooks\Novolis.Raylib.CodeGen.Hooks.csproj" />
+  </ItemGroup>
+
+</Project>

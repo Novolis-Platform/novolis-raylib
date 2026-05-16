@@ -1,0 +1,49 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Novolis.Raylib.CodeGen.targets" />
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Novolis.Raylib.Packaging.props" />
+
+  <PropertyGroup>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DisableRuntimeMarshalling>true</DisableRuntimeMarshalling>
+    <RootNamespace>Novolis.Raylib</RootNamespace>
+    <AssemblyName>Novolis.Raylib.Runtime</AssemblyName>
+    <PackageId>Novolis.Raylib.Runtime</PackageId>
+    <IsPackable>true</IsPackable>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Description>raylib 6 + raygui interop, façades, and window shell for .NET.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" Condition="Exists('README.md')" />
+  </ItemGroup>
+
+  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+    <None Include="$(MSBuildThisFileDirectory)..\..\vendor\raylib-6\prebuilt\win-x64\raylib.dll"
+          Link="raylib.dll"
+          CopyToOutputDirectory="PreserveNewest"
+          Condition="Exists('$(MSBuildThisFileDirectory)..\..\vendor\raylib-6\prebuilt\win-x64\raylib.dll')" />
+    <None Include="$(MSBuildThisFileDirectory)..\..\native\raylib6-with-raygui\out\novolis_raygui.dll"
+          Link="novolis_raygui.dll"
+          CopyToOutputDirectory="PreserveNewest"
+          Condition="Exists('$(MSBuildThisFileDirectory)..\..\native\raylib6-with-raygui\out\novolis_raygui.dll')" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Novolis.Raylib.Abstractions\Novolis.Raylib.Abstractions.csproj" />
+    <ProjectReference Include="..\Novolis.Raylib.Native\Novolis.Raylib.Native.csproj">
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Novolis.Raylib.CodeGen.Unit" />
+    <InternalsVisibleTo Include="Novolis.Raylib.Testing" />
+    <InternalsVisibleTo Include="Novolis.Raylib.Runtime.Unit" />
+  </ItemGroup>
+
+</Project>

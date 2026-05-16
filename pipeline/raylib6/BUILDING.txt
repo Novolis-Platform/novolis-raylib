@@ -1,0 +1,52 @@
+raylib 6 + raygui pipeline (Star Conflicts Revolt)
+=================================================
+
+Roslyn codegen (committed *.g.cs) runs automatically when building StarConflictsRevolt.Raylib6.Bindings,
+and via:
+
+  dotnet run --project tools/Novolis.Raylib.CodeGen -- generate
+
+CI / pre-push drift check:
+
+  pwsh ./scripts/raylib-codegen-check.ps1
+
+Extend behavior with C# hooks in tools/Novolis.Raylib.CodeGen.Hooks/ (see tools/raylib6-pipeline/hooks/README.md).
+
+1) Vendor headers + Windows prebuilt DLL
+   dotnet run tools/raylib6-pipeline/fetch-sources.cs
+
+2) Import library + raygui shim (required for Raylib exes at runtime; Windows / MSVC or your platform toolchain)
+   dotnet run tools/raylib6-pipeline/run.cs native
+   (or: cmake -S tools/native/raylib6-with-raygui -B tools/native/raylib6-with-raygui/build && cmake --build ... --config Release)
+
+   CMake defines BUILD_LIBTYPE_SHARED so raygui.h emits __declspec(dllexport) and Gui* symbols
+   (e.g. GuiButton) are exported for P/Invoke. The same DLL also compiles trace_shim.c (TraceLog → managed bridge).
+   Re-run this step after pulling CMake changes.
+
+3) Regenerate deterministic C# interop + façades (manifest-driven + Roslyn hooks)
+   dotnet run tools/raylib6-pipeline/run.cs generate
+   (same as: dotnet run --project tools/Novolis.Raylib.CodeGen -- generate)
+
+   Ordered steps:
+     a) verify-raylib-manifest-against-vendor (skip if vendor raylib.h missing)
+     b) Raylib6Native.g.cs from raylib-exports.manifest.json (schema v2: optional interopPolicy for SuppressGCTransition / DisableRuntimeMarshalling / façade inlining)
+     c) RayguiShimExports.g.cs from raygui-exports.manifest.json
+     d) RaylibDebugFrameHooks.g.cs from raylib-debug.manifest.json
+     e) Windowing/Rendering/Interact/Timing/Audio *.g.cs from facades.manifest.json
+
+   Optional: dotnet run --project tools/Novolis.Raylib.CodeGen -- suggest-raylib
+   Optional: dotnet run --project tools/Novolis.Raylib.CodeGen -- hooks list
+
+4) Build .NET
+   dotnet build StarConflictsRevolt.slnx
+
+Outputs / inputs
+-------
+- tools/vendor/raylib-6/prebuilt/win-x64/raylib.dll
+- tools/vendor/raylib-6/include/*.h
+- tools/vendor/raygui-6/raygui.h
+- tools/native/raylib6-with-raygui/out/novolis_raygui.dll
+- tools/raylib6-pipeline/raylib-exports.manifest.json → Interop/Raylib6Native.g.cs
+- tools/raylib6-pipeline/raygui-exports.manifest.json → Interop/RayguiShimExports.g.cs
+- tools/raylib6-pipeline/raylib-debug.manifest.json → Interop/RaylibDebugFrameHooks.g.cs
+- tools/raylib6-pipeline/facades.manifest.json → */*.g.cs public façades

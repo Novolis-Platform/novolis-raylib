@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Novolis.Raylib.CodeGen.Hooks</RootNamespace>
+    <AssemblyName>Novolis.Raylib.CodeGen.Hooks</AssemblyName>
+    <Description>Roslyn codegen hooks for Novolis.Raylib bindings.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Novolis.Raylib.CodeGen.Abstractions\Novolis.Raylib.CodeGen.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

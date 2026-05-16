@@ -1,0 +1,13 @@
+<Project>
+  <PropertyGroup Label="Novolis.Raylib NuGet metadata">
+    <NovolisRaylibVersion Condition="'$(NovolisRaylibVersion)' == ''">0.1.0-alpha</NovolisRaylibVersion>
+    <Version>$(NovolisRaylibVersion)</Version>
+    <Authors>Novolis</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/novolis/novolis-raylib</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/novolis/novolis-raylib</RepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageTags>raylib;raygui;interop;graphics;gamedev</PackageTags>
+  </PropertyGroup>
+</Project>

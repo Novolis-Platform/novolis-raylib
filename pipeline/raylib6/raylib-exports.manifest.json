@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 2,
+  "header": "vendor/raylib-6/include/raylib.h",
+  "description": "Authoritative raylib 6 LibraryImport surface. Sorted by name; templates map to generate-raylib-interop.cs emit logic.",
+  "dllName": "raylib",
+  "interopPolicy": {
+    "suppressGcTransitionByTemplate": [
+      "void_void",
+      "void_color",
+      "void_int",
+      "void_uint",
+      "bool_int",
+      "bool_void",
+      "int_void",
+      "float_void",
+      "vector2_void",
+      "void_int_int_int_int",
+      "void_int_int_float_color",
+      "void_int_int_int_int_color",
+      "void_rectangle_color",
+      "void_int_int",
+      "image_void",
+      "void_image"
+    ],
+    "neverSuppressGcTransition": [
+      "ExportImageToMemory",
+      "MemFree"
+    ],
+    "facadeMethodImpl": "AggressiveInlining",
+    "useDisableRuntimeMarshalling": true
+  },
+  "structs": [
+    {
+      "name": "Raylib6NativeImage",
+      "fields": [
+        { "name": "Data", "clrType": "nint" },
+        { "name": "Width", "clrType": "int" },
+        { "name": "Height", "clrType": "int" },
+        { "name": "Mipmaps", "clrType": "int" },
+        { "name": "Format", "clrType": "int" }
+      ]
+    }
+  ],
+  "imports": [
+    { "name": "BeginDrawing", "template": "void_void" },
+    { "name": "BeginScissorMode", "template": "void_int_int_int_int" },
+    { "name": "ClearBackground", "template": "void_color" },
+    { "name": "CloseAudioDevice", "template": "void_void" },
+    { "name": "CloseWindow", "template": "void_void" },
+    { "name": "DrawCircle", "template": "void_int_int_float_color" },
+    { "name": "DrawFPS", "template": "void_int_int" },
+    { "name": "DrawLine", "template": "void_int_int_int_int_color" },
+    { "name": "DrawRectangle", "template": "void_int_int_int_int_color" },
+    { "name": "DrawRectangleLines", "template": "void_int_int_int_int_color" },
+    { "name": "DrawRectangleRec", "template": "void_rectangle_color" },
+    { "name": "DrawText", "template": "void_string_utf8_int_int_int_color" },
+    { "name": "EndDrawing", "template": "void_void" },
+    { "name": "EndScissorMode", "template": "void_void" },
+    { "name": "ExportImageToMemory", "template": "nint_image_string_utf8_out_int" },
+    { "name": "GetCharPressed", "template": "int_void" },
+    { "name": "GetFrameTime", "template": "float_void" },
+    { "name": "GetKeyPressed", "template": "int_void" },
+    { "name": "GetMouseDelta", "template": "vector2_void" },
+    { "name": "GetMousePosition", "template": "vector2_void" },
+    { "name": "GetMouseWheelMove", "template": "float_void" },
+    { "name": "GetScreenHeight", "template": "int_void" },
+    { "name": "GetScreenWidth", "template": "int_void" },
+    { "name": "InitAudioDevice", "template": "void_void" },
+    { "name": "InitWindow", "template": "void_int_int_string_utf8" },
+    { "name": "IsCursorOnScreen", "template": "bool_void" },
+    { "name": "IsKeyDown", "template": "bool_int" },
+    { "name": "IsKeyPressed", "template": "bool_int" },
+    { "name": "IsKeyReleased", "template": "bool_int" },
+    { "name": "IsMouseButtonDown", "template": "bool_int" },
+    { "name": "IsMouseButtonPressed", "template": "bool_int" },
+    { "name": "IsWindowFullscreen", "template": "bool_void" },
+    { "name": "IsWindowHidden", "template": "bool_void" },
+    { "name": "IsWindowReady", "template": "bool_void" },
+    { "name": "LoadImageFromScreen", "template": "image_void" },
+    { "name": "MeasureText", "template": "int_string_utf8_int" },
+    { "name": "MemFree", "template": "void_nint" },
+    { "name": "PollInputEvents", "template": "void_void" },
+    { "name": "SetConfigFlags", "template": "void_uint" },
+    { "name": "SetExitKey", "template": "void_int" },
+    { "name": "SetTargetFPS", "template": "void_int" },
+    { "name": "SetTraceLogLevel", "template": "void_int" },
+    { "name": "SetWindowState", "template": "void_uint" },
+    { "name": "SetWindowTitle", "template": "void_string_utf8" },
+    { "name": "ToggleFullscreen", "template": "void_void" },
+    { "name": "UnloadImage", "template": "void_image" },
+    { "name": "WindowShouldClose", "template": "bool_void" }
+  ]
+}
