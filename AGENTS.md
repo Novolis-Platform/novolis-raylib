@@ -169,6 +169,18 @@ Some comments and help text still mention **Star Conflicts Revolt**, `tools/rayl
 - [docs/testing.md](docs/testing.md) — test helpers and env gates
 - Per-package `README.md` under `src/Novolis.Raylib.*/`
 
+## Git remote (Novolis-Platform)
+
+This repo lives under `d:\novolis\` and **`origin` must be the org repo**:
+
+- `https://github.com/Novolis-Platform/novolis-raylib.git`
+
+Before the first `git push` or `gh repo create` in any `novolis-*` repo:
+
+1. Run `git remote -v` and confirm `origin` points at `Novolis-Platform/`.
+2. Never create a personal-repo remote for reserved `novolis-*` names.
+3. Use `gh repo create --org Novolis-Platform` when bootstrapping a new org repo.
+
 ## What not to do
 
 - Hand-edit `*.g.cs` under `src/Novolis.Raylib.Bindings/Interop/` or `src/Novolis.Raylib.Runtime/`.

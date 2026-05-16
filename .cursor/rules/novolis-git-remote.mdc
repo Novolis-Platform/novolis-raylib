@@ -1,0 +1,15 @@
+---
+description: Git remotes for repos under d:\novolis must target Novolis-Platform
+alwaysApply: true
+---
+
+# Novolis git remotes
+
+Repos under `d:\novolis\*` are **Novolis-Platform** org repositories, not personal forks.
+
+Before `git push`, `git remote add origin`, or `gh repo create`:
+
+1. Run `git remote -v`.
+2. `origin` must be `https://github.com/Novolis-Platform/<repo>.git`.
+3. For new repos: `gh repo create <name> --org Novolis-Platform` (never omit `--org`).
+4. Do not push implementation work to `frankhaugen/novolis-*` remotes.
