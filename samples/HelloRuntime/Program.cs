@@ -9,7 +9,7 @@ file sealed class DemoFrame : IRaylibFrameRenderer
 {
     public void OnFrame(float dt, int w, int h)
     {
-        Graphics.ClearBackground(Color.RayWhite);
-        Graphics.DrawText($"Runtime shell ({w}x{h})", 16, 16, 24, Color.DarkGray);
+        Graphics.ClearBackground(RaylibColors.RayWhite);
+        Graphics.DrawText($"Runtime shell ({w}x{h})", 16, 16, 24, RaylibColors.DarkGray);
     }
 }

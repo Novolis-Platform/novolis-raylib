@@ -1,6 +1,6 @@
+using System.Drawing;
 using System.Text;
 using Novolis.Raylib.Interop;
-using Novolis.Raylib.Transformations;
 
 namespace Novolis.Raylib.Raygui;
 
@@ -9,7 +9,7 @@ public static unsafe class RayguiSidebar
 {
     private const int Utf8StackCap = 512;
 
-    public static bool TryDrawNavRow(Rectangle bounds, string label, out bool clicked)
+    public static bool TryDrawNavRow(RectangleF bounds, string label, out bool clicked)
     {
         clicked = false;
         RayguiShimHost.EnsureInitialized();
@@ -28,7 +28,7 @@ public static unsafe class RayguiSidebar
     }
 
     /// <summary>Draws a raygui panel (UTF-8 title).</summary>
-    public static bool TryDrawPanel(Rectangle bounds, string title, out int controlState)
+    public static bool TryDrawPanel(RectangleF bounds, string title, out int controlState)
     {
         controlState = 0;
         RayguiShimHost.EnsureInitialized();
@@ -47,7 +47,7 @@ public static unsafe class RayguiSidebar
     }
 
     /// <summary>Immediate-mode toggle; <paramref name="active"/> is read/written as a 1-byte C bool.</summary>
-    public static bool TryDrawToggle(Rectangle bounds, string label, ref bool active)
+    public static bool TryDrawToggle(RectangleF bounds, string label, ref bool active)
     {
         RayguiShimHost.EnsureInitialized();
 
@@ -69,7 +69,7 @@ public static unsafe class RayguiSidebar
     }
 
     /// <summary>Combo box; <paramref name="active"/> is the selected item index (read/write).</summary>
-    public static bool TryDrawComboBox(Rectangle bounds, string text, ref int active)
+    public static bool TryDrawComboBox(RectangleF bounds, string text, ref int active)
     {
         RayguiShimHost.EnsureInitialized();
 
@@ -87,7 +87,7 @@ public static unsafe class RayguiSidebar
         return true;
     }
 
-    private static RayguiShimExports.RayguiRectangle ToRaygui(Rectangle b) =>
+    private static RayguiShimExports.RayguiRectangle ToRaygui(RectangleF b) =>
         new()
         {
             X = b.X,

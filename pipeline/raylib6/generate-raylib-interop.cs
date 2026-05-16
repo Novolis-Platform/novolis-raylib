@@ -1,4 +1,4 @@
-// DEPRECATED: use dotnet run --project tools/Novolis.Raylib.CodeGen -- generate
+// DEPRECATED: use dotnet run --project codegen/Novolis.Raylib.CodeGen -- generate
 // Legacy file-based emitter kept for reference; run.cs no longer invokes this script.
 // Emit Raylib6Native.g.cs from raylib-exports.manifest.json (deterministic: sorted imports, fixed layout).
 // Usage (repo root): dotnet run tools/raylib6-pipeline/generate-raylib-interop.cs

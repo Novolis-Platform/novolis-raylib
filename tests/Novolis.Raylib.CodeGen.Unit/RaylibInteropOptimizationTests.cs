@@ -1,8 +1,8 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using Novolis.Raylib.Colors;
+using System.Drawing;
+using System.Numerics;
 using Novolis.Raylib.Interop;
-using Novolis.Raylib.Transformations;
 using Novolis.Raylib.CodeGen;
 
 namespace Novolis.Raylib.CodeGen.Unit;
@@ -35,7 +35,7 @@ public sealed class RaylibInteropOptimizationTests
                    ?? throw new InvalidOperationException("Could not resolve repository root.");
         var native = await File.ReadAllTextAsync(Path.Combine(
             root,
-            "src", "Novolis.Raylib.Runtime", "Interop",
+            "src", "Novolis.Raylib.Bindings", "Interop",
             "Raylib6Native.g.cs"));
 
         await Assert.That(native).Contains("[MarshalUsing(typeof(Utf8StringMarshaller))] string text");
@@ -46,9 +46,9 @@ public sealed class RaylibInteropOptimizationTests
     [Test]
     public async Task Blittable_struct_layouts_match_raylib_expectations()
     {
-        await Assert.That(Marshal.SizeOf<Color>()).IsEqualTo(4);
+        await Assert.That(Marshal.SizeOf<RaylibColor>()).IsEqualTo(4);
         await Assert.That(Marshal.SizeOf<Vector2>()).IsEqualTo(8);
-        await Assert.That(Marshal.SizeOf<Rectangle>()).IsEqualTo(16);
+        await Assert.That(Marshal.SizeOf<RectangleF>()).IsEqualTo(16);
         await Assert.That(Marshal.SizeOf<Raylib6NativeImage>()).IsEqualTo(IntPtr.Size + 16);
     }
 
@@ -60,7 +60,7 @@ public sealed class RaylibInteropOptimizationTests
         var graphics = await File.ReadAllTextAsync(Path.Combine(
             root,
             "src",
-            "Novolis.Raylib.Runtime",
+            "Novolis.Raylib.Bindings",
             "Rendering",
             "Graphics.g.cs"));
 

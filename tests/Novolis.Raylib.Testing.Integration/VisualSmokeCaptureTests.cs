@@ -1,7 +1,7 @@
+using System.Drawing;
 using Novolis.Raylib.Colors;
 using Novolis.Raylib.Rendering;
 using Novolis.Raylib.Testing;
-using Novolis.Raylib.Transformations;
 
 namespace Novolis.Raylib.Testing.Integration;
 
@@ -11,10 +11,10 @@ namespace Novolis.Raylib.Testing.Integration;
 /// </summary>
 public sealed class VisualSmokeCaptureTests
 {
-    private static readonly Color PanelBlue = new(66, 135, 245, 255);
-    private static readonly Color PanelGreen = new(80, 200, 120, 255);
-    private static readonly Color AccentRed = new(230, 41, 55, 255);
-    private static readonly Color Border = new(40, 40, 40, 255);
+    private static readonly Color PanelBlue = Color.FromArgb(255, 66, 135, 245);
+    private static readonly Color PanelGreen = Color.FromArgb(255, 80, 200, 120);
+    private static readonly Color AccentRed = Color.FromArgb(255, 230, 41, 55);
+    private static readonly Color Border = Color.FromArgb(255, 40, 40, 40);
 
     [Test]
     public async Task Capture_smoke_scene_writes_png_for_visual_review()
@@ -53,7 +53,7 @@ public sealed class VisualSmokeCaptureTests
     private static void DrawSmokeScene(float deltaSeconds, int screenWidth, int screenHeight)
     {
         _ = deltaSeconds;
-        Graphics.ClearBackground(Color.RayWhite);
+        Graphics.ClearBackground(RaylibColors.RayWhite);
 
         Graphics.DrawRectangleLines(4, 4, screenWidth - 8, screenHeight - 8, Border);
         Graphics.DrawLine(0, 0, screenWidth, screenHeight, Border);
@@ -64,8 +64,8 @@ public sealed class VisualSmokeCaptureTests
         Graphics.DrawRectangle(screenWidth - 104, midY - 36, 88, 72, PanelGreen);
         Graphics.DrawCircle(screenWidth / 2, midY, 28, AccentRed);
 
-        Graphics.DrawRectangleRec(new Rectangle(16, 16, screenWidth - 32, 28), Border);
-        Graphics.DrawText("Novolis smoke", 24, 22, 18, Color.RayWhite);
-        Graphics.DrawText("pre-Game visual check", 24, screenHeight - 36, 14, Color.DarkGray);
+        Graphics.DrawRectangleRec(new RectangleF(16, 16, screenWidth - 32, 28), Border);
+        Graphics.DrawText("Novolis smoke", 24, 22, 18, RaylibColors.RayWhite);
+        Graphics.DrawText("pre-Game visual check", 24, screenHeight - 36, 14, RaylibColors.DarkGray);
     }
 }

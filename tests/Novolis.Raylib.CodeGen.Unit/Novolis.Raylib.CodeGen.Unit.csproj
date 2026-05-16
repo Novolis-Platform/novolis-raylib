@@ -11,9 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Novolis.Raylib.Bindings\Novolis.Raylib.Bindings.csproj" />
     <ProjectReference Include="..\..\src\Novolis.Raylib.Runtime\Novolis.Raylib.Runtime.csproj" />
-    <ProjectReference Include="..\..\src\Novolis.Raylib.CodeGen\Novolis.Raylib.CodeGen.csproj" />
-    <ProjectReference Include="..\..\src\Novolis.Raylib.CodeGen.Hooks\Novolis.Raylib.CodeGen.Hooks.csproj" />
+    <ProjectReference Include="..\..\codegen\Novolis.Raylib.CodeGen\Novolis.Raylib.CodeGen.csproj" />
+    <ProjectReference Include="..\..\codegen\Novolis.Raylib.CodeGen.Hooks\Novolis.Raylib.CodeGen.Hooks.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,16 +1,16 @@
-using Novolis.Raylib.Colors;
+using System.Drawing;
+using System.Numerics;
 using Novolis.Raylib.Game;
 using Novolis.Raylib.Rendering;
-using Novolis.Raylib.Transformations;
 
 namespace XFighter.Game;
 
 internal sealed class HFighter
 {
-    private static readonly Color Hull = new(90, 95, 110, 255);
-    private static readonly Color Wing = new(70, 75, 90, 255);
-    private static readonly Color CockpitGlass = new(40, 180, 220, 255);
-    private static readonly Color EngineGlow = new(255, 90, 40, 255);
+    private static readonly Color Hull = Color.FromArgb(255, 90, 95, 110);
+    private static readonly Color Wing = Color.FromArgb(255, 70, 75, 90);
+    private static readonly Color CockpitGlass = Color.FromArgb(255, 40, 180, 220);
+    private static readonly Color EngineGlow = Color.FromArgb(255, 255, 90, 40);
 
     public Vector3 Position;
     public Vector3 Velocity;
@@ -73,6 +73,6 @@ internal sealed class HFighter
         drawBox(center + forward * 0.6f + up * 0.2f, new Vector3(0.8f, 0.5f, 0.8f), CockpitGlass);
         drawSphere(center - forward * 1.4f + right * 1.1f, 0.35f, EngineGlow);
         drawSphere(center - forward * 1.4f - right * 1.1f, 0.35f, EngineGlow);
-        drawWires(center, new Vector3(6.5f, 2.5f, 4f), new Color(30, 30, 40, 180));
+        drawWires(center, new Vector3(6.5f, 2.5f, 4f), Color.FromArgb(180, 30, 30, 40));
     }
 }

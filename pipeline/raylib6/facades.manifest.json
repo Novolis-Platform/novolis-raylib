@@ -7,23 +7,22 @@
       "namespace": "Novolis.Raylib.Rendering",
       "folder": "Rendering",
       "usings": [
-        "Novolis.Raylib.Colors",
-        "Novolis.Raylib.Interop",
-        "Novolis.Raylib.Transformations"
+        "System.Drawing",
+        "Novolis.Raylib.Interop"
       ],
       "methods": [
         { "name": "BeginDrawing", "signature": "void BeginDrawing()", "body": "Raylib6Native.BeginDrawing()" },
         { "name": "EndDrawing", "signature": "void EndDrawing()", "body": "Raylib6Native.EndDrawing()" },
-        { "name": "ClearBackground", "signature": "void ClearBackground(Color color)", "body": "Raylib6Native.ClearBackground(color)" },
-        { "name": "DrawText", "signature": "void DrawText(string text, int posX, int posY, int fontSize, Color color)", "body": "Raylib6Native.DrawText(text, posX, posY, fontSize, color)" },
+        { "name": "ClearBackground", "signature": "void ClearBackground(Color color)", "body": "Raylib6Native.ClearBackground(color.ToRaylibColor())" },
+        { "name": "DrawText", "signature": "void DrawText(string text, int posX, int posY, int fontSize, Color color)", "body": "Raylib6Native.DrawText(text, posX, posY, fontSize, color.ToRaylibColor())" },
         { "name": "MeasureText", "signature": "int MeasureText(string text, int fontSize)", "body": "Raylib6Native.MeasureText(text, fontSize)" },
-        { "name": "DrawRectangle", "signature": "void DrawRectangle(int posX, int posY, int width, int height, Color color)", "body": "Raylib6Native.DrawRectangle(posX, posY, width, height, color)" },
-        { "name": "DrawRectangleRec", "signature": "void DrawRectangleRec(Rectangle rec, Color color)", "body": "Raylib6Native.DrawRectangleRec(rec, color)" },
-        { "name": "DrawRectangleLines", "signature": "void DrawRectangleLines(int posX, int posY, int width, int height, Color color)", "body": "Raylib6Native.DrawRectangleLines(posX, posY, width, height, color)" },
-        { "name": "DrawLine", "signature": "void DrawLine(int startPosX, int startPosY, int endPosX, int endPosY, Color color)", "body": "Raylib6Native.DrawLine(startPosX, startPosY, endPosX, endPosY, color)" },
+        { "name": "DrawRectangle", "signature": "void DrawRectangle(int posX, int posY, int width, int height, Color color)", "body": "Raylib6Native.DrawRectangle(posX, posY, width, height, color.ToRaylibColor())" },
+        { "name": "DrawRectangleRec", "signature": "void DrawRectangleRec(RectangleF rec, Color color)", "body": "Raylib6Native.DrawRectangleRec(rec, color.ToRaylibColor())" },
+        { "name": "DrawRectangleLines", "signature": "void DrawRectangleLines(int posX, int posY, int width, int height, Color color)", "body": "Raylib6Native.DrawRectangleLines(posX, posY, width, height, color.ToRaylibColor())" },
+        { "name": "DrawLine", "signature": "void DrawLine(int startPosX, int startPosY, int endPosX, int endPosY, Color color)", "body": "Raylib6Native.DrawLine(startPosX, startPosY, endPosX, endPosY, color.ToRaylibColor())" },
         { "name": "BeginScissorMode", "signature": "void BeginScissorMode(int x, int y, int width, int height)", "body": "Raylib6Native.BeginScissorMode(x, y, width, height)" },
         { "name": "EndScissorMode", "signature": "void EndScissorMode()", "body": "Raylib6Native.EndScissorMode()" },
-        { "name": "DrawCircle", "signature": "void DrawCircle(int centerX, int centerY, float radius, Color color)", "body": "Raylib6Native.DrawCircle(centerX, centerY, radius, color)" },
+        { "name": "DrawCircle", "signature": "void DrawCircle(int centerX, int centerY, float radius, Color color)", "body": "Raylib6Native.DrawCircle(centerX, centerY, radius, color.ToRaylibColor())" },
         { "name": "DrawFPS", "signature": "void DrawFPS(int posX, int posY)", "body": "Raylib6Native.DrawFPS(posX, posY)" }
       ]
     },
@@ -72,8 +71,8 @@
       "namespace": "Novolis.Raylib.Interact",
       "folder": "Interact",
       "usings": [
-        "Novolis.Raylib.Interop",
-        "Novolis.Raylib.Transformations"
+        "System.Numerics",
+        "Novolis.Raylib.Interop"
       ],
       "methods": [
         { "name": "IsKeyPressed", "signature": "bool IsKeyPressed(KeyboardKey key)", "body": "Raylib6Native.IsKeyPressed((int)key)" },
@@ -107,20 +106,20 @@
       "namespace": "Novolis.Raylib.Rendering",
       "folder": "Rendering",
       "usings": [
-        "Novolis.Raylib.Colors",
-        "Novolis.Raylib.Interop",
-        "Novolis.Raylib.Transformations"
+        "System.Drawing",
+        "System.Numerics",
+        "Novolis.Raylib.Interop"
       ],
       "methods": [
         { "name": "Begin", "signature": "void Begin(Camera3D camera)", "body": "Raylib6Native.BeginMode3D(camera)" },
         { "name": "End", "signature": "void End()", "body": "Raylib6Native.EndMode3D()" },
-        { "name": "DrawCube", "signature": "void DrawCube(Vector3 position, float width, float height, float length, Color color)", "body": "Raylib6Native.DrawCube(position, width, height, length, color)" },
-        { "name": "DrawCubeV", "signature": "void DrawCubeV(Vector3 position, Vector3 size, Color color)", "body": "Raylib6Native.DrawCubeV(position, size, color)" },
-        { "name": "DrawCubeWiresV", "signature": "void DrawCubeWiresV(Vector3 position, Vector3 size, Color color)", "body": "Raylib6Native.DrawCubeWiresV(position, size, color)" },
-        { "name": "DrawSphere", "signature": "void DrawSphere(Vector3 centerPos, float radius, Color color)", "body": "Raylib6Native.DrawSphere(centerPos, radius, color)" },
-        { "name": "DrawSphereWires", "signature": "void DrawSphereWires(Vector3 centerPos, float radius, int rings, int slices, Color color)", "body": "Raylib6Native.DrawSphereWires(centerPos, radius, rings, slices, color)" },
-        { "name": "DrawLine3D", "signature": "void DrawLine3D(Vector3 startPos, Vector3 endPos, Color color)", "body": "Raylib6Native.DrawLine3D(startPos, endPos, color)" },
-        { "name": "DrawCylinder", "signature": "void DrawCylinder(Vector3 position, float radiusTop, float radiusBottom, float height, int slices, Color color)", "body": "Raylib6Native.DrawCylinder(position, radiusTop, radiusBottom, height, slices, color)" },
+        { "name": "DrawCube", "signature": "void DrawCube(Vector3 position, float width, float height, float length, Color color)", "body": "Raylib6Native.DrawCube(position, width, height, length, color.ToRaylibColor())" },
+        { "name": "DrawCubeV", "signature": "void DrawCubeV(Vector3 position, Vector3 size, Color color)", "body": "Raylib6Native.DrawCubeV(position, size, color.ToRaylibColor())" },
+        { "name": "DrawCubeWiresV", "signature": "void DrawCubeWiresV(Vector3 position, Vector3 size, Color color)", "body": "Raylib6Native.DrawCubeWiresV(position, size, color.ToRaylibColor())" },
+        { "name": "DrawSphere", "signature": "void DrawSphere(Vector3 centerPos, float radius, Color color)", "body": "Raylib6Native.DrawSphere(centerPos, radius, color.ToRaylibColor())" },
+        { "name": "DrawSphereWires", "signature": "void DrawSphereWires(Vector3 centerPos, float radius, int rings, int slices, Color color)", "body": "Raylib6Native.DrawSphereWires(centerPos, radius, rings, slices, color.ToRaylibColor())" },
+        { "name": "DrawLine3D", "signature": "void DrawLine3D(Vector3 startPos, Vector3 endPos, Color color)", "body": "Raylib6Native.DrawLine3D(startPos, endPos, color.ToRaylibColor())" },
+        { "name": "DrawCylinder", "signature": "void DrawCylinder(Vector3 position, float radiusTop, float radiusBottom, float height, int slices, Color color)", "body": "Raylib6Native.DrawCylinder(position, radiusTop, radiusBottom, height, slices, color.ToRaylibColor())" },
         { "name": "DrawGrid", "signature": "void DrawGrid(int slices, float spacing)", "body": "Raylib6Native.DrawGrid(slices, spacing)" }
       ]
     },
@@ -129,16 +128,16 @@
       "namespace": "Novolis.Raylib.Rendering",
       "folder": "Rendering",
       "usings": [
-        "Novolis.Raylib.Colors",
-        "Novolis.Raylib.Interop",
-        "Novolis.Raylib.Transformations"
+        "System.Drawing",
+        "System.Numerics",
+        "Novolis.Raylib.Interop"
       ],
       "methods": [
         { "name": "Load", "signature": "Texture Load(string fileName)", "body": "Texture.FromNative(Raylib6Native.LoadTexture(fileName))" },
         { "name": "Unload", "signature": "void Unload(Texture texture)", "body": "Raylib6Native.UnloadTexture(texture.Native)" },
         { "name": "IsValid", "signature": "bool IsValid(Texture texture)", "body": "Raylib6Native.IsTextureValid(texture.Native)" },
-        { "name": "Draw", "signature": "void Draw(Texture texture, int posX, int posY, Color tint)", "body": "Raylib6Native.DrawTexture(texture.Native, posX, posY, tint)" },
-        { "name": "DrawPro", "signature": "void DrawPro(Texture texture, Rectangle source, Rectangle dest, Vector2 origin, float rotation, Color tint)", "body": "Raylib6Native.DrawTexturePro(texture.Native, source, dest, origin, rotation, tint)" }
+        { "name": "Draw", "signature": "void Draw(Texture texture, int posX, int posY, Color tint)", "body": "Raylib6Native.DrawTexture(texture.Native, posX, posY, tint.ToRaylibColor())" },
+        { "name": "DrawPro", "signature": "void DrawPro(Texture texture, RectangleF source, RectangleF dest, Vector2 origin, float rotation, Color tint)", "body": "Raylib6Native.DrawTexturePro(texture.Native, source, dest, origin, rotation, tint.ToRaylibColor())" }
       ]
     },
     {

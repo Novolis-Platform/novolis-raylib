@@ -1,9 +1,12 @@
 <Solution>
+  <Folder Name="/codegen/">
+    <Project Path="codegen/Novolis.Raylib.CodeGen.Abstractions/Novolis.Raylib.CodeGen.Abstractions.csproj" />
+    <Project Path="codegen/Novolis.Raylib.CodeGen.Hooks/Novolis.Raylib.CodeGen.Hooks.csproj" />
+    <Project Path="codegen/Novolis.Raylib.CodeGen/Novolis.Raylib.CodeGen.csproj" />
+  </Folder>
   <Folder Name="/src/">
-    <Project Path="src/Novolis.Raylib.CodeGen.Abstractions/Novolis.Raylib.CodeGen.Abstractions.csproj" />
-    <Project Path="src/Novolis.Raylib.CodeGen.Hooks/Novolis.Raylib.CodeGen.Hooks.csproj" />
-    <Project Path="src/Novolis.Raylib.CodeGen/Novolis.Raylib.CodeGen.csproj" />
     <Project Path="src/Novolis.Raylib.Native/Novolis.Raylib.Native.csproj" />
+    <Project Path="src/Novolis.Raylib.Bindings/Novolis.Raylib.Bindings.csproj" />
     <Project Path="src/Novolis.Raylib.Abstractions/Novolis.Raylib.Abstractions.csproj" />
     <Project Path="src/Novolis.Raylib.Runtime/Novolis.Raylib.Runtime.csproj" />
     <Project Path="src/Novolis.Raylib.Hosting/Novolis.Raylib.Hosting.csproj" />

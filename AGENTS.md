@@ -4,7 +4,7 @@ Guidance for AI agents and contributors working in **novolis-raylib**.
 
 ## What this repo is
 
-Multi-package **.NET 10** bindings for [raylib](https://www.raylib.com/) 6 and raygui, published as NuGet packages under the `Novolis.Raylib.*` id prefix. Bindings are **manifest-driven**: JSON under `pipeline/raylib6/` drives Roslyn codegen into committed `*.g.cs` files in `src/Novolis.Raylib.Runtime/`.
+Multi-package **.NET 10** bindings for [raylib](https://www.raylib.com/) 6 and raygui, published as NuGet packages under the `Novolis.Raylib.*` id prefix. Bindings are **manifest-driven**: JSON under `pipeline/raylib6/` drives Roslyn codegen into committed `*.g.cs` files in `src/Novolis.Raylib.Bindings/` (native interop layer). Hand-crafted shell/helpers live in `Novolis.Raylib.Runtime/`.
 
 **Consumer entry point:** `Novolis.Raylib` (meta package). Do not tell app authors to reference `Novolis.Raylib.Native` or `Novolis.Raylib.Abstractions` directly.
 
@@ -13,14 +13,15 @@ Multi-package **.NET 10** bindings for [raylib](https://www.raylib.com/) 6 and r
 | Path | Role |
 |------|------|
 | `src/Novolis.Raylib/` | Meta package — install this in games/apps |
-| `src/Novolis.Raylib.Runtime/` | Interop (`Raylib6Native`), façades (`Graphics`, `Window`, …), shell, raygui |
+| `src/Novolis.Raylib.Bindings/` | Generated interop (`Raylib6Native`), façades (`Graphics`, `World3D`, …), shared blittable types |
+| `src/Novolis.Raylib.Runtime/` | Hand-crafted shell, logging, debug, framebuffer capture, raygui host |
+| `src/Novolis.Raylib.Native/` | Native DLL assets per RID (transitive; not C# bindings) |
 | `src/Novolis.Raylib.Game/` | `RayGame.Run` jam API |
 | `src/Novolis.Raylib.Hosting/` | `IHost` + phased game-loop systems |
 | `src/Novolis.Raylib.Abstractions/` | `IRaylibFrameRenderer`, `IRenderSystem`, … (transitive) |
-| `src/Novolis.Raylib.Native/` | Native assets per RID (transitive) |
 | `src/Novolis.Raylib.Testing/` | Offscreen harness, deterministic clock, hosting test host |
-| `src/Novolis.Raylib.CodeGen/` | Roslyn CLI: `generate`, `verify`, `suggest-raylib`, `hooks list` |
-| `src/Novolis.Raylib.CodeGen.Hooks/` | `IRaylibCodegenHook` implementations |
+| `codegen/Novolis.Raylib.CodeGen/` | Roslyn CLI: `generate`, `verify`, `suggest-raylib`, `hooks list` (not published) |
+| `codegen/Novolis.Raylib.CodeGen.Hooks/` | `IRaylibCodegenHook` implementations (not published) |
 | `pipeline/raylib6/` | Manifests, fetch/native orchestration (`run.cs`) |
 | `vendor/raylib-6/`, `vendor/raygui-6/` | Vendored headers + prebuilt `raylib.dll` (fetched) |
 | `native/raylib6-with-raygui/` | CMake shim (`novolis_raygui.dll`) + trace forwarder |
@@ -32,15 +33,18 @@ Multi-package **.NET 10** bindings for [raylib](https://www.raylib.com/) 6 and r
 
 Solution file: `Novolis.Raylib.slnx`. Central package versions: `Directory.Packages.props`.
 
+**`src/`** — publishable NuGet packages only. **`codegen/`** — build-time tooling (never published).
+
 ## Package dependency graph
 
 ```
 Novolis.Raylib
 ├── Novolis.Raylib.Game
 ├── Novolis.Raylib.Hosting
-├── Novolis.Raylib.Runtime  ← codegen runs here (BeforeTargets CoreCompile)
-│   ├── Novolis.Raylib.Abstractions
-│   └── Novolis.Raylib.Native (assets only)
+├── Novolis.Raylib.Runtime  ← hand-crafted shell
+│   ├── Novolis.Raylib.Bindings  ← codegen runs here (BeforeTargets CoreCompile)
+│   │   └── Novolis.Raylib.Native (DLL assets only)
+│   └── Novolis.Raylib.Abstractions
 └── (transitive via Runtime)
 
 Novolis.Raylib.Testing  → references Runtime + Game patterns (test projects only)
@@ -53,29 +57,29 @@ Novolis.Raylib.Testing  → references Runtime + Game patterns (test projects on
 | Quick prototype / jam game | `RayGame.Run(title, w, h, loop)` | `Novolis.Raylib.Game`, `Novolis.Raylib.Colors` |
 | Full app with DI / phases | `RaylibHost.CreateApplicationBuilder()` + `AddRaylib` / `AddRaylibSystem<T>()` | `Novolis.Raylib.Hosting`, implement `IRenderSystem`, `IUpdateSystem`, … |
 | Low-level drawing without Game | `RaylibRuntimeShell.RunShellFrame` + `IRaylibFrameRenderer` | `Novolis.Raylib.Shell` |
-| Drawing calls | Static façades | `Graphics`, `Window`, `Input`, `Time`, `AudioDevice` in `Novolis.Raylib.Runtime` |
+| Drawing calls | Static façades | `Graphics`, `Window`, `Input`, `World3D`, `Textures` in `Novolis.Raylib.Bindings` |
 
-Hand-written runtime code lives beside generated files (e.g. `Colors/Color.cs`, `Shell/`, `Debug/`). **Do not hand-edit `*.g.cs`.**
+Hand-written shell code lives in `Runtime/` (`Shell/`, `Debug/`, …). Shared types used by façades (`Color`, `Vector3`, …) live in `Bindings/`. **Do not hand-edit `*.g.cs`.**
 
 ## Codegen rules (read before touching bindings)
 
 1. **Source of truth:** `pipeline/raylib6/*.manifest.json` (exports, raygui, debug hooks, façades).
-2. **Generated output:** `src/Novolis.Raylib.Runtime/**/*.g.cs` — each file has `ManifestSha256` in the header.
+2. **Generated output:** `src/Novolis.Raylib.Bindings/**/*.g.cs` — each file has `ManifestSha256` in the header.
 3. **Regenerate:**
    ```bash
-   dotnet run --project src/Novolis.Raylib.CodeGen -- generate
+   dotnet run --project codegen/Novolis.Raylib.CodeGen -- generate
    ```
    Or full maintainer pipeline:
    ```bash
    dotnet run pipeline/raylib6/run.cs all   # fetch + native + generate
    ```
-4. **Extend behavior:** add or change hooks in `src/Novolis.Raylib.CodeGen.Hooks/` (see `pipeline/raylib6/hooks/README.md`).
+4. **Extend behavior:** add or change hooks in `codegen/Novolis.Raylib.CodeGen.Hooks/` (see `pipeline/raylib6/hooks/README.md`).
 5. **Drift check (CI/local):**
    ```powershell
    ./scripts/raylib-codegen-check.ps1
    ```
    CI job `codegen-drift` runs the same check on Ubuntu.
-6. **MSBuild:** `build/Novolis.Raylib.CodeGen.targets` runs codegen before `CoreCompile` on `Novolis.Raylib.Runtime` when manifests/hooks change. Packing sets `RunRaylibCodegen=false`.
+6. **MSBuild:** `build/Novolis.Raylib.CodeGen.targets` runs codegen before `CoreCompile` on `Novolis.Raylib.Bindings` when manifests/hooks change. Packing sets `RunRaylibCodegen=false`.
 
 To add a raylib export: update `raylib-exports.manifest.json` (and façade manifest if needed), run `generate`, commit both manifest and `*.g.cs` changes together.
 
@@ -111,7 +115,7 @@ Pack all NuGet packages: `./scripts/pack-all.ps1` → `artifacts/`.
 
 | Job | OS | What it checks |
 |-----|-----|----------------|
-| `codegen-drift` | ubuntu | Regenerate bindings; `git diff --exit-code src/Novolis.Raylib.Runtime/` |
+| `codegen-drift` | ubuntu | Regenerate bindings; `git diff --exit-code src/Novolis.Raylib.Bindings/` |
 | `build-test` | windows | fetch → native → build → test (non-Native filter) |
 | `pack-smoke` | ubuntu | `dotnet pack` after build-test |
 
@@ -120,7 +124,7 @@ Pack all NuGet packages: `./scripts/pack-all.ps1` → `artifacts/`.
 - **TFM:** `net10.0`, `LangVersion=latest`, nullable enabled, **warnings as errors** (`Directory.Build.props`).
 - **Tests:** TUnit (`TestingPlatformDotnetTestSupport`), under `tests/`.
 - **Namespaces:** `Novolis.Raylib.*` (interop types in `Novolis.Raylib.Interop`, internal `Raylib6Native`).
-- **Runtime project:** `AllowUnsafeBlocks`, `DisableRuntimeMarshalling` — string interop uses UTF-8 marshalling; respect `interopPolicy` in manifests for `SuppressGCTransition`.
+- **Bindings project:** `AllowUnsafeBlocks`, `DisableRuntimeMarshalling` — string interop uses UTF-8 marshalling; respect `interopPolicy` in manifests for `SuppressGCTransition`.
 - **Scope discipline:** Only change files required by the task. Do not drive-by refactor unrelated packages or stale pipeline scripts.
 
 ## Stale references in the tree
@@ -147,7 +151,7 @@ Some comments and help text still mention **Star Conflicts Revolt**, `tools/rayl
 
 ## What not to do
 
-- Hand-edit `*.g.cs` under `src/Novolis.Raylib.Runtime/`.
+- Hand-edit `*.g.cs` under `src/Novolis.Raylib.Bindings/`.
 - Add direct `PackageReference` to `Novolis.Raylib.Native` or `Novolis.Raylib.Abstractions` in application projects.
 - Commit secrets or local IDE-only config (`.idea/` is untracked noise).
 - Assume Linux CI runs native window tests — use env gates or Windows locally.

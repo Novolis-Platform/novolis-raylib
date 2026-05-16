@@ -49,7 +49,7 @@ public sealed class RaylibInteropReflectionTests
         foreach (var el in imports.EnumerateArray())
             templates.Add(el.GetProperty("template").GetString()!);
 
-        var genPath = Path.Combine(root, "src", "Novolis.Raylib.CodeGen", "Emit", "RaylibInteropEmitter.cs");
+        var genPath = Path.Combine(root, "codegen", "Novolis.Raylib.CodeGen", "Emit", "RaylibInteropEmitter.cs");
         var gen = await File.ReadAllTextAsync(genPath);
         var caseLabels = new HashSet<string>(
             Regex.Matches(gen, @"case\s+""([^""]+)""\s*:")
@@ -72,7 +72,7 @@ public sealed class RaylibInteropReflectionTests
 
         var genPath = Path.Combine(
             root,
-            "src", "Novolis.Raylib.Runtime", "Interop",
+            "src", "Novolis.Raylib.Bindings", "Interop",
             "Raylib6Native.g.cs");
         var gen = await File.ReadAllTextAsync(genPath);
         var line = gen.Split('\n').FirstOrDefault(l => l.Contains("// ManifestSha256:", StringComparison.Ordinal));
@@ -116,7 +116,7 @@ public sealed class RaylibInteropReflectionTests
         foreach (var el in functions.EnumerateArray())
             templates.Add(el.GetProperty("template").GetString()!);
 
-        var genPath = Path.Combine(root, "src", "Novolis.Raylib.CodeGen", "Emit", "RayguiInteropEmitter.cs");
+        var genPath = Path.Combine(root, "codegen", "Novolis.Raylib.CodeGen", "Emit", "RayguiInteropEmitter.cs");
         var gen = await File.ReadAllTextAsync(genPath);
         var blockStart = gen.IndexOf(
             "static (string delegateType, string exportName) TemplateToDelegate",

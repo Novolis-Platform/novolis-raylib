@@ -29,7 +29,7 @@ file sealed class DemoRenderSystem : IRenderSystem
 {
     public void OnRender(float deltaSeconds, int screenWidth, int screenHeight)
     {
-        Graphics.ClearBackground(Color.RayWhite);
-        Graphics.DrawText("Hello from Novolis.Raylib.Hosting", 16, 16, 24, Color.DarkGray);
+        Graphics.ClearBackground(RaylibColors.RayWhite);
+        Graphics.DrawText("Hello from Novolis.Raylib.Hosting", 16, 16, 24, RaylibColors.DarkGray);
     }
 }

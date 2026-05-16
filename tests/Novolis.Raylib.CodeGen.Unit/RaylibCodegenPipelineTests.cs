@@ -18,7 +18,7 @@ public sealed class RaylibCodegenPipelineTests
 
         var committedPath = Path.Combine(
             root,
-            "src", "Novolis.Raylib.Runtime", "Interop",
+            "src", "Novolis.Raylib.Bindings", "Interop",
             "Raylib6Native.g.cs");
         var committed = await File.ReadAllTextAsync(committedPath);
         var committedShaLine = committed.Split('\n').First(l => l.Contains("// ManifestSha256:", StringComparison.Ordinal));
@@ -38,7 +38,7 @@ public sealed class RaylibCodegenPipelineTests
         var graphics = await File.ReadAllTextAsync(Path.Combine(
             root,
             "src",
-            "Novolis.Raylib.Runtime",
+            "Novolis.Raylib.Bindings",
             "Rendering",
             "Graphics.g.cs"));
 

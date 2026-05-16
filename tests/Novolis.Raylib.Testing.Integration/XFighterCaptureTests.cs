@@ -1,17 +1,17 @@
-using Novolis.Raylib.Colors;
+using System.Drawing;
+using System.Numerics;
 using Novolis.Raylib.Rendering;
 using Novolis.Raylib.Testing;
-using Novolis.Raylib.Transformations;
 
 namespace Novolis.Raylib.Testing.Integration;
 
 /// <summary>Captures a scripted 3D combat frame (H-Fighter silhouette) for visual review.</summary>
 public sealed class XFighterCaptureTests
 {
-    private static readonly Color SpaceBlack = new(4, 6, 14, 255);
-    private static readonly Color Hull = new(90, 95, 110, 255);
-    private static readonly Color Wing = new(70, 75, 90, 255);
-    private static readonly Color LaserRed = new(255, 60, 80, 255);
+    private static readonly Color SpaceBlack = Color.FromArgb(255, 4, 6, 14);
+    private static readonly Color Hull = Color.FromArgb(255, 90, 95, 110);
+    private static readonly Color Wing = Color.FromArgb(255, 70, 75, 90);
+    private static readonly Color LaserRed = Color.FromArgb(255, 255, 60, 80);
 
     [Test]
     public async Task Capture_xfighter_combat_frame_writes_png()
@@ -34,7 +34,7 @@ public sealed class XFighterCaptureTests
             World3D.DrawCubeV(center + new Vector3(2.8f, 0, 0), new Vector3(0.35f, 0.2f, 2.4f), Wing);
             World3D.DrawCubeV(center - new Vector3(2.8f, 0, 0), new Vector3(0.35f, 0.2f, 2.4f), Wing);
             World3D.DrawLine3D(new Vector3(0, 0, -2), new Vector3(0, 0, -25), LaserRed);
-            World3D.DrawSphere(new Vector3(0, 0, -30), 1.5f, new Color(255, 200, 80, 255));
+            World3D.DrawSphere(new Vector3(0, 0, -30), 1.5f, Color.FromArgb(255, 255, 200, 80));
 
             World3D.End();
             Graphics.DrawText("X-Fighter capture", 24, 24, 20, Color.White);

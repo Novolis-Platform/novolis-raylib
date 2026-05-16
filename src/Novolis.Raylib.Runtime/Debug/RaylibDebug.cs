@@ -1,5 +1,5 @@
 using Novolis.Raylib.Audio;
-using Novolis.Raylib.Colors;
+using System.Drawing;
 using Novolis.Raylib.Interop;
 using Novolis.Raylib.Logging;
 using Novolis.Raylib.Rendering;
@@ -61,19 +61,23 @@ public static class RaylibDebug
     {
         NativeOffscreenTestHarnessEnabled = true;
         MemoryFramebufferCaptureEnabled = true;
+        RaylibDebugCaptureGate.ProgrammaticEnabled = true;
     }
 
     public static void Reset()
     {
         NativeOffscreenTestHarnessEnabled = false;
         MemoryFramebufferCaptureEnabled = false;
+        RaylibDebugCaptureGate.ProgrammaticEnabled = false;
         RefreshFromEnvironment();
     }
 
     internal static bool IsMemoryFramebufferCaptureRequested()
     {
         RefreshFromEnvironment();
-        return MemoryFramebufferCaptureEnabled || _captureFromEnv;
+        return MemoryFramebufferCaptureEnabled
+               || _captureFromEnv
+               || RaylibDebugCaptureGate.IsRequested(RaylibDebugFrameHooks.CaptureEnvironmentVariable);
     }
 
     public static LoopResult RunMinimalFrameLoop(LoopOptions? options = null, CancellationToken cancellationToken = default)
@@ -94,7 +98,7 @@ public static class RaylibDebug
             while (frames < options.MaxFrames && !cancellationToken.IsCancellationRequested)
             {
                 Graphics.BeginDrawing();
-                Graphics.ClearBackground(new Color(20, 24, 32, 255));
+                Graphics.ClearBackground(Color.FromArgb(255, 20, 24, 32));
                 Graphics.EndDrawing();
                 frames++;
             }

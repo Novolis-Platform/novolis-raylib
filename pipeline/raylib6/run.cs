@@ -62,7 +62,7 @@ try
 
 static int RunGenerateChain(string repoRoot)
 {
-	var codegenProject = Path.Combine(repoRoot, "src", "Novolis.Raylib.CodeGen", "Novolis.Raylib.CodeGen.csproj");
+	var codegenProject = Path.Combine(repoRoot, "codegen", "Novolis.Raylib.CodeGen", "Novolis.Raylib.CodeGen.csproj");
 	return Run("dotnet", $"run --project \"{codegenProject}\" -- generate", repoRoot);
 }
 

@@ -1,16 +1,15 @@
-using Novolis.Raylib.Colors;
+using System.Drawing;
 using Novolis.Raylib.Game;
 using Novolis.Raylib.Rendering;
-using Novolis.Raylib.Transformations;
 
 namespace XFighter.Game;
 
 internal sealed class CockpitHud
 {
-    private static readonly Color HudGreen = new(80, 255, 120, 255);
-    private static readonly Color HudAmber = new(255, 190, 60, 255);
-    private static readonly Color PanelDark = new(18, 22, 32, 240);
-    private static readonly Color PanelMid = new(35, 42, 58, 255);
+    private static readonly Color HudGreen = Color.FromArgb(255, 80, 255, 120);
+    private static readonly Color HudAmber = Color.FromArgb(255, 255, 190, 60);
+    private static readonly Color PanelDark = Color.FromArgb(240, 18, 22, 32);
+    private static readonly Color PanelMid = Color.FromArgb(255, 35, 42, 58);
 
     private Texture _cockpitTexture;
     private bool _hasTexture;
@@ -35,7 +34,7 @@ internal sealed class CockpitHud
         {
             ctx.DrawHudTexture(
                 _cockpitTexture,
-                new Rectangle(0, 0, ctx.Width, ctx.Height),
+                new RectangleF(0, 0, ctx.Width, ctx.Height),
                 Color.White);
         }
         else
@@ -56,7 +55,7 @@ internal sealed class CockpitHud
 
         DrawRadar(ctx, player);
         DrawShieldBar(ctx, shield);
-        ctx.HudText("MOUSE: AIM  |  W/S: THROTTLE  |  SPACE/LMB: FIRE", 48, 24, 16, new Color(160, 170, 190, 255));
+        ctx.HudText("MOUSE: AIM  |  W/S: THROTTLE  |  SPACE/LMB: FIRE", 48, 24, 16, Color.FromArgb(255, 160, 170, 190));
     }
 
     private static void DrawProceduralFrame(RayGameContext ctx)
@@ -82,8 +81,8 @@ internal sealed class CockpitHud
         for (var i = 0; i < 8; i++)
         {
             var y = margin + i * 48;
-            ctx.HudRect(viewL + 24, y, 120, 28, new Color(25, 30, 45, 200));
-            ctx.HudRect(viewR - 144, y, 120, 28, new Color(25, 30, 45, 200));
+            ctx.HudRect(viewL + 24, y, 120, 28, Color.FromArgb(200, 25, 30, 45));
+            ctx.HudRect(viewR - 144, y, 120, 28, Color.FromArgb(200, 25, 30, 45));
         }
     }
 
@@ -92,7 +91,7 @@ internal sealed class CockpitHud
         var rx = ctx.Width - 200;
         var ry = 80;
         var size = 140;
-        ctx.HudRect(rx, ry, size, size, new Color(10, 20, 15, 180));
+        ctx.HudRect(rx, ry, size, size, Color.FromArgb(180, 10, 20, 15));
         ctx.HudLine(rx, ry + size / 2, rx + size, ry + size / 2, HudGreen);
         ctx.HudLine(rx + size / 2, ry, rx + size / 2, ry + size, HudGreen);
         ctx.HudText("RADAR", rx + 36, ry + 8, 14, HudGreen);
@@ -105,7 +104,7 @@ internal sealed class CockpitHud
         var y = 80;
         var w = 200;
         var h = 16;
-        ctx.HudRect(x, y, w, h, new Color(30, 30, 40, 255));
+        ctx.HudRect(x, y, w, h, Color.FromArgb(255, 30, 30, 40));
         ctx.HudRect(x, y, (int)(w * shield), h, HudAmber);
         ctx.HudText("SHIELDS", x, y - 22, 14, HudAmber);
     }

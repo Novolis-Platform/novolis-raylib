@@ -1,4 +1,4 @@
-// DEPRECATED: use dotnet run --project tools/Novolis.Raylib.CodeGen -- generate
+// DEPRECATED: use dotnet run --project codegen/Novolis.Raylib.CodeGen -- generate
 // Legacy file-based emitter; run.cs no longer invokes this script.
 // Emit RaylibDebugFrameHooks.g.cs from raylib-debug.manifest.json (references Raylib6Native symbol names).
 // Usage (repo root): dotnet run tools/raylib6-pipeline/generate-raylib-debug-hooks.cs

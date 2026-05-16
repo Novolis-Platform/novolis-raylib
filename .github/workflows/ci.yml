@@ -17,9 +17,9 @@ jobs:
       - name: Fetch vendor headers
         run: dotnet run pipeline/raylib6/fetch-sources.cs
       - name: Regenerate bindings
-        run: dotnet run --project src/Novolis.Raylib.CodeGen -- generate
+        run: dotnet run --project codegen/Novolis.Raylib.CodeGen -- generate
       - name: Assert no drift
-        run: git diff --exit-code src/Novolis.Raylib.Runtime/
+        run: git diff --exit-code src/Novolis.Raylib.Bindings/
 
   build-test:
     runs-on: windows-latest

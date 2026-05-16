@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <RaylibCodegenProject>$(MSBuildThisFileDirectory)..\src\Novolis.Raylib.CodeGen\Novolis.Raylib.CodeGen.csproj</RaylibCodegenProject>
+    <RaylibCodegenProject>$(MSBuildThisFileDirectory)..\codegen\Novolis.Raylib.CodeGen\Novolis.Raylib.CodeGen.csproj</RaylibCodegenProject>
     <RaylibCodegenRepoRoot>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\'))</RaylibCodegenRepoRoot>
     <RunRaylibCodegen Condition="'$(RunRaylibCodegen)' == ''">true</RunRaylibCodegen>
   </PropertyGroup>
@@ -13,9 +13,9 @@
 
   <ItemGroup>
     <RaylibCodegenInput Include="$(RaylibCodegenRepoRoot)pipeline\raylib6\*.manifest.json" />
-    <RaylibCodegenInput Include="$(RaylibCodegenRepoRoot)src\Novolis.Raylib.CodeGen\**\*.cs" />
-    <RaylibCodegenInput Include="$(RaylibCodegenRepoRoot)src\Novolis.Raylib.CodeGen.Abstractions\**\*.cs" />
-    <RaylibCodegenInput Include="$(RaylibCodegenRepoRoot)src\Novolis.Raylib.CodeGen.Hooks\**\*.cs" />
+    <RaylibCodegenInput Include="$(RaylibCodegenRepoRoot)codegen\Novolis.Raylib.CodeGen\**\*.cs" />
+    <RaylibCodegenInput Include="$(RaylibCodegenRepoRoot)codegen\Novolis.Raylib.CodeGen.Abstractions\**\*.cs" />
+    <RaylibCodegenInput Include="$(RaylibCodegenRepoRoot)codegen\Novolis.Raylib.CodeGen.Hooks\**\*.cs" />
     <RaylibCodegenOutput Include="$(MSBuildProjectDirectory)\Interop\*.g.cs" />
     <RaylibCodegenOutput Include="$(MSBuildProjectDirectory)\Rendering\*.g.cs" />
     <RaylibCodegenOutput Include="$(MSBuildProjectDirectory)\Windowing\*.g.cs" />

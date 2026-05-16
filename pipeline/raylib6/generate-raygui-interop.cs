@@ -1,4 +1,4 @@
-// DEPRECATED: use dotnet run --project tools/Novolis.Raylib.CodeGen -- generate
+// DEPRECATED: use dotnet run --project codegen/Novolis.Raylib.CodeGen -- generate
 // Legacy file-based emitter; run.cs no longer invokes this script.
 // Emit RayguiShimExports.g.cs from raygui-exports.manifest.json (deterministic: sorted exports, fixed layout).
 // Usage (repo root): dotnet run tools/raylib6-pipeline/generate-raygui-interop.cs

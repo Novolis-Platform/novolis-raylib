@@ -1,6 +1,6 @@
-using Novolis.Raylib.Colors;
+using System.Drawing;
+using System.Numerics;
 using Novolis.Raylib.Game;
-using Novolis.Raylib.Transformations;
 
 namespace XFighter.Game;
 
@@ -29,7 +29,7 @@ internal sealed class Starfield
         {
             var p = _stars[i] - playerPos * 0.02f;
             var b = (byte)(180 + _brightness[i] * 75);
-            var c = new Color(b, b, (byte)(b + 20), 255);
+            var c = Color.FromArgb(255, b, b, (byte)(b + 20));
             var s = 0.08f + _brightness[i] * 0.12f;
             ctx.DrawGlowSphere(p, s, c);
         }

@@ -1,6 +1,6 @@
 # Raylib codegen hooks
 
-Roslyn transforms run after each emitter and before files are written. Add a hook by creating a class in `tools/Novolis.Raylib.CodeGen.Hooks/` that implements `IRaylibCodegenHook`.
+Roslyn transforms run after each emitter and before files are written. Add a hook by creating a class in `codegen/Novolis.Raylib.CodeGen.Hooks/` that implements `IRaylibCodegenHook`.
 
 ## Skeleton
 
@@ -26,8 +26,8 @@ public sealed class MyHook : IRaylibCodegenHook
 ## Commands
 
 ```bash
-dotnet run --project tools/Novolis.Raylib.CodeGen -- hooks list
-dotnet run --project tools/Novolis.Raylib.CodeGen -- generate
+dotnet run --project codegen/Novolis.Raylib.CodeGen -- hooks list
+dotnet run --project codegen/Novolis.Raylib.CodeGen -- generate
 ```
 
 Codegen also runs automatically when building `StarConflictsRevolt.Raylib6.Bindings` (see MSBuild target in that project).

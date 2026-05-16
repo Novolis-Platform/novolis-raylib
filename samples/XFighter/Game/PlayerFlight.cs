@@ -1,5 +1,7 @@
+using System.Numerics;
+using Novolis.Raylib;
 using Novolis.Raylib.Game;
-using Novolis.Raylib.Transformations;
+using Novolis.Raylib.Rendering;
 
 namespace XFighter.Game;
 
@@ -10,7 +12,7 @@ internal sealed class PlayerFlight
     public float Speed = 22f;
     public Vector3 Position = Vector3.Zero;
 
-    public Vector3 Forward => Vector3.ForwardFromYawPitch(Yaw, Pitch);
+    public Vector3 Forward => RaylibVector3.ForwardFromYawPitch(Yaw, Pitch);
 
     public void Update(RayGameContext ctx)
     {

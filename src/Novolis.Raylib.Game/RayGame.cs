@@ -1,9 +1,9 @@
+using System.Drawing;
+using System.Numerics;
 using Novolis.Raylib.Abstractions;
-using Novolis.Raylib.Colors;
 using Novolis.Raylib.Interact;
 using Novolis.Raylib.Rendering;
 using Novolis.Raylib.Shell;
-using Novolis.Raylib.Transformations;
 
 namespace Novolis.Raylib.Game;
 
@@ -106,8 +106,8 @@ public sealed class RayGameContext
     public void DrawGlowSphereWires(Vector3 center, float radius, Color color) =>
         World3D.DrawSphereWires(center, radius, 8, 12, color);
 
-    public void DrawHudTexture(Texture texture, Rectangle dest, Color tint) =>
-        Textures.DrawPro(texture, new Rectangle(0, 0, texture.Width, texture.Height), dest, default, 0f, tint);
+    public void DrawHudTexture(Texture texture, RectangleF dest, Color tint) =>
+        Textures.DrawPro(texture, new RectangleF(0, 0, texture.Width, texture.Height), dest, default, 0f, tint);
 
     public void HudText(string text, int x, int y, int fontSize, Color color) =>
         Graphics.DrawText(text, x, y, fontSize, color);

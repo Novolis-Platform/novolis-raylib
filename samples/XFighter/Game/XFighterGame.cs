@@ -1,15 +1,16 @@
-using Novolis.Raylib.Colors;
+using System.Drawing;
+using System.Numerics;
 using Novolis.Raylib.Game;
 using Novolis.Raylib.Interact;
-using Novolis.Raylib.Transformations;
+using Novolis.Raylib.Rendering;
 
 namespace XFighter.Game;
 
 internal sealed class XFighterGame
 {
-    private static readonly Color SpaceBlack = new(4, 6, 14, 255);
-    private static readonly Color LaserRed = new(255, 60, 80, 255);
-    private static readonly Color ExplosionCore = new(255, 220, 120, 255);
+    private static readonly Color SpaceBlack = Color.FromArgb(255, 4, 6, 14);
+    private static readonly Color LaserRed = Color.FromArgb(255, 255, 60, 80);
+    private static readonly Color ExplosionCore = Color.FromArgb(255, 255, 220, 120);
 
     private readonly Random _rng = new(42);
     private readonly PlayerFlight _player = new();
