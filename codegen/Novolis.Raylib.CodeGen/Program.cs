@@ -19,6 +19,8 @@ internal static class Program
             {
                 "generate" => new RaylibCodegenPipeline(repoRoot).GenerateAll(),
                 "verify" => RaylibManifestVerifier.Verify(repoRoot),
+                "verify-docs" => FacadeDocVerifier.Verify(repoRoot),
+                "enrich-docs" => FacadeDocEnricher.Enrich(repoRoot, write: args.Contains("--write")),
                 "suggest-raylib" => RaylibManifestSuggester.Suggest(repoRoot),
                 "hooks" => RunHooksCommand(args.Skip(1).ToArray()),
                 _ => Unknown(cmd),
@@ -59,6 +61,8 @@ internal static class Program
             Commands:
               generate       — verify vendor manifest, emit interop + raygui + debug + façades
               verify         — fail if manifest symbols missing from vendor raylib.h
+              verify-docs    — fail if façade/Hud/Gui types or methods lack resolvable summaries
+              enrich-docs    — fill manifest typeSummary/summary from raylib headers (use --write)
               suggest-raylib — list RLAPI names in raylib.h not present in manifest
               hooks list     — show registered IRaylibCodegenHook implementations
             """);

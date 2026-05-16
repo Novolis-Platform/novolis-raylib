@@ -16,10 +16,13 @@ jobs:
           dotnet-version: '10.0.x'
       - name: Fetch vendor headers
         run: dotnet run pipeline/raylib6/fetch-sources.cs
-      - name: Regenerate bindings
-        run: dotnet run --project codegen/Novolis.Raylib.CodeGen -- generate
+      - name: Enrich and regenerate bindings
+        run: |
+          dotnet run --project codegen/Novolis.Raylib.CodeGen -- enrich-docs --write
+          dotnet run --project codegen/Novolis.Raylib.CodeGen -- verify-docs
+          dotnet run --project codegen/Novolis.Raylib.CodeGen -- generate
       - name: Assert no drift
-        run: git diff --exit-code src/Novolis.Raylib.Bindings/ src/Novolis.Raylib.Runtime/
+        run: git diff --exit-code pipeline/raylib6/ src/Novolis.Raylib.Bindings/ src/Novolis.Raylib.Runtime/
 
   build-test:
     runs-on: windows-latest
@@ -47,4 +50,14 @@ jobs:
           dotnet-version: '10.0.x'
       - run: dotnet run pipeline/raylib6/fetch-sources.cs
       - run: dotnet pack Novolis.Raylib.slnx -c Release -o artifacts
+      - name: Assert XML docs in consumer packages
+        run: |
+          set -e
+          for pkg in Novolis.Raylib Novolis.Raylib.Game Novolis.Raylib.Hosting Novolis.Raylib.Runtime Novolis.Raylib.Bindings Novolis.Raylib.Abstractions Novolis.Raylib.Testing; do
+            nupkg=$(ls artifacts/${pkg}.*.nupkg 2>/dev/null | head -1)
+            if [ -z "$nupkg" ]; then echo "missing package: $pkg"; exit 1; fi
+            if ! unzip -l "$nupkg" | grep -q "lib/net10.0/${pkg}.xml"; then
+              echo "missing XML in $nupkg"; unzip -l "$nupkg"; exit 1
+            fi
+          done
       - run: ls artifacts

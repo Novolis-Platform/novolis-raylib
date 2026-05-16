@@ -5,12 +5,12 @@ namespace Novolis.Raylib.CodeGen;
 
 internal static class FacadeManifestModels
 {
-    private static readonly JsonSerializerOptions JsonOptions = new() { PropertyNameCaseInsensitive = true };
+    internal static readonly JsonSerializerOptions JsonReadOptions = new() { PropertyNameCaseInsensitive = true };
 
     public static IReadOnlyList<FacadeTypeDefinition> LoadTypes(string manifestPath)
     {
         var json = File.ReadAllText(manifestPath);
-        var doc = JsonSerializer.Deserialize<FacadesManifest>(json, JsonOptions)
+        var doc = JsonSerializer.Deserialize<FacadesManifest>(json, JsonReadOptions)
                   ?? throw new InvalidOperationException($"Failed to parse {manifestPath}");
         if (doc.Types is null || doc.Types.Count == 0)
             throw new InvalidOperationException("facades.manifest.json has no types.");
@@ -34,6 +34,9 @@ internal sealed class FacadeTypeDefinition
 
     [JsonPropertyName("folder")]
     public string Folder { get; set; } = "";
+
+    [JsonPropertyName("typeSummary")]
+    public string? TypeSummary { get; set; }
 
     [JsonPropertyName("usings")]
     public List<string>? Usings { get; set; }

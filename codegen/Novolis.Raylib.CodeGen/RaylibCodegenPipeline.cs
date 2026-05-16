@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Novolis.Raylib.CodeGen;
@@ -99,6 +100,11 @@ internal sealed class RaylibCodegenPipeline
         Console.WriteLine($"Wrote {outPath}");
     }
 
+    private (IReadOnlyDictionary<string, string> Raylib, IReadOnlyDictionary<string, string> Raygui) LoadHeaderDocs() =>
+        (
+            RaylibHeaderDocs.LoadFromFile(RaylibHeaderDocs.RaylibHeaderPath(_repoRoot)),
+            RaylibHeaderDocs.LoadFromFile(RaylibHeaderDocs.RayguiHeaderPath(_repoRoot)));
+
     public void EmitFacades()
     {
         var manifestPath = Path.Combine(RepoPaths.PipelineDir(_repoRoot), "facades.manifest.json");
@@ -111,6 +117,7 @@ internal sealed class RaylibCodegenPipeline
         var manifestBytes = File.ReadAllBytes(manifestPath);
         var manifestSha256 = Sha256Hex(manifestBytes);
         var types = FacadeManifestModels.LoadTypes(manifestPath);
+        var (raylibComments, rayguiComments) = LoadHeaderDocs();
         var raylibManifestPath = Path.Combine(RepoPaths.PipelineDir(_repoRoot), "raylib-exports.manifest.json");
         var facadeMethodImpl = File.Exists(raylibManifestPath)
             ? RaylibManifestModels.LoadInteropPolicy(raylibManifestPath).FacadeMethodImpl
@@ -119,7 +126,7 @@ internal sealed class RaylibCodegenPipeline
         foreach (var facadeType in types)
         {
             var outPath = Path.Combine(RepoPaths.RuntimeDir(_repoRoot), facadeType.Folder, $"{facadeType.Name}.g.cs");
-            var source = FacadeEmitter.EmitType(facadeType, manifestSha256);
+            var source = FacadeEmitter.EmitType(facadeType, manifestSha256, raylibComments, rayguiComments, facadeMethodImpl);
             var context = new RaylibCodegenContext
             {
                 RepoRoot = _repoRoot,
@@ -159,6 +166,7 @@ internal sealed class RaylibCodegenPipeline
         var manifestBytes = File.ReadAllBytes(manifestPath);
         var manifestSha256 = Sha256Hex(manifestBytes);
         var types = FacadeManifestModels.LoadTypes(manifestPath);
+        var (raylibComments, rayguiComments) = LoadHeaderDocs();
         var raylibManifestPath = Path.Combine(RepoPaths.PipelineDir(_repoRoot), "raylib-exports.manifest.json");
         var facadeMethodImpl = File.Exists(raylibManifestPath)
             ? RaylibManifestModels.LoadInteropPolicy(raylibManifestPath).FacadeMethodImpl
@@ -167,7 +175,7 @@ internal sealed class RaylibCodegenPipeline
         foreach (var facadeType in types)
         {
             var outPath = Path.Combine(RepoPaths.RuntimeDir(_repoRoot), facadeType.Folder, $"{facadeType.Name}.g.cs");
-            var source = FacadeEmitter.EmitType(facadeType, manifestSha256);
+            var source = FacadeEmitter.EmitType(facadeType, manifestSha256, raylibComments, rayguiComments, facadeMethodImpl);
             var context = new RaylibCodegenContext
             {
                 RepoRoot = _repoRoot,
@@ -191,7 +199,9 @@ internal sealed class RaylibCodegenPipeline
         foreach (var hook in _hooks.Where(h => h.Phase == context.Phase))
             unit = hook.Transform(unit, context);
 
-        var formatted = CodegenFormatter.FormatCompilationUnit(unit);
+        var formatted = context.Phase == RaylibCodegenPhase.Facade
+            ? unit.NormalizeWhitespace(eol: Environment.NewLine).ToFullString()
+            : CodegenFormatter.FormatCompilationUnit(unit);
         Directory.CreateDirectory(Path.GetDirectoryName(context.OutputPath)!);
         if (!formatted.EndsWith('\n'))
             formatted += Environment.NewLine;

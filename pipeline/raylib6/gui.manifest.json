@@ -1,31 +1,110 @@
 {
-  "schemaVersion": 1,
-  "description": "raygui immediate-mode widgets (UTF-8 shim). Generated into Runtime.",
   "types": [
     {
       "name": "Gui",
       "namespace": "Novolis.Raylib",
       "folder": "Gui",
+      "typeSummary": "raygui immediate-mode widgets (UTF-8); draw after scene and HUD, before EndDrawing.",
       "usings": [
         "System.Drawing"
       ],
       "methods": [
-        { "name": "Enable", "signature": "void Enable()", "body": "GuiControls.Enable()" },
-        { "name": "Disable", "signature": "void Disable()", "body": "GuiControls.Disable()" },
-        { "name": "Lock", "signature": "void Lock()", "body": "GuiControls.Lock()" },
-        { "name": "Unlock", "signature": "void Unlock()", "body": "GuiControls.Unlock()" },
-        { "name": "SetAlpha", "signature": "void SetAlpha(float alpha)", "body": "GuiControls.SetAlpha(alpha)" },
-        { "name": "LoadStyleDefault", "signature": "void LoadStyleDefault()", "body": "GuiControls.LoadStyleDefault()" },
-        { "name": "Button", "signature": "bool Button(RectangleF bounds, string label)", "body": "GuiControls.Button(bounds, label)" },
-        { "name": "Label", "signature": "void Label(RectangleF bounds, string text)", "body": "GuiControls.Label(bounds, text)" },
-        { "name": "Panel", "signature": "bool Panel(RectangleF bounds, string title)", "body": "GuiControls.Panel(bounds, title)" },
-        { "name": "GroupBox", "signature": "void GroupBox(RectangleF bounds, string title)", "body": "GuiControls.GroupBox(bounds, title)" },
-        { "name": "Toggle", "signature": "bool Toggle(RectangleF bounds, string label, ref bool active)", "body": "GuiControls.Toggle(bounds, label, ref active)" },
-        { "name": "CheckBox", "signature": "bool CheckBox(RectangleF bounds, string label, ref bool active)", "body": "GuiControls.CheckBox(bounds, label, ref active)" },
-        { "name": "ComboBox", "signature": "bool ComboBox(RectangleF bounds, string text, ref int active)", "body": "GuiControls.ComboBox(bounds, text, ref active)" },
-        { "name": "Slider", "signature": "bool Slider(RectangleF bounds, string label, ref float value, float min, float max)", "body": "GuiControls.Slider(bounds, label, ref value, min, max)" },
-        { "name": "SliderBar", "signature": "bool SliderBar(RectangleF bounds, string label, ref float value, float min, float max)", "body": "GuiControls.SliderBar(bounds, label, ref value, min, max)" },
-        { "name": "ProgressBar", "signature": "bool ProgressBar(RectangleF bounds, string label, ref float value, float min, float max)", "body": "GuiControls.ProgressBar(bounds, label, ref value, min, max)" }
+        {
+          "name": "Enable",
+          "signature": "void Enable()",
+          "body": "GuiControls.Enable()",
+          "summary": "Enables raygui controls (global state)."
+        },
+        {
+          "name": "Disable",
+          "signature": "void Disable()",
+          "body": "GuiControls.Disable()",
+          "summary": "Disables raygui controls (global state)."
+        },
+        {
+          "name": "Lock",
+          "signature": "void Lock()",
+          "body": "GuiControls.Lock()",
+          "summary": "Locks raygui controls (global state)."
+        },
+        {
+          "name": "Unlock",
+          "signature": "void Unlock()",
+          "body": "GuiControls.Unlock()",
+          "summary": "Unlocks raygui controls (global state)."
+        },
+        {
+          "name": "SetAlpha",
+          "signature": "void SetAlpha(float alpha)",
+          "body": "GuiControls.SetAlpha(alpha)",
+          "summary": "Sets global raygui alpha."
+        },
+        {
+          "name": "LoadStyleDefault",
+          "signature": "void LoadStyleDefault()",
+          "body": "GuiControls.LoadStyleDefault()",
+          "summary": "Loads default raygui style."
+        },
+        {
+          "name": "Button",
+          "signature": "bool Button(RectangleF bounds, string label)",
+          "body": "GuiControls.Button(bounds, label)",
+          "summary": "raygui button; returns true when pressed."
+        },
+        {
+          "name": "Label",
+          "signature": "void Label(RectangleF bounds, string text)",
+          "body": "GuiControls.Label(bounds, text)",
+          "summary": "raygui static label."
+        },
+        {
+          "name": "Panel",
+          "signature": "bool Panel(RectangleF bounds, string title)",
+          "body": "GuiControls.Panel(bounds, title)",
+          "summary": "raygui panel with title."
+        },
+        {
+          "name": "GroupBox",
+          "signature": "void GroupBox(RectangleF bounds, string title)",
+          "body": "GuiControls.GroupBox(bounds, title)",
+          "summary": "raygui group box with title."
+        },
+        {
+          "name": "Toggle",
+          "signature": "bool Toggle(RectangleF bounds, string label, ref bool active)",
+          "body": "GuiControls.Toggle(bounds, label, ref active)",
+          "summary": "raygui toggle control."
+        },
+        {
+          "name": "CheckBox",
+          "signature": "bool CheckBox(RectangleF bounds, string label, ref bool active)",
+          "body": "GuiControls.CheckBox(bounds, label, ref active)",
+          "summary": "raygui checkbox."
+        },
+        {
+          "name": "ComboBox",
+          "signature": "bool ComboBox(RectangleF bounds, string text, ref int active)",
+          "body": "GuiControls.ComboBox(bounds, text, ref active)",
+          "summary": "raygui combo box."
+        },
+        {
+          "name": "Slider",
+          "signature": "bool Slider(RectangleF bounds, string label, ref float value, float min, float max)",
+          "body": "GuiControls.Slider(bounds, label, ref value, min, max)",
+          "summary": "raygui slider with label."
+        },
+        {
+          "name": "SliderBar",
+          "signature": "bool SliderBar(RectangleF bounds, string label, ref float value, float min, float max)",
+          "body": "GuiControls.SliderBar(bounds, label, ref value, min, max)",
+          "summary": "raygui slider bar with label."
+        },
+        {
+          "name": "ProgressBar",
+          "signature": "bool ProgressBar(RectangleF bounds, string label, ref float value, float min, float max)",
+          "body": "GuiControls.ProgressBar(bounds, label, ref value, min, max)",
+          "summary": "raygui progress bar with label."
+        }
       ]
     }
   ]

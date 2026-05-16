@@ -1,0 +1,7 @@
+<Project>
+  <PropertyGroup Label="Novolis.Raylib API documentation">
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!-- Missing XML on public APIs until coverage is complete; hand-written APIs should be documented. -->
+    <WarningsNotAsErrors>$(WarningsNotAsErrors);CS1591;CS1574;CS0419</WarningsNotAsErrors>
+  </PropertyGroup>
+</Project>

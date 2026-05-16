@@ -58,6 +58,10 @@ flowchart TB
 
 **Not published:** Roslyn codegen under `codegen/` (see [docs/codegen.md](docs/codegen.md)).
 
+## Getting started
+
+See [docs/getting-started.md](docs/getting-started.md) for choosing Game vs Hosting vs Runtime, frame order, and samples.
+
 ## Quick start (Game)
 
 ```csharp

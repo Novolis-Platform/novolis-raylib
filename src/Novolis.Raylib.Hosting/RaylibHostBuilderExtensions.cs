@@ -4,8 +4,13 @@ using Novolis.Raylib.Abstractions;
 
 namespace Novolis.Raylib.Hosting;
 
+/// <summary>Registers raylib window loop services on a generic host.</summary>
 public static class RaylibHostBuilderExtensions
 {
+    /// <summary>Adds raylib shell, options, and a hosted loop service.</summary>
+    /// <param name="builder">The application builder.</param>
+    /// <param name="configure">Optional window and timing options.</param>
+    /// <returns>The same builder for chaining.</returns>
     public static IHostApplicationBuilder AddRaylib(this IHostApplicationBuilder builder, Action<RaylibHostOptions>? configure = null)
     {
         ArgumentNullException.ThrowIfNull(builder);
@@ -17,6 +22,10 @@ public static class RaylibHostBuilderExtensions
         return builder;
     }
 
+    /// <summary>Registers a game system type against all matching phase interfaces it implements.</summary>
+    /// <typeparam name="T">Concrete system type implementing one or more of <see cref="IStartupSystem"/>, <see cref="IUpdateSystem"/>, <see cref="IFixedUpdateSystem"/>, <see cref="IRenderSystem"/>, <see cref="IShutdownSystem"/>.</typeparam>
+    /// <param name="builder">The application builder.</param>
+    /// <returns>The same builder for chaining.</returns>
     public static IHostApplicationBuilder AddRaylibSystem<T>(this IHostApplicationBuilder builder)
         where T : class
     {

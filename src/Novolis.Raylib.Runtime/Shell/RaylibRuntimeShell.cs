@@ -8,7 +8,7 @@ using Novolis.Raylib.Windowing;
 namespace Novolis.Raylib.Shell;
 
 /// <summary>
-/// raylib 6 window + render loop. Use <see cref="RunShellFrame"/> with an <see cref="IRaylibFrameRenderer"/>.
+/// raylib 6 window + render loop. Call <c>RunShellFrame</c> with an <see cref="IRaylibFrameRenderer"/>.
 /// Set <c>NOVOLIS_RAYLIB_HEADLESS</c> to skip window creation (CI or headless hosts).
 /// </summary>
 public static class RaylibRuntimeShell
@@ -18,9 +18,20 @@ public static class RaylibRuntimeShell
     public const int DefaultWindowWidth = 1920;
     public const int DefaultWindowHeight = 1080;
 
+    /// <summary>Runs the default-sized window loop with a frame renderer.</summary>
+    /// <param name="windowTitle">Window title.</param>
+    /// <param name="frameRenderer">Receives <see cref="IRaylibFrameRenderer.OnFrame"/> each frame inside <c>BeginDrawing</c>/<c>EndDrawing</c>.</param>
+    /// <param name="cancellationToken">Stops the loop when cancelled.</param>
     public static int RunShellFrame(string windowTitle, IRaylibFrameRenderer frameRenderer, CancellationToken cancellationToken = default) =>
         RunShellFrame(windowTitle, DefaultWindowWidth, DefaultWindowHeight, frameRenderer, cancellationToken);
 
+    /// <summary>Runs a sized window loop with optional FPS overlay.</summary>
+    /// <param name="windowTitle">Window title.</param>
+    /// <param name="width">Initial width in pixels.</param>
+    /// <param name="height">Initial height in pixels.</param>
+    /// <param name="frameRenderer">Per-frame draw callback.</param>
+    /// <param name="cancellationToken">Stops the loop when cancelled.</param>
+    /// <param name="showFps">When true, draws an FPS counter after the renderer returns.</param>
     public static int RunShellFrame(
         string windowTitle,
         int width,

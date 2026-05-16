@@ -1,4 +1,6 @@
 <Project>
+  <Import Project="$(MSBuildThisFileDirectory)Novolis.Raylib.Documentation.props" />
+
   <PropertyGroup Label="Novolis.Raylib NuGet metadata">
     <NovolisRaylibVersion Condition="'$(NovolisRaylibVersion)' == ''">0.1.0-alpha</NovolisRaylibVersion>
     <Version>$(NovolisRaylibVersion)</Version>
