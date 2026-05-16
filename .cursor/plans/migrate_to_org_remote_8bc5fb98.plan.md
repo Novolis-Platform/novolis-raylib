@@ -4,22 +4,22 @@ overview: Replay all 7 local commits on top of the existing Novolis-Platform/nov
 todos:
   - id: backup
     content: Create backup-pre-org-migrate branch and git bundle
-    status: pending
+    status: completed
   - id: rebase-onto-org
     content: Add novolis remote, rebase --onto novolis/main --root main, resolve skeleton conflicts
-    status: pending
+    status: completed
   - id: push-org
     content: Push main to Novolis-Platform/novolis-raylib and set origin to org URL
-    status: pending
+    status: completed
   - id: verify
     content: Verify log order (stub + 7 commits), tree diff vs backup, CI on org repo
-    status: pending
+    status: completed
   - id: retire-fork
     content: Archive frankhaugen/novolis-raylib and fix IDE remote metadata
-    status: pending
+    status: completed
   - id: agents-guard
     content: "Add AGENTS.md / cursor rule: d:\\novolis\\* must use Novolis-Platform origin"
-    status: pending
+    status: completed
 isProject: false
 ---
 
