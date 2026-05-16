@@ -1,0 +1,23 @@
+---
+description: Agent tool registry and verification gates for this repo
+alwaysApply: true
+---
+
+# Agentic tools
+
+Read [agentic-tools/README.md](agentic-tools/README.md) and [AGENTS.md](AGENTS.md) before changing bindings or manifests.
+
+## Required after manifest / codegen hook edits
+
+```bash
+dotnet run --project codegen/Novolis.Raylib.CodeGen -- generate
+pwsh ./scripts/agent-verify.ps1
+```
+
+Machine-readable catalog: [agentic-tools/registry.json](agentic-tools/registry.json).
+
+## Never
+
+- Hand-edit `*.g.cs` in `Novolis.Raylib.Bindings/Interop/` or `Novolis.Raylib.Runtime/`
+- Put publishable packages under `codegen/`
+- Skip committing regenerated `*.g.cs` when manifests change

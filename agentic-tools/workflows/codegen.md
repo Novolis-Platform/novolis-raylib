@@ -1,0 +1,48 @@
+# Codegen workflow (agents)
+
+## When you must run codegen
+
+- Any edit under `pipeline/raylib6/*.manifest.json`
+- Any edit under `codegen/Novolis.Raylib.CodeGen.Hooks/`
+- Any task that mentions new raylib exports, façades, `Hud`, `Gui`, or interop
+
+## Standard loop
+
+```bash
+# 1. Edit manifests (and hooks if customizing emission)
+# 2. Regenerate
+dotnet run --project codegen/Novolis.Raylib.CodeGen -- generate
+
+# 3. Agent gate (drift + build)
+pwsh ./scripts/agent-verify.ps1
+```
+
+Commit **manifest and generated `*.g.cs` in the same commit**.
+
+## Where output goes
+
+| Manifest | Generated into |
+|----------|----------------|
+| `raylib-exports.manifest.json` | `src/Novolis.Raylib.Bindings/Interop/Raylib6Native.g.cs` |
+| `raygui-exports.manifest.json` | `Bindings/Interop/RayguiShimExports.g.cs` |
+| `raylib-debug.manifest.json` | `Bindings/Interop/RaylibDebugFrameHooks.g.cs` |
+| `facades.manifest.json` | `Runtime/Rendering`, `Windowing`, `Interact`, … |
+| `hud.manifest.json` | `Runtime/Hud/Hud.g.cs` |
+| `gui.manifest.json` | `Runtime/Gui/Gui.g.cs` |
+
+## Adding a raylib function
+
+1. Add import row to `raylib-exports.manifest.json` (`name` + `template`).
+2. If public API needed, add method to `facades.manifest.json` (or `hud` / `gui`).
+3. If template missing, extend `RaylibInteropEmitter` in `codegen/Novolis.Raylib.CodeGen/Emit/`.
+4. Run `generate` + `agent.verify`.
+
+## What not to do
+
+- Patch `Raylib6Native.g.cs` or `Graphics.g.cs` directly.
+- Put façade `*.g.cs` back under `Bindings/` (they belong in `Runtime/`).
+- Add `Novolis.Raylib.CodeGen` to `src/` or pack it as NuGet.
+
+## CI parity
+
+Job `codegen-drift` runs the same check as `scripts/raylib-codegen-check.ps1`.

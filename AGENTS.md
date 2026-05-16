@@ -8,6 +8,23 @@ Multi-package **.NET 10** bindings for [raylib](https://www.raylib.com/) 6 and r
 
 **Consumer entry point:** `Novolis.Raylib` (meta package). Do not tell app authors to reference `Novolis.Raylib.Native` or `Novolis.Raylib.Abstractions` directly.
 
+## Agentic tools (read first)
+
+| Resource | Purpose |
+|----------|---------|
+| [agentic-tools/README.md](agentic-tools/README.md) | Tool catalog and rules for agents |
+| [agentic-tools/registry.json](agentic-tools/registry.json) | Machine-readable commands and workflows |
+| [agentic-tools/workflows/codegen.md](agentic-tools/workflows/codegen.md) | Step-by-step codegen |
+| `.cursor/rules/` | Cursor rules (codegen, generated files) |
+| `.cursor/hooks.json` | Blocks direct edits to generated `*.g.cs` |
+
+**Before finishing binding/manifest work:**
+
+```bash
+dotnet run --project codegen/Novolis.Raylib.CodeGen -- generate
+pwsh ./scripts/agent-verify.ps1
+```
+
 ## Repository layout
 
 | Path | Role |
@@ -29,7 +46,8 @@ Multi-package **.NET 10** bindings for [raylib](https://www.raylib.com/) 6 and r
 | `tests/` | TUnit unit/integration tests |
 | `samples/` | HelloGame, HelloRuntime, HelloHosting, HelloTesting |
 | `docs/` | `codegen.md`, `testing.md` |
-| `scripts/` | `raylib-codegen-check.ps1`, `raylib-e2e.ps1`, `pack-all.ps1` |
+| `scripts/` | `agent-verify.ps1`, `raylib-codegen-check.ps1`, `raylib-e2e.ps1`, `pack-all.ps1` |
+| `agentic-tools/` | Agent registry, workflows (codegen discipline) |
 
 Solution file: `Novolis.Raylib.slnx`. Central package versions: `Directory.Packages.props`.
 
@@ -117,7 +135,7 @@ Pack all NuGet packages: `./scripts/pack-all.ps1` → `artifacts/`.
 
 | Job | OS | What it checks |
 |-----|-----|----------------|
-| `codegen-drift` | ubuntu | Regenerate bindings; `git diff --exit-code src/Novolis.Raylib.Bindings/` |
+| `codegen-drift` | ubuntu | Regenerate bindings; `git diff --exit-code` on Bindings + Runtime |
 | `build-test` | windows | fetch → native → build → test (non-Native filter) |
 | `pack-smoke` | ubuntu | `dotnet pack` after build-test |
 
@@ -153,7 +171,7 @@ Some comments and help text still mention **Star Conflicts Revolt**, `tools/rayl
 
 ## What not to do
 
-- Hand-edit `*.g.cs` under `src/Novolis.Raylib.Bindings/`.
+- Hand-edit `*.g.cs` under `src/Novolis.Raylib.Bindings/Interop/` or `src/Novolis.Raylib.Runtime/`.
 - Add direct `PackageReference` to `Novolis.Raylib.Native` or `Novolis.Raylib.Abstractions` in application projects.
 - Commit secrets or local IDE-only config (`.idea/` is untracked noise).
 - Assume Linux CI runs native window tests — use env gates or Windows locally.

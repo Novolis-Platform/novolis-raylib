@@ -23,3 +23,5 @@ Regenerate locally:
 ```bash
 dotnet run --project codegen/Novolis.Raylib.CodeGen -- generate
 ```
+
+Agent gate (drift + build): `pwsh ./scripts/agent-verify.ps1` — see [agentic-tools/README.md](../agentic-tools/README.md).

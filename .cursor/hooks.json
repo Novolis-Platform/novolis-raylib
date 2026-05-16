@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "hooks": {
+    "preToolUse": [
+      {
+        "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File .cursor/hooks/guard-generated-files.ps1",
+        "matcher": "Write|StrReplace|edit|EditNotebook"
+      }
+    ],
+    "postToolUse": [
+      {
+        "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File .cursor/hooks/remind-after-manifest-edit.ps1",
+        "matcher": "Write|StrReplace|edit"
+      }
+    ]
+  }
+}

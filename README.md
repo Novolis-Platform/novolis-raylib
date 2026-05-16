@@ -79,4 +79,4 @@ dotnet build Novolis.Raylib.slnx
 ./scripts/raylib-codegen-check.ps1
 ```
 
-See [docs/codegen.md](docs/codegen.md) and [docs/testing.md](docs/testing.md).
+See [docs/codegen.md](docs/codegen.md), [docs/testing.md](docs/testing.md), and [agentic-tools/README.md](agentic-tools/README.md) (AI agent workflows).
