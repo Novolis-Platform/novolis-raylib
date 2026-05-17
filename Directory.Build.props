@@ -23,5 +23,6 @@
 
   <PropertyGroup Condition="$(MSBuildProjectDirectory.Contains('\tests\')) Or $(MSBuildProjectDirectory.Contains('/tests/'))">
     <IsTestProject Condition="'$(IsTestProject)' == ''">true</IsTestProject>
+    <TestingPlatformCommandLineArguments>--maximum-parallel-tests 1</TestingPlatformCommandLineArguments>
   </PropertyGroup>
 </Project>

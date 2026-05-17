@@ -86,6 +86,13 @@ public static class RaylibDebug
         Logger.SetTraceLogLevel(TraceLogLevel.Warning);
         AudioDevice.Init();
         Window.Init(Math.Max(64, options.Width), Math.Max(64, options.Height), options.WindowTitle);
+        if (!Window.IsReady())
+        {
+            Window.Close();
+            AudioDevice.Close();
+            return new LoopResult(false, options.Width, options.Height, 0);
+        }
+
         if (options.HideWindow)
             Window.SetState(WindowStateFlags.Hidden);
 

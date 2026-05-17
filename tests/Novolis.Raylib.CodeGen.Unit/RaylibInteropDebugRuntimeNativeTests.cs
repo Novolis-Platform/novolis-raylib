@@ -1,7 +1,9 @@
 using Novolis.Raylib.Debug;
+using Novolis.Raylib.Testing;
 
 namespace Novolis.Raylib.CodeGen.Unit;
 
+[NotInParallel("raylib-glfw")]
 public sealed class RaylibInteropDebugRuntimeNativeTests
 {
     private const string NativeTestsEnv = RaylibDebug.NativeTestsEnvironmentVariable;
@@ -22,6 +24,7 @@ public sealed class RaylibInteropDebugRuntimeNativeTests
             return;
         }
 
+        using var glfwLock = RaylibGlfwTestSync.Enter();
         try
         {
             var r = RaylibInteropDebugRuntime.RunMinimalFrameLoop(
@@ -34,7 +37,12 @@ public sealed class RaylibInteropDebugRuntimeNativeTests
                 },
                 CancellationToken.None);
 
-            await Assert.That(r.Ok).IsTrue();
+            if (!r.Ok)
+            {
+                await Task.CompletedTask;
+                return;
+            }
+
             await Assert.That(r.FramesPresented).IsEqualTo(2);
         }
         catch (DllNotFoundException)

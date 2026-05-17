@@ -68,6 +68,7 @@ public static class RaylibOffscreenTestHarness
         RaylibOffscreenTestOptions options,
         CancellationToken cancellationToken)
     {
+        using var glfwLock = RaylibGlfwTestSync.Enter();
         Logger.SetTraceLogLevel(TraceLogLevel.Warning);
         AudioDevice.Init();
         try

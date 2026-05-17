@@ -1,9 +1,11 @@
 using Novolis.Raylib.Debug;
 using Novolis.Raylib.Interop;
+using Novolis.Raylib.Testing;
 
 namespace Novolis.Raylib.CodeGen.Unit;
 
 /// <summary>Optional smoke tests that load <c>raylib.dll</c>; default CI does not set the env gate.</summary>
+[NotInParallel("raylib-glfw")]
 public sealed class RaylibNativeSmokeTests
 {
     private const string NativeTestsEnv = RaylibDebug.NativeTestsEnvironmentVariable;
@@ -18,6 +20,7 @@ public sealed class RaylibNativeSmokeTests
             return;
         }
 
+        using var glfwLock = RaylibGlfwTestSync.Enter();
         try
         {
             Raylib6Native.InitWindow(64, 64, "Novolis.Raylib.CodeGen.Unit");
