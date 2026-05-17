@@ -10,16 +10,16 @@ todos:
     status: completed
   - id: golden-test-multi
     content: Update RaylibGoldenTest, GoldenCatalog, FramebufferAssert, UpdateBaselines for per-frame assert/write
-    status: in_progress
+    status: completed
   - id: restyle-writer
     content: GoldenRenderReportWriter — SCR dark CSS, one HTML section per frame (title/caption/status/images/expectations)
-    status: pending
+    status: completed
   - id: catalog-tests-docs
     content: Update GoldenCatalogConsistencyTests, add GoldenRenderReportWriterTests, docs/testing.md; optional demo multi-frame story
     status: pending
   - id: verify-local
     content: Run unit tests + golden tests; open index.html via open-latest-golden-report.ps1
-    status: pending
+    status: completed
 isProject: false
 ---
 
