@@ -4,8 +4,12 @@ param(
 )
 $ErrorActionPreference = "Stop"
 $Root = Split-Path $PSScriptRoot -Parent
+$PackPackageCache = Join-Path $Root "..\artifacts\nuget-packages-pack"
 New-Item -ItemType Directory -Force -Path $Feed | Out-Null
+New-Item -ItemType Directory -Force -Path $PackPackageCache | Out-Null
+$env:NUGET_PACKAGES = (Resolve-Path $PackPackageCache).Path
+dotnet build-server shutdown 2>$null | Out-Null
 $slnx = Get-ChildItem $Root -Filter "*.slnx" | Select-Object -First 1
-dotnet pack $slnx.FullName -c Release -o $Feed /p:ContinuousIntegrationBuild=false
+dotnet pack $slnx.FullName -c Release -o $Feed /p:ContinuousIntegrationBuild=false /p:NovolisLocalPack=true
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 Write-Host "Packed Novolis.Raylib -> $Feed"
