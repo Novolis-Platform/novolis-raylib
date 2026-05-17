@@ -1,0 +1,1 @@
+[assembly: NotInParallel("raylib-glfw")]

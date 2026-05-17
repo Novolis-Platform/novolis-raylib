@@ -2,43 +2,52 @@
 
 Optional test helpers for projects that use **`Novolis.Raylib`**. Reference this package **only from test projects**.
 
-## Environment gates
+## Golden tests (preferred for visuals)
 
-| Variable | Purpose |
-|----------|---------|
-| `NOVOLIS_RAYLIB_OFFSCREEN_TESTS=1` | Enable offscreen harness |
-| `NOVOLIS_RAYLIB_NATIVE_TESTS=1` | Enable native smoke / harness |
-| `NOVOLIS_RAYLIB_HEADLESS=1` | Skip blocking window in shell samples |
-| `NOVOLIS_RAYLIB_DEBUG_CAPTURE=1` | Debug framebuffer capture |
-
-## Minimal harness
+No environment variables. Enable native offscreen per assembly:
 
 ```csharp
-using Novolis.Raylib.Abstractions;
-using Novolis.Raylib.Rendering;
-using Novolis.Raylib.Testing;
+RaylibTestRuntime.EnableForAssembly();
+```
 
-var result = RaylibOffscreenTestHarness.Run(new MyRenderer(), new RaylibOffscreenTestOptions
+```csharp
+var result = RaylibGoldenTest.Run(
+    "raylib-golden-smoke-scene",
+    new DelegateRaylibFrameRenderer(DrawScene),
+    new GoldenRunOptions { TestAssembly = typeof(MyTests).Assembly });
+```
+
+Each run writes `temp/test-renders/adhoc-runs/.../renders/{storyId}/index.html` with render images and an itemized QA expectations column. See [docs/testing.md](../../docs/testing.md).
+
+## Native offscreen harness
+
+```csharp
+using var scope = RaylibTestRuntime.EnterNativeOffscreen();
+var result = RaylibOffscreenTestHarness.Run(renderer, new RaylibOffscreenTestOptions
 {
-    FrameCount = 2,
+    MaxFrames = 4,
     Width = 320,
     Height = 240,
+    CaptureLastFramePng = true,
 });
 ```
 
-Set `NOVOLIS_RAYLIB_OFFSCREEN_TESTS=1` and `NOVOLIS_RAYLIB_NATIVE_TESTS=1` before running native/offscreen tests locally or in CI.
+Legacy env vars (`NOVOLIS_RAYLIB_OFFSCREEN_TESTS`, `NOVOLIS_RAYLIB_NATIVE_TESTS`) still work for older tests.
 
 ## Helpers
 
 | Type | Role |
 |------|------|
+| `RaylibGoldenTest` | Golden SHA256 + QA HTML reports |
+| `RaylibTestRuntime` | Scoped native test state (no env vars) |
 | `RaylibOffscreenTestHarness` | Bounded hidden-window loop |
+| `RaylibTestSession` | Scoped `EnterNativeOffscreen()` |
 | `DeterministicFrameClock` | Manual timestep |
-| `SimulatedInput` | Queued keys |
 | `FramebufferAssert` | PNG SHA256 checks |
+| `NativeRaylibTestGate` | Fail when native unavailable |
 | `RaylibHostingTestHost` | In-process `IHost` |
 
-Full details: [docs/testing.md](https://github.com/novolis/novolis-raylib/blob/main/docs/testing.md).
+Full details: [docs/testing.md](../../docs/testing.md).
 
 ## E2E (maintainers)
 

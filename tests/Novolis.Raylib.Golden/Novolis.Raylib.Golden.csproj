@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Novolis.Raylib.Testing.Integration</RootNamespace>
+    <RootNamespace>Novolis.Raylib.Golden</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,8 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\Novolis.Raylib.Golden\Goldens\**\*">
-      <Link>Goldens\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    <None Update="Goldens\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

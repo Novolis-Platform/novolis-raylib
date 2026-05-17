@@ -1,71 +1,35 @@
-using System.Drawing;
-using Novolis.Raylib.Colors;
-using Novolis.Raylib.Rendering;
+using Novolis.Raylib.Diagnostics;
 using Novolis.Raylib.Testing;
+using Novolis.Raylib.Testing.Golden;
 
 namespace Novolis.Raylib.Testing.Integration;
 
-/// <summary>
-/// Renders a simple diagnostic scene through the offscreen harness (not <c>RayGame</c>)
-/// and writes PNGs to <c>artifacts/visual-captures/</c> for visual review before building Game samples.
-/// </summary>
+/// <summary>Thin integration wrapper over <see cref="RaylibGoldenTest"/> (smoke scene).</summary>
 public sealed class VisualSmokeCaptureTests
 {
-    private static readonly Color PanelBlue = Color.FromArgb(255, 66, 135, 245);
-    private static readonly Color PanelGreen = Color.FromArgb(255, 80, 200, 120);
-    private static readonly Color AccentRed = Color.FromArgb(255, 230, 41, 55);
-    private static readonly Color Border = Color.FromArgb(255, 40, 40, 40);
-
     [Test]
-    public async Task Capture_smoke_scene_writes_png_for_visual_review()
+    public async Task Capture_smoke_scene_writes_golden_review_bundle()
     {
-        using var session = new RaylibTestSession();
+        RaylibTestRuntime.EnableForAssembly();
 
-        var renderer = new DelegateRaylibFrameRenderer(DrawSmokeScene);
-        var result = RaylibOffscreenTestHarness.Run(
-            renderer,
-            new RaylibOffscreenTestOptions
+        var result = RaylibGoldenTest.Run(
+            "raylib-golden-smoke-scene",
+            new DelegateRaylibFrameRenderer(GoldenScenes.DrawSmokeScene),
+            new GoldenRunOptions
             {
-                WindowTitle = "Novolis.VisualSmoke",
-                Width = 320,
-                Height = 240,
-                MaxFrames = 4,
-                HideWindow = true,
-                CaptureLastFramePng = true,
+                Mode = GoldenRunMode.ReportOnly,
+                TestAssembly = typeof(VisualSmokeCaptureTests).Assembly,
             });
 
-        if (!result.RanNativeLoop)
+        if (result.Skipped)
         {
-            Console.WriteLine($"Skipped (native offscreen not available): {result.Message}");
+            Console.WriteLine($"Skipped: {result.Message}");
+            await Assert.That(result.ReviewReportPath).IsNotNull();
             return;
         }
 
         await Assert.That(result.Succeeded).IsTrue();
-        await Assert.That(result.LastFramePng).IsNotNull();
-
-        var png = result.LastFramePng!;
-        var path = VisualCaptureArtifacts.WritePng(png, "smoke-scene.png");
-        var hash = FramebufferAssert.Sha256Hex(png);
-        Console.WriteLine($"Visual capture: {path}");
-        Console.WriteLine($"PNG SHA256: {hash}");
-    }
-
-    private static void DrawSmokeScene(float deltaSeconds, int screenWidth, int screenHeight)
-    {
-        _ = deltaSeconds;
-        Graphics.ClearBackground(RaylibColors.RayWhite);
-
-        Graphics.DrawRectangleLines(4, 4, screenWidth - 8, screenHeight - 8, Border);
-        Graphics.DrawLine(0, 0, screenWidth, screenHeight, Border);
-        Graphics.DrawLine(screenWidth, 0, 0, screenHeight, Border);
-
-        var midY = screenHeight / 2;
-        Graphics.DrawRectangle(16, midY - 36, 88, 72, PanelBlue);
-        Graphics.DrawRectangle(screenWidth - 104, midY - 36, 88, 72, PanelGreen);
-        Graphics.DrawCircle(screenWidth / 2, midY, 28, AccentRed);
-
-        Graphics.DrawRectangleRec(new RectangleF(16, 16, screenWidth - 32, 28), Border);
-        Graphics.DrawText("Novolis smoke", 24, 22, 18, RaylibColors.RayWhite);
-        Graphics.DrawText("pre-Game visual check", 24, screenHeight - 36, 14, RaylibColors.DarkGray);
+        await Assert.That(result.ReviewReportPath).IsNotNull();
+        Console.WriteLine($"Golden render report: {result.ReviewReportPath}");
     }
 }

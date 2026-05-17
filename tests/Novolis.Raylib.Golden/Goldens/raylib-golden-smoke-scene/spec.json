@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "storyId": "raylib-golden-smoke-scene",
+  "title": "2D smoke scene",
+  "width": 320,
+  "height": 240,
+  "maxFrames": 4,
+  "baselineSha256": "d2ba8b0ede2b6989a39341802b74bcd340b4bc423170a20f21c545a41f3c3d55",
+  "expectations": [
+    "Background fill is RayWhite.",
+    "Outer border: 1px DarkGray rectangle inset 4px from edges.",
+    "Two diagonal DarkGray lines corner-to-corner (X pattern).",
+    "Left panel: blue filled rectangle 88x72 at (16, vertical center - 36).",
+    "Right panel: green filled rectangle 88x72, mirrored on the right.",
+    "Center: red filled circle radius 28 at screen center.",
+    "Top bar: DarkGray strip with white text \u0027Novolis smoke\u0027 at (24, 22), 18px.",
+    "Footer: \u0027pre-Game visual check\u0027 in DarkGray at y near height - 36."
+  ]
+}

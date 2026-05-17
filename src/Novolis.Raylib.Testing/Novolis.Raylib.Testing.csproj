@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Novolis.Raylib.Diagnostics\Novolis.Raylib.Diagnostics.csproj" />
     <ProjectReference Include="..\Novolis.Raylib\Novolis.Raylib.csproj" />
   </ItemGroup>
 

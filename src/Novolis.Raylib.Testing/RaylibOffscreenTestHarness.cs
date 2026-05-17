@@ -1,6 +1,7 @@
 using Novolis.Raylib.Abstractions;
 using Novolis.Raylib.Audio;
 using Novolis.Raylib.Debug;
+using Novolis.Raylib.Internal;
 using Novolis.Raylib.Interact;
 using Novolis.Raylib.Logging;
 using Novolis.Raylib.Rendering;
@@ -30,6 +31,9 @@ public static class RaylibOffscreenTestHarness
 
     public static bool IsNativeOffscreenRunRequested()
     {
+        if (RaylibTestRuntimeState.NativeOffscreenEnabled)
+            return true;
+
         RaylibDebug.RefreshFromEnvironment();
         return RaylibDebug.NativeOffscreenTestHarnessEnabled
                || (RaylibDebug.OffscreenTestsRequestedFromEnvironment && RaylibDebug.NativeTestsRequestedFromEnvironment);
@@ -46,7 +50,7 @@ public static class RaylibOffscreenTestHarness
         if (!IsNativeOffscreenRunRequested())
         {
             return RaylibOffscreenTestRunResult.Skipped(
-                $"Enable native offscreen tests: call RaylibDebug.Start(), or set both {OffscreenTestsEnvironmentVariable}=1 and {NativeTestsEnvironmentVariable}=1.");
+                $"Enable native offscreen tests: RaylibTestRuntime.EnableForAssembly(), RaylibTestRuntime.EnterNativeOffscreen(), RaylibDebug.Start(), or both {OffscreenTestsEnvironmentVariable}=1 and {NativeTestsEnvironmentVariable}=1.");
         }
 
         try

@@ -2,6 +2,7 @@
   "schemaVersion": 1,
   "description": "Debug-only frame hooks; native calls reference names from raylib-exports.manifest.json imports.",
   "notifyAfterNativeCall": "EndDrawing",
+  "frameHubNotifyAfter": "EndDrawing",
   "captureEnvVar": "NOVOLIS_RAYLIB_DEBUG_CAPTURE",
   "capturePngFileType": ".png",
   "symbols": {

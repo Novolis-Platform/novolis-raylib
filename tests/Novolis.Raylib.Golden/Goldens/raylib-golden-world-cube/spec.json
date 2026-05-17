@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "storyId": "raylib-golden-world-cube",
+  "title": "3D world cube",
+  "width": 320,
+  "height": 240,
+  "maxFrames": 4,
+  "baselineSha256": "32bf8934bbe0541d096b978015eb0f65f70a55826509b9f6c864b8e0622213c9",
+  "expectations": [
+    "Background is RayWhite.",
+    "A red 3D box is visible in perspective near the center.",
+    "DarkGray wireframe outlines the box edges.",
+    "Scene uses a perspective camera looking at the origin."
+  ]
+}

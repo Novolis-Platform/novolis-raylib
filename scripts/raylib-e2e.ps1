@@ -6,6 +6,7 @@ Push-Location $root
 try {
     dotnet run pipeline/raylib6/run.cs all
     dotnet test tests/Novolis.Raylib.CodeGen.Unit -- --maximum-parallel-tests 1
+    dotnet test --project tests/Novolis.Raylib.Golden -c Release -- --maximum-parallel-tests 1
 }
 finally {
     Remove-Item Env:NOVOLIS_RAYLIB_OFFSCREEN_TESTS -ErrorAction SilentlyContinue

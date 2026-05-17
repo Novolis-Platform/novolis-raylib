@@ -39,7 +39,13 @@ public sealed class InjectEndDrawingNotifyHook : IRaylibCodegenHook
                         SyntaxFactory.MemberAccessExpression(
                             SyntaxKind.SimpleMemberAccessExpression,
                             SyntaxFactory.IdentifierName("RaylibDebugFrameHooks"),
-                            SyntaxFactory.IdentifierName("NotifyAfterEndDrawing")))));
+                            SyntaxFactory.IdentifierName("NotifyAfterEndDrawing")))),
+                SyntaxFactory.ExpressionStatement(
+                    SyntaxFactory.InvocationExpression(
+                        SyntaxFactory.MemberAccessExpression(
+                            SyntaxKind.SimpleMemberAccessExpression,
+                            SyntaxFactory.ParseName("Novolis.Raylib.Internal.RaylibFrameCaptureHub"),
+                            SyntaxFactory.IdentifierName("Notify")))));
 
             return node
                 .WithExpressionBody(null)
