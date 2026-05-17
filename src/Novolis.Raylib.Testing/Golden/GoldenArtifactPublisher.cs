@@ -62,6 +62,8 @@ public static class GoldenArtifactPublisher
 
         if (!File.Exists(indexPath))
             WriteFallbackIndex(indexPath, destinationDirectory, options);
+        else if (options.StablePngNames && copiedPngs.Count > 0)
+            RewriteIndexImageSources(indexPath);
 
         if (options.WriteReadme)
             WriteReadme(destinationDirectory, indexPath, options);
@@ -117,6 +119,14 @@ public static class GoldenArtifactPublisher
         }
 
         File.WriteAllText(Path.Combine(destinationDirectory, "README.txt"), sb.ToString(), Encoding.UTF8);
+    }
+
+    private static void RewriteIndexImageSources(string indexPath)
+    {
+        var html = File.ReadAllText(indexPath);
+        var updated = html.Replace(".actual.png", ".png", StringComparison.OrdinalIgnoreCase);
+        if (!ReferenceEquals(html, updated))
+            File.WriteAllText(indexPath, updated, Encoding.UTF8);
     }
 
     private static string H(string text) => WebUtility.HtmlEncode(text);
