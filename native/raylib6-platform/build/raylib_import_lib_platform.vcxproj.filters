@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="D:\novolis\novolis-raylib\native\raylib6-platform\build\CMakeFiles\45614e2906a969aff51d5c238745fc66\raylib_import.lib.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\novolis\novolis-raylib\native\raylib6-platform\build\CMakeFiles\43fc4bd6dfdca613b768b7aba43f0c7c\raylib_import_lib_platform.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\novolis\novolis-raylib\native\raylib6-platform\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="D:\novolis\novolis-raylib\native\raylib6-platform\build\CMakeFiles\raylib_import_lib_platform" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{CE54D380-B700-34F5-9C34-04DA7A1A39C2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

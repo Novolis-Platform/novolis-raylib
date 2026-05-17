@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="D:\novolis\novolis-raylib\native\raylib6-with-imgui\build\CMakeFiles\14beadfa00dfb0f6581ac03ebf3d5044\INSTALL_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{3B57EE1E-E422-3A6D-80DD-DA8CEC4C232B}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

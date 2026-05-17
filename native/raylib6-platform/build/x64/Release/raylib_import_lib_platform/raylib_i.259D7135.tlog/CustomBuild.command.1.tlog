@@ -1,0 +1,28 @@
+^D:\NOVOLIS\NOVOLIS-RAYLIB\NATIVE\RAYLIB6-PLATFORM\BUILD\CMAKEFILES\45614E2906A969AFF51D5C238745FC66\RAYLIB_IMPORT.LIB.RULE
+setlocal
+"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\bin\Hostx64\x64\lib.exe" /def:D:/novolis/novolis-raylib/native/raylib6-platform/../raylib6-with-raygui/generated/raylib.win-x64.def /out:D:/novolis/novolis-raylib/native/raylib6-platform/build/raylib_import.lib /machine:x64
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^D:\NOVOLIS\NOVOLIS-RAYLIB\NATIVE\RAYLIB6-PLATFORM\BUILD\CMAKEFILES\43FC4BD6DFDCA613B768B7ABA43F0C7C\RAYLIB_IMPORT_LIB_PLATFORM.RULE
+setlocal
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^D:\NOVOLIS\NOVOLIS-RAYLIB\NATIVE\RAYLIB6-PLATFORM\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SD:/novolis/novolis-raylib/native/raylib6-platform -BD:/novolis/novolis-raylib/native/raylib6-platform/build --check-stamp-file D:/novolis/novolis-raylib/native/raylib6-platform/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

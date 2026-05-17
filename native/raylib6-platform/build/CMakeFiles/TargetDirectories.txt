@@ -1,0 +1,4 @@
+D:/novolis/novolis-raylib/native/raylib6-platform/build/CMakeFiles/novolis_raylib_trace.dir
+D:/novolis/novolis-raylib/native/raylib6-platform/build/CMakeFiles/raylib_import_lib_platform.dir
+D:/novolis/novolis-raylib/native/raylib6-platform/build/CMakeFiles/ALL_BUILD.dir
+D:/novolis/novolis-raylib/native/raylib6-platform/build/CMakeFiles/ZERO_CHECK.dir

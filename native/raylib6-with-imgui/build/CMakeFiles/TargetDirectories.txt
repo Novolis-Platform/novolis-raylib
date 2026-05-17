@@ -1,0 +1,8 @@
+D:/novolis/novolis-raylib/native/raylib6-with-imgui/build/CMakeFiles/novolis_imgui.dir
+D:/novolis/novolis-raylib/native/raylib6-with-imgui/build/CMakeFiles/raylib_import_lib_imgui.dir
+D:/novolis/novolis-raylib/native/raylib6-with-imgui/build/CMakeFiles/INSTALL.dir
+D:/novolis/novolis-raylib/native/raylib6-with-imgui/build/CMakeFiles/ALL_BUILD.dir
+D:/novolis/novolis-raylib/native/raylib6-with-imgui/build/CMakeFiles/ZERO_CHECK.dir
+D:/novolis/novolis-raylib/native/raylib6-with-imgui/build/cimgui-build/CMakeFiles/cimgui.dir
+D:/novolis/novolis-raylib/native/raylib6-with-imgui/build/cimgui-build/CMakeFiles/INSTALL.dir
+D:/novolis/novolis-raylib/native/raylib6-with-imgui/build/cimgui-build/CMakeFiles/ALL_BUILD.dir

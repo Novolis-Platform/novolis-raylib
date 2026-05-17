@@ -1,0 +1,10 @@
+^D:\NOVOLIS\NOVOLIS-RAYLIB\NATIVE\RAYLIB6-PLATFORM\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SD:/novolis/novolis-raylib/native/raylib6-platform -BD:/novolis/novolis-raylib/native/raylib6-platform/build --check-stamp-file D:/novolis/novolis-raylib/native/raylib6-platform/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
