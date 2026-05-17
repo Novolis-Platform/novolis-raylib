@@ -214,4 +214,36 @@ public sealed class RayGameContext
     /// <summary>Alias for <see cref="HudRect"/>.</summary>
     public void Rect(int x, int y, int w, int h, Color color) =>
         HudRect(x, y, w, h, color);
+
+    /// <summary>Draws a heightfield grid as wire segments between vertex samples.</summary>
+    public void DrawHeightfieldWires(
+        ReadOnlySpan<Vector3> vertices,
+        int cellsX,
+        int cellsZ,
+        Color cellDiagonalColor,
+        Color gridLineColor)
+    {
+        var stride = cellsX + 1;
+        for (var z = 0; z < cellsZ; z++)
+        {
+            for (var x = 0; x < cellsX; x++)
+            {
+                var i00 = z * stride + x;
+                var i10 = i00 + 1;
+                var i01 = i00 + stride;
+                DrawBolt(vertices[i00], vertices[i10], cellDiagonalColor);
+                DrawBolt(vertices[i00], vertices[i01], cellDiagonalColor);
+            }
+        }
+
+        for (var x = 0; x <= cellsX; x++)
+        {
+            for (var z = 0; z < cellsZ; z++)
+            {
+                var a = vertices[z * stride + x];
+                var b = vertices[(z + 1) * stride + x];
+                DrawBolt(a, b, gridLineColor);
+            }
+        }
+    }
 }
