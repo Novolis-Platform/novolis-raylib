@@ -81,23 +81,24 @@ public static class GoldenArtifactPublisher
         sb.AppendLine("<html lang=\"en\"><head><meta charset=\"utf-8\" />");
         sb.AppendLine($"<title>{H(options.FallbackTitle)}</title>");
         sb.AppendLine("<style>");
-        sb.AppendLine("body{font-family:Segoe UI,system-ui,sans-serif;background:#0d1117;color:#c9d6e8;margin:0;padding:24px;}");
-        sb.AppendLine(".meta{color:#8b949e;margin-bottom:24px;}");
-        sb.AppendLine(".skip{color:#ff6b5a;}");
+        sb.AppendLine(GoldenReportStyles.Css);
         sb.AppendLine("</style></head><body>");
-        sb.AppendLine($"<h1>{H(options.FallbackTitle)}</h1>");
-        sb.Append("<p class=\"meta\">Folder: <code>").Append(H(destinationDirectory)).AppendLine("</code></p>");
-        sb.Append("<p class=\"meta\">Status: ");
+        sb.AppendLine("<div class=\"grain\" aria-hidden=\"true\"></div>");
+        sb.AppendLine("<div class=\"shell\">");
+        sb.AppendLine("<header class=\"hdr\"><div class=\"hdr-brand\">");
+        sb.AppendLine($"<h1 class=\"hdr-name\">{H(options.FallbackTitle)}</h1>");
+        sb.AppendLine("<span class=\"hdr-sub\">Golden QA (fallback)</span></div></header>");
+        sb.Append("<p class=\"story-meta\">Folder: <code>").Append(H(destinationDirectory)).AppendLine("</code></p>");
+        sb.Append("<p class=\"story-meta\">Status: ");
         if (!string.IsNullOrWhiteSpace(options.SkippedMessage))
-            sb.Append("<span class=\"skip\">").Append(H(options.SkippedMessage)).Append("</span>");
+            sb.Append("<span class=\"t-badge skipped\">").Append(H(options.SkippedMessage)).Append("</span>");
         else if (!string.IsNullOrWhiteSpace(options.FailedMessage))
-            sb.Append("<span class=\"skip\">").Append(H(options.FailedMessage)).Append("</span>");
+            sb.Append("<span class=\"t-badge failed\">").Append(H(options.FailedMessage)).Append("</span>");
         else if (options.ReportOnly)
-            sb.Append("report-only (see Novolis QA bundle when native capture succeeds)");
+            sb.Append("<span class=\"t-badge captured\">report-only (see Novolis QA bundle when native capture succeeds)</span>");
         else
             sb.Append("no index.html in source bundle");
-        sb.AppendLine("</p>");
-        sb.AppendLine("</body></html>");
+        sb.AppendLine("</p></div></body></html>");
         File.WriteAllText(indexPath, sb.ToString(), Encoding.UTF8);
     }
 

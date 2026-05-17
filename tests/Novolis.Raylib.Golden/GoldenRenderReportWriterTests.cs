@@ -38,11 +38,12 @@ public sealed class GoldenRenderReportWriterTests
                 new GoldenStoryAssertInfo { AssertPassed = true },
                 dir);
 
-            await Assert.That(html).Contains("#0d1117");
-            await Assert.That(html).Contains("<section>");
+            await Assert.That(html).Contains("--bg:#0b0d11");
+            await Assert.That(html).Contains("class=\"dash\"");
+            await Assert.That(html).Contains("class=\"grp ");
             await Assert.That(html).Contains("src=\"actual.png\"");
             await Assert.That(html).Contains("First expectation.");
-            await Assert.That(html).Contains("class=\"status ok\"");
+            await Assert.That(html).Contains("class=\"t-badge passed\"");
         }
         finally
         {
@@ -110,9 +111,9 @@ public sealed class GoldenRenderReportWriterTests
             await Assert.That(html).Contains("src=\"01-a.actual.png\"");
             await Assert.That(html).Contains("Alpha checklist item.");
             await Assert.That(html).Contains("Beta checklist item.");
-            await Assert.That(html).Contains("class=\"missing\"");
+            await Assert.That(html).Contains("class=\"golden-missing\"");
             await Assert.That(html).Contains("<strong>FAIL</strong>");
-            await Assert.That(html).Contains("class=\"status skip\"");
+            await Assert.That(html).Contains("class=\"t-badge skipped\"");
         }
         finally
         {
@@ -151,7 +152,7 @@ public sealed class GoldenRenderReportWriterTests
                 new GoldenStoryAssertInfo { AssertPassed = false, ErrorMessage = "hash mismatch" },
                 dir);
 
-            await Assert.That(html).Contains("class=\"status fail\"");
+            await Assert.That(html).Contains("class=\"t-badge failed\"");
             await Assert.That(html).Contains("hash mismatch");
         }
         finally

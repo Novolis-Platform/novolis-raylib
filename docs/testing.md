@@ -32,7 +32,7 @@ Every run writes a review folder under:
 
 | File | Purpose |
 |------|---------|
-| `index.html` | Dark section-based QA page (SCR-style): one section per frame with images and checklist |
+| `index.html` | Dark QA page (TUnit report styling): dashboard summary + one card per frame with images and checklist |
 | `expectations.md` | Same checklist for agents/CLI (`## {frameId}` per frame when multi-frame) |
 | `manifest.json` | Machine-readable metadata, per-frame hashes and paths |
 | `agent-brief.json` | Compact JSON for agentic review (paths, expectations, hashes) |
