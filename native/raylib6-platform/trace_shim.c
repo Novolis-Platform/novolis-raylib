@@ -5,14 +5,14 @@
 #include "raylib.h"
 
 #if defined(_WIN32)
-#define SC_EXPORT __declspec(dllexport)
+#define NOVOLIS_EXPORT __declspec(dllexport)
 #else
-#define SC_EXPORT __attribute__((visibility("default")))
+#define NOVOLIS_EXPORT __attribute__((visibility("default")))
 #endif
 
-typedef void (*StarconflictsManagedTraceFn)(int logLevel, const char *message);
+typedef void (*NovolisManagedTraceFn)(int logLevel, const char *message);
 
-static StarconflictsManagedTraceFn g_managed_trace;
+static NovolisManagedTraceFn g_managed_trace;
 
 static void NOVOLIS_RAYLIB_trace_shim(int logLevel, const char *text, va_list args)
 {
@@ -34,13 +34,13 @@ static void NOVOLIS_RAYLIB_trace_shim(int logLevel, const char *text, va_list ar
         g_managed_trace(logLevel, buf);
 }
 
-SC_EXPORT void NOVOLIS_RAYLIB_trace_forwarder_install(StarconflictsManagedTraceFn fn)
+NOVOLIS_EXPORT void NOVOLIS_RAYLIB_trace_forwarder_install(NovolisManagedTraceFn fn)
 {
     g_managed_trace = fn;
     SetTraceLogCallback(NOVOLIS_RAYLIB_trace_shim);
 }
 
-SC_EXPORT void NOVOLIS_RAYLIB_trace_forwarder_clear(void)
+NOVOLIS_EXPORT void NOVOLIS_RAYLIB_trace_forwarder_clear(void)
 {
     g_managed_trace = NULL;
     SetTraceLogCallback(NULL);

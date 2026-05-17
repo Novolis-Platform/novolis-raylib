@@ -3,10 +3,10 @@ using System.Runtime.InteropServices;
 
 namespace Novolis.Raylib.Interop;
 
-/// <summary>Native shim in <c>novolis_raygui</c> that formats <c>TraceLogCallback</c> (<c>va_list</c>) and forwards to an unmanaged delegate.</summary>
+/// <summary>Native shim in <c>novolis_raylib_trace</c> that formats <c>TraceLogCallback</c> (<c>va_list</c>) and forwards to an unmanaged delegate.</summary>
 internal static unsafe partial class NovolisRaylibTraceForwarderNative
 {
-    private const string ShimDll = "novolis_raygui";
+    private const string ShimDll = "novolis_raylib_trace";
 
     [LibraryImport(ShimDll, EntryPoint = "NOVOLIS_RAYLIB_trace_forwarder_install")]
     internal static partial void Install(delegate* unmanaged[Cdecl]<int, byte*, void> callback);

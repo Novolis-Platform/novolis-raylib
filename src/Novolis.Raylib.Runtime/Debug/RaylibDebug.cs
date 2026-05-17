@@ -96,7 +96,6 @@ public static class RaylibDebug
         if (options.HideWindow)
             Window.SetState(WindowStateFlags.Hidden);
 
-        RayguiShimHost.EnsureInitialized();
         Time.SetTargetFPS(60);
 
         var frames = 0;

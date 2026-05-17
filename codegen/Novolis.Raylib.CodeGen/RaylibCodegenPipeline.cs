@@ -23,11 +23,13 @@ internal sealed class RaylibCodegenPipeline
             return verify;
 
         EmitRaylibInterop();
+        EmitImguiInterop();
         EmitRayguiInterop();
         EmitDebugHooks();
         EmitFacades();
         EmitHud();
         EmitGui();
+        EmitRayGui();
         return 0;
     }
 
@@ -55,12 +57,42 @@ internal sealed class RaylibCodegenPipeline
         Console.WriteLine($"Wrote {RaylibManifestModels.LoadImports(manifestPath).Count} imports to {outPath}");
     }
 
+    public void EmitImguiInterop()
+    {
+        var manifestPath = Path.Combine(RepoPaths.PipelineDir(_repoRoot), "imgui-exports.manifest.json");
+        var manifestBytes = File.ReadAllBytes(manifestPath);
+        var manifestSha256 = Sha256Hex(manifestBytes);
+        var outPath = Path.Combine(RepoPaths.InteropDir(_repoRoot), "ImguiShimExports.g.cs");
+
+        var source = ImguiInteropEmitter.Emit(manifestPath, manifestBytes, manifestSha256);
+        var context = new RaylibCodegenContext
+        {
+            RepoRoot = _repoRoot,
+            Phase = RaylibCodegenPhase.ImGui,
+            OutputPath = outPath,
+            ManifestPath = manifestPath,
+            ManifestSha256 = manifestSha256,
+            RegenerateHint = "dotnet run --project codegen/Novolis.Raylib.CodeGen -- generate",
+        };
+
+        WriteUnit(source, context);
+        Console.WriteLine($"Wrote Imgui interop to {outPath}");
+    }
+
     public void EmitRayguiInterop()
     {
         var manifestPath = Path.Combine(RepoPaths.PipelineDir(_repoRoot), "raygui-exports.manifest.json");
+        if (!File.Exists(manifestPath))
+        {
+            Console.WriteLine("raygui-exports.manifest.json not found; skipping raygui interop.");
+            return;
+        }
+
         var manifestBytes = File.ReadAllBytes(manifestPath);
         var manifestSha256 = Sha256Hex(manifestBytes);
-        var outPath = Path.Combine(RepoPaths.InteropDir(_repoRoot), "RayguiShimExports.g.cs");
+        var rayguiDir = Path.Combine(_repoRoot, "src", "Novolis.Raylib.Raygui", "Interop");
+        Directory.CreateDirectory(rayguiDir);
+        var outPath = Path.Combine(rayguiDir, "RayguiShimExports.g.cs");
 
         var source = RayguiInteropEmitter.Emit(manifestPath, manifestBytes, manifestSha256);
         var context = new RaylibCodegenContext
@@ -152,6 +184,11 @@ internal sealed class RaylibCodegenPipeline
     public void EmitGui()
     {
         EmitManifestTypes("gui.manifest.json", "Gui");
+    }
+
+    public void EmitRayGui()
+    {
+        EmitManifestTypes("raygui.manifest.json", "RayGui");
     }
 
     private void EmitManifestTypes(string manifestFileName, string label)

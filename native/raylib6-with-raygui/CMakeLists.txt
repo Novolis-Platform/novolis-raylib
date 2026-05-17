@@ -16,7 +16,7 @@ if(NOT EXISTS "${RAYLIB_HEADER_DIR}/raylib.h")
     message(FATAL_ERROR "Missing ${RAYLIB_HEADER_DIR}/raylib.h — run: dotnet run pipeline/raylib6/fetch-sources.cs")
 endif()
 
-add_library(novolis_raygui SHARED raygui_shim.c trace_shim.c)
+add_library(novolis_raygui SHARED raygui_shim.c)
 set_target_properties(novolis_raygui PROPERTIES OUTPUT_NAME "novolis_raygui")
 
 # raygui.h only sets RAYGUIAPI __declspec(dllexport) when building a shared lib on Windows.

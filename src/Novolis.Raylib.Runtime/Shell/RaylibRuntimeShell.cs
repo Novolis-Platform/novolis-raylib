@@ -53,7 +53,6 @@ public static class RaylibRuntimeShell
         Window.SetConfigFlags(WindowStateFlags.DefaultGameHost);
         Window.Init(Math.Max(64, width), Math.Max(64, height), windowTitle);
         Window.SetState(WindowStateFlags.Resizable);
-        RayguiShimHost.EnsureInitialized();
         Time.SetTargetFPS(60);
 
         try

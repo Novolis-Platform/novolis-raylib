@@ -2,9 +2,12 @@
   <Target Name="CopyNovolisRaylibNativeAssets" AfterTargets="Build">
     <ItemGroup>
       <_NovolisRaylibNative Include="$(MSBuildThisFileDirectory)..\vendor\raylib-6\prebuilt\$(RuntimeIdentifier)\**\*" Condition="'$(RuntimeIdentifier)' != '' and Exists('$(MSBuildThisFileDirectory)..\vendor\raylib-6\prebuilt\$(RuntimeIdentifier)')" />
-      <_NovolisRaylibNative Include="$(MSBuildThisFileDirectory)..\native\raylib6-with-raygui\out\novolis_raygui.dll" Condition="$([MSBuild]::IsOSPlatform('Windows'))" />
-      <_NovolisRaylibNative Include="$(MSBuildThisFileDirectory)..\native\raylib6-with-raygui\out\libnovolis_raygui.so" Condition="$([MSBuild]::IsOSPlatform('Linux'))" />
-      <_NovolisRaylibNative Include="$(MSBuildThisFileDirectory)..\native\raylib6-with-raygui\out\libnovolis_raygui.dylib" Condition="$([MSBuild]::IsOSPlatform('OSX'))" />
+      <_NovolisRaylibNative Include="$(MSBuildThisFileDirectory)..\native\raylib6-platform\out\novolis_raylib_trace.dll" Condition="$([MSBuild]::IsOSPlatform('Windows'))" />
+      <_NovolisRaylibNative Include="$(MSBuildThisFileDirectory)..\native\raylib6-with-imgui\out\novolis_imgui.dll" Condition="$([MSBuild]::IsOSPlatform('Windows'))" />
+      <_NovolisRaylibNative Include="$(MSBuildThisFileDirectory)..\native\raylib6-platform\out\libnovolis_raylib_trace.so" Condition="$([MSBuild]::IsOSPlatform('Linux'))" />
+      <_NovolisRaylibNative Include="$(MSBuildThisFileDirectory)..\native\raylib6-with-imgui\out\libnovolis_imgui.so" Condition="$([MSBuild]::IsOSPlatform('Linux'))" />
+      <_NovolisRaylibNative Include="$(MSBuildThisFileDirectory)..\native\raylib6-platform\out\libnovolis_raylib_trace.dylib" Condition="$([MSBuild]::IsOSPlatform('OSX'))" />
+      <_NovolisRaylibNative Include="$(MSBuildThisFileDirectory)..\native\raylib6-with-imgui\out\libnovolis_imgui.dylib" Condition="$([MSBuild]::IsOSPlatform('OSX'))" />
     </ItemGroup>
     <Copy SourceFiles="@(_NovolisRaylibNative)" DestinationFolder="$(OutputPath)" SkipUnchangedFiles="true" Condition="'@(_NovolisRaylibNative)' != ''" />
   </Target>

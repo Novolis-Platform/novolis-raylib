@@ -103,7 +103,6 @@ public static class RaylibOffscreenTestHarness
                 if (options.HideWindow && options.UsePostInitHideOnly)
                     Window.SetState(WindowStateFlags.Hidden);
 
-                RayguiShimHost.EnsureInitialized();
                 Time.SetTargetFPS(60);
                 Window.SetExitKey((KeyboardKey)0);
 

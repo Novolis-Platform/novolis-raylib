@@ -68,8 +68,8 @@ static int RunGenerateChain(string repoRoot)
 
 static int RunNative(string repoRoot)
 {
-	var nativeDir = Path.Combine(repoRoot, "native", "raylib6-with-raygui");
-	var defPath = Path.Combine(nativeDir, "generated", "raylib.win-x64.def");
+	var rayguiDir = Path.Combine(repoRoot, "native", "raylib6-with-raygui");
+	var defPath = Path.Combine(rayguiDir, "generated", "raylib.win-x64.def");
 	if (OperatingSystem.IsWindows())
 	{
 		var raylibDll = Path.Combine(repoRoot, "vendor", "raylib-6", "prebuilt", "win-x64", "raylib.dll");
@@ -82,27 +82,40 @@ static int RunNative(string repoRoot)
 		}
 	}
 
-	var buildDir = Path.Combine(nativeDir, "build");
-	Directory.CreateDirectory(buildDir);
-	var configureArgs = $"-S \"{nativeDir}\" -B \"{buildDir}\"";
-	if (Run("cmake", configureArgs, repoRoot) != 0)
+	foreach (var nativeDir in new[]
+	         {
+		         Path.Combine(repoRoot, "native", "raylib6-with-raygui"),
+		         Path.Combine(repoRoot, "native", "raylib6-platform"),
+		         Path.Combine(repoRoot, "native", "raylib6-with-imgui"),
+	         })
 	{
-		// Stale CMake cache (e.g. sources moved from repo-root native/ to tools/native/) — wipe once and retry.
-		try
+		if (!Directory.Exists(nativeDir))
+			continue;
+
+		var buildDir = Path.Combine(nativeDir, "build");
+		Directory.CreateDirectory(buildDir);
+		var configureArgs = $"-S \"{nativeDir}\" -B \"{buildDir}\"";
+		if (Run("cmake", configureArgs, repoRoot) != 0)
 		{
-			Directory.Delete(buildDir, recursive: true);
-		}
-		catch
-		{
-			// ignore; second cmake will surface the real error
+			try
+			{
+				Directory.Delete(buildDir, recursive: true);
+			}
+			catch
+			{
+				// ignore; second cmake will surface the real error
+			}
+
+			Directory.CreateDirectory(buildDir);
+			if (Run("cmake", configureArgs, repoRoot) != 0)
+				return 1;
 		}
 
-		Directory.CreateDirectory(buildDir);
-		if (Run("cmake", configureArgs, repoRoot) != 0)
+		if (Run("cmake", $"--build \"{buildDir}\" --config Release", repoRoot) != 0)
 			return 1;
 	}
 
-	return Run("cmake", $"--build \"{buildDir}\" --config Release", repoRoot);
+	return 0;
 }
 
 static int Run(string file, string arguments, string workingDirectory)

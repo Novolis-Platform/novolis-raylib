@@ -11,7 +11,8 @@
     <PackageId>Novolis.Raylib.Bindings</PackageId>
     <IsPackable>true</IsPackable>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <Description>Generated raylib 6 + raygui P/Invoke (manifest-driven; do not hand-edit Interop/*.g.cs).</Description>
+    <Description>Generated raylib 6 + ImGui P/Invoke (manifest-driven; do not hand-edit Interop/*.g.cs).</Description>
+    <IncludeRaygui Condition="'$(IncludeRaygui)' == ''">false</IncludeRaygui>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,10 +24,18 @@
           Link="raylib.dll"
           CopyToOutputDirectory="PreserveNewest"
           Condition="Exists('$(MSBuildThisFileDirectory)..\..\vendor\raylib-6\prebuilt\win-x64\raylib.dll')" />
+    <None Include="$(MSBuildThisFileDirectory)..\..\native\raylib6-platform\out\novolis_raylib_trace.dll"
+          Link="novolis_raylib_trace.dll"
+          CopyToOutputDirectory="PreserveNewest"
+          Condition="Exists('$(MSBuildThisFileDirectory)..\..\native\raylib6-platform\out\novolis_raylib_trace.dll')" />
+    <None Include="$(MSBuildThisFileDirectory)..\..\native\raylib6-with-imgui\out\novolis_imgui.dll"
+          Link="novolis_imgui.dll"
+          CopyToOutputDirectory="PreserveNewest"
+          Condition="Exists('$(MSBuildThisFileDirectory)..\..\native\raylib6-with-imgui\out\novolis_imgui.dll')" />
     <None Include="$(MSBuildThisFileDirectory)..\..\native\raylib6-with-raygui\out\novolis_raygui.dll"
           Link="novolis_raygui.dll"
           CopyToOutputDirectory="PreserveNewest"
-          Condition="Exists('$(MSBuildThisFileDirectory)..\..\native\raylib6-with-raygui\out\novolis_raygui.dll')" />
+          Condition="'$(IncludeRaygui)' == 'true' and Exists('$(MSBuildThisFileDirectory)..\..\native\raylib6-with-raygui\out\novolis_raygui.dll')" />
   </ItemGroup>
 
   <ItemGroup>

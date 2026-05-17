@@ -7,7 +7,7 @@ using Novolis.Raylib.Interop;
 
 namespace Novolis.Raylib.Logging;
 
-/// <summary>raylib trace level + optional bridge to <see cref="ILogger"/> via the native shim in <c>novolis_raygui</c>.</summary>
+/// <summary>raylib trace level + optional bridge to <see cref="ILogger"/> via the native shim in <c>novolis_raylib_trace</c>.</summary>
 public static class Logger
 {
     private const string DefaultCategoryName = "Novolis.Raylib.Interop";
@@ -17,7 +17,7 @@ public static class Logger
     private static ILogger? s_logger;
 
     /// <summary>Registers or clears forwarding of raylib <c>TraceLog</c> into Microsoft.Extensions.Logging. Pass <c>null</c> to detach.</summary>
-    /// <remarks>Requires <see cref="RayguiShimHost.EnsureInitialized"/> (loads <c>novolis_raygui</c>) when <paramref name="factory"/> is non-null.</remarks>
+    /// <remarks>Requires <see cref="RaylibTraceHost.EnsureInitialized"/> (loads <c>novolis_raylib_trace</c>) when <paramref name="factory"/> is non-null.</remarks>
     public static unsafe void UseLoggerFactory(ILoggerFactory? factory, string? categoryName = null)
     {
         lock (Gate)
@@ -35,7 +35,7 @@ public static class Logger
             if (factory is null)
                 return;
 
-            RayguiShimHost.EnsureInitialized();
+            RaylibTraceHost.EnsureInitialized();
 
             Volatile.Write(
                 ref s_logger,

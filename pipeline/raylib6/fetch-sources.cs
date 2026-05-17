@@ -29,6 +29,8 @@ if (!File.Exists(manifestPath))
 var json = JsonSerializer.Deserialize<Manifest>(File.ReadAllText(manifestPath), JsonSerializerOptions.Web)!;
 var vendorRaylib = Path.Combine(repoRoot, "vendor", "raylib-6");
 var vendorRaygui = Path.Combine(repoRoot, "vendor", "raygui-6");
+var vendorCimgui = Path.Combine(repoRoot, "vendor", "cimgui");
+var vendorRaylibCimgui = Path.Combine(repoRoot, "vendor", "raylib-cimgui");
 Directory.CreateDirectory(vendorRaylib);
 Directory.CreateDirectory(vendorRaygui);
 
@@ -57,6 +59,18 @@ if (json.RayguiHeaderUrl is { } rayguiUrl)
 	await DownloadToFileAsync(http, rayguiUrl, dest);
 	FixRayguiIncludesIfNeeded(dest);
 	Console.WriteLine($"Wrote {dest}");
+}
+
+if (json.CimguiRepoUrl is { } cimguiRepo)
+{
+	EnsureGitClone(cimguiRepo, vendorCimgui, json.CimguiGitRef ?? "master", recursive: true);
+	Console.WriteLine($"cimgui ready at {vendorCimgui}");
+}
+
+if (json.RaylibCimguiRepoUrl is { } raylibCimguiRepo)
+{
+	EnsureGitClone(raylibCimguiRepo, vendorRaylibCimgui, json.RaylibCimguiGitRef ?? "master", recursive: false);
+	Console.WriteLine($"raylib-cimgui ready at {vendorRaylibCimgui}");
 }
 
 Console.WriteLine("fetch-sources: done.");
@@ -139,10 +153,48 @@ static void FixRayguiIncludesIfNeeded(string path)
 	File.WriteAllText(path, text);
 }
 
+static void EnsureGitClone(string repoUrl, string destDir, string gitRef, bool recursive)
+{
+	if (File.Exists(Path.Combine(destDir, "cimgui.h")) || File.Exists(Path.Combine(destDir, "rlcimgui.c")))
+	{
+		Console.WriteLine($"Skipping clone; already present: {destDir}");
+		return;
+	}
+
+	if (Directory.Exists(destDir))
+		Directory.Delete(destDir, recursive: true);
+
+	var cloneArgs = new List<string> { "clone", "--depth", "1", "--branch", gitRef, repoUrl, destDir };
+	if (recursive)
+		cloneArgs.Insert(1, "--recursive");
+
+	var code = RunProcess("git", string.Join(' ', cloneArgs.Select(a => a.Contains(' ') ? $"\"{a}\"" : a)), FindRepoRoot());
+	if (code != 0)
+		throw new InvalidOperationException($"git clone failed for {repoUrl} (exit {code})");
+}
+
+static int RunProcess(string file, string arguments, string workingDirectory)
+{
+	var psi = new System.Diagnostics.ProcessStartInfo
+	{
+		FileName = file,
+		Arguments = arguments,
+		WorkingDirectory = workingDirectory,
+		UseShellExecute = false,
+	};
+	using var p = System.Diagnostics.Process.Start(psi) ?? throw new InvalidOperationException($"Failed to start {file}");
+	p.WaitForExit();
+	return p.ExitCode;
+}
+
 sealed class Manifest
 {
 	public string? RaylibGitTag { get; set; }
 	public string? RayguiGitTag { get; set; }
+	public string? CimguiGitRef { get; set; }
+	public string? RaylibCimguiGitRef { get; set; }
+	public string? CimguiRepoUrl { get; set; }
+	public string? RaylibCimguiRepoUrl { get; set; }
 	public Dictionary<string, string>? Prebuilt { get; set; }
 	public string? RayguiHeaderUrl { get; set; }
 }
