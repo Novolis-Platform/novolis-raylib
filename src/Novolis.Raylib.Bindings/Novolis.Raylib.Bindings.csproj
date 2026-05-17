@@ -45,7 +45,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Interop\RayguiShimExports.g.cs" Condition="Exists('Interop\RayguiShimExports.g.cs')" />
+    <Compile Remove="Interop\RayguiShimExports.PostBind.cs" Condition="Exists('Interop\RayguiShimExports.PostBind.cs')" />
+  </ItemGroup>
+
+  <ItemGroup>
     <InternalsVisibleTo Include="Novolis.Raylib.Runtime" />
+    <InternalsVisibleTo Include="Novolis.Raylib.Raygui" />
     <InternalsVisibleTo Include="Novolis.Raylib.CodeGen.Unit" />
     <InternalsVisibleTo Include="Novolis.Raylib.Testing" />
   </ItemGroup>

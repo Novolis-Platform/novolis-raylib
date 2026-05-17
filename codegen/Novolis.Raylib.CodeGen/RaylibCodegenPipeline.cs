@@ -188,10 +188,13 @@ internal sealed class RaylibCodegenPipeline
 
     public void EmitRayGui()
     {
-        EmitManifestTypes("raygui.manifest.json", "RayGui");
+        EmitManifestTypes(
+            "raygui.manifest.json",
+            "RayGui",
+            Path.Combine(_repoRoot, "src", "Novolis.Raylib.Raygui"));
     }
 
-    private void EmitManifestTypes(string manifestFileName, string label)
+    private void EmitManifestTypes(string manifestFileName, string label, string? outputRoot = null)
     {
         var manifestPath = Path.Combine(RepoPaths.PipelineDir(_repoRoot), manifestFileName);
         if (!File.Exists(manifestPath))
@@ -209,9 +212,10 @@ internal sealed class RaylibCodegenPipeline
             ? RaylibManifestModels.LoadInteropPolicy(raylibManifestPath).FacadeMethodImpl
             : null;
 
+        var root = outputRoot ?? RepoPaths.RuntimeDir(_repoRoot);
         foreach (var facadeType in types)
         {
-            var outPath = Path.Combine(RepoPaths.RuntimeDir(_repoRoot), facadeType.Folder, $"{facadeType.Name}.g.cs");
+            var outPath = Path.Combine(root, facadeType.Folder, $"{facadeType.Name}.g.cs");
             var source = FacadeEmitter.EmitType(facadeType, manifestSha256, raylibComments, rayguiComments, facadeMethodImpl);
             var context = new RaylibCodegenContext
             {

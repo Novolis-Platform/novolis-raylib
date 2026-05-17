@@ -8,7 +8,7 @@
     <PackageId>Novolis.Raylib</PackageId>
     <IsPackable>true</IsPackable>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <Description>Novolis Raylib — one install for games, tools, and realtime apps (raylib + raygui).</Description>
+    <Description>Novolis Raylib — one install for games, tools, and realtime apps (raylib + Dear ImGui).</Description>
   </PropertyGroup>
 
   <ItemGroup>

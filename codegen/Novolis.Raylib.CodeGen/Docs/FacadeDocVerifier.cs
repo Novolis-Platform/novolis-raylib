@@ -7,7 +7,7 @@ internal static class FacadeDocVerifier
         var raylibComments = RaylibHeaderDocs.LoadFromFile(RaylibHeaderDocs.RaylibHeaderPath(repoRoot));
         var rayguiComments = RaylibHeaderDocs.LoadFromFile(RaylibHeaderDocs.RayguiHeaderPath(repoRoot));
         var pipelineDir = RepoPaths.PipelineDir(repoRoot);
-        var manifestFiles = new[] { "facades.manifest.json", "hud.manifest.json", "gui.manifest.json" };
+        var manifestFiles = new[] { "facades.manifest.json", "hud.manifest.json", "gui.manifest.json", "raygui.manifest.json" };
         var errors = new List<string>();
 
         foreach (var file in manifestFiles)

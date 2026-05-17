@@ -4,106 +4,79 @@
       "name": "Gui",
       "namespace": "Novolis.Raylib",
       "folder": "Gui",
-      "typeSummary": "raygui immediate-mode widgets (UTF-8); draw after scene and HUD, before EndDrawing.",
-      "usings": [
-        "System.Drawing"
-      ],
+      "typeSummary": "Dear ImGui immediate-mode UI (cimgui + raylib-cimgui); after scene/HUD, before EndDrawing.",
       "methods": [
         {
-          "name": "Enable",
-          "signature": "void Enable()",
-          "body": "GuiControls.Enable()",
-          "summary": "Enables raygui controls (global state)."
+          "name": "Setup",
+          "signature": "void Setup(bool darkTheme = true)",
+          "body": "GuiControls.Setup(darkTheme)",
+          "summary": "Initializes ImGui and the raylib backend (call once after window init)."
         },
         {
-          "name": "Disable",
-          "signature": "void Disable()",
-          "body": "GuiControls.Disable()",
-          "summary": "Disables raygui controls (global state)."
+          "name": "Shutdown",
+          "signature": "void Shutdown()",
+          "body": "GuiControls.Shutdown()",
+          "summary": "Shuts down ImGui and releases backend resources."
         },
         {
-          "name": "Lock",
-          "signature": "void Lock()",
-          "body": "GuiControls.Lock()",
-          "summary": "Locks raygui controls (global state)."
+          "name": "NewFrame",
+          "signature": "void NewFrame()",
+          "body": "GuiControls.NewFrame()",
+          "summary": "Starts a new ImGui frame (call after BeginDrawing, before widgets)."
         },
         {
-          "name": "Unlock",
-          "signature": "void Unlock()",
-          "body": "GuiControls.Unlock()",
-          "summary": "Unlocks raygui controls (global state)."
+          "name": "Render",
+          "signature": "void Render()",
+          "body": "GuiControls.Render()",
+          "summary": "Submits ImGui draw data to raylib (call after widgets, before EndDrawing)."
         },
         {
-          "name": "SetAlpha",
-          "signature": "void SetAlpha(float alpha)",
-          "body": "GuiControls.SetAlpha(alpha)",
-          "summary": "Sets global raygui alpha."
+          "name": "BeginWindow",
+          "signature": "bool BeginWindow(string title, ref bool open)",
+          "body": "GuiControls.BeginWindow(title, ref open)",
+          "summary": "Begins an ImGui window; returns false when collapsed."
         },
         {
-          "name": "LoadStyleDefault",
-          "signature": "void LoadStyleDefault()",
-          "body": "GuiControls.LoadStyleDefault()",
-          "summary": "Loads default raygui style."
+          "name": "EndWindow",
+          "signature": "void EndWindow()",
+          "body": "GuiControls.EndWindow()",
+          "summary": "Ends the current ImGui window."
         },
         {
           "name": "Button",
-          "signature": "bool Button(RectangleF bounds, string label)",
-          "body": "GuiControls.Button(bounds, label)",
-          "summary": "raygui button; returns true when pressed."
+          "signature": "bool Button(string label)",
+          "body": "GuiControls.Button(label)",
+          "summary": "ImGui button; returns true when pressed."
         },
         {
-          "name": "Label",
-          "signature": "void Label(RectangleF bounds, string text)",
-          "body": "GuiControls.Label(bounds, text)",
-          "summary": "raygui static label."
+          "name": "Text",
+          "signature": "void Text(string text)",
+          "body": "GuiControls.Text(text)",
+          "summary": "Draws static ImGui text."
         },
         {
-          "name": "Panel",
-          "signature": "bool Panel(RectangleF bounds, string title)",
-          "body": "GuiControls.Panel(bounds, title)",
-          "summary": "raygui panel with title."
-        },
-        {
-          "name": "GroupBox",
-          "signature": "void GroupBox(RectangleF bounds, string title)",
-          "body": "GuiControls.GroupBox(bounds, title)",
-          "summary": "raygui group box with title."
-        },
-        {
-          "name": "Toggle",
-          "signature": "bool Toggle(RectangleF bounds, string label, ref bool active)",
-          "body": "GuiControls.Toggle(bounds, label, ref active)",
-          "summary": "raygui toggle control."
-        },
-        {
-          "name": "CheckBox",
-          "signature": "bool CheckBox(RectangleF bounds, string label, ref bool active)",
-          "body": "GuiControls.CheckBox(bounds, label, ref active)",
-          "summary": "raygui checkbox."
-        },
-        {
-          "name": "ComboBox",
-          "signature": "bool ComboBox(RectangleF bounds, string text, ref int active)",
-          "body": "GuiControls.ComboBox(bounds, text, ref active)",
-          "summary": "raygui combo box."
+          "name": "Checkbox",
+          "signature": "bool Checkbox(string label, ref bool value)",
+          "body": "GuiControls.Checkbox(label, ref value)",
+          "summary": "ImGui checkbox; returns true when toggled."
         },
         {
           "name": "Slider",
-          "signature": "bool Slider(RectangleF bounds, string label, ref float value, float min, float max)",
-          "body": "GuiControls.Slider(bounds, label, ref value, min, max)",
-          "summary": "raygui slider with label."
+          "signature": "bool Slider(string label, ref float value, float min, float max)",
+          "body": "GuiControls.Slider(label, ref value, min, max)",
+          "summary": "ImGui float slider."
         },
         {
-          "name": "SliderBar",
-          "signature": "bool SliderBar(RectangleF bounds, string label, ref float value, float min, float max)",
-          "body": "GuiControls.SliderBar(bounds, label, ref value, min, max)",
-          "summary": "raygui slider bar with label."
+          "name": "SameLine",
+          "signature": "void SameLine(float offsetFromStartX = 0, float spacing = -1)",
+          "body": "GuiControls.SameLine(offsetFromStartX, spacing)",
+          "summary": "Continues layout on the same line."
         },
         {
-          "name": "ProgressBar",
-          "signature": "bool ProgressBar(RectangleF bounds, string label, ref float value, float min, float max)",
-          "body": "GuiControls.ProgressBar(bounds, label, ref value, min, max)",
-          "summary": "raygui progress bar with label."
+          "name": "Separator",
+          "signature": "void Separator()",
+          "body": "GuiControls.Separator()",
+          "summary": "Draws a horizontal separator."
         }
       ]
     }

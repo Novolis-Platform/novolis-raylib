@@ -14,6 +14,8 @@
     <Project Path="src/Novolis.Raylib/Novolis.Raylib.csproj" />
     <Project Path="src/Novolis.Raylib.Testing/Novolis.Raylib.Testing.csproj" />
     <Project Path="src/Novolis.Raylib.Capture/Novolis.Raylib.Capture.csproj" />
+    <Project Path="src/Novolis.Raylib.Raygui/Novolis.Raylib.Raygui.csproj" />
+    <Project Path="src/Novolis.Raylib.Raygui.Native/Novolis.Raylib.Raygui.Native.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Novolis.Raylib.CodeGen.Unit/Novolis.Raylib.CodeGen.Unit.csproj" />
@@ -30,5 +32,7 @@
     <Project Path="samples/HelloHosting/HelloHosting.csproj" />
     <Project Path="samples/HelloTesting/HelloTesting.csproj" />
     <Project Path="samples/XFighter/XFighter.csproj" />
+    <Project Path="samples/HelloGui/HelloGui.csproj" />
+    <Project Path="samples/HelloRaygui/HelloRaygui.csproj" />
   </Folder>
 </Solution>

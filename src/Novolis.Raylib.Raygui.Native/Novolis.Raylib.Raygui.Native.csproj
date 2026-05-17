@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Novolis.Raylib.Packaging.props" />
+
+  <PropertyGroup>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <IncludeSymbols>false</IncludeSymbols>
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+    <PackageId>Novolis.Raylib.Raygui.Native</PackageId>
+    <IsPackable>true</IsPackable>
+    <Description>novolis_raygui native binaries per RID (transitive with Novolis.Raylib.Raygui).</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)..\..\native\raylib6-with-raygui\out\novolis_raygui.dll" Pack="true" PackagePath="runtimes/win-x64/native" Condition="Exists('$(MSBuildThisFileDirectory)..\..\native\raylib6-with-raygui\out\novolis_raygui.dll')" />
+    <None Include="$(MSBuildThisFileDirectory)..\..\native\raylib6-with-raygui\out\libnovolis_raygui.so" Pack="true" PackagePath="runtimes/linux-x64/native" Condition="Exists('$(MSBuildThisFileDirectory)..\..\native\raylib6-with-raygui\out\libnovolis_raygui.so')" />
+    <None Include="$(MSBuildThisFileDirectory)..\..\native\raylib6-with-raygui\out\libnovolis_raygui.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Condition="Exists('$(MSBuildThisFileDirectory)..\..\native\raylib6-with-raygui\out\libnovolis_raygui.dylib')" />
+  </ItemGroup>
+
+</Project>

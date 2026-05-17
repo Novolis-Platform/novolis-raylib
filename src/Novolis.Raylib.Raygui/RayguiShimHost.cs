@@ -4,7 +4,7 @@ using Novolis.Raylib.Interop;
 namespace Novolis.Raylib;
 
 /// <summary>
-/// Loads the in-box <c>novolis_raygui</c> native module (raygui built against raylib 6; see <c>native/raylib6-with-raygui</c>).
+/// Loads <c>novolis_raygui</c> (raygui built against raylib 6; see <c>native/raylib6-with-raygui</c>).
 /// </summary>
 public static class RayguiShimHost
 {
@@ -15,15 +15,6 @@ public static class RayguiShimHost
     private static readonly object Gate = new();
     private static int _state;
     private static string? _failureMessage;
-
-    public static bool IsRayguiEnabled
-    {
-        get
-        {
-            EnsureInitialized();
-            return true;
-        }
-    }
 
     public static void EnsureInitialized()
     {
@@ -54,13 +45,12 @@ public static class RayguiShimHost
             {
                 NativeLibrary.Free(module);
                 _failureMessage =
-                    $"Raygui shim export binding failed ({ShimLibraryName}): {bindError}. Regenerate interop and rebuild the native shim (see pipeline/raylib6/BUILDING.txt).";
+                    $"Raygui shim export binding failed ({ShimLibraryName}): {bindError}. Regenerate interop and rebuild native.";
                 _state = StateFailed;
                 throw new InvalidOperationException(_failureMessage);
             }
 
             RayguiShimExports.ApplyDefaultGuiStyle();
-
             _state = StateReady;
         }
     }
@@ -68,11 +58,7 @@ public static class RayguiShimHost
     private static string BuildShimLoadFailureMessage(string shimPath, string baseDir)
     {
         var fileName = Path.GetFileName(shimPath);
-        return
-            $"Required raygui native shim was not loaded: expected '{fileName}' in the application base directory '{baseDir}'. "
-            + "From the repository root run: dotnet run pipeline/raylib6/run.cs all "
-            + "(or fetch-sources then: dotnet run pipeline/raylib6/run.cs native). "
-            + "See pipeline/raylib6/BUILDING.txt.";
+        return $"Required raygui native shim was not loaded: expected '{fileName}' in '{baseDir}'. Run: dotnet run pipeline/raylib6/run.cs native";
     }
 
     private static string ShimLibraryName =>

@@ -1,39 +1,42 @@
-<Project>
-  <PropertyGroup>
-    <RaylibCodegenProject>$(MSBuildThisFileDirectory)..\codegen\Novolis.Raylib.CodeGen\Novolis.Raylib.CodeGen.csproj</RaylibCodegenProject>
-    <RaylibCodegenRepoRoot>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\'))</RaylibCodegenRepoRoot>
-    <RunRaylibCodegen Condition="'$(RunRaylibCodegen)' == ''">true</RunRaylibCodegen>
-  </PropertyGroup>
-
-  <Target Name="DisableRaylibCodegenForPack" BeforeTargets="GenerateRaylibBindings" Condition="'$(IsPacking)' == 'true'">
-    <PropertyGroup>
-      <RunRaylibCodegen>false</RunRaylibCodegen>
-    </PropertyGroup>
-  </Target>
-
-  <ItemGroup>
-    <RaylibCodegenInput Include="$(RaylibCodegenRepoRoot)pipeline\raylib6\*.manifest.json" />
-    <RaylibCodegenInput Include="$(RaylibCodegenRepoRoot)codegen\Novolis.Raylib.CodeGen\**\*.cs" />
-    <RaylibCodegenInput Include="$(RaylibCodegenRepoRoot)codegen\Novolis.Raylib.CodeGen.Abstractions\**\*.cs" />
-    <RaylibCodegenInput Include="$(RaylibCodegenRepoRoot)codegen\Novolis.Raylib.CodeGen.Hooks\**\*.cs" />
-    <RaylibCodegenOutput Include="$(RaylibCodegenRepoRoot)src\Novolis.Raylib.Bindings\Interop\*.g.cs" />
-    <RaylibCodegenOutput Include="$(RaylibCodegenRepoRoot)src\Novolis.Raylib.Runtime\Rendering\*.g.cs" />
-    <RaylibCodegenOutput Include="$(RaylibCodegenRepoRoot)src\Novolis.Raylib.Runtime\Windowing\*.g.cs" />
-    <RaylibCodegenOutput Include="$(RaylibCodegenRepoRoot)src\Novolis.Raylib.Runtime\Interact\*.g.cs" />
-    <RaylibCodegenOutput Include="$(RaylibCodegenRepoRoot)src\Novolis.Raylib.Runtime\Timing\*.g.cs" />
-    <RaylibCodegenOutput Include="$(RaylibCodegenRepoRoot)src\Novolis.Raylib.Runtime\Audio\*.g.cs" />
-    <RaylibCodegenOutput Include="$(RaylibCodegenRepoRoot)src\Novolis.Raylib.Runtime\Hud\*.g.cs" />
-    <RaylibCodegenOutput Include="$(RaylibCodegenRepoRoot)src\Novolis.Raylib.Runtime\Gui\Gui.g.cs" />
-  </ItemGroup>
-
-  <Target Name="GenerateRaylibBindings"
-          BeforeTargets="CoreCompile"
-          Condition="'$(RunRaylibCodegen)' == 'true' and '$(DesignTimeBuild)' != 'true'"
-          Inputs="@(RaylibCodegenInput)"
-          Outputs="@(RaylibCodegenOutput)">
-    <Exec Command="dotnet run --project &quot;$(RaylibCodegenProject)&quot; -- generate"
-          WorkingDirectory="$(RaylibCodegenRepoRoot)"
-          StandardOutputImportance="high"
-          StandardErrorImportance="high" />
-  </Target>
-</Project>
+<Project>
+  <PropertyGroup>
+    <RaylibCodegenProject>$(MSBuildThisFileDirectory)..\codegen\Novolis.Raylib.CodeGen\Novolis.Raylib.CodeGen.csproj</RaylibCodegenProject>
+    <RaylibCodegenRepoRoot>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\'))</RaylibCodegenRepoRoot>
+    <RunRaylibCodegen Condition="'$(RunRaylibCodegen)' == ''">true</RunRaylibCodegen>
+  </PropertyGroup>
+
+  <Target Name="DisableRaylibCodegenForPack" BeforeTargets="GenerateRaylibBindings" Condition="'$(IsPacking)' == 'true'">
+    <PropertyGroup>
+      <RunRaylibCodegen>false</RunRaylibCodegen>
+    </PropertyGroup>
+  </Target>
+
+  <ItemGroup>
+    <RaylibCodegenInput Include="$(RaylibCodegenRepoRoot)pipeline\raylib6\*.manifest.json" />
+    <RaylibCodegenInput Include="$(RaylibCodegenRepoRoot)codegen\Novolis.Raylib.CodeGen\**\*.cs" />
+    <RaylibCodegenInput Include="$(RaylibCodegenRepoRoot)codegen\Novolis.Raylib.CodeGen.Abstractions\**\*.cs" />
+    <RaylibCodegenInput Include="$(RaylibCodegenRepoRoot)codegen\Novolis.Raylib.CodeGen.Hooks\**\*.cs" />
+    <RaylibCodegenOutput Include="$(RaylibCodegenRepoRoot)src\Novolis.Raylib.Bindings\Interop\*.g.cs" />
+    <RaylibCodegenOutput Include="$(RaylibCodegenRepoRoot)src\Novolis.Raylib.Runtime\Rendering\*.g.cs" />
+    <RaylibCodegenOutput Include="$(RaylibCodegenRepoRoot)src\Novolis.Raylib.Runtime\Windowing\*.g.cs" />
+    <RaylibCodegenOutput Include="$(RaylibCodegenRepoRoot)src\Novolis.Raylib.Runtime\Interact\*.g.cs" />
+    <RaylibCodegenOutput Include="$(RaylibCodegenRepoRoot)src\Novolis.Raylib.Runtime\Timing\*.g.cs" />
+    <RaylibCodegenOutput Include="$(RaylibCodegenRepoRoot)src\Novolis.Raylib.Runtime\Audio\*.g.cs" />
+    <RaylibCodegenOutput Include="$(RaylibCodegenRepoRoot)src\Novolis.Raylib.Runtime\Hud\*.g.cs" />
+    <RaylibCodegenOutput Include="$(RaylibCodegenRepoRoot)src\Novolis.Raylib.Runtime\Gui\Gui.g.cs" />
+    <RaylibCodegenOutput Include="$(RaylibCodegenRepoRoot)src\Novolis.Raylib.Bindings\Interop\ImguiShimExports.g.cs" />
+    <RaylibCodegenOutput Include="$(RaylibCodegenRepoRoot)src\Novolis.Raylib.Raygui\Interop\RayguiShimExports.g.cs" />
+    <RaylibCodegenOutput Include="$(RaylibCodegenRepoRoot)src\Novolis.Raylib.Raygui\RayGui\RayGui.g.cs" />
+  </ItemGroup>
+
+  <Target Name="GenerateRaylibBindings"
+          BeforeTargets="CoreCompile"
+          Condition="'$(RunRaylibCodegen)' == 'true' and '$(DesignTimeBuild)' != 'true'"
+          Inputs="@(RaylibCodegenInput)"
+          Outputs="@(RaylibCodegenOutput)">
+    <Exec Command="dotnet run --project &quot;$(RaylibCodegenProject)&quot; -- generate"
+          WorkingDirectory="$(RaylibCodegenRepoRoot)"
+          StandardOutputImportance="high"
+          StandardErrorImportance="high" />
+  </Target>
+</Project>
