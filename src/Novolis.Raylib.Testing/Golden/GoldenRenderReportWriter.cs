@@ -40,6 +40,7 @@ public static class GoldenRenderReportWriter
         WriteExpectationsMarkdown(context.StoryDirectory, spec);
         var htmlPath = WriteIndexHtml(context.StoryDirectory, spec, assert);
         WriteManifest(context, spec, assert);
+        WriteAgentBrief(context, spec, assert);
         if (!string.IsNullOrWhiteSpace(assert.ErrorMessage))
             File.WriteAllText(Path.Combine(context.StoryDirectory, "assert.txt"), assert.ErrorMessage);
 
@@ -56,6 +57,7 @@ public static class GoldenRenderReportWriter
         var assert = new AssertInfo { Skipped = true, SkipReason = skipReason };
         var htmlPath = WriteIndexHtml(context.StoryDirectory, spec, assert);
         WriteManifest(context, spec, assert);
+        WriteAgentBrief(context, spec, assert);
         File.WriteAllText(Path.Combine(context.StoryDirectory, "assert.txt"), skipReason);
         return htmlPath;
     }
@@ -156,6 +158,31 @@ public static class GoldenRenderReportWriter
 
         var json = JsonSerializer.Serialize(manifest, new JsonSerializerOptions { WriteIndented = true });
         File.WriteAllText(Path.Combine(context.StoryDirectory, "manifest.json"), json);
+    }
+
+    private static void WriteAgentBrief(GoldenRenderRunContext context, GoldenStorySpec spec, AssertInfo assert)
+    {
+        var storyDirectory = context.StoryDirectory;
+        var brief = new
+        {
+            schemaVersion = 1,
+            storyId = spec.StoryId,
+            title = spec.Title,
+            reviewHtml = File.Exists(Path.Combine(storyDirectory, "index.html")) ? "index.html" : null,
+            actualPng = File.Exists(Path.Combine(storyDirectory, "actual.png")) ? "actual.png" : null,
+            baselinePng = File.Exists(Path.Combine(storyDirectory, "baseline.png")) ? "baseline.png" : null,
+            expectations = spec.Expectations,
+            assertPassed = assert.AssertPassed,
+            skipped = assert.Skipped,
+            skipReason = assert.SkipReason,
+            actualSha256 = assert.ActualSha256,
+            baselineSha256 = assert.BaselineSha256,
+            storyDirectory,
+            runFolder = context.RunFolder,
+        };
+
+        var json = JsonSerializer.Serialize(brief, new JsonSerializerOptions { WriteIndented = true });
+        File.WriteAllText(Path.Combine(storyDirectory, "agent-brief.json"), json);
     }
 
     private static string EscapeHtml(string text) => WebUtility.HtmlEncode(text);

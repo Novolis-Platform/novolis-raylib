@@ -1,6 +1,6 @@
-namespace Novolis.Raylib.Diagnostics;
+namespace Novolis.Raylib.Capture;
 
-/// <summary>One PNG frame from streaming capture.</summary>
+/// <summary>One framebuffer snapshot from streaming capture.</summary>
 public sealed class CapturedFrame
 {
     public required int FrameIndex { get; init; }
@@ -11,5 +11,5 @@ public sealed class CapturedFrame
 
     public required byte[] Png { get; init; }
 
-    public TimeSpan Elapsed { get; init; }
+    public required TimeSpan Elapsed { get; init; }
 }

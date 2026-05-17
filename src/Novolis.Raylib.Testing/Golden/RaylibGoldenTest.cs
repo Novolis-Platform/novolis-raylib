@@ -1,6 +1,6 @@
 using System.Reflection;
 using Novolis.Raylib.Abstractions;
-using Novolis.Raylib.Diagnostics;
+using Novolis.Raylib.Capture;
 
 namespace Novolis.Raylib.Testing.Golden;
 
@@ -16,7 +16,7 @@ public static class RaylibGoldenTest
         ArgumentNullException.ThrowIfNull(renderer);
         options ??= new GoldenRunOptions();
 
-        var assembly = options.TestAssembly ?? Assembly.GetCallingAssembly();
+        var assembly = options.TestAssembly ?? System.Reflection.Assembly.GetCallingAssembly();
         var goldensRoot = options.GoldensRoot;
         GoldenStorySpec spec;
         try
@@ -31,15 +31,12 @@ public static class RaylibGoldenTest
         var renderContext = GoldenRenderOutputLayout.Resolve(assembly, storyId, options.OutputRoot);
         using var testScope = RaylibTestRuntime.EnterNativeOffscreen();
 
-        var runtimeFrame = new GoldenRuntimeFrame
-        {
-            Mode = options.Mode,
-            StoryDirectory = renderContext.StoryDirectory,
-            EnableStreamingCapture = options.EnableStreamingCapture,
-        };
-        using var goldenScope = RaylibGoldenRuntimeState.Enter(runtimeFrame);
         using var captureSession = options.EnableStreamingCapture
-            ? new GoldenCaptureSession(runtimeFrame)
+            ? new FrameCaptureSession(new CaptureStreamOptions
+            {
+                CaptureEveryNFrames = options.CaptureEveryNFrames,
+                MaxBufferedFrames = options.MaxBufferedFrames,
+            })
             : null;
 
         if (!RaylibOffscreenTestHarness.IsNativeOffscreenRunRequested())

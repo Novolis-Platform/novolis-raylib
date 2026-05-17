@@ -37,7 +37,7 @@ Codegen also runs automatically when building `StarConflictsRevolt.Raylib6.Bindi
 | Hook | Phase | Purpose |
 |------|-------|---------|
 | `AnnotateLibraryImportHook` | Interop | XML docs from optional `description` on `raylib-exports.manifest.json` rows |
-| `InjectEndDrawingNotifyHook` | Facade | `Graphics.EndDrawing` calls `RaylibDebugFrameHooks.NotifyAfterEndDrawing()` |
+| `InjectEndDrawingNotifyHook` | Facade | After native `EndDrawing` (per `raylib-debug.manifest.json`): `RaylibDebugFrameHooks.NotifyAfterEndDrawing()` and `RaylibFrameCaptureHub.Notify()` |
 | `FacadeInliningHook` | Facade | `[MethodImpl(AggressiveInlining)]` on expression-bodied forwards when `interopPolicy.facadeMethodImpl` is set |
 
 ## `interopPolicy` (manifest v2)

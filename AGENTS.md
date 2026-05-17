@@ -36,7 +36,8 @@ pwsh ./scripts/agent-verify.ps1
 | `src/Novolis.Raylib.Game/` | `RayGame.Run` jam API |
 | `src/Novolis.Raylib.Hosting/` | `IHost` + phased game-loop systems |
 | `src/Novolis.Raylib.Abstractions/` | `IRaylibFrameRenderer`, `IRenderSystem`, … (transitive) |
-| `src/Novolis.Raylib.Testing/` | Offscreen harness, deterministic clock, hosting test host |
+| `src/Novolis.Raylib.Testing/` | Offscreen harness, golden QA API, deterministic clock, hosting test host |
+| `src/Novolis.Raylib.Capture/` | Framebuffer streaming capture (test/build-time; not packable) |
 | `codegen/Novolis.Raylib.CodeGen/` | Roslyn CLI: `generate`, `verify`, `suggest-raylib`, `hooks list` (not published) |
 | `codegen/Novolis.Raylib.CodeGen.Hooks/` | `IRaylibCodegenHook` implementations (not published) |
 | `pipeline/raylib6/` | Manifests, fetch/native orchestration (`run.cs`) |
@@ -118,14 +119,16 @@ dotnet build Novolis.Raylib.slnx -c Release
 dotnet test Novolis.Raylib.slnx -c Release --filter "Category!=Native" -- --maximum-parallel-tests 1
 ```
 
-Native/offscreen tests are **opt-in** via environment variables (default CI does not set them):
+**Golden image tests** (preferred for visuals): `tests/Novolis.Raylib.Golden`, `[Category("Golden")]`, no env vars — use `RaylibTestRuntime.EnableForAssembly()`. CI job `golden-tests` on Windows. See [docs/testing.md](docs/testing.md). Scripts: `./scripts/run-golden-tests.ps1`, `./scripts/seed-golden-baselines.ps1`.
+
+Legacy native/offscreen tests may still use environment variables (default unit CI does not set them):
 
 | Variable | Purpose |
 |----------|---------|
-| `NOVOLIS_RAYLIB_OFFSCREEN_TESTS=1` | Offscreen harness |
-| `NOVOLIS_RAYLIB_NATIVE_TESTS=1` | Load `raylib.dll` / window smoke |
+| `NOVOLIS_RAYLIB_OFFSCREEN_TESTS=1` | Legacy offscreen harness |
+| `NOVOLIS_RAYLIB_NATIVE_TESTS=1` | Legacy native smoke |
 | `NOVOLIS_RAYLIB_HEADLESS=1` | Skip blocking window loop (samples/CI) |
-| `NOVOLIS_RAYLIB_DEBUG_CAPTURE=1` | Debug frame capture (see manifest) |
+| `NOVOLIS_RAYLIB_DEBUG_CAPTURE=1` | Debug frame capture in Bindings (not golden CI) |
 
 Full native E2E: `./scripts/raylib-e2e.ps1` (sets offscreen + native env, runs pipeline + CodeGen unit tests).
 
@@ -137,6 +140,7 @@ Pack all NuGet packages: `./scripts/pack-all.ps1` → `artifacts/`.
 |-----|-----|----------------|
 | `codegen-drift` | ubuntu | Regenerate bindings; `git diff --exit-code` on Bindings + Runtime |
 | `build-test` | windows | fetch → native → build → test (non-Native filter) |
+| `golden-tests` | windows | fetch → native → build → `[Category("Golden")]`; uploads `temp/test-renders/` on failure |
 | `pack-smoke` | ubuntu | `dotnet pack` after build-test |
 
 ## Coding conventions

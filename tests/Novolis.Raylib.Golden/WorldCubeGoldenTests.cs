@@ -11,8 +11,6 @@ public sealed class WorldCubeGoldenTests
     [RunOnlyIfNativeRaylib]
     public async Task World_cube_scene_matches_golden_baseline()
     {
-        NativeRaylibTestGate.EnsureAvailable();
-
         var result = RaylibGoldenTest.Run(
             "raylib-golden-world-cube",
             new DelegateRaylibFrameRenderer(GoldenScenes.DrawWorldCube),

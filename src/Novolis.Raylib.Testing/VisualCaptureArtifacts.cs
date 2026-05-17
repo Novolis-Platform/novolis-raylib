@@ -5,8 +5,10 @@ public static class VisualCaptureArtifacts
 {
     public const string RelativeCapturesDir = "artifacts/visual-captures";
 
+    [Obsolete("Prefer RaylibGoldenTest with GoldenRunMode.ReportOnly; writes QA bundles under temp/test-renders/.")]
     public static string CapturesDirectory => Path.Combine(FindRepoRoot(), RelativeCapturesDir);
 
+    [Obsolete("Prefer RaylibGoldenTest with GoldenRunMode.ReportOnly; writes QA bundles under temp/test-renders/.")]
     public static string WritePng(ReadOnlySpan<byte> png, string fileName)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(fileName);

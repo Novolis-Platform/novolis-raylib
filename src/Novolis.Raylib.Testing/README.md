@@ -44,7 +44,8 @@ Legacy env vars (`NOVOLIS_RAYLIB_OFFSCREEN_TESTS`, `NOVOLIS_RAYLIB_NATIVE_TESTS`
 | `RaylibTestSession` | Scoped `EnterNativeOffscreen()` |
 | `DeterministicFrameClock` | Manual timestep |
 | `FramebufferAssert` | PNG SHA256 checks |
-| `NativeRaylibTestGate` | Fail when native unavailable |
+| `RunOnlyIfNativeRaylib` | TUnit skip when native unavailable |
+| `NativeRaylibTestGate` | Probe native offscreen availability |
 | `RaylibHostingTestHost` | In-process `IHost` |
 
 Full details: [docs/testing.md](../../docs/testing.md).

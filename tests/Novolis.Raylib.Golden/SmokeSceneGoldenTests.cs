@@ -11,8 +11,6 @@ public sealed class SmokeSceneGoldenTests
     [RunOnlyIfNativeRaylib]
     public async Task Smoke_scene_matches_golden_baseline()
     {
-        NativeRaylibTestGate.EnsureAvailable();
-
         var result = RaylibGoldenTest.Run(
             "raylib-golden-smoke-scene",
             new DelegateRaylibFrameRenderer(GoldenScenes.DrawSmokeScene),

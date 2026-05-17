@@ -3,19 +3,19 @@ using System.Threading.Channels;
 using Novolis.Raylib.Internal;
 using Novolis.Raylib.Rendering;
 
-namespace Novolis.Raylib.Diagnostics;
+namespace Novolis.Raylib.Capture;
 
-/// <summary>Streams framebuffer PNGs when golden streaming capture is active.</summary>
-internal static class GoldenCaptureService
+/// <summary>Streams framebuffer PNGs when <see cref="RaylibCaptureRuntimeState"/> streaming is active.</summary>
+internal static class FrameCaptureService
 {
     private static Channel<CapturedFrame>? _channel;
     private static int _frameIndex;
     private static readonly Stopwatch Stopwatch = new();
-    private static GoldenRuntimeFrame? _options;
+    private static CaptureStreamOptions? _options;
 
     public static ChannelReader<CapturedFrame>? Reader => _channel?.Reader;
 
-    public static void Start(GoldenRuntimeFrame options)
+    public static void Start(CaptureStreamOptions options)
     {
         Stop();
         _options = options;
@@ -44,7 +44,7 @@ internal static class GoldenCaptureService
     {
         var options = _options;
         var channel = _channel;
-        if (options is null || channel is null || !RaylibGoldenRuntimeState.IsCaptureActive)
+        if (options is null || channel is null || !RaylibCaptureRuntimeState.IsStreamingActive)
             return;
 
         _frameIndex++;

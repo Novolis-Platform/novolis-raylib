@@ -22,6 +22,8 @@ var result = RaylibGoldenTest.Run(
 await Assert.That(result.AssertPassed).IsTrue();
 ```
 
+Mark native-dependent tests with `[RunOnlyIfNativeRaylib]` (TUnit skip when native offscreen is unavailable).
+
 ### QA review bundle
 
 Every run writes a review folder under:
@@ -33,19 +35,30 @@ Every run writes a review folder under:
 | `index.html` | Two-column QA page: render image(s) and itemized expectations |
 | `expectations.md` | Same checklist for agents/CLI |
 | `manifest.json` | Machine-readable metadata and hashes |
+| `agent-brief.json` | Compact JSON for agentic review (paths, expectations, hashes) |
 | `actual.png` | Captured frame |
 | `baseline.png` | Copy of committed baseline |
 
 Open `index.html` in a browser for human or agentic visual review, even when SHA256 assert passes in CI.
 
+Local helpers:
+
+```powershell
+./scripts/run-golden-tests.ps1
+./scripts/open-latest-golden-report.ps1
+./scripts/seed-golden-baselines.ps1
+```
+
 ### Committed baselines
 
 Store under `tests/<Project>/Goldens/{storyId}/`:
 
-- `spec.json` — resolution, `baselineSha256`, and `expectations[]`
+- `spec.json` — authoritative metadata: resolution, `baselineSha256`, and `expectations[]`
 - `baseline.png` — reference image
 
-Refresh baselines (explicit test, no env vars):
+[`GoldenScenes`](src/Novolis.Raylib.Testing/Golden/GoldenScenes.cs) provides render delegates only (no duplicated expectations).
+
+Refresh baselines (explicit test or seed console, no env vars):
 
 ```csharp
 RaylibGoldenTest.Run(storyId, renderer, new GoldenRunOptions
@@ -55,7 +68,41 @@ RaylibGoldenTest.Run(storyId, renderer, new GoldenRunOptions
 });
 ```
 
-See `tests/Novolis.Raylib.Golden/UpdateBaselinesTests` (`[Explicit]`).
+See `tests/Novolis.Raylib.Golden/UpdateBaselinesTests` (`[Explicit]`) or `dotnet run --project tests/Novolis.Raylib.Golden.Seed`.
+
+### Golden baseline policy
+
+- **Canonical CI platform:** Windows (`golden-tests` job).
+- **Assertion:** exact SHA256 of PNG bytes (no per-pixel tolerance in v1).
+- **Stories:** fixed `width` / `height` / `maxFrames`; avoid time-based animation.
+- **On hash failure:** open `index.html`, compare the expectations column, then run `seed-golden-baselines.ps1` only if the visual change is intentional.
+- **v2 (deferred):** tolerance thresholds and diff images in the HTML report.
+
+### Capture vs debug
+
+| Concept | Location | Purpose |
+|---------|----------|---------|
+| **Capture** | `Novolis.Raylib.Capture` (internal) | Streaming framebuffer capture via `RaylibFrameCaptureHub` after `EndDrawing` |
+| **Golden** | `Novolis.Raylib.Testing.Golden` | Stories, SHA256 baselines, QA HTML reports |
+| **Debug** | `RaylibDebugFrameHooks` | Env-gated DEBUG capture (`NOVOLIS_RAYLIB_DEBUG_CAPTURE`); not used by golden CI |
+
+### Threading and parallel tests
+
+Native / GLFW tests must not run concurrently:
+
+- `[assembly: NotInParallel("raylib-glfw")]` on golden and native test assemblies
+- `RaylibGlfwTestSync` global mutex inside `RaylibOffscreenTestHarness`
+- `Directory.Build.props` sets `--maximum-parallel-tests 1` for all test projects
+- `AsyncLocal` scopes: `RaylibTestRuntimeState`, `RaylibCaptureRuntimeState`
+- Streaming capture channel: single writer (render thread), single reader (test thread)
+
+### Harness activation precedence
+
+`RaylibOffscreenTestHarness.IsNativeOffscreenRunRequested()` returns true when, in order:
+
+1. `RaylibTestRuntimeState` (assembly flag or `EnterNativeOffscreen()` scope)
+2. `RaylibDebug.Start()` / `NativeOffscreenTestHarnessEnabled`
+3. Legacy env pair `NOVOLIS_RAYLIB_OFFSCREEN_TESTS` and `NOVOLIS_RAYLIB_NATIVE_TESTS`
 
 ### CI
 
@@ -70,6 +117,7 @@ Older helpers still support optional env vars; the **golden framework does not r
 | `NOVOLIS_RAYLIB_OFFSCREEN_TESTS=1` | Legacy offscreen harness |
 | `NOVOLIS_RAYLIB_NATIVE_TESTS=1` | Legacy native tests |
 | `NOVOLIS_RAYLIB_HEADLESS=1` | Skip window in shell samples |
+| `NOVOLIS_RAYLIB_DEBUG_CAPTURE=1` | Debug frame capture (Bindings; unrelated to golden CI) |
 
 Prefer `RaylibTestRuntime.EnableForAssembly()` and `RaylibTestRuntime.EnterNativeOffscreen()`.
 
@@ -82,7 +130,7 @@ Prefer `RaylibTestRuntime.EnableForAssembly()` and `RaylibTestRuntime.EnterNativ
 - `RaylibTestSession` — scoped native offscreen (runtime state)
 - `FramebufferAssert` — PNG SHA256 checks
 - `RaylibHostingTestHost` — in-process `IHost`
-- `NativeRaylibTestGate` — fail when native offscreen unavailable
+- `NativeRaylibTestGate.IsAvailable` — probe native offscreen availability
 
 E2E (native):
 

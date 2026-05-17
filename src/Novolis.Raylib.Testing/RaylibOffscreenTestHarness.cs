@@ -29,6 +29,12 @@ public static class RaylibOffscreenTestHarness
         return RaylibDebug.NativeTestsRequestedFromEnvironment;
     }
 
+    /// <summary>
+    /// Returns whether the native offscreen harness may run. Precedence:
+    /// (1) <see cref="RaylibTestRuntimeState.NativeOffscreenEnabled"/> (scoped or assembly flag),
+    /// (2) <see cref="RaylibDebug.NativeOffscreenTestHarnessEnabled"/> via <see cref="RaylibDebug.Start"/>,
+    /// (3) legacy env pair <c>NOVOLIS_RAYLIB_OFFSCREEN_TESTS</c> and <c>NOVOLIS_RAYLIB_NATIVE_TESTS</c>.
+    /// </summary>
     public static bool IsNativeOffscreenRunRequested()
     {
         if (RaylibTestRuntimeState.NativeOffscreenEnabled)

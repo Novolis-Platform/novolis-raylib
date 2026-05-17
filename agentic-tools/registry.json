@@ -59,6 +59,18 @@
       "title": "Agent gate: codegen drift + build Bindings and Runtime",
       "command": "pwsh ./scripts/agent-verify.ps1",
       "runWhen": ["Before marking binding/codegen tasks complete", "After editing manifests or hooks"]
+    },
+    {
+      "id": "golden.run",
+      "title": "Run golden image tests (native + QA reports)",
+      "command": "pwsh ./scripts/run-golden-tests.ps1",
+      "platforms": ["windows"]
+    },
+    {
+      "id": "golden.seed-baselines",
+      "title": "Regenerate committed golden baseline PNGs and spec hashes",
+      "command": "pwsh ./scripts/seed-golden-baselines.ps1",
+      "platforms": ["windows"]
     }
   ],
   "workflows": {
@@ -77,6 +89,11 @@
       "Add or change IRaylibCodegenHook in codegen/Novolis.Raylib.CodeGen.Hooks/",
       "Run tool codegen.generate",
       "Run tool agent.verify"
+    ],
+    "refresh-golden-baselines": [
+      "Run tool golden.seed-baselines",
+      "Open temp/test-renders QA reports and verify expectations",
+      "Commit tests/Novolis.Raylib.Golden/Goldens/**"
     ]
   },
   "docs": [

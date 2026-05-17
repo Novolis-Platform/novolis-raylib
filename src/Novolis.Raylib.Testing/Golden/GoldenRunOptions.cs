@@ -1,5 +1,4 @@
 using System.Reflection;
-using Novolis.Raylib.Diagnostics;
 
 namespace Novolis.Raylib.Testing.Golden;
 
@@ -11,6 +10,10 @@ public sealed class GoldenRunOptions
     public string? OutputRoot { get; init; }
 
     public bool EnableStreamingCapture { get; init; }
+
+    public int CaptureEveryNFrames { get; init; } = 1;
+
+    public int MaxBufferedFrames { get; init; } = 32;
 
     public Assembly? TestAssembly { get; init; }
 

@@ -11,8 +11,6 @@ public sealed class HudSceneGoldenTests
     [RunOnlyIfNativeRaylib]
     public async Task Hud_text_scene_matches_golden_baseline()
     {
-        NativeRaylibTestGate.EnsureAvailable();
-
         var result = RaylibGoldenTest.Run(
             "raylib-golden-hud-scene",
             new DelegateRaylibFrameRenderer(GoldenScenes.DrawHudScene),

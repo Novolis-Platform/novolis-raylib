@@ -18,7 +18,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Novolis.Raylib.Diagnostics\Novolis.Raylib.Diagnostics.csproj" />
+    <PackageReference Include="TUnit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Novolis.Raylib.Capture\Novolis.Raylib.Capture.csproj" />
     <ProjectReference Include="..\Novolis.Raylib\Novolis.Raylib.csproj" />
   </ItemGroup>
 

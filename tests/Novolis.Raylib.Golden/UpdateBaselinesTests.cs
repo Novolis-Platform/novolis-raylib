@@ -1,17 +1,17 @@
 using Novolis.Raylib.Testing;
 using Novolis.Raylib.Testing.Golden;
 
-return await SeedRunner.ExecuteAsync();
+namespace Novolis.Raylib.Golden;
 
-internal static class SeedRunner
+/// <summary>Run explicitly to refresh committed baseline PNGs and spec hashes.</summary>
+public sealed class UpdateBaselinesTests
 {
-    public static async Task<int> ExecuteAsync()
+    [Test]
+    [Explicit]
+    public async Task Update_all_golden_baselines()
     {
-        var goldensRoot = Path.GetFullPath(Path.Combine(VisualCaptureArtifacts.FindRepoRoot(), "tests", "Novolis.Raylib.Golden", "Goldens"));
-        var assembly = typeof(SeedRunner).Assembly;
-
         RaylibTestRuntime.EnableForAssembly();
-
+        var assembly = typeof(UpdateBaselinesTests).Assembly;
         var stories = new (string Id, DelegateRaylibFrameRenderer Renderer)[]
         {
             ("raylib-golden-smoke-scene", new DelegateRaylibFrameRenderer(GoldenScenes.DrawSmokeScene)),
@@ -28,19 +28,8 @@ internal static class SeedRunner
                 {
                     Mode = GoldenRunMode.UpdateBaselines,
                     TestAssembly = assembly,
-                    GoldensRoot = goldensRoot,
                 });
-
-            if (!result.Succeeded)
-            {
-                await Console.Error.WriteLineAsync($"Failed to seed {id}: {result.Message}");
-                return 1;
-            }
-
-            await Console.Out.WriteLineAsync($"Seeded {id}");
+            await Assert.That(result.Succeeded).IsTrue();
         }
-
-        await Console.Out.WriteLineAsync($"Committed baselines under {goldensRoot}");
-        return 0;
     }
 }

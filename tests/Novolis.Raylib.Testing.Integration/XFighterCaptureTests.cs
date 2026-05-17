@@ -61,7 +61,10 @@ public sealed class XFighterCaptureTests
 
         await Assert.That(result.Succeeded).IsTrue();
         await Assert.That(result.LastFramePng).IsNotNull();
-        var path = VisualCaptureArtifacts.WritePng(result.LastFramePng!, "xfighter-combat.png");
+        var dir = Path.Combine(VisualCaptureArtifacts.FindRepoRoot(), "artifacts", "visual-captures");
+        Directory.CreateDirectory(dir);
+        var path = Path.Combine(dir, "xfighter-combat.png");
+        await File.WriteAllBytesAsync(path, result.LastFramePng!);
         Console.WriteLine($"Visual capture: {path}");
     }
 }

@@ -1,16 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project>
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>Novolis.Raylib.Golden.Seed</RootNamespace>
     <IsTestProject>false</IsTestProject>
     <EnableTestingPlatform>false</EnableTestingPlatform>
     <EnableMicrosoftTestingPlatform>false</EnableMicrosoftTestingPlatform>
     <UseMicrosoftTestingPlatform>false</UseMicrosoftTestingPlatform>
+    <GenerateTestingPlatformEntryPoint>false</GenerateTestingPlatformEntryPoint>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\Novolis.Raylib.Testing\Novolis.Raylib.Testing.csproj" />
-  </ItemGroup>
-
 </Project>

@@ -1,4 +1,3 @@
-using Novolis.Raylib.Diagnostics;
 using Novolis.Raylib.Testing;
 using Novolis.Raylib.Testing.Golden;
 

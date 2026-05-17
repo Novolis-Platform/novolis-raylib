@@ -1,20 +1,20 @@
 namespace Novolis.Raylib.Testing;
 
-/// <summary>Marks tests that require native raylib; use with <see cref="NativeRaylibTestGate"/>.</summary>
+/// <summary>Skips the test when native raylib offscreen is unavailable (no environment variables).</summary>
 [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class)]
-public sealed class RunOnlyIfNativeRaylibAttribute : Attribute
+public sealed class RunOnlyIfNativeRaylibAttribute : SkipAttribute
 {
+    public RunOnlyIfNativeRaylibAttribute()
+        : base("Native raylib offscreen not available. Call RaylibTestRuntime.EnableForAssembly() or RaylibTestRuntime.EnterNativeOffscreen().")
+    {
+    }
+
+    public override Task<bool> ShouldSkip(TestRegisteredContext context) =>
+        Task.FromResult(!NativeRaylibTestGate.IsAvailable);
 }
 
-/// <summary>Skips or fails when native offscreen is unavailable (no environment variables).</summary>
+/// <summary>Reports whether native offscreen is available (runtime state or legacy env).</summary>
 public static class NativeRaylibTestGate
 {
     public static bool IsAvailable => RaylibOffscreenTestHarness.IsNativeOffscreenRunRequested();
-
-    public static void EnsureAvailable()
-    {
-        if (!IsAvailable)
-            throw new InvalidOperationException(
-                "Native raylib offscreen is not enabled. Call RaylibTestRuntime.EnableForAssembly() or RaylibTestRuntime.EnterNativeOffscreen().");
-    }
 }

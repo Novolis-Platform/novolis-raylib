@@ -45,6 +45,15 @@ public static class GoldenRenderOutputLayout
         }
     }
 
+    public static string? SharedRunFolder
+    {
+        get
+        {
+            lock (RunLock)
+                return _sharedRunFolder;
+        }
+    }
+
     public static void ResetSharedRun()
     {
         lock (RunLock)

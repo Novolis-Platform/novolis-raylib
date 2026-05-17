@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>Novolis.Raylib.Diagnostics</RootNamespace>
-    <AssemblyName>Novolis.Raylib.Diagnostics</AssemblyName>
+    <RootNamespace>Novolis.Raylib.Capture</RootNamespace>
+    <AssemblyName>Novolis.Raylib.Capture</AssemblyName>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 

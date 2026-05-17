@@ -13,7 +13,7 @@
     <Project Path="src/Novolis.Raylib.Game/Novolis.Raylib.Game.csproj" />
     <Project Path="src/Novolis.Raylib/Novolis.Raylib.csproj" />
     <Project Path="src/Novolis.Raylib.Testing/Novolis.Raylib.Testing.csproj" />
-    <Project Path="src/Novolis.Raylib.Diagnostics/Novolis.Raylib.Diagnostics.csproj" />
+    <Project Path="src/Novolis.Raylib.Capture/Novolis.Raylib.Capture.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Novolis.Raylib.CodeGen.Unit/Novolis.Raylib.CodeGen.Unit.csproj" />
@@ -22,6 +22,7 @@
     <Project Path="tests/Novolis.Raylib.Game.Unit/Novolis.Raylib.Game.Unit.csproj" />
     <Project Path="tests/Novolis.Raylib.Testing.Integration/Novolis.Raylib.Testing.Integration.csproj" />
     <Project Path="tests/Novolis.Raylib.Golden/Novolis.Raylib.Golden.csproj" />
+    <Project Path="tests/Novolis.Raylib.Golden.Seed/Novolis.Raylib.Golden.Seed.csproj" />
   </Folder>
   <Folder Name="/samples/">
     <Project Path="samples/HelloGame/HelloGame.csproj" />
