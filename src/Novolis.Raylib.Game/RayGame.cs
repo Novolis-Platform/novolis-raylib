@@ -131,9 +131,48 @@ public sealed class RayGameContext
     public void DrawGlowSphereWires(Vector3 center, float radius, Color color) =>
         World.DrawSphereWires(center, radius, 8, 12, color);
 
+    /// <summary>Loads a texture from a file path.</summary>
+    public Texture LoadTexture(string path) => Textures.Load(path);
+
+    /// <summary>Unloads a texture from GPU memory.</summary>
+    public void UnloadTexture(Texture texture) => Textures.Unload(texture);
+
+    /// <summary>Returns whether a texture handle is valid.</summary>
+    public bool IsTextureValid(Texture texture) => Textures.IsValid(texture);
+
     /// <summary>Draws a texture region in screen space (HUD).</summary>
     public void DrawHudTexture(Texture texture, RectangleF dest, Color tint) =>
         Hud.DrawTexturePro(texture, new RectangleF(0, 0, texture.Width, texture.Height), dest, default, 0f, tint);
+
+    /// <summary>Draws an XZ plane in the active 3D pass.</summary>
+    public void DrawPlane(Vector3 center, Vector2 size, Color color) =>
+        World.DrawPlane(center, size, color);
+
+    /// <summary>Draws a camera-facing billboard in the active 3D pass.</summary>
+    public void DrawBillboard(Camera camera, Texture texture, Vector3 position, float scale, Color tint) =>
+        World.DrawBillboard(camera, texture, position, scale, tint);
+
+    /// <summary>Draws a billboard with source rect and size in the active 3D pass.</summary>
+    public void DrawBillboardPro(
+        Camera camera,
+        Texture texture,
+        RectangleF source,
+        Vector3 position,
+        Vector2 size,
+        Color tint,
+        Vector3? up = null,
+        Vector2? origin = null,
+        float rotation = 0f) =>
+        World.DrawBillboardPro(
+            camera,
+            texture,
+            source,
+            position,
+            up ?? Vector3.UnitY,
+            size,
+            origin ?? Vector2.Zero,
+            rotation,
+            tint);
 
     /// <summary>Draws text in screen space.</summary>
     public void HudText(string text, int x, int y, int fontSize, Color color) =>

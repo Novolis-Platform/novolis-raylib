@@ -249,6 +249,21 @@ internal static class RaylibInteropEmitter
                 sb.AppendLine($"    internal static partial void {name}(Raylib6NativeTexture texture, RectangleF source, RectangleF dest, Vector2 origin, float rotation, RaylibColor tint);");
                 sb.AppendLine();
                 break;
+            case "void_vector3_vector2_color":
+                Li(sb, suppress, utf8, policy);
+                sb.AppendLine($"    internal static partial void {name}(Vector3 centerPos, Vector2 size, RaylibColor color);");
+                sb.AppendLine();
+                break;
+            case "void_camera_texture_vector3_float_color":
+                Li(sb, suppress, utf8, policy);
+                sb.AppendLine($"    internal static partial void {name}(Camera camera, Raylib6NativeTexture texture, Vector3 position, float scale, RaylibColor tint);");
+                sb.AppendLine();
+                break;
+            case "void_camera_texture_rectangle_vector3_vector2_vector2_vector2_float_color":
+                Li(sb, suppress, utf8, policy);
+                sb.AppendLine($"    internal static partial void {name}(Camera camera, Raylib6NativeTexture texture, RectangleF source, Vector3 position, Vector3 up, Vector2 size, Vector2 origin, float rotation, RaylibColor tint);");
+                sb.AppendLine();
+                break;
             default:
                 throw new InvalidOperationException($"Unknown template '{template}' for import '{name}'.");
         }
