@@ -33,6 +33,7 @@ flowchart TB
 | DI / phased loop | `Novolis.Raylib.Hosting` → `AddRaylib`, `IRenderSystem` | `samples/HelloHosting` |
 | Low-level control | `Graphics`, `World`, `Hud`, `Gui` | `samples/HelloRuntime` |
 | Automated tests | `Novolis.Raylib.Testing` | `samples/HelloTesting` |
+| Frame streaming / clips | `Novolis.Raylib.Capture` (optional) | `samples/HelloCapture` |
 
 Do **not** add direct package references to `Novolis.Raylib.Native` or `Novolis.Raylib.Abstractions` unless you extend the stack.
 

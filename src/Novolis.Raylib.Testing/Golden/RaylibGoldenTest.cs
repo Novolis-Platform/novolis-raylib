@@ -1,5 +1,4 @@
 using Novolis.Raylib.Abstractions;
-using Novolis.Raylib.Capture;
 
 namespace Novolis.Raylib.Testing.Golden;
 
@@ -43,13 +42,7 @@ public static class RaylibGoldenTest
             options.RunBucketLayout);
         using var testScope = RaylibTestRuntime.EnterNativeOffscreen();
 
-        using var captureSession = options.EnableStreamingCapture
-            ? new FrameCaptureSession(new CaptureStreamOptions
-            {
-                CaptureEveryNFrames = options.CaptureEveryNFrames,
-                MaxBufferedFrames = options.MaxBufferedFrames,
-            })
-            : null;
+        using var streamingCapture = GoldenStreamingCapture.TryStart(renderContext.StoryDirectory, options);
 
         if (!RaylibOffscreenTestHarness.IsNativeOffscreenRunRequested())
         {

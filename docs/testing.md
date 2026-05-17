@@ -85,8 +85,8 @@ See `tests/Novolis.Raylib.Golden/UpdateBaselinesTests` (`[Explicit]`) or `dotnet
 
 | Concept | Location | Purpose |
 |---------|----------|---------|
-| **Capture** | `Novolis.Raylib.Capture` (internal) | Streaming framebuffer capture via `RaylibFrameCaptureHub` after `EndDrawing` |
-| **Golden** | `Novolis.Raylib.Testing.Golden` | Stories, SHA256 baselines, QA HTML reports |
+| **Capture** | `Novolis.Raylib.Capture` | General per-frame PNG streaming via `RaylibPresentationHooks` after `EndDrawing` |
+| **Golden** | `Novolis.Raylib.Testing.Golden` | Stories, SHA256 baselines, QA HTML reports, `GoldenStreamingCapture` glue |
 | **Debug** | `RaylibDebugFrameHooks` | Env-gated DEBUG capture (`NOVOLIS_RAYLIB_DEBUG_CAPTURE`); not used by golden CI |
 
 ### Threading and parallel tests

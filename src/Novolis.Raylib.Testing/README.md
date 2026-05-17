@@ -2,6 +2,8 @@
 
 Optional test helpers for projects that use **`Novolis.Raylib`**. Reference this package **only from test projects**.
 
+This package references **[`Novolis.Raylib.Capture`](../Novolis.Raylib.Capture/)** for framebuffer streaming. Golden-specific streaming glue lives here (`GoldenStreamingCapture`), not in Capture.
+
 ## Golden tests (preferred for visuals)
 
 No environment variables. Enable native offscreen per assembly:
@@ -39,6 +41,7 @@ Legacy env vars (`NOVOLIS_RAYLIB_OFFSCREEN_TESTS`, `NOVOLIS_RAYLIB_NATIVE_TESTS`
 | Type | Role |
 |------|------|
 | `RaylibGoldenTest` | Golden SHA256 + QA HTML reports |
+| `GoldenStreamingCapture` | Optional `EnableStreamingCapture` → `stream_XXXX.png` in story folder |
 | `GoldenArtifactPublisher` | Mirror QA bundle to stable `{frameId}.png` folders |
 | `IGoldenRunBucketLayout` | Pluggable `temp/test-renders/...` run folder layout |
 | `QueuedGoldenStoryRenderer` | Drain main-thread queue around scene setup |

@@ -9,6 +9,7 @@ $pkgs = @(
     "src/Novolis.Raylib.Abstractions/Novolis.Raylib.Abstractions.csproj",
     "src/Novolis.Raylib.Bindings/Novolis.Raylib.Bindings.csproj",
     "src/Novolis.Raylib.Runtime/Novolis.Raylib.Runtime.csproj",
+    "src/Novolis.Raylib.Capture/Novolis.Raylib.Capture.csproj",
     "src/Novolis.Raylib.Hosting/Novolis.Raylib.Hosting.csproj",
     "src/Novolis.Raylib.Game/Novolis.Raylib.Game.csproj",
     "src/Novolis.Raylib/Novolis.Raylib.csproj",

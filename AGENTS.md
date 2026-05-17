@@ -36,8 +36,8 @@ pwsh ./scripts/agent-verify.ps1
 | `src/Novolis.Raylib.Game/` | `RayGame.Run` jam API |
 | `src/Novolis.Raylib.Hosting/` | `IHost` + phased game-loop systems |
 | `src/Novolis.Raylib.Abstractions/` | `IRaylibFrameRenderer`, `IRenderSystem`, … (transitive) |
-| `src/Novolis.Raylib.Testing/` | Offscreen harness, golden QA API, deterministic clock, hosting test host |
-| `src/Novolis.Raylib.Capture/` | Framebuffer streaming capture (test/build-time; not packable) |
+| `src/Novolis.Raylib.Capture/` | Optional packable per-frame framebuffer streaming (`FrameCaptureSession`) |
+| `src/Novolis.Raylib.Testing/` | Offscreen harness, golden QA API, deterministic clock (test projects only) |
 | `codegen/Novolis.Raylib.CodeGen/` | Roslyn CLI: `generate`, `verify`, `suggest-raylib`, `hooks list` (not published) |
 | `codegen/Novolis.Raylib.CodeGen.Hooks/` | `IRaylibCodegenHook` implementations (not published) |
 | `pipeline/raylib6/` | Manifests, fetch/native orchestration (`run.cs`) |
@@ -48,7 +48,7 @@ pwsh ./scripts/agent-verify.ps1
 | `src/Novolis.Raylib.Raygui/` | Optional raygui widgets add-on package |
 | `build/` | MSBuild targets (codegen on compile, native copy) |
 | `tests/` | TUnit unit/integration tests |
-| `samples/` | HelloGame, HelloRuntime, HelloHosting, HelloTesting |
+| `samples/` | HelloGame, HelloRuntime, HelloHosting, HelloCapture, HelloTesting |
 | `docs/` | `codegen.md`, `testing.md` |
 | `scripts/` | `agent-verify.ps1`, `raylib-codegen-check.ps1`, `raylib-e2e.ps1`, `pack-all.ps1` |
 | `agentic-tools/` | Agent registry, workflows (codegen discipline) |
@@ -69,7 +69,9 @@ Novolis.Raylib
 │   └── Novolis.Raylib.Abstractions
 └── (transitive via Runtime)
 
-Novolis.Raylib.Testing  → references Runtime + Game patterns (test projects only)
+Novolis.Raylib.Capture  → Runtime (optional; not in meta package)
+
+Novolis.Raylib.Testing  → Novolis.Raylib + Capture (test projects only)
 ```
 
 ## Public APIs (where to implement features)

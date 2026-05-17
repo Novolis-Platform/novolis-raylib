@@ -7,19 +7,19 @@ todos:
     status: completed
   - id: capture-packable
     content: Make Novolis.Raylib.Capture packable (props, README, public pipeline API, hook via PresentationHooks); add to pack-all.ps1
-    status: in_progress
+    status: completed
   - id: testing-glue
     content: Add GoldenStreamingCapture in Testing; refactor RaylibGoldenTest to use it; keep all golden/QA types in Testing
-    status: pending
+    status: completed
   - id: docs-agents
     content: Update AGENTS.md, README.md, docs/testing.md, Testing README for package split
-    status: pending
+    status: completed
   - id: hello-capture
     content: Optional HelloCapture sample + slnx entry
-    status: pending
+    status: completed
   - id: verify
     content: codegen generate, agent-verify, build, golden + codegen tests, pack-all smoke
-    status: pending
+    status: completed
 isProject: false
 ---
 

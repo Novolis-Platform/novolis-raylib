@@ -1,9 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Novolis.Raylib.Packaging.props" />
+
   <PropertyGroup>
     <RootNamespace>Novolis.Raylib.Capture</RootNamespace>
     <AssemblyName>Novolis.Raylib.Capture</AssemblyName>
-    <IsPackable>false</IsPackable>
+    <IsPackable>true</IsPackable>
+    <PackageId>Novolis.Raylib.Capture</PackageId>
   </PropertyGroup>
 
   <ItemGroup>

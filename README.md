@@ -28,6 +28,7 @@ flowchart TB
   abstractions[Novolis.Raylib.Abstractions]
   native["Novolis.Raylib.Native<br/><i>DLLs only, no C#</i>"]
   testing["Novolis.Raylib.Testing<br/><i>test projects</i>"]
+  capture["Novolis.Raylib.Capture<br/><i>optional</i>"]
 
   meta --> game
   meta --> hosting
@@ -41,6 +42,7 @@ flowchart TB
   bindings --> native
   abstractions --> native
   testing --> meta
+  capture --> runtime
 ```
 
 | Package | Role | Depends on |
@@ -52,7 +54,14 @@ flowchart TB
 | **Novolis.Raylib.Bindings** | Generated P/Invoke + shared types (`Camera`, `Texture`, …) | Native (assets) |
 | **Novolis.Raylib.Abstractions** | Frame/shell contracts (transitive) | Native (assets) |
 | **Novolis.Raylib.Native** | `raylib` + `novolis_raygui` binaries per RID (no managed code) | — |
-| **Novolis.Raylib.Testing** | Offscreen harness, deterministic clock (tests only) | Novolis.Raylib |
+| **Novolis.Raylib.Capture** | Per-frame framebuffer streaming (`FrameCaptureSession`) | Runtime |
+| **Novolis.Raylib.Testing** | Offscreen harness, golden QA, deterministic clock (tests only) | Novolis.Raylib, Capture |
+
+**Optional capture** (not in the meta package):
+
+```bash
+dotnet add package Novolis.Raylib.Capture
+```
 
 **Native assets:** `Novolis.Raylib.Native` packs prebuilt `raylib` from `vendor/` plus `novolis_raygui` built by the maintainer pipeline (`dotnet run pipeline/raylib6/run.cs native`). That is separate from the **`native`** CMake step and from **`Novolis.Raylib.Bindings`**, which holds the C# interop.
 
