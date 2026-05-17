@@ -9,6 +9,8 @@ public sealed class GoldenRunOptions
 
     public string? OutputRoot { get; init; }
 
+    public IGoldenRunBucketLayout? RunBucketLayout { get; init; }
+
     public bool EnableStreamingCapture { get; init; }
 
     public int CaptureEveryNFrames { get; init; } = 1;
@@ -19,4 +21,9 @@ public sealed class GoldenRunOptions
 
     /// <summary>Override committed <c>Goldens/</c> root (for baseline seed console).</summary>
     public string? GoldensRoot { get; init; }
+
+    /// <summary>Optional second copy of the QA bundle via <see cref="GoldenArtifactPublisher"/>.</summary>
+    public string? MirrorPublishDirectory { get; init; }
+
+    public GoldenPublishOptions? MirrorPublishOptions { get; init; }
 }

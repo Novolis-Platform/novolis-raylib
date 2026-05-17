@@ -111,6 +111,54 @@ Native / GLFW tests must not run concurrently:
 
 Job `golden-tests` on Windows builds native raylib, runs `[Category("Golden")]`, and uploads `temp/test-renders/` on failure.
 
+### Artifact mirror (`GoldenArtifactPublisher`)
+
+After `RaylibGoldenTest.Run`, copy the QA bundle into a stable folder (e.g. `raylib-golden-story/` with `{frameId}.png` instead of `{frameId}.actual.png`):
+
+```csharp
+var mirror = GoldenArtifactPublisher.Publish(
+    result.StoryDirectory!,
+    @"temp/test-renders/my-story",
+    new GoldenPublishOptions { ReadmeStepSummary = "01-galaxy → 02-production" });
+```
+
+Or set `GoldenRunOptions.MirrorPublishDirectory` (and optional `MirrorPublishOptions`) so `RaylibGoldenTest` mirrors automatically; `GoldenTestResult.MirrorPublish` holds `IndexHtmlUri` and paths.
+
+### Run bucket layouts (`IGoldenRunBucketLayout`)
+
+Default output uses `GoldenAdhocRunBucketLayout` (`adhoc-runs/{timestamp}_{pid}_{guid}/...`).
+
+Consumer repos can plug a custom layout (e.g. solution-scoped `solution-runs/{runId}/assemblies/...`):
+
+```csharp
+new GoldenRunOptions
+{
+    TestAssembly = typeof(MyTests).Assembly,
+    RunBucketLayout = myLayout,
+};
+```
+
+`GoldenRenderOutputLayout.Resolve` accepts `IGoldenRunBucketLayout?`; call `GoldenAdhocRunBucketLayout.ResetSharedRun()` between isolated test runs when needed.
+
+### Queued scene renderer
+
+Hosted games often post UI work to a main-thread queue. Wrap the frame renderer:
+
+```csharp
+var renderer = new QueuedGoldenStoryRenderer(
+    innerRenderer,
+    () => hostQueue.Drain(),
+    sceneScript);
+```
+
+`IGoldenSceneScript.BeginFrame(frameId)` runs after the first drain and before the second (same order as manual drain/setup/drain in product tests).
+
+### Opt-in gate and polling
+
+- `GoldenTestGate.IsOptInEnabled("MY_RAYLIB_GOLDEN")` — true when env is `1` or `true`.
+- `GoldenTestPolling.WaitUntil` / `WaitUntilAsync` — blocking wait for session setup.
+- `RaylibGoldenTestExtensions.RunAndPublish` — `Run` plus `MirrorPublish` on the result tuple.
+
 ## Legacy environment gates
 
 Older helpers still support optional env vars; the **golden framework does not require them**.

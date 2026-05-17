@@ -39,6 +39,13 @@ Legacy env vars (`NOVOLIS_RAYLIB_OFFSCREEN_TESTS`, `NOVOLIS_RAYLIB_NATIVE_TESTS`
 | Type | Role |
 |------|------|
 | `RaylibGoldenTest` | Golden SHA256 + QA HTML reports |
+| `GoldenArtifactPublisher` | Mirror QA bundle to stable `{frameId}.png` folders |
+| `IGoldenRunBucketLayout` | Pluggable `temp/test-renders/...` run folder layout |
+| `QueuedGoldenStoryRenderer` | Drain main-thread queue around scene setup |
+| `IGoldenSceneScript` | Per-frame navigation/setup before capture |
+| `GoldenTestGate` | Opt-in env gate (`1` / `true`) |
+| `GoldenTestPolling` | `WaitUntil` / `WaitUntilAsync` for hosted setup |
+| `RaylibGoldenTestExtensions` | `RunAndPublish` convenience |
 | `RaylibTestRuntime` | Scoped native test state (no env vars) |
 | `RaylibOffscreenTestHarness` | Bounded hidden-window loop |
 | `RaylibTestSession` | Scoped `EnterNativeOffscreen()` |

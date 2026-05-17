@@ -17,6 +17,8 @@ public sealed class GoldenTestResult
 
     public byte[]? ActualPng { get; init; }
 
+    public GoldenPublishResult? MirrorPublish { get; init; }
+
     public static GoldenTestResult Skip(string reason, string? reviewReportPath = null) =>
         new()
         {
@@ -41,7 +43,8 @@ public sealed class GoldenTestResult
         string reviewReportPath,
         string storyDirectory,
         byte[] actualPng,
-        bool assertPassed) =>
+        bool assertPassed,
+        GoldenPublishResult? mirrorPublish = null) =>
         new()
         {
             Skipped = false,
@@ -50,5 +53,6 @@ public sealed class GoldenTestResult
             ReviewReportPath = reviewReportPath,
             StoryDirectory = storyDirectory,
             ActualPng = actualPng,
+            MirrorPublish = mirrorPublish,
         };
 }

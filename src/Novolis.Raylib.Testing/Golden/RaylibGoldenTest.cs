@@ -33,7 +33,14 @@ public static class RaylibGoldenTest
             return GoldenTestResult.Fail($"Failed to load golden spec: {ex.Message}");
         }
 
-        var renderContext = GoldenRenderOutputLayout.Resolve(assembly, storyId, options.OutputRoot);
+        var outputRoot = string.IsNullOrWhiteSpace(options.OutputRoot)
+            ? null
+            : options.OutputRoot;
+        var renderContext = GoldenRenderOutputLayout.Resolve(
+            assembly,
+            storyId,
+            outputRoot,
+            options.RunBucketLayout);
         using var testScope = RaylibTestRuntime.EnterNativeOffscreen();
 
         using var captureSession = options.EnableStreamingCapture
@@ -49,7 +56,8 @@ public static class RaylibGoldenTest
             var skipReason = "Native offscreen not enabled. Call RaylibTestRuntime.EnableForAssembly() or EnterNativeOffscreen().";
             var reportPath = GoldenRenderReportWriter.WriteSkippedReport(renderContext, spec, skipReason);
             Console.WriteLine($"Golden render report: {reportPath}");
-            return GoldenTestResult.Skip(skipReason, reportPath);
+            var earlyMirror = TryMirrorPublish(renderContext, options, true, skipReason, false);
+            return BuildSkipResult(skipReason, reportPath, renderContext.StoryDirectory, earlyMirror);
         }
 
         var frameSpecs = spec.GetEffectiveFrames();
@@ -182,7 +190,8 @@ public static class RaylibGoldenTest
         {
             var reportPath = GoldenRenderReportWriter.WriteSkippedReport(renderContext, spec, storySkipReason!);
             Console.WriteLine($"Golden render report: {reportPath}");
-            return GoldenTestResult.Skip(storySkipReason!, reportPath);
+            var skipMirror = TryMirrorPublish(renderContext, options, true, storySkipReason, false);
+            return BuildSkipResult(storySkipReason!, reportPath, renderContext.StoryDirectory, skipMirror);
         }
 
         var anyFail = frameResults.Any(f => f.AssertPassed == false);
@@ -207,12 +216,75 @@ public static class RaylibGoldenTest
         var reviewPath = GoldenRenderReportWriter.Write(renderContext, spec, frameResults, storyAssert);
         Console.WriteLine($"Golden render report: {reviewPath}");
 
+        var mirror = TryMirrorPublish(renderContext, options, storySkipped, storySkipReason, anyFail);
+
         if (anyFail)
             return GoldenTestResult.Fail(storyAssert.ErrorMessage ?? "Golden assert failed", reviewPath, renderContext.StoryDirectory);
 
         if (lastActualPng is null)
             return GoldenTestResult.Fail("No frames captured.", reviewPath, renderContext.StoryDirectory);
 
-        return GoldenTestResult.Pass(reviewPath, renderContext.StoryDirectory, lastActualPng, storyAssertPassed ?? true);
+        return GoldenTestResult.Pass(
+            reviewPath,
+            renderContext.StoryDirectory,
+            lastActualPng,
+            storyAssertPassed ?? true,
+            mirror);
     }
+
+    private static GoldenPublishResult? TryMirrorPublish(
+        GoldenRenderRunContext renderContext,
+        GoldenRunOptions options,
+        bool storySkipped,
+        string? storySkipReason,
+        bool anyFail)
+    {
+        if (string.IsNullOrWhiteSpace(options.MirrorPublishDirectory))
+            return null;
+
+        var publishOptions = ClonePublishOptions(options.MirrorPublishOptions ?? new GoldenPublishOptions());
+        if (storySkipped)
+            publishOptions.SkippedMessage = storySkipReason ?? publishOptions.SkippedMessage;
+        else if (anyFail)
+            publishOptions.FailedMessage = "Golden assert failed";
+        else if (options.Mode == GoldenRunMode.ReportOnly)
+            publishOptions.ReportOnly = true;
+
+        var sourceDir = renderContext.StoryDirectory;
+
+        return GoldenArtifactPublisher.Publish(
+            sourceDir,
+            options.MirrorPublishDirectory,
+            publishOptions);
+    }
+
+    private static GoldenTestResult BuildSkipResult(
+        string reason,
+        string reportPath,
+        string? storyDirectory,
+        GoldenPublishResult? mirror) =>
+        mirror is null
+            ? GoldenTestResult.Skip(reason, reportPath)
+            : new GoldenTestResult
+            {
+                Skipped = true,
+                Succeeded = true,
+                Message = reason,
+                ReviewReportPath = reportPath,
+                StoryDirectory = storyDirectory,
+                MirrorPublish = mirror,
+            };
+
+    private static GoldenPublishOptions ClonePublishOptions(GoldenPublishOptions source) =>
+        new()
+        {
+            StablePngNames = source.StablePngNames,
+            CopySidecarFiles = source.CopySidecarFiles,
+            WriteReadme = source.WriteReadme,
+            ReadmeStepSummary = source.ReadmeStepSummary,
+            FallbackTitle = source.FallbackTitle,
+            SkippedMessage = source.SkippedMessage,
+            FailedMessage = source.FailedMessage,
+            ReportOnly = source.ReportOnly,
+        };
 }
