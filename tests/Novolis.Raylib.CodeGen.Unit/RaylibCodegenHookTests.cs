@@ -36,7 +36,7 @@ public sealed class RaylibCodegenHookTests
         var text = transformed.ToFullString();
         await Assert.That(text).Contains("Raylib6Native.EndDrawing()");
         await Assert.That(text).Contains("RaylibDebugFrameHooks.NotifyAfterEndDrawing()");
-        await Assert.That(text).Contains("RaylibFrameCaptureHub.Notify()");
+        await Assert.That(text).Contains("RaylibPresentationHooks.Notify()");
     }
 
     [Test]

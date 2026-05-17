@@ -10,10 +10,10 @@ public sealed class FrameCaptureSession : IDisposable
     {
         ArgumentNullException.ThrowIfNull(options);
         _scope = RaylibCaptureRuntimeState.Enter(options);
-        FrameCaptureService.Start(options);
+        FrameCapturePipeline.Start(options);
     }
 
-    public System.Threading.Channels.ChannelReader<CapturedFrame>? Reader => FrameCaptureService.Reader;
+    public System.Threading.Channels.ChannelReader<CapturedFrame>? Reader => FrameCapturePipeline.Reader;
 
     public void Dispose()
     {
@@ -21,7 +21,7 @@ public sealed class FrameCaptureSession : IDisposable
             return;
 
         _disposed = true;
-        FrameCaptureService.Stop();
+        FrameCapturePipeline.Stop();
         _scope.Dispose();
     }
 }

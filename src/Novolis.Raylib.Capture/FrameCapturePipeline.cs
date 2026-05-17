@@ -1,12 +1,12 @@
 using System.Diagnostics;
 using System.Threading.Channels;
-using Novolis.Raylib.Internal;
+using Novolis.Raylib.Presentation;
 using Novolis.Raylib.Rendering;
 
 namespace Novolis.Raylib.Capture;
 
-/// <summary>Streams framebuffer PNGs when <see cref="RaylibCaptureRuntimeState"/> streaming is active.</summary>
-internal static class FrameCaptureService
+/// <summary>Streams framebuffer PNGs when a <see cref="FrameCaptureSession"/> is active.</summary>
+public static class FrameCapturePipeline
 {
     private static Channel<CapturedFrame>? _channel;
     private static int _frameIndex;
@@ -28,12 +28,12 @@ internal static class FrameCaptureService
             SingleWriter = true,
         });
 
-        RaylibFrameCaptureHub.Register(OnFramePresented, enabled: true);
+        RaylibPresentationHooks.Register(OnFramePresented, enabled: true);
     }
 
     public static void Stop()
     {
-        RaylibFrameCaptureHub.Register(null, enabled: false);
+        RaylibPresentationHooks.Register(null, enabled: false);
         _channel = null;
         _options = null;
         _frameIndex = 0;

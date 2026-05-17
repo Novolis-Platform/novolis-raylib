@@ -31,7 +31,6 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="Novolis.Raylib.Runtime.Unit" />
-    <InternalsVisibleTo Include="Novolis.Raylib.Capture" />
     <InternalsVisibleTo Include="Novolis.Raylib.Testing" />
   </ItemGroup>
 

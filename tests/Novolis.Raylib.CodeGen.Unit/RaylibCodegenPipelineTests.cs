@@ -44,6 +44,6 @@ public sealed class RaylibCodegenPipelineTests
 
         await Assert.That(graphics).Contains("Raylib6Native.EndDrawing()");
         await Assert.That(graphics).Contains("RaylibDebugFrameHooks.NotifyAfterEndDrawing()");
-        await Assert.That(graphics).Contains("RaylibFrameCaptureHub.Notify()");
+        await Assert.That(graphics).Contains("RaylibPresentationHooks.Notify()");
     }
 }

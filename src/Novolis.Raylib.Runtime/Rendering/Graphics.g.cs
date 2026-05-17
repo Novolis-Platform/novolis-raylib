@@ -25,7 +25,7 @@ public static partial class Graphics
     {
         Raylib6Native.EndDrawing();
         RaylibDebugFrameHooks.NotifyAfterEndDrawing();
-        Novolis.Raylib.Internal.RaylibFrameCaptureHub.Notify();
+        Novolis.Raylib.Presentation.RaylibPresentationHooks.Notify();
     }
 
     /// <summary>

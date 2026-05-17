@@ -4,10 +4,10 @@ overview: Make `Novolis.Raylib.Capture` a proper optional NuGet package for play
 todos:
   - id: presentation-hooks
     content: Add public RaylibPresentationHooks in Runtime; update codegen hook + regen Graphics.g.cs; remove internal RaylibFrameCaptureHub
-    status: pending
+    status: completed
   - id: capture-packable
     content: Make Novolis.Raylib.Capture packable (props, README, public pipeline API, hook via PresentationHooks); add to pack-all.ps1
-    status: pending
+    status: in_progress
   - id: testing-glue
     content: Add GoldenStreamingCapture in Testing; refactor RaylibGoldenTest to use it; keep all golden/QA types in Testing
     status: pending
