@@ -20,7 +20,7 @@ if (args is [] or ["-h"] or ["--help"])
 		Commands:
 		  fetch    — dotnet run tools/raylib6-pipeline/fetch-sources.cs
 		  native   — cmake configure/build tools/native/raylib6-with-raygui (Windows + MSVC)
-		  generate — Roslyn codegen (verify → interop → raygui → debug hooks → façades + hooks)
+		  generate — Roslyn codegen (verify → interop → imgui/raygui → debug hooks → façades + hooks)
 		  all      — fetch, then native, then generate (same codegen chain as generate)
 
 		Prerequisites (native): CMake + VS C toolchain; run fetch first so tools/vendor/raylib-6 contains raylib.dll.

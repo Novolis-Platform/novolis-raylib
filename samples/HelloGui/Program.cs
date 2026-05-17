@@ -3,8 +3,15 @@ using Novolis.Raylib.Colors;
 using Novolis.Raylib.Game;
 using Novolis.Raylib.Rendering;
 
+var guiReady = false;
 RayGame.Run("Hello ImGui", 960, 540, ctx =>
 {
+    if (!guiReady)
+    {
+        Gui.Setup();
+        guiReady = true;
+    }
+
     ctx.Clear(RaylibColors.DarkGray);
 
     Gui.NewFrame();

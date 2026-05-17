@@ -133,4 +133,58 @@ public sealed class RaylibInteropReflectionTests
         foreach (var t in templates)
             await Assert.That(caseLabels.Contains(t)).IsTrue();
     }
+
+    [Test]
+    public async Task Imgui_function_count_matches_export_pointer_fields()
+    {
+        var root = RepoTestPaths.TryRepositoryRoot()
+                   ?? throw new InvalidOperationException("Could not resolve repository root.");
+
+        var manifestPath = Path.Combine(root, "pipeline", "raylib6", "imgui-exports.manifest.json");
+        using var doc = JsonDocument.Parse(await File.ReadAllTextAsync(manifestPath));
+        var functions = doc.RootElement.GetProperty("functions");
+        var exports = new List<string>();
+        foreach (var el in functions.EnumerateArray())
+            exports.Add(el.GetProperty("export").GetString()!);
+
+        var ptrFields = typeof(ImguiShimExports)
+            .GetFields(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
+            .Where(f => f.Name.EndsWith("_ptr", StringComparison.Ordinal))
+            .ToArray();
+
+        await Assert.That(ptrFields.Length).IsEqualTo(exports.Count);
+        foreach (var ex in exports)
+            await Assert.That(ptrFields.Any(f => f.Name == $"{ex}_ptr")).IsTrue();
+    }
+
+    [Test]
+    public async Task Imgui_each_manifest_template_is_implemented_in_generator()
+    {
+        var root = RepoTestPaths.TryRepositoryRoot()
+                   ?? throw new InvalidOperationException("Could not resolve repository root.");
+
+        var manifestPath = Path.Combine(root, "pipeline", "raylib6", "imgui-exports.manifest.json");
+        using var doc = JsonDocument.Parse(await File.ReadAllTextAsync(manifestPath));
+        var functions = doc.RootElement.GetProperty("functions");
+        var templates = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var el in functions.EnumerateArray())
+            templates.Add(el.GetProperty("template").GetString()!);
+
+        var genPath = Path.Combine(root, "codegen", "Novolis.Raylib.CodeGen", "Emit", "ImguiInteropEmitter.cs");
+        var gen = await File.ReadAllTextAsync(genPath);
+        var blockStart = gen.IndexOf(
+            "static (string delegateType, string exportName) TemplateToDelegate",
+            StringComparison.Ordinal);
+        await Assert.That(blockStart).IsGreaterThanOrEqualTo(0);
+        var throwIdx = gen.IndexOf("_ => throw new InvalidOperationException", blockStart, StringComparison.Ordinal);
+        await Assert.That(throwIdx).IsGreaterThanOrEqualTo(0);
+        var block = gen.Substring(blockStart, throwIdx - blockStart + 80);
+        var caseLabels = new HashSet<string>(
+            Regex.Matches(block, @"""([a-z0-9_]+)""\s*=>")
+                .Select(m => m.Groups[1].Value),
+            StringComparer.Ordinal);
+
+        foreach (var t in templates)
+            await Assert.That(caseLabels.Contains(t)).IsTrue();
+    }
 }

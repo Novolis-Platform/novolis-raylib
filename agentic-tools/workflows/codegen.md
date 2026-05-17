@@ -24,11 +24,13 @@ Commit **manifest and generated `*.g.cs` in the same commit**.
 | Manifest | Generated into |
 |----------|----------------|
 | `raylib-exports.manifest.json` | `src/Novolis.Raylib.Bindings/Interop/Raylib6Native.g.cs` |
-| `raygui-exports.manifest.json` | `Bindings/Interop/RayguiShimExports.g.cs` |
+| `imgui-exports.manifest.json` | `Bindings/Interop/ImguiShimExports.g.cs` |
+| `raygui-exports.manifest.json` | `Raygui/Interop/RayguiShimExports.g.cs` (add-on) |
 | `raylib-debug.manifest.json` | `Bindings/Interop/RaylibDebugFrameHooks.g.cs` |
 | `facades.manifest.json` | `Runtime/Rendering`, `Windowing`, `Interact`, … |
 | `hud.manifest.json` | `Runtime/Hud/Hud.g.cs` |
-| `gui.manifest.json` | `Runtime/Gui/Gui.g.cs` |
+| `gui.manifest.json` | `Runtime/Gui/Gui.g.cs` (Dear ImGui) |
+| `raygui.manifest.json` | `Raygui/RayGui/RayGui.g.cs` (add-on) |
 
 ## Adding a raylib function
 

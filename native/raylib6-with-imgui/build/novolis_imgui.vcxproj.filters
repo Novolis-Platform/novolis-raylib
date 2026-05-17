@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="D:\novolis\novolis-raylib\native\raylib6-with-imgui\novolis_imgui_exports.c">
+    <ClCompile Include="D:\novolis\novolis-raylib\native\raylib6-with-imgui\novolis_imgui_exports.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\novolis\novolis-raylib\vendor\raylib-cimgui\rlcimgui.c">
+    <ClCompile Include="D:\novolis\novolis-raylib\vendor\raylib-cimgui\src\raycimgui.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

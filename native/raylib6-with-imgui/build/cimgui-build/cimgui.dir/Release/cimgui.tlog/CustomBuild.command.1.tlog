@@ -1,4 +1,4 @@
-^D:\NOVOLIS\NOVOLIS-RAYLIB\VENDOR\CIMGUI\CMAKELISTS.TXT
+^D:\NOVOLIS\NOVOLIS-RAYLIB\VENDOR\RAYLIB-CIMGUI\CIMGUI-1.92.1-DOCKING\CMAKELISTS.TXT
 setlocal
 "C:\Program Files\CMake\bin\cmake.exe" -SD:/novolis/novolis-raylib/native/raylib6-with-imgui -BD:/novolis/novolis-raylib/native/raylib6-with-imgui/build --check-stamp-file D:/novolis/novolis-raylib/native/raylib6-with-imgui/build/cimgui-build/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd

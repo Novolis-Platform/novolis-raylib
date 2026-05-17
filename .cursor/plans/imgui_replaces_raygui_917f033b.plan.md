@@ -7,19 +7,19 @@ todos:
     status: completed
   - id: native-imgui
     content: Add vendor fetch + CMake native/raylib6-with-imgui → novolis_imgui (cimgui + raylib-cimgui)
-    status: in_progress
+    status: completed
   - id: codegen-imgui
     content: Add imgui-exports.manifest.json, ImguiInteropEmitter, RaylibCodegenPhase.ImGui, MSBuild outputs
-    status: pending
+    status: completed
   - id: gui-rewrite
     content: Rewrite gui.manifest.json + GuiControls + ImguiShimHost for ImGui frame/widget API
-    status: pending
+    status: completed
   - id: raygui-addon
     content: Create Novolis.Raylib.Raygui + Raygui.Native; move raygui codegen/host; gate IncludeRaygui emit
-    status: pending
+    status: completed
   - id: ci-samples-docs
     content: Update run.cs/CI, HelloGui sample, codegen tests, AGENTS.md/docs/registry
-    status: pending
+    status: completed
 isProject: false
 ---
 

@@ -29,7 +29,6 @@ if (!File.Exists(manifestPath))
 var json = JsonSerializer.Deserialize<Manifest>(File.ReadAllText(manifestPath), JsonSerializerOptions.Web)!;
 var vendorRaylib = Path.Combine(repoRoot, "vendor", "raylib-6");
 var vendorRaygui = Path.Combine(repoRoot, "vendor", "raygui-6");
-var vendorCimgui = Path.Combine(repoRoot, "vendor", "cimgui");
 var vendorRaylibCimgui = Path.Combine(repoRoot, "vendor", "raylib-cimgui");
 Directory.CreateDirectory(vendorRaylib);
 Directory.CreateDirectory(vendorRaygui);
@@ -61,16 +60,13 @@ if (json.RayguiHeaderUrl is { } rayguiUrl)
 	Console.WriteLine($"Wrote {dest}");
 }
 
-if (json.CimguiRepoUrl is { } cimguiRepo)
-{
-	EnsureGitClone(cimguiRepo, vendorCimgui, json.CimguiGitRef ?? "master", recursive: true);
-	Console.WriteLine($"cimgui ready at {vendorCimgui}");
-}
-
 if (json.RaylibCimguiRepoUrl is { } raylibCimguiRepo)
 {
-	EnsureGitClone(raylibCimguiRepo, vendorRaylibCimgui, json.RaylibCimguiGitRef ?? "master", recursive: false);
-	Console.WriteLine($"raylib-cimgui ready at {vendorRaylibCimgui}");
+	EnsureGitClone(raylibCimguiRepo, vendorRaylibCimgui, json.RaylibCimguiGitRef ?? "1.92.1-docking", recursive: true);
+	var bundledCimgui = Path.Combine(vendorRaylibCimgui, json.CimguiBundledSubdir ?? "cimgui-1.92.1-docking");
+	if (!File.Exists(Path.Combine(bundledCimgui, "cimgui.h")))
+		throw new InvalidOperationException($"Missing bundled cimgui at {bundledCimgui}. Re-run fetch with git submodule update --init --recursive.");
+	Console.WriteLine($"raylib-cimgui ready at {vendorRaylibCimgui} (cimgui: {bundledCimgui})");
 }
 
 Console.WriteLine("fetch-sources: done.");
@@ -155,7 +151,7 @@ static void FixRayguiIncludesIfNeeded(string path)
 
 static void EnsureGitClone(string repoUrl, string destDir, string gitRef, bool recursive)
 {
-	if (File.Exists(Path.Combine(destDir, "cimgui.h")) || File.Exists(Path.Combine(destDir, "rlcimgui.c")))
+	if (File.Exists(Path.Combine(destDir, "src", "raycimgui.c")) || File.Exists(Path.Combine(destDir, "rlcimgui.c")))
 	{
 		Console.WriteLine($"Skipping clone; already present: {destDir}");
 		return;
@@ -191,9 +187,8 @@ sealed class Manifest
 {
 	public string? RaylibGitTag { get; set; }
 	public string? RayguiGitTag { get; set; }
-	public string? CimguiGitRef { get; set; }
+	public string? CimguiBundledSubdir { get; set; }
 	public string? RaylibCimguiGitRef { get; set; }
-	public string? CimguiRepoUrl { get; set; }
 	public string? RaylibCimguiRepoUrl { get; set; }
 	public Dictionary<string, string>? Prebuilt { get; set; }
 	public string? RayguiHeaderUrl { get; set; }

@@ -59,7 +59,7 @@ internal static class Program
             Star Conflicts Revolt — raylib 6 Roslyn codegen
 
             Commands:
-              generate       — verify vendor manifest, emit interop + raygui + debug + façades
+              generate       — verify vendor manifest, emit interop + imgui + raygui + debug + façades
               verify         — fail if manifest symbols missing from vendor raylib.h
               verify-docs    — fail if façade/Hud/Gui types or methods lack resolvable summaries
               enrich-docs    — fill manifest typeSummary/summary from raylib headers (use --write)

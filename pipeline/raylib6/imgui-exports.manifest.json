@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "header": "vendor/cimgui/cimgui.h",
+  "header": "vendor/raylib-cimgui/cimgui-1.92.1-docking/cimgui.h",
   "description": "Curated novolis_imgui shim exports (cimgui + raylib-cimgui).",
   "functions": [
     { "export": "novolis_rlimgui_setup", "template": "void_int" },

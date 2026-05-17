@@ -22,7 +22,7 @@ jobs:
           dotnet run --project codegen/Novolis.Raylib.CodeGen -- verify-docs
           dotnet run --project codegen/Novolis.Raylib.CodeGen -- generate
       - name: Assert no drift
-        run: git diff --exit-code pipeline/raylib6/ src/Novolis.Raylib.Bindings/ src/Novolis.Raylib.Runtime/
+        run: git diff --exit-code pipeline/raylib6/ src/Novolis.Raylib.Bindings/ src/Novolis.Raylib.Runtime/ src/Novolis.Raylib.Raygui/
 
   build-test:
     runs-on: windows-latest

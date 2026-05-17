@@ -81,7 +81,7 @@
       "Commit manifest + *.g.cs together"
     ],
     "add-facade-method": [
-      "Edit pipeline/raylib6/facades.manifest.json (or hud.manifest.json / gui.manifest.json)",
+      "Edit pipeline/raylib6/facades.manifest.json (or hud.manifest.json / gui.manifest.json / raygui.manifest.json)",
       "Run tool codegen.generate",
       "Run tool agent.verify"
     ],

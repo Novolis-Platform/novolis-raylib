@@ -41,8 +41,11 @@ pwsh ./scripts/agent-verify.ps1
 | `codegen/Novolis.Raylib.CodeGen/` | Roslyn CLI: `generate`, `verify`, `suggest-raylib`, `hooks list` (not published) |
 | `codegen/Novolis.Raylib.CodeGen.Hooks/` | `IRaylibCodegenHook` implementations (not published) |
 | `pipeline/raylib6/` | Manifests, fetch/native orchestration (`run.cs`) |
-| `vendor/raylib-6/`, `vendor/raygui-6/` | Vendored headers + prebuilt `raylib.dll` (fetched) |
-| `native/raylib6-with-raygui/` | CMake shim (`novolis_raygui.dll`) + trace forwarder |
+| `vendor/raylib-6/`, `vendor/raygui-6/`, `vendor/raylib-cimgui/` | Vendored raylib prebuilts, raygui header, ray-cimgui + bundled cimgui (fetched) |
+| `native/raylib6-platform/` | Trace forwarder (`novolis_raylib_trace`) |
+| `native/raylib6-with-imgui/` | ImGui shim (`novolis_imgui.dll`) |
+| `native/raylib6-with-raygui/` | RayGui add-on shim (`novolis_raygui.dll`) |
+| `src/Novolis.Raylib.Raygui/` | Optional raygui widgets add-on package |
 | `build/` | MSBuild targets (codegen on compile, native copy) |
 | `tests/` | TUnit unit/integration tests |
 | `samples/` | HelloGame, HelloRuntime, HelloHosting, HelloTesting |
@@ -78,7 +81,8 @@ Novolis.Raylib.Testing  → references Runtime + Game patterns (test projects on
 | Low-level drawing without Game | `RaylibRuntimeShell.RunShellFrame` + `IRaylibFrameRenderer` | `Novolis.Raylib.Shell` |
 | Drawing / scene | Static façades | `Graphics`, `World`, `Window`, `Input`, `Textures` in `Novolis.Raylib.Runtime` |
 | HUD overlay (2D) | `Hud` | `Novolis.Raylib` (generated) |
-| GUI widgets (raygui) | `Gui` | `Novolis.Raylib` (generated) |
+| GUI widgets (Dear ImGui) | `Gui` | `Novolis.Raylib` (generated) |
+| GUI widgets (raygui, optional) | `RayGui` | `Novolis.Raylib.Raygui` add-on |
 
 Hand-written shell code lives in `Runtime/` (`Shell/`, `Debug/`, …). Shared types used by façades (`Color`, `Vector3`, …) live in `Bindings/`. **Do not hand-edit `*.g.cs`.**
 
@@ -112,7 +116,7 @@ To add a raylib export: update `raylib-exports.manifest.json` (and façade manif
 # Fetch vendor headers/DLL (required before first build)
 dotnet run pipeline/raylib6/fetch-sources.cs
 
-# Windows: build novolis_raygui shim (needed for raygui + trace bridge)
+# Windows: build native shims (trace, ImGui, optional raygui)
 dotnet run pipeline/raylib6/run.cs native
 
 dotnet build Novolis.Raylib.slnx -c Release

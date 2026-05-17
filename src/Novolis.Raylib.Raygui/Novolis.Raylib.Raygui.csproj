@@ -18,6 +18,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="Novolis.Raylib.CodeGen.Unit" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Novolis.Raylib.Runtime\Novolis.Raylib.Runtime.csproj" />
     <ProjectReference Include="..\Novolis.Raylib.Raygui.Native\Novolis.Raylib.Raygui.Native.csproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>

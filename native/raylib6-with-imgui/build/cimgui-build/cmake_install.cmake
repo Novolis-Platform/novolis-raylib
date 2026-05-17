@@ -1,4 +1,4 @@
-# Install script for directory: D:/novolis/novolis-raylib/vendor/cimgui
+# Install script for directory: D:/novolis/novolis-raylib/vendor/raylib-cimgui/cimgui-1.92.1-docking
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

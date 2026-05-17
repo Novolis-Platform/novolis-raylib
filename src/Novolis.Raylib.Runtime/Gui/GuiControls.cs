@@ -41,13 +41,14 @@ public static unsafe class GuiControls
             return false;
 
         var openInt = open ? 1 : 0;
+        int visible;
         fixed (byte* name = utf8)
-        fixed (int* pOpen = &openInt)
         {
-            var visible = ImguiShimExports.novolis_igBegin_ptr(name, pOpen, 0) != 0;
-            open = openInt != 0;
-            return visible;
+            visible = ImguiShimExports.novolis_igBegin_ptr(name, &openInt, 0);
         }
+
+        open = openInt != 0;
+        return visible != 0;
     }
 
     public static void EndWindow()
@@ -88,8 +89,7 @@ public static unsafe class GuiControls
         var v = value ? 1 : 0;
         int changed;
         fixed (byte* name = utf8)
-        fixed (int* pValue = &v)
-            changed = ImguiShimExports.novolis_igCheckbox_ptr(name, pValue);
+            changed = ImguiShimExports.novolis_igCheckbox_ptr(name, &v);
 
         value = v != 0;
         return changed != 0;

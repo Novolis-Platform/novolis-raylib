@@ -206,7 +206,7 @@ cimgui_BINARY_DIR:STATIC=D:/novolis/novolis-raylib/native/raylib6-with-imgui/bui
 cimgui_IS_TOP_LEVEL:STATIC=OFF
 
 //Value Computed by CMake
-cimgui_SOURCE_DIR:STATIC=D:/novolis/novolis-raylib/vendor/cimgui
+cimgui_SOURCE_DIR:STATIC=D:/novolis/novolis-raylib/vendor/raylib-cimgui/cimgui-1.92.1-docking
 
 //Value Computed by CMake
 novolis_imgui_raylib6_BINARY_DIR:STATIC=D:/novolis/novolis-raylib/native/raylib6-with-imgui/build

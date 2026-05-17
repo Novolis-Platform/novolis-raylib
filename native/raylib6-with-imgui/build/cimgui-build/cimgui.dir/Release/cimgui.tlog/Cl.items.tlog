@@ -1,6 +1,6 @@
-D:\novolis\novolis-raylib\vendor\cimgui\cimgui.cpp;D:\novolis\novolis-raylib\native\raylib6-with-imgui\build\cimgui-build\cimgui.dir\Release\cimgui.obj
-D:\novolis\novolis-raylib\vendor\cimgui\imgui\imgui.cpp;D:\novolis\novolis-raylib\native\raylib6-with-imgui\build\cimgui-build\cimgui.dir\Release\imgui.obj
-D:\novolis\novolis-raylib\vendor\cimgui\imgui\imgui_demo.cpp;D:\novolis\novolis-raylib\native\raylib6-with-imgui\build\cimgui-build\cimgui.dir\Release\imgui_demo.obj
-D:\novolis\novolis-raylib\vendor\cimgui\imgui\imgui_draw.cpp;D:\novolis\novolis-raylib\native\raylib6-with-imgui\build\cimgui-build\cimgui.dir\Release\imgui_draw.obj
-D:\novolis\novolis-raylib\vendor\cimgui\imgui\imgui_tables.cpp;D:\novolis\novolis-raylib\native\raylib6-with-imgui\build\cimgui-build\cimgui.dir\Release\imgui_tables.obj
-D:\novolis\novolis-raylib\vendor\cimgui\imgui\imgui_widgets.cpp;D:\novolis\novolis-raylib\native\raylib6-with-imgui\build\cimgui-build\cimgui.dir\Release\imgui_widgets.obj
+D:\novolis\novolis-raylib\vendor\raylib-cimgui\cimgui-1.92.1-docking\cimgui.cpp;D:\novolis\novolis-raylib\native\raylib6-with-imgui\build\cimgui-build\cimgui.dir\Release\cimgui.obj
+D:\novolis\novolis-raylib\vendor\raylib-cimgui\cimgui-1.92.1-docking\imgui\imgui.cpp;D:\novolis\novolis-raylib\native\raylib6-with-imgui\build\cimgui-build\cimgui.dir\Release\imgui.obj
+D:\novolis\novolis-raylib\vendor\raylib-cimgui\cimgui-1.92.1-docking\imgui\imgui_demo.cpp;D:\novolis\novolis-raylib\native\raylib6-with-imgui\build\cimgui-build\cimgui.dir\Release\imgui_demo.obj
+D:\novolis\novolis-raylib\vendor\raylib-cimgui\cimgui-1.92.1-docking\imgui\imgui_draw.cpp;D:\novolis\novolis-raylib\native\raylib6-with-imgui\build\cimgui-build\cimgui.dir\Release\imgui_draw.obj
+D:\novolis\novolis-raylib\vendor\raylib-cimgui\cimgui-1.92.1-docking\imgui\imgui_tables.cpp;D:\novolis\novolis-raylib\native\raylib6-with-imgui\build\cimgui-build\cimgui.dir\Release\imgui_tables.obj
+D:\novolis\novolis-raylib\vendor\raylib-cimgui\cimgui-1.92.1-docking\imgui\imgui_widgets.cpp;D:\novolis\novolis-raylib\native\raylib6-with-imgui\build\cimgui-build\cimgui.dir\Release\imgui_widgets.obj
