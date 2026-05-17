@@ -1,4 +1,3 @@
-using System.Reflection;
 using Novolis.Raylib.Abstractions;
 using Novolis.Raylib.Capture;
 
