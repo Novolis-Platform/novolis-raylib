@@ -26,4 +26,8 @@
     <ProjectReference Include="..\Novolis.Raylib\Novolis.Raylib.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="Novolis.Raylib.Golden" />
+  </ItemGroup>
+
 </Project>

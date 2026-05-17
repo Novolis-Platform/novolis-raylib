@@ -32,12 +32,12 @@ Every run writes a review folder under:
 
 | File | Purpose |
 |------|---------|
-| `index.html` | Two-column QA page: render image(s) and itemized expectations |
-| `expectations.md` | Same checklist for agents/CLI |
-| `manifest.json` | Machine-readable metadata and hashes |
+| `index.html` | Dark section-based QA page (SCR-style): one section per frame with images and checklist |
+| `expectations.md` | Same checklist for agents/CLI (`## {frameId}` per frame when multi-frame) |
+| `manifest.json` | Machine-readable metadata, per-frame hashes and paths |
 | `agent-brief.json` | Compact JSON for agentic review (paths, expectations, hashes) |
-| `actual.png` | Captured frame |
-| `baseline.png` | Copy of committed baseline |
+| `actual.png` / `{frameId}.actual.png` | Captured frame (v1 / multi-frame) |
+| `baseline.png` / `{frameId}.baseline.png` | Copy of committed baseline |
 
 Open `index.html` in a browser for human or agentic visual review, even when SHA256 assert passes in CI.
 
@@ -53,8 +53,11 @@ Local helpers:
 
 Store under `tests/<Project>/Goldens/{storyId}/`:
 
-- `spec.json` — authoritative metadata: resolution, `baselineSha256`, and `expectations[]`
-- `baseline.png` — reference image
+- `spec.json` — authoritative metadata: resolution, `baselineSha256`, `expectations[]`, optional `frames[]`
+- `baseline.png` — reference image (single-frame v1 stories)
+- `{frameId}.png` — per-frame baseline when `frames[]` is present (schema v2)
+
+**Multi-frame `spec.json` (optional):** each entry in `frames[]` has `frameId`, `title`, `caption`, `captureAtFrame`, `maxFrames`, `baselineSha256`, and `expectations[]`. Existing v1 stories without `frames` continue to use `actual.png` / `baseline.png` with no migration required.
 
 [`GoldenScenes`](src/Novolis.Raylib.Testing/Golden/GoldenScenes.cs) provides render delegates only (no duplicated expectations).
 

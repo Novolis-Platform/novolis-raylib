@@ -8,12 +8,14 @@ public sealed class RaylibOffscreenTestRunResult
         bool ranNative,
         int framesCompleted,
         byte[]? lastFramePng,
+        IReadOnlyDictionary<int, byte[]> framePngs,
         string? message)
     {
         Succeeded = succeeded;
         RanNativeLoop = ranNative;
         FramesCompleted = framesCompleted;
         LastFramePng = lastFramePng;
+        FramePngs = framePngs;
         Message = message;
     }
 
@@ -25,14 +27,16 @@ public sealed class RaylibOffscreenTestRunResult
 
     public byte[]? LastFramePng { get; }
 
+    public IReadOnlyDictionary<int, byte[]> FramePngs { get; }
+
     public string? Message { get; }
 
     public static RaylibOffscreenTestRunResult Skipped(string reason) =>
-        new(false, false, 0, null, reason);
+        new(false, false, 0, null, new Dictionary<int, byte[]>(), reason);
 
     public static RaylibOffscreenTestRunResult Failed(string error) =>
-        new(false, true, 0, null, error);
+        new(false, true, 0, null, new Dictionary<int, byte[]>(), error);
 
-    public static RaylibOffscreenTestRunResult Ok(int frames, byte[]? png) =>
-        new(true, true, frames, png, null);
+    public static RaylibOffscreenTestRunResult Ok(int frames, byte[]? png, IReadOnlyDictionary<int, byte[]>? framePngs = null) =>
+        new(true, true, frames, png, framePngs ?? new Dictionary<int, byte[]>(), null);
 }

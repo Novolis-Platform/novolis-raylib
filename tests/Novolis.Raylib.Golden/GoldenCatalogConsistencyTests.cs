@@ -19,12 +19,27 @@ public sealed class GoldenCatalogConsistencyTests
 
             await Assert.That(spec.StoryId).IsEqualTo(folderId);
 
-            var baselinePath = Path.Combine(storyDir, spec.BaselinePngFileName);
-            await Assert.That(File.Exists(baselinePath)).IsTrue();
+            if (spec.IsMultiFrame)
+            {
+                foreach (var frame in spec.Frames)
+                {
+                    var baselinePath = Path.Combine(storyDir, GoldenStorySpec.GetCommittedBaselineFileName(spec, frame));
+                    await Assert.That(File.Exists(baselinePath)).IsTrue();
 
-            var png = await File.ReadAllBytesAsync(baselinePath);
-            var hash = FramebufferAssert.Sha256Hex(png);
-            await Assert.That(spec.BaselineSha256).IsEqualTo(hash);
+                    var png = await File.ReadAllBytesAsync(baselinePath);
+                    var hash = FramebufferAssert.Sha256Hex(png);
+                    await Assert.That(frame.BaselineSha256).IsEqualTo(hash);
+                }
+            }
+            else
+            {
+                var baselinePath = Path.Combine(storyDir, spec.BaselinePngFileName);
+                await Assert.That(File.Exists(baselinePath)).IsTrue();
+
+                var png = await File.ReadAllBytesAsync(baselinePath);
+                var hash = FramebufferAssert.Sha256Hex(png);
+                await Assert.That(spec.BaselineSha256).IsEqualTo(hash);
+            }
         }
     }
 }

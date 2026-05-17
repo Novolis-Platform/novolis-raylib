@@ -16,4 +16,7 @@ public sealed class RaylibOffscreenTestOptions
     public bool UsePostInitHideOnly { get; init; }
 
     public bool CaptureLastFramePng { get; init; }
+
+    /// <summary>1-based frame numbers to capture as PNG after <c>EndDrawing</c> (empty = none unless <see cref="CaptureLastFramePng"/>).</summary>
+    public IReadOnlyList<int> CaptureAtFrameNumbers { get; init; } = [];
 }

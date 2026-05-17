@@ -25,7 +25,20 @@ public static class GoldenCatalog
     }
 
     public static string GetBaselinePngPath(Assembly testAssembly, string storyId, string? goldensRoot = null) =>
-        Path.Combine(GetStoryDirectory(testAssembly, storyId, goldensRoot), "baseline.png");
+        GetBaselinePngPath(testAssembly, storyId, frameId: null, goldensRoot);
+
+    public static string GetBaselinePngPath(
+        Assembly testAssembly,
+        string storyId,
+        string? frameId,
+        string? goldensRoot = null)
+    {
+        var storyDir = GetStoryDirectory(testAssembly, storyId, goldensRoot);
+        if (string.IsNullOrWhiteSpace(frameId) || frameId == GoldenFrameSpec.DefaultFrameId)
+            return Path.Combine(storyDir, "baseline.png");
+
+        return Path.Combine(storyDir, $"{frameId}.png");
+    }
 
     public static string GetGoldensRoot(Assembly testAssembly, string? goldensRootOverride = null)
     {

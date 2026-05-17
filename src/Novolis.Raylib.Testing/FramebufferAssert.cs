@@ -19,16 +19,36 @@ public static class FramebufferAssert
             throw new InvalidOperationException($"PNG hash mismatch. Expected {expectedSha256Hex}, got {actual}.");
     }
 
-    public static void AssertMatchesBaseline(ReadOnlySpan<byte> pngBytes, Golden.GoldenStorySpec spec, Assembly testAssembly)
+    public static void AssertMatchesBaseline(ReadOnlySpan<byte> pngBytes, Golden.GoldenStorySpec spec, Assembly testAssembly) =>
+        AssertMatchesBaseline(pngBytes, spec, spec.GetEffectiveFrames()[0], testAssembly);
+
+    public static void AssertMatchesBaseline(
+        ReadOnlySpan<byte> pngBytes,
+        Golden.GoldenStorySpec spec,
+        Golden.GoldenFrameSpec frame,
+        Assembly testAssembly,
+        string? goldensRoot = null)
     {
         ArgumentNullException.ThrowIfNull(spec);
-        if (!string.IsNullOrWhiteSpace(spec.BaselineSha256))
+        ArgumentNullException.ThrowIfNull(frame);
+
+        if (!string.IsNullOrWhiteSpace(frame.BaselineSha256))
+        {
+            AssertHash(pngBytes, frame.BaselineSha256);
+            return;
+        }
+
+        if (!spec.IsMultiFrame && !string.IsNullOrWhiteSpace(spec.BaselineSha256))
         {
             AssertHash(pngBytes, spec.BaselineSha256);
             return;
         }
 
-        var baselinePath = Golden.GoldenCatalog.GetBaselinePngPath(testAssembly, spec.StoryId);
+        var baselinePath = Golden.GoldenCatalog.GetBaselinePngPath(
+            testAssembly,
+            spec.StoryId,
+            spec.IsMultiFrame ? frame.FrameId : null,
+            goldensRoot);
         if (!File.Exists(baselinePath))
             throw new FileNotFoundException($"Baseline PNG not found: {baselinePath}", baselinePath);
 

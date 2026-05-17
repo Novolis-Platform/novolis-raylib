@@ -6,7 +6,7 @@ namespace Novolis.Raylib.Testing.Golden;
 /// <summary>Committed golden story metadata and QA expectations.</summary>
 public sealed class GoldenStorySpec
 {
-    public const int CurrentSchemaVersion = 1;
+    public const int CurrentSchemaVersion = 2;
 
     [JsonPropertyName("schemaVersion")]
     public int SchemaVersion { get; init; } = CurrentSchemaVersion;
@@ -32,8 +32,43 @@ public sealed class GoldenStorySpec
     [JsonPropertyName("expectations")]
     public IReadOnlyList<string> Expectations { get; init; } = [];
 
+    [JsonPropertyName("frames")]
+    public IReadOnlyList<GoldenFrameSpec> Frames { get; init; } = [];
+
+    [JsonIgnore]
+    public bool IsMultiFrame => Frames.Count > 0;
+
     [JsonIgnore]
     public string BaselinePngFileName => "baseline.png";
+
+    public IReadOnlyList<GoldenFrameSpec> GetEffectiveFrames()
+    {
+        if (Frames.Count > 0)
+            return Frames;
+
+        return
+        [
+            new GoldenFrameSpec
+            {
+                FrameId = GoldenFrameSpec.DefaultFrameId,
+                Title = string.IsNullOrWhiteSpace(Title) ? StoryId : Title,
+                Caption = "Captured frame from this run.",
+                MaxFrames = MaxFrames,
+                CaptureAtFrame = 0,
+                BaselineSha256 = BaselineSha256,
+                Expectations = Expectations,
+            },
+        ];
+    }
+
+    public static string GetCommittedBaselineFileName(GoldenStorySpec spec, GoldenFrameSpec frame) =>
+        spec.IsMultiFrame ? $"{frame.FrameId}.png" : spec.BaselinePngFileName;
+
+    public static string GetAdhocActualFileName(GoldenStorySpec spec, GoldenFrameSpec frame) =>
+        spec.IsMultiFrame ? $"{frame.FrameId}.actual.png" : "actual.png";
+
+    public static string GetAdhocBaselineFileName(GoldenStorySpec spec, GoldenFrameSpec frame) =>
+        spec.IsMultiFrame ? $"{frame.FrameId}.baseline.png" : "baseline.png";
 
     public static GoldenStorySpec LoadFromFile(string specPath)
     {

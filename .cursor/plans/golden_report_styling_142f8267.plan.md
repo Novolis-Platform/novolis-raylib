@@ -4,13 +4,13 @@ overview: Restyle golden QA index.html to match Star Conflicts Revolt’s dark s
 todos:
   - id: spec-schema-v2
     content: Add GoldenFrameSpec + frames[] to spec.json (schema v2); implicit single-frame compat for v1 stories
-    status: pending
+    status: completed
   - id: harness-multi-capture
     content: Extend RaylibOffscreenTestHarness/Options/RunResult for capture-at-indices or per-frame sub-runs
-    status: pending
+    status: completed
   - id: golden-test-multi
     content: Update RaylibGoldenTest, GoldenCatalog, FramebufferAssert, UpdateBaselines for per-frame assert/write
-    status: pending
+    status: in_progress
   - id: restyle-writer
     content: GoldenRenderReportWriter — SCR dark CSS, one HTML section per frame (title/caption/status/images/expectations)
     status: pending

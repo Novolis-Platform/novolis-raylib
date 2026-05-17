@@ -108,6 +108,11 @@ public static class RaylibOffscreenTestHarness
 
                 var frames = 0;
                 byte[]? lastPng = null;
+                var framePngs = new Dictionary<int, byte[]>();
+                var captureAt = options.CaptureAtFrameNumbers.Count > 0
+                    ? new HashSet<int>(options.CaptureAtFrameNumbers)
+                    : null;
+
                 while (frames < options.MaxFrames && !cancellationToken.IsCancellationRequested)
                 {
                     Graphics.BeginDrawing();
@@ -118,17 +123,24 @@ public static class RaylibOffscreenTestHarness
                     Graphics.EndDrawing();
                     frames++;
 
-                    if (options.CaptureLastFramePng && frames >= options.MaxFrames)
+                    var shouldCapture =
+                        captureAt is not null && captureAt.Contains(frames)
+                        || (options.CaptureLastFramePng && frames >= options.MaxFrames);
+
+                    if (shouldCapture && ScreenFramebufferCapture.TryExportFramebufferToPng(out var png))
                     {
-                        if (ScreenFramebufferCapture.TryExportFramebufferToPng(out var png))
-                            lastPng = png;
+                        lastPng = png;
+                        framePngs[frames] = png;
                     }
                 }
 
                 if (options.CaptureLastFramePng && lastPng is null)
                     FlushFramebufferAndTryCapturePng(frameRenderer, ref lastPng);
 
-                return RaylibOffscreenTestRunResult.Ok(frames, lastPng);
+                if (lastPng is not null && !framePngs.ContainsKey(frames))
+                    framePngs[frames] = lastPng;
+
+                return RaylibOffscreenTestRunResult.Ok(frames, lastPng, framePngs);
             }
             finally
             {
