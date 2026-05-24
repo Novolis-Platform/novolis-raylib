@@ -1,94 +1,14 @@
-# Publishes Novolis.Raylib.* packages to nuget.org when a GitHub Release is published.
-# Trusted publishing on nuget.org must reference this file name: release.yml
-# (Novolis-Platform/novolis-raylib, OIDC via NuGet/login — no long-lived API key).
-# Day-to-day publishes use merge.yml with auto build bump (see .novolis/version.props).
-
 name: Release
 
 on:
   release:
     types: [published]
-  workflow_dispatch:
-    inputs:
-      version:
-        required: false
-        type: string
-        description: SemVer override when not triggered by a release tag
-      pack_only:
-        required: false
-        type: boolean
-        default: false
-        description: Pack and upload CI artifacts only; do not push to nuget.org
 
 permissions:
   contents: read
-  id-token: write
+  packages: write
 
 jobs:
-  validate:
-    name: Validate
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 10.0.x
-      - run: dotnet build -c Release
-
   publish:
-    name: Pack and publish
-    needs: validate
-    runs-on: ubuntu-latest
-    environment: nuget.org
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 10.0.x
-
-      - name: Resolve package version
-        id: version
-        shell: bash
-        run: |
-          if [ "${{ github.event_name }}" = "release" ]; then
-            TAG="${{ github.event.release.tag_name }}"
-          elif [ -n "${{ inputs.version }}" ]; then
-            TAG="${{ inputs.version }}"
-          else
-            echo "workflow_dispatch requires inputs.version when not triggered by a release."
-            exit 1
-          fi
-          VERSION="${TAG#v}"
-          if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(\.[0-9]+)?(-[a-zA-Z0-9.+-]+)?(\+[a-zA-Z0-9.+-]+)?$ ]]; then
-            echo "Tag/version is not a valid version string: $VERSION"
-            exit 1
-          fi
-          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-          echo "Resolved NovolisRaylibVersion=$VERSION"
-
-      - name: Pack NuGet packages
-        shell: pwsh
-        run: ./scripts/pack-all.ps1 -Version ${{ steps.version.outputs.version }}
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: nuget-packages-${{ steps.version.outputs.version }}
-          path: artifacts/packages/*.nupkg
-          if-no-files-found: error
-
-      - name: NuGet login (OIDC trusted publishing)
-        if: inputs.pack_only != true
-        uses: NuGet/login@v1
-        id: nuget_login
-        with:
-          user: ${{ vars.NUGET_USERNAME }}
-
-      - name: Push packages to nuget.org
-        if: inputs.pack_only != true
-        shell: pwsh
-        run: |
-          $apiKey = '${{ steps.nuget_login.outputs.NUGET_API_KEY }}'
-          $source = 'https://api.nuget.org/v3/index.json'
-          Get-ChildItem artifacts/packages/*.nupkg | ForEach-Object {
-            dotnet nuget push $_.FullName --source $source --api-key $apiKey --skip-duplicate
-          }
+    uses: Novolis-Platform/novolis-workflows/.github/workflows/dotnet-publish-nuget.yml@main
+    secrets: inherit

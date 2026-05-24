@@ -3,5 +3,13 @@ name: 'CI: pull request'
 on:
   pull_request:
     branches: [main]
+  workflow_dispatch:
 
-# Full validation runs in ci.yml (also triggered on pull_request).
+permissions:
+  contents: read
+
+jobs:
+  pull_request_job:
+    name: CI
+    uses: Novolis-Platform/novolis-workflows/.github/workflows/dotnet-pull-request.yml@main
+    secrets: inherit
