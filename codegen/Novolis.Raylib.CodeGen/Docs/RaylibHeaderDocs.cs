@@ -27,8 +27,8 @@ internal static partial class RaylibHeaderDocs
     }
 
     public static string RaylibHeaderPath(string repoRoot) =>
-        Path.Combine(repoRoot, "vendor", "raylib-6", "include", "raylib.h");
+        PipelinePaths.RaylibHeaderPath(repoRoot);
 
     public static string RayguiHeaderPath(string repoRoot) =>
-        Path.Combine(repoRoot, "vendor", "raygui-6", "raygui.h");
+        PipelinePaths.RayguiHeaderPath(repoRoot);
 }

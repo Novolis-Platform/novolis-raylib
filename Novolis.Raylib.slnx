@@ -3,6 +3,7 @@
     <Project Path="codegen/Novolis.Raylib.CodeGen.Abstractions/Novolis.Raylib.CodeGen.Abstractions.csproj" />
     <Project Path="codegen/Novolis.Raylib.CodeGen.Hooks/Novolis.Raylib.CodeGen.Hooks.csproj" />
     <Project Path="codegen/Novolis.Raylib.CodeGen/Novolis.Raylib.CodeGen.csproj" />
+    <Project Path="codegen/Novolis.Raylib.Pipeline/Novolis.Raylib.Pipeline.csproj" />
   </Folder>
   <Folder Name="/src/">
     <Project Path="src/Novolis.Raylib.Native/Novolis.Raylib.Native.csproj" />

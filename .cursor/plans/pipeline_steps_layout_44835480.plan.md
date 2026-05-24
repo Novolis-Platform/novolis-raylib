@@ -4,25 +4,25 @@ overview: Introduce a linear, git-visible pipeline under `pipeline/raylib6/steps
 todos:
   - id: scaffold-steps
     content: Add pipeline/raylib6/steps/step_01..08 folders with README, seed result.json/step.log; update .gitignore for artifacts/
-    status: pending
+    status: completed
   - id: pipeline-project
     content: Create codegen/Novolis.Raylib.Pipeline with IPipelineStep, PipelineRunner, StepSkipEvaluator, result.json + step.log writers
-    status: pending
+    status: completed
   - id: pipeline-paths
     content: Add PipelinePaths; migrate CMake, Native, Bindings, RaylibHeaderDocs from vendor/ to step_01/step_02 artifacts
-    status: pending
+    status: completed
   - id: port-steps
     content: Implement step_01_source (fetch), step_02_native, step_03-08; refactor RaylibCodegenPipeline for step_06
-    status: pending
+    status: completed
   - id: wire-ci-registry
     content: Update ci.yml, release.yml, agentic-tools registry, PS1 wrappers, CodeGen.targets; fix suggest-raylib path
-    status: pending
+    status: completed
   - id: delete-legacy
     content: Remove superseded pipeline/*.cs emit scripts; obsolete run.cs/fetch-sources.cs forwarders
-    status: pending
+    status: completed
   - id: tests-docs
     content: Add pipeline unit tests; update AGENTS.md, docs/codegen.md, BUILDING.txt
-    status: pending
+    status: completed
 isProject: false
 ---
 

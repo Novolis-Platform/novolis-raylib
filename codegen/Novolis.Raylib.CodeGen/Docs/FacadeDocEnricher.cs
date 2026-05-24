@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Novolis.Raylib.CodeGen;
 
-internal static class FacadeDocEnricher
+public static class FacadeDocEnricher
 {
     private static readonly JsonSerializerOptions WriteOptions = new()
     {

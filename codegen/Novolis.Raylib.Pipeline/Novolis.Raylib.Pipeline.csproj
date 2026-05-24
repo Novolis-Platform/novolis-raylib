@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Novolis.Raylib.Pipeline</RootNamespace>
+    <AssemblyName>Novolis.Raylib.Pipeline</AssemblyName>
+    <Description>Linear maintainer pipeline for Novolis.Raylib (fetch, native, codegen, drift).</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Novolis.Raylib.CodeGen.Abstractions\Novolis.Raylib.CodeGen.Abstractions.csproj" />
+    <ProjectReference Include="..\Novolis.Raylib.CodeGen\Novolis.Raylib.CodeGen.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Novolis.Raylib.CodeGen.Unit" />
+  </ItemGroup>
+
+</Project>

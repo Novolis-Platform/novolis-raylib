@@ -21,7 +21,7 @@ Multi-package **.NET 10** bindings for [raylib](https://www.raylib.com/) 6 and r
 **Before finishing binding/manifest work:**
 
 ```bash
-dotnet run --project codegen/Novolis.Raylib.CodeGen -- generate
+dotnet run --project codegen/Novolis.Raylib.Pipeline -- run generate
 pwsh ./scripts/agent-verify.ps1
 ```
 
@@ -38,10 +38,11 @@ pwsh ./scripts/agent-verify.ps1
 | `src/Novolis.Raylib.Abstractions/` | `IRaylibFrameRenderer`, `IRenderSystem`, … (transitive) |
 | `src/Novolis.Raylib.Capture/` | Optional packable per-frame framebuffer streaming (`FrameCaptureSession`) |
 | `src/Novolis.Raylib.Testing/` | Offscreen harness, golden QA API, deterministic clock (test projects only) |
-| `codegen/Novolis.Raylib.CodeGen/` | Roslyn CLI: `generate`, `verify`, `suggest-raylib`, `hooks list` (not published) |
+| `codegen/Novolis.Raylib.CodeGen/` | Roslyn emitters: `verify`, `suggest-raylib`, `hooks list` (not published) |
+| `codegen/Novolis.Raylib.Pipeline/` | Linear maintainer pipeline (`run maintainer`, `run generate`, step folders) |
 | `codegen/Novolis.Raylib.CodeGen.Hooks/` | `IRaylibCodegenHook` implementations (not published) |
-| `pipeline/raylib6/` | Manifests, fetch/native orchestration (`run.cs`) |
-| `vendor/raylib-6/`, `vendor/raygui-6/`, `vendor/raylib-cimgui/` | Vendored raylib prebuilts, raygui header, ray-cimgui + bundled cimgui (fetched) |
+| `pipeline/raylib6/` | Manifests + `steps/` (result.json, step.log, artifacts/) |
+| `pipeline/raylib6/steps/step_01_source/artifacts/` | Fetched raylib, raygui, raylib-cimgui (gitignored under artifacts/) |
 | `native/raylib6-platform/` | Trace forwarder (`novolis_raylib_trace`) |
 | `native/raylib6-with-imgui/` | ImGui shim (`novolis_imgui.dll`) |
 | `native/raylib6-with-raygui/` | RayGui add-on shim (`novolis_raygui.dll`) |
@@ -94,11 +95,11 @@ Hand-written shell code lives in `Runtime/` (`Shell/`, `Debug/`, …). Shared ty
 2. **Generated output:** `src/Novolis.Raylib.Bindings/Interop/*.g.cs` and `src/Novolis.Raylib.Runtime/**/*.g.cs` — each file has `ManifestSha256` in the header.
 3. **Regenerate:**
    ```bash
-   dotnet run --project codegen/Novolis.Raylib.CodeGen -- generate
+   dotnet run --project codegen/Novolis.Raylib.Pipeline -- run generate
    ```
    Or full maintainer pipeline:
    ```bash
-   dotnet run pipeline/raylib6/run.cs all   # fetch + native + generate
+   dotnet run --project codegen/Novolis.Raylib.Pipeline -- run maintainer
    ```
 4. **Extend behavior:** add or change hooks in `codegen/Novolis.Raylib.CodeGen.Hooks/` (see `pipeline/raylib6/hooks/README.md`).
 5. **Drift check (CI/local):**
@@ -116,10 +117,10 @@ To add a raylib export: update `raylib-exports.manifest.json` (and façade manif
 
 ```bash
 # Fetch vendor headers/DLL (required before first build)
-dotnet run pipeline/raylib6/fetch-sources.cs
+dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_01_source
 
 # Windows: build native shims (trace, ImGui, optional raygui)
-dotnet run pipeline/raylib6/run.cs native
+dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_02_native
 
 dotnet build Novolis.Raylib.slnx -c Release
 dotnet test Novolis.Raylib.slnx -c Release --filter "Category!=Native" -- --maximum-parallel-tests 1

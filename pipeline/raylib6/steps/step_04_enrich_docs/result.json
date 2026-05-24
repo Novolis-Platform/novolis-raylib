@@ -1,0 +1,31 @@
+{
+  "stepId": "step_04_enrich_docs",
+  "status": "Succeeded",
+  "startedUtc": "2026-05-24T00:19:36.2209283+00:00",
+  "durationMs": 272,
+  "pipelineVersion": "1",
+  "inputs": {
+    "pipeline/raylib6/steps/step_01_source/artifacts/raylib-6/include/raylib.h": "1842111e48260e622d0ff2e6f4ac6141508d6f369791265ba518e7502c760ccf",
+    "pipeline/raylib6/steps/step_01_source/artifacts/raygui-6/raygui.h": "36491f2067a5ff18e366f950dde2945bbcf9f75c1ab560ff9c8ca3ab6c7d0145",
+    "pipeline/raylib6/facades.manifest.json": "f3c88e0e8244512cf130f0ff29b862755f849b2b1701d23d00f25870374c1452",
+    "pipeline/raylib6/hud.manifest.json": "fbebec821bd81035234330c3e6b8a12b352e637dee42387aefead84a8109548b",
+    "pipeline/raylib6/gui.manifest.json": "0b5e7be3893bc052947b3f8e1562f09bb92dec436710f852864fc729d5d7ec8e"
+  },
+  "outputs": [
+    {
+      "path": "pipeline/raylib6/facades.manifest.json",
+      "sha256": "f3c88e0e8244512cf130f0ff29b862755f849b2b1701d23d00f25870374c1452",
+      "bytes": 18177
+    },
+    {
+      "path": "pipeline/raylib6/hud.manifest.json",
+      "sha256": "fbebec821bd81035234330c3e6b8a12b352e637dee42387aefead84a8109548b",
+      "bytes": 3322
+    },
+    {
+      "path": "pipeline/raylib6/gui.manifest.json",
+      "sha256": "0b5e7be3893bc052947b3f8e1562f09bb92dec436710f852864fc729d5d7ec8e",
+      "bytes": 2990
+    }
+  ]
+}

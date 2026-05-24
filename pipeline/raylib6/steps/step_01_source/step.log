@@ -1,0 +1,12 @@
+# step_01_source — 2026-05-24T00:18:30.0214534+00:00
+# force=True
+
+Mirroring legacy d:\novolis\novolis-raylib\vendor\raylib-6 -> d:\novolis\novolis-raylib\pipeline\raylib6\steps\step_01_source\artifacts\raylib-6
+Mirroring legacy d:\novolis\novolis-raylib\vendor\raygui-6 -> d:\novolis\novolis-raylib\pipeline\raylib6\steps\step_01_source\artifacts\raygui-6
+Mirroring legacy d:\novolis\novolis-raylib\vendor\raylib-cimgui -> d:\novolis\novolis-raylib\pipeline\raylib6\steps\step_01_source\artifacts\raylib-cimgui
+Downloading https://github.com/raysan5/raylib/releases/download/6.0/raylib-6.0_win64_msvc16.zip
+Extracted raylib prebuilt under d:\novolis\novolis-raylib\pipeline\raylib6\steps\step_01_source\artifacts\raylib-6
+Downloading https://raw.githubusercontent.com/raysan5/raygui/4.0/src/raygui.h
+Wrote d:\novolis\novolis-raylib\pipeline\raylib6\steps\step_01_source\artifacts\raygui-6\raygui.h
+Skipping clone; already present: d:\novolis\novolis-raylib\pipeline\raylib6\steps\step_01_source\artifacts\raylib-cimgui
+raylib-cimgui ready at d:\novolis\novolis-raylib\pipeline\raylib6\steps\step_01_source\artifacts\raylib-cimgui

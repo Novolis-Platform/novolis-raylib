@@ -30,7 +30,7 @@ dotnet run --project codegen/Novolis.Raylib.CodeGen -- hooks list
 dotnet run --project codegen/Novolis.Raylib.CodeGen -- generate
 ```
 
-Codegen also runs automatically when building `StarConflictsRevolt.Raylib6.Bindings` (see MSBuild target in that project).
+Codegen also runs automatically when building `Novolis.Raylib.Bindings` (see MSBuild target in `build/Novolis.Raylib.CodeGen.targets`).
 
 ## Shipped hooks
 

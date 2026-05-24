@@ -4,12 +4,14 @@ Build-time Roslyn tooling for `Novolis.Raylib.Bindings`. These projects are **ne
 
 | Project | Role |
 |---------|------|
-| `Novolis.Raylib.CodeGen` | CLI: `generate`, `verify`, `suggest-raylib`, `hooks list` |
-| `Novolis.Raylib.CodeGen.Abstractions` | `IRaylibCodegenHook`, `RaylibCodegenContext` |
+| `Novolis.Raylib.Pipeline` | Linear maintainer pipeline (`run maintainer`, step folders + `result.json`) |
+| `Novolis.Raylib.CodeGen` | Roslyn emitters: `verify`, `suggest-raylib`, `hooks list` |
+| `Novolis.Raylib.CodeGen.Abstractions` | `IRaylibCodegenHook`, `IPipelineStep`, `PipelinePaths` |
 | `Novolis.Raylib.CodeGen.Hooks` | Shipped Roslyn transforms (inlining, XML docs, debug notify) |
 
 ```bash
-dotnet run --project codegen/Novolis.Raylib.CodeGen -- generate
+dotnet run --project codegen/Novolis.Raylib.Pipeline -- run maintainer
+dotnet run --project codegen/Novolis.Raylib.Pipeline -- run generate
 ```
 
 Published packages live under `src/` only.

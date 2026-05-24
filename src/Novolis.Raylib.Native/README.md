@@ -14,7 +14,7 @@ RayGui (`novolis_raygui`) ships in **`Novolis.Raylib.Raygui.Native`** when you r
 | `linux-x64` | `libraylib.so`, `libnovolis_raylib_trace.so`, `libnovolis_imgui.so` |
 | `osx-x64` | `libraylib.dylib`, `libnovolis_raylib_trace.dylib`, `libnovolis_imgui.dylib` |
 
-Maintainers build native shims: `dotnet run pipeline/raylib6/run.cs native` (after `fetch-sources`).
+Maintainers run the linear pipeline: `dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_01_source` then `step_02_native`.
 
 ## Troubleshooting
 

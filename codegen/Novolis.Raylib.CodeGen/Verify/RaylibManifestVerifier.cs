@@ -3,12 +3,12 @@ using System.Text.Json.Serialization;
 
 namespace Novolis.Raylib.CodeGen;
 
-internal static class RaylibManifestVerifier
+public static class RaylibManifestVerifier
 {
     public static int Verify(string repoRoot)
     {
         var manifestPath = Path.Combine(RepoPaths.PipelineDir(repoRoot), "raylib-exports.manifest.json");
-        var headerPath = Path.Combine(repoRoot, "vendor", "raylib-6", "include", "raylib.h");
+        var headerPath = PipelinePaths.RaylibHeaderPath(repoRoot);
         if (!File.Exists(manifestPath))
         {
             Console.Error.WriteLine($"Missing manifest: {manifestPath}");

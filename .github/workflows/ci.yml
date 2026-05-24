@@ -15,14 +15,9 @@ jobs:
         with:
           dotnet-version: '10.0.x'
       - name: Fetch vendor headers
-        run: dotnet run pipeline/raylib6/fetch-sources.cs
-      - name: Enrich and regenerate bindings
-        run: |
-          dotnet run --project codegen/Novolis.Raylib.CodeGen -- enrich-docs --write
-          dotnet run --project codegen/Novolis.Raylib.CodeGen -- verify-docs
-          dotnet run --project codegen/Novolis.Raylib.CodeGen -- generate
-      - name: Assert no drift
-        run: git diff --exit-code pipeline/raylib6/ src/Novolis.Raylib.Bindings/ src/Novolis.Raylib.Runtime/ src/Novolis.Raylib.Raygui/
+        run: dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_01_source
+      - name: Codegen pipeline (enrich, verify-docs, generate, drift)
+        run: dotnet run --project codegen/Novolis.Raylib.Pipeline -- run ci-codegen
 
   build-test:
     runs-on: windows-latest
@@ -32,9 +27,9 @@ jobs:
         with:
           dotnet-version: '10.0.x'
       - name: Fetch sources
-        run: dotnet run pipeline/raylib6/fetch-sources.cs
+        run: dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_01_source
       - name: Build native shim
-        run: dotnet run pipeline/raylib6/run.cs native
+        run: dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_02_native
       - name: Build solution
         run: dotnet build Novolis.Raylib.slnx -c Release
       - name: Test (unit, no native)
@@ -48,9 +43,9 @@ jobs:
         with:
           dotnet-version: '10.0.x'
       - name: Fetch sources
-        run: dotnet run pipeline/raylib6/fetch-sources.cs
+        run: dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_01_source
       - name: Build native shim
-        run: dotnet run pipeline/raylib6/run.cs native
+        run: dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_02_native
       - name: Build solution
         run: dotnet build Novolis.Raylib.slnx -c Release
       - name: Golden tests
@@ -71,7 +66,7 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
-      - run: dotnet run pipeline/raylib6/fetch-sources.cs
+      - run: dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_01_source
       - run: dotnet pack Novolis.Raylib.slnx -c Release -o artifacts
       - name: Assert XML docs in consumer packages
         run: |

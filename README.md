@@ -63,7 +63,7 @@ flowchart TB
 dotnet add package Novolis.Raylib.Capture
 ```
 
-**Native assets:** `Novolis.Raylib.Native` packs prebuilt `raylib` from `vendor/` plus `novolis_raygui` built by the maintainer pipeline (`dotnet run pipeline/raylib6/run.cs native`). That is separate from the **`native`** CMake step and from **`Novolis.Raylib.Bindings`**, which holds the C# interop.
+**Native assets:** `Novolis.Raylib.Native` packs prebuilt `raylib` from `pipeline/raylib6/steps/step_01_source/artifacts/` plus shims from `step_02_native/artifacts/` (built via maintainer pipeline). That is separate from **`Novolis.Raylib.Bindings`**, which holds the C# interop.
 
 **Not published:** Roslyn codegen under `codegen/` (see [docs/codegen.md](docs/codegen.md)).
 
@@ -87,7 +87,7 @@ RayGame.Run("Demo", 800, 600, ctx =>
 ## Maintainer pipeline
 
 ```bash
-dotnet run pipeline/raylib6/run.cs all   # fetch + native + codegen
+dotnet run --project codegen/Novolis.Raylib.Pipeline -- run maintainer
 dotnet build Novolis.Raylib.slnx
 ./scripts/raylib-codegen-check.ps1
 ```

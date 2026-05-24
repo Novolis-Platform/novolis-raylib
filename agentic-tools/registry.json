@@ -10,14 +10,24 @@
     "sourceOfTruth": "pipeline/raylib6/*.manifest.json",
     "handEditAllowed": [
       "codegen/Novolis.Raylib.CodeGen/**",
-      "codegen/Novolis.Raylib.CodeGen.Hooks/**"
+      "codegen/Novolis.Raylib.CodeGen.Hooks/**",
+      "codegen/Novolis.Raylib.Pipeline/**"
     ]
   },
   "tools": [
     {
+      "id": "pipeline.run",
+      "title": "Run maintainer pipeline profile or step",
+      "command": "dotnet run --project codegen/Novolis.Raylib.Pipeline -- run maintainer",
+      "runWhen": [
+        "Fetch vendor sources or build native shims",
+        "Full maintainer refresh"
+      ]
+    },
+    {
       "id": "codegen.generate",
       "title": "Regenerate all bindings",
-      "command": "dotnet run --project codegen/Novolis.Raylib.CodeGen -- generate",
+      "command": "dotnet run --project codegen/Novolis.Raylib.Pipeline -- run generate",
       "runWhen": [
         "Changed any file under pipeline/raylib6/*.manifest.json",
         "Added or changed IRaylibCodegenHook",
@@ -51,8 +61,8 @@
     },
     {
       "id": "pipeline.all",
-      "title": "Maintainer pipeline: fetch + native shim + codegen",
-      "command": "dotnet run pipeline/raylib6/run.cs all"
+      "title": "Maintainer pipeline: fetch + native + codegen + drift",
+      "command": "dotnet run --project codegen/Novolis.Raylib.Pipeline -- run maintainer"
     },
     {
       "id": "agent.verify",
@@ -78,7 +88,7 @@
       "Edit pipeline/raylib6/raylib-exports.manifest.json (and facades/hud/gui manifest if needed)",
       "Run tool codegen.generate",
       "Run tool agent.verify",
-      "Commit manifest + *.g.cs together"
+      "Commit manifest + *.g.cs + pipeline/raylib6/steps/*/result.json and step.log when maintainer ran full pipeline"
     ],
     "add-facade-method": [
       "Edit pipeline/raylib6/facades.manifest.json (or hud.manifest.json / gui.manifest.json / raygui.manifest.json)",

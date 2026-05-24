@@ -7,6 +7,7 @@ temp/
 *.suo
 .vs/
 vendor/raylib-6/prebuilt/
+pipeline/raylib6/steps/*/artifacts/
 native/raylib6-with-raygui/build/
 *.dll
 *.so

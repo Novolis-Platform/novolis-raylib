@@ -15,7 +15,8 @@ Registry and scripts for **AI agents** (and humans) working in this repo. Use th
 
 | Tool id | Command |
 |---------|---------|
-| `codegen.generate` | `dotnet run --project codegen/Novolis.Raylib.CodeGen -- generate` |
+| `pipeline.run` | `dotnet run --project codegen/Novolis.Raylib.Pipeline -- run maintainer` |
+| `codegen.generate` | `dotnet run --project codegen/Novolis.Raylib.Pipeline -- run generate` |
 | `codegen.drift-check` | `pwsh ./scripts/raylib-codegen-check.ps1` |
 | `agent.verify` | `pwsh ./scripts/agent-verify.ps1` |
 

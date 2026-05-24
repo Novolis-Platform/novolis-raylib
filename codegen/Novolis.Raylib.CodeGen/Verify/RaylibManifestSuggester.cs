@@ -12,7 +12,7 @@ internal static class RaylibManifestSuggester
     public static int Suggest(string repoRoot)
     {
         var manifestPath = Path.Combine(RepoPaths.PipelineDir(repoRoot), "raylib-exports.manifest.json");
-        var headerPath = Path.Combine(repoRoot, "tools", "vendor", "raylib-6", "include", "raylib.h");
+        var headerPath = PipelinePaths.RaylibHeaderPath(repoRoot);
         if (!File.Exists(headerPath))
         {
             Console.Error.WriteLine($"Missing vendor header: {headerPath}");

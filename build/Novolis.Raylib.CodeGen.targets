@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <RaylibCodegenProject>$(MSBuildThisFileDirectory)..\codegen\Novolis.Raylib.CodeGen\Novolis.Raylib.CodeGen.csproj</RaylibCodegenProject>
+    <RaylibCodegenProject>$(MSBuildThisFileDirectory)..\codegen\Novolis.Raylib.Pipeline\Novolis.Raylib.Pipeline.csproj</RaylibCodegenProject>
     <RaylibCodegenRepoRoot>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\'))</RaylibCodegenRepoRoot>
     <RunRaylibCodegen Condition="'$(RunRaylibCodegen)' == ''">true</RunRaylibCodegen>
   </PropertyGroup>
@@ -34,7 +34,7 @@
           Condition="'$(RunRaylibCodegen)' == 'true' and '$(DesignTimeBuild)' != 'true'"
           Inputs="@(RaylibCodegenInput)"
           Outputs="@(RaylibCodegenOutput)">
-    <Exec Command="dotnet run --project &quot;$(RaylibCodegenProject)&quot; -- generate"
+    <Exec Command="dotnet run --project &quot;$(RaylibCodegenProject)&quot; -- run generate"
           WorkingDirectory="$(RaylibCodegenRepoRoot)"
           StandardOutputImportance="high"
           StandardErrorImportance="high" />

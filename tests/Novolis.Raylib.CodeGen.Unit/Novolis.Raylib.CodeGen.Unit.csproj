@@ -17,6 +17,7 @@
     <ProjectReference Include="..\..\src\Novolis.Raylib.Raygui\Novolis.Raylib.Raygui.csproj" />
     <ProjectReference Include="..\..\codegen\Novolis.Raylib.CodeGen\Novolis.Raylib.CodeGen.csproj" />
     <ProjectReference Include="..\..\codegen\Novolis.Raylib.CodeGen.Hooks\Novolis.Raylib.CodeGen.Hooks.csproj" />
+    <ProjectReference Include="..\..\codegen\Novolis.Raylib.Pipeline\Novolis.Raylib.Pipeline.csproj" />
   </ItemGroup>
 
 </Project>

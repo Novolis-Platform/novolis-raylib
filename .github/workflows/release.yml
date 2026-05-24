@@ -38,17 +38,17 @@ jobs:
           dotnet-version: 10.0.x
 
       - name: Fetch vendor sources
-        run: dotnet run pipeline/raylib6/fetch-sources.cs
+        run: dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_01_source
 
       - name: Regenerate bindings
-        run: dotnet run --project codegen/Novolis.Raylib.CodeGen -- generate
+        run: dotnet run --project codegen/Novolis.Raylib.Pipeline -- run generate
 
       - name: Assert no codegen drift
         shell: bash
-        run: git diff --exit-code src/Novolis.Raylib.Bindings/
+        run: git diff --exit-code src/Novolis.Raylib.Bindings/ src/Novolis.Raylib.Runtime/ src/Novolis.Raylib.Raygui/
 
       - name: Build native shim
-        run: dotnet run pipeline/raylib6/run.cs native
+        run: dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_02_native
 
       - name: Build solution
         run: dotnet build Novolis.Raylib.slnx -c Release
@@ -92,10 +92,10 @@ jobs:
           echo "Resolved NovolisRaylibVersion=$VERSION"
 
       - name: Fetch vendor sources
-        run: dotnet run pipeline/raylib6/fetch-sources.cs
+        run: dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_01_source
 
       - name: Build native shim
-        run: dotnet run pipeline/raylib6/run.cs native
+        run: dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_02_native
 
       - name: Pack NuGet packages
         shell: pwsh

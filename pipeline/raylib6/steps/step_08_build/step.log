@@ -1,0 +1,29 @@
+# step_08_build — 2026-05-24T00:19:52.4693466+00:00
+# force=True
+
+$ dotnet build "src/Novolis.Raylib.Bindings/Novolis.Raylib.Bindings.csproj" -c Release
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  Novolis.Raylib.Native -> d:\novolis\novolis-raylib\src\Novolis.Raylib.Native\bin\Release\net10.0\Novolis.Raylib.Native.dll
+  Novolis.Raylib.Bindings -> d:\novolis\novolis-raylib\src\Novolis.Raylib.Bindings\bin\Release\net10.0\Novolis.Raylib.Bindings.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.86
+
+$ dotnet build "src/Novolis.Raylib.Runtime/Novolis.Raylib.Runtime.csproj" -c Release
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  Novolis.Raylib.Native -> d:\novolis\novolis-raylib\src\Novolis.Raylib.Native\bin\Release\net10.0\Novolis.Raylib.Native.dll
+  Novolis.Raylib.Abstractions -> d:\novolis\novolis-raylib\src\Novolis.Raylib.Abstractions\bin\Release\net10.0\Novolis.Raylib.Abstractions.dll
+  Novolis.Raylib.Bindings -> d:\novolis\novolis-raylib\src\Novolis.Raylib.Bindings\bin\Release\net10.0\Novolis.Raylib.Bindings.dll
+  Novolis.Raylib.Runtime -> d:\novolis\novolis-raylib\src\Novolis.Raylib.Runtime\bin\Release\net10.0\Novolis.Raylib.Runtime.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.99
+

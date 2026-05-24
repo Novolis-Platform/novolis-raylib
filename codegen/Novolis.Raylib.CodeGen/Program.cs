@@ -56,15 +56,17 @@ internal static class Program
     private static void PrintHelp()
     {
         Console.WriteLine("""
-            Star Conflicts Revolt — raylib 6 Roslyn codegen
+            Novolis.Raylib — raylib 6 Roslyn codegen + pipeline
 
             Commands:
-              generate       — verify vendor manifest, emit interop + imgui + raygui + debug + façades
-              verify         — fail if manifest symbols missing from vendor raylib.h
+              generate       — emit interop + façades (same as: pipeline run generate)
+              verify         — fail if manifest symbols missing from raylib.h
               verify-docs    — fail if façade/Hud/Gui types or methods lack resolvable summaries
               enrich-docs    — fill manifest typeSummary/summary from raylib headers (use --write)
               suggest-raylib — list RLAPI names in raylib.h not present in manifest
               hooks list     — show registered IRaylibCodegenHook implementations
+
+            Maintainer pipeline: dotnet run --project codegen/Novolis.Raylib.Pipeline -- run maintainer
             """);
     }
 }

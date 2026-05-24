@@ -1,0 +1,1147 @@
+# step_07_drift — 2026-05-24T00:19:36.5614604+00:00
+# force=False
+
+$ git diff --exit-code "pipeline/raylib6/" "src/Novolis.Raylib.Bindings/" "src/Novolis.Raylib.Runtime/" "src/Novolis.Raylib.Raygui/"
+diff --git a/pipeline/raylib6/BUILDING.txt b/pipeline/raylib6/BUILDING.txt
+index d95dd12..a74d95c 100644
+--- a/pipeline/raylib6/BUILDING.txt
++++ b/pipeline/raylib6/BUILDING.txt
+@@ -1,52 +1,50 @@
+-raylib 6 + raygui pipeline (Star Conflicts Revolt)
+-=================================================
++raylib 6 + raygui pipeline (Novolis.Raylib)
++=========================================
+ 
+-Roslyn codegen (committed *.g.cs) runs automatically when building StarConflictsRevolt.Raylib6.Bindings,
+-and via:
++Linear step pipeline with committed `result.json` + `step.log` per step under
++`pipeline/raylib6/steps/`. Heavy artifacts (DLLs, clones) go in each step's
++`artifacts/` folder (gitignored).
+ 
+-  dotnet run --project codegen/Novolis.Raylib.CodeGen -- generate
++List steps:
+ 
+-CI / pre-push drift check:
++  dotnet run --project codegen/Novolis.Raylib.Pipeline -- list
+ 
+-  pwsh ./scripts/raylib-codegen-check.ps1
++Full maintainer flow (fetch + native + codegen + drift):
+ 
+-Extend behavior with C# hooks in codegen/Novolis.Raylib.CodeGen.Hooks/ (see pipeline/raylib6/hooks/README.md).
++  dotnet run --project codegen/Novolis.Raylib.Pipeline -- run maintainer
+ 
+-1) Vendor headers + Windows prebuilt DLL
+-   dotnet run tools/raylib6-pipeline/fetch-sources.cs
++Agent gate (CI parity + build):
+ 
+-2) Import library + raygui shim (required for Raylib exes at runtime; Windows / MSVC or your platform toolchain)
+-   dotnet run tools/raylib6-pipeline/run.cs native
+-   (or: cmake -S tools/native/raylib6-with-raygui -B tools/native/raylib6-with-raygui/build && cmake --build ... --config Release)
++  pwsh ./scripts/agent-verify.ps1
+ 
+-   CMake defines BUILD_LIBTYPE_SHARED so raygui.h emits __declspec(dllexport) and Gui* symbols
+-   (e.g. GuiButton) are exported for P/Invoke. The same DLL also compiles trace_shim.c (TraceLog → managed bridge).
+-   Re-run this step after pulling CMake changes.
++Extend codegen behavior with hooks in codegen/Novolis.Raylib.CodeGen.Hooks/
++(see pipeline/raylib6/hooks/README.md).
+ 
+-3) Regenerate deterministic C# interop + façades (manifest-driven + Roslyn hooks)
+-   dotnet run tools/raylib6-pipeline/run.cs generate
+-   (same as: dotnet run --project tools/Novolis.Raylib.CodeGen -- generate)
++Steps
++-----
+ 
+-   Ordered steps:
+-     a) verify-raylib-manifest-against-vendor (skip if vendor raylib.h missing)
+-     b) Raylib6Native.g.cs from raylib-exports.manifest.json (schema v2: optional interopPolicy for SuppressGCTransition / DisableRuntimeMarshalling / façade inlining)
+-     c) RayguiShimExports.g.cs from raygui-exports.manifest.json
+-     d) RaylibDebugFrameHooks.g.cs from raylib-debug.manifest.json
+-     e) Windowing/Rendering/Interact/Timing/Audio *.g.cs from facades.manifest.json
++1) step_01_source — vendor headers + prebuilt raylib, raygui.h, raylib-cimgui
++   dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_01_source
+ 
+-   Optional: dotnet run --project codegen/Novolis.Raylib.CodeGen -- suggest-raylib
+-   Optional: dotnet run --project codegen/Novolis.Raylib.CodeGen -- hooks list
++2) step_02_native — CMake shims (trace, ImGui, raygui) → step_02_native/artifacts/
++   dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_02_native
+ 
+-4) Build .NET
+-   dotnet build StarConflictsRevolt.slnx
++3) step_03_verify_manifest — manifest imports vs raylib.h
+ 
+-Outputs / inputs
++4) step_04_enrich_docs / step_05_verify_docs — façade XML doc enrichment
++
++5) step_06_codegen — Raylib6Native.g.cs, façades, Hud, Gui, RayGui (*.g.cs)
++
++6) step_07_drift — git diff on pipeline manifests + generated C#
++
++7) step_08_build — Release build Bindings + Runtime (agent-verify profile)
++
++Outputs
+ -------
+-- tools/vendor/raylib-6/prebuilt/win-x64/raylib.dll
+-- tools/vendor/raylib-6/include/*.h
+-- tools/vendor/raygui-6/raygui.h
+-- tools/native/raylib6-with-raygui/out/novolis_raygui.dll
+-- tools/raylib6-pipeline/raylib-exports.manifest.json → Interop/Raylib6Native.g.cs
+-- tools/raylib6-pipeline/raygui-exports.manifest.json → Interop/RayguiShimExports.g.cs
+-- tools/raylib6-pipeline/raylib-debug.manifest.json → Interop/RaylibDebugFrameHooks.g.cs
+-- tools/raylib6-pipeline/facades.manifest.json → */*.g.cs public façades
++- pipeline/raylib6/steps/step_01_source/artifacts/raylib-6/
++- pipeline/raylib6/steps/step_02_native/artifacts/*.dll
++- pipeline/raylib6/*.manifest.json → src/**/Interop/*.g.cs and Runtime/**/*.g.cs
++
++Build .NET:
++
++  dotnet build Novolis.Raylib.slnx
+diff --git a/pipeline/raylib6/fetch-sources.cs b/pipeline/raylib6/fetch-sources.cs
+index b731314..0f8dbdd 100644
+--- a/pipeline/raylib6/fetch-sources.cs
++++ b/pipeline/raylib6/fetch-sources.cs
+@@ -1,5 +1,4 @@
+-// Fetches pinned raylib 6 prebuilts + raygui header into tools/vendor (see versions.json).
+-// Usage (repo root): dotnet run tools/raylib6-pipeline/fetch-sources.cs
++// Obsolete forwarder — use: dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_01_source
+ #:sdk Microsoft.NET.Sdk
+ #:property TargetFramework=net10.0
+ #:property PublishAot=false
+@@ -8,70 +7,25 @@
+ #:property Nullable=enable
+ #:property ManagePackageVersionsCentrally=false
+ 
+-using System.IO.Compression;
+-using System.Net.Http;
+-using System.Text.Json;
+-
++Console.Error.WriteLine("fetch-sources.cs is obsolete. Use: dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_01_source");
+ var repoRoot = FindRepoRoot();
+-var manifestPath = Path.Combine(repoRoot, "pipeline", "raylib6", "versions.json");
+-if (args is ["-h"] or ["--help"])
+-{
+-	Console.WriteLine("Usage: dotnet run tools/raylib6-pipeline/fetch-sources.cs");
+-	return 0;
+-}
+-
+-if (!File.Exists(manifestPath))
+-{
+-	Console.Error.WriteLine($"Missing {manifestPath}");
+-	return 2;
+-}
+-
+-var json = JsonSerializer.Deserialize<Manifest>(File.ReadAllText(manifestPath), JsonSerializerOptions.Web)!;
+-var vendorRaylib = Path.Combine(repoRoot, "vendor", "raylib-6");
+-var vendorRaygui = Path.Combine(repoRoot, "vendor", "raygui-6");
+-var vendorRaylibCimgui = Path.Combine(repoRoot, "vendor", "raylib-cimgui");
+-Directory.CreateDirectory(vendorRaylib);
+-Directory.CreateDirectory(vendorRaygui);
+-
+-using var http = new HttpClient { Timeout = TimeSpan.FromMinutes(5) };
++var pipeline = Path.Combine(repoRoot, "codegen", "Novolis.Raylib.Pipeline", "Novolis.Raylib.Pipeline.csproj");
++return Run("dotnet", $"run --project \"{pipeline}\" -- run step_01_source", repoRoot);
+ 
+-if (OperatingSystem.IsWindows())
++static int Run(string file, string arguments, string workingDirectory)
+ {
+-	if (json.Prebuilt is null || !json.Prebuilt.TryGetValue("windows-x64", out var url) || string.IsNullOrEmpty(url))
++	var psi = new System.Diagnostics.ProcessStartInfo
+ 	{
+-		Console.Error.WriteLine("versions.json missing prebuilt.windows-x64");
+-		return 3;
+-	}
+-
+-	var zipPath = Path.Combine(vendorRaylib, "download_win.zip");
+-	Console.WriteLine($"Downloading {url}");
+-	await DownloadToFileAsync(http, url, zipPath);
+-	ExtractZipDllAndIncludes(zipPath, vendorRaylib);
+-	File.Delete(zipPath);
+-	Console.WriteLine($"Extracted raylib 6 prebuilt under {vendorRaylib}");
+-}
+-
+-if (json.RayguiHeaderUrl is { } rayguiUrl)
+-{
+-	var dest = Path.Combine(vendorRaygui, "raygui.h");
+-	Console.WriteLine($"Downloading {rayguiUrl}");
+-	await DownloadToFileAsync(http, rayguiUrl, dest);
+-	FixRayguiIncludesIfNeeded(dest);
+-	Console.WriteLine($"Wrote {dest}");
+-}
+-
+-if (json.RaylibCimguiRepoUrl is { } raylibCimguiRepo)
+-{
+-	EnsureGitClone(raylibCimguiRepo, vendorRaylibCimgui, json.RaylibCimguiGitRef ?? "1.92.1-docking", recursive: true);
+-	var bundledCimgui = Path.Combine(vendorRaylibCimgui, json.CimguiBundledSubdir ?? "cimgui-1.92.1-docking");
+-	if (!File.Exists(Path.Combine(bundledCimgui, "cimgui.h")))
+-		throw new InvalidOperationException($"Missing bundled cimgui at {bundledCimgui}. Re-run fetch with git submodule update --init --recursive.");
+-	Console.WriteLine($"raylib-cimgui ready at {vendorRaylibCimgui} (cimgui: {bundledCimgui})");
++		FileName = file,
++		Arguments = arguments,
++		WorkingDirectory = workingDirectory,
++		UseShellExecute = false,
++	};
++	using var p = System.Diagnostics.Process.Start(psi) ?? throw new InvalidOperationException($"Failed to start {file}");
++	p.WaitForExit();
++	return p.ExitCode;
+ }
+ 
+-Console.WriteLine("fetch-sources: done.");
+-return 0;
+-
+ static string FindRepoRoot()
+ {
+ 	var dir = new DirectoryInfo(AppContext.BaseDirectory);
+@@ -84,112 +38,3 @@ static string FindRepoRoot()
+ 
+ 	return Directory.GetCurrentDirectory();
+ }
+-
+-static async Task DownloadToFileAsync(HttpClient http, string url, string path)
+-{
+-	await using var s = await http.GetStreamAsync(new Uri(url));
+-	await using var f = File.Create(path);
+-	await s.CopyToAsync(f);
+-}
+-
+-static void ExtractZipDllAndIncludes(string zipPath, string destRoot)
+-{
+-	using var zip = ZipFile.OpenRead(zipPath);
+-	var prebuiltRoot = Path.Combine(destRoot, "prebuilt", "win-x64");
+-	Directory.CreateDirectory(prebuiltRoot);
+-	var includeRoot = Path.Combine(destRoot, "include");
+-	Directory.CreateDirectory(includeRoot);
+-	foreach (var e in zip.Entries)
+-	{
+-		var n = e.FullName.Replace('\\', '/');
+-		if (n.EndsWith("raylib.dll", StringComparison.OrdinalIgnoreCase))
+-		{
+-			e.ExtractToFile(Path.Combine(prebuiltRoot, "raylib.dll"), overwrite: true);
+-			continue;
+-		}
+-
+-		if (n.EndsWith("/include/raylib.h", StringComparison.OrdinalIgnoreCase) ||
+-		    n.EndsWith("/include/rlgl.h", StringComparison.OrdinalIgnoreCase) ||
+-		    n.EndsWith("/include/raymath.h", StringComparison.OrdinalIgnoreCase) ||
+-		    n.Contains("/include/raylib", StringComparison.OrdinalIgnoreCase) && n.EndsWith(".h", StringComparison.OrdinalIgnoreCase))
+-		{
+-			var name = Path.GetFileName(n);
+-			if (name.Length > 0)
+-				e.ExtractToFile(Path.Combine(includeRoot, name), overwrite: true);
+-		}
+-	}
+-
+-	if (!File.Exists(Path.Combine(prebuiltRoot, "raylib.dll")))
+-		throw new InvalidOperationException("raylib.dll not found in zip — update versions.json prebuilt URL or extraction logic.");
+-}
+-
+-/// <summary>Upstream raw fetch can strip angle brackets in RAYGUI_IMPLEMENTATION includes; repair if detected.</summary>
+-static void FixRayguiIncludesIfNeeded(string path)
+-{
+-	var text = File.ReadAllText(path);
+-	const string broken = "#include // Required for:";
+-	if (!text.Contains(broken, StringComparison.Ordinal))
+-		return;
+-
+-	text = text.Replace(
+-		"#include // Required for: FILE, fopen(), fclose(), fprintf(), feof(), fscanf(), vsprintf() [GuiLoadStyle(), GuiLoadIcons()]",
+-		"#include <stdio.h> // Required for: FILE, fopen(), fclose(), fprintf(), feof(), fscanf(), vsprintf() [GuiLoadStyle(), GuiLoadIcons()]");
+-	text = text.Replace(
+-		"#include // Required for: malloc(), calloc(), free() [GuiLoadStyle(), GuiLoadIcons()]",
+-		"#include <stdlib.h> // Required for: malloc(), calloc(), free() [GuiLoadStyle(), GuiLoadIcons()]");
+-	text = text.Replace(
+-		"#include // Required for: strlen() [GuiTextBox(), GuiValueBox()], memset(), memcpy()",
+-		"#include <string.h> // Required for: strlen() [GuiTextBox(), GuiValueBox()], memset(), memcpy()");
+-	text = text.Replace(
+-		"#include // Required for: va_list, va_start(), vfprintf(), va_end() [TextFormat()]",
+-		"#include <stdarg.h> // Required for: va_list, va_start(), vfprintf(), va_end() [TextFormat()]");
+-	text = text.Replace(
+-		"#include // Required for: roundf() [GuiColorPicker()]",
+-		"#include <math.h> // Required for: roundf() [GuiColorPicker()]");
+-	File.WriteAllText(path, text);
+-}
+-
+-static void EnsureGitClone(string repoUrl, string destDir, string gitRef, bool recursive)
+-{
+-	if (File.Exists(Path.Combine(destDir, "src", "raycimgui.c")) || File.Exists(Path.Combine(destDir, "rlcimgui.c")))
+-	{
+-		Console.WriteLine($"Skipping clone; already present: {destDir}");
+-		return;
+-	}
+-
+-	if (Directory.Exists(destDir))
+-		Directory.Delete(destDir, recursive: true);
+-
+-	var cloneArgs = new List<string> { "clone", "--depth", "1", "--branch", gitRef, repoUrl, destDir };
+-	if (recursive)
+-		cloneArgs.Insert(1, "--recursive");
+-
+-	var code = RunProcess("git", string.Join(' ', cloneArgs.Select(a => a.Contains(' ') ? $"\"{a}\"" : a)), FindRepoRoot());
+-	if (code != 0)
+-		throw new InvalidOperationException($"git clone failed for {repoUrl} (exit {code})");
+-}
+-
+-static int RunProcess(string file, string arguments, string workingDirectory)
+-{
+-	var psi = new System.Diagnostics.ProcessStartInfo
+-	{
+-		FileName = file,
+-		Arguments = arguments,
+-		WorkingDirectory = workingDirectory,
+-		UseShellExecute = false,
+-	};
+-	using var p = System.Diagnostics.Process.Start(psi) ?? throw new InvalidOperationException($"Failed to start {file}");
+-	p.WaitForExit();
+-	return p.ExitCode;
+-}
+-
+-sealed class Manifest
+-{
+-	public string? RaylibGitTag { get; set; }
+-	public string? RayguiGitTag { get; set; }
+-	public string? CimguiBundledSubdir { get; set; }
+-	public string? RaylibCimguiGitRef { get; set; }
+-	public string? RaylibCimguiRepoUrl { get; set; }
+-	public Dictionary<string, string>? Prebuilt { get; set; }
+-	public string? RayguiHeaderUrl { get; set; }
+-}
+diff --git a/pipeline/raylib6/generate-bindings.cs b/pipeline/raylib6/generate-bindings.cs
+deleted file mode 100644
+index 4febf4d..0000000
+--- a/pipeline/raylib6/generate-bindings.cs
++++ /dev/null
+@@ -1,35 +0,0 @@
+-// Placeholder for optional ClangSharp full emit of raylib.h (not used for shipping interop).
+-// Shipping raylib P/Invoke: tools/raylib6-pipeline/raylib-exports.manifest.json → generate-raylib-interop.cs → Raylib6Native.g.cs
+-// Shipping raygui: tools/raylib6-pipeline/raygui-exports.manifest.json → generate-raygui-interop.cs (invoked from run.cs generate).
+-// Usage: dotnet run tools/raylib6-pipeline/generate-bindings.cs
+-#:sdk Microsoft.NET.Sdk
+-#:property TargetFramework=net10.0
+-#:property PublishAot=false
+-#:property PackAsTool=false
+-#:property ImplicitUsings=enable
+-#:property Nullable=enable
+-#:property ManagePackageVersionsCentrally=false
+-
+-if (args is ["-h"] or ["--help"])
+-{
+-	Console.WriteLine("""
+-		generate-bindings: reserved for optional ClangSharp full emit of raylib.h.
+-
+-		Shipping interop today:
+-		  • raylib — manifest + dotnet run tools/raylib6-pipeline/generate-raylib-interop.cs → Raylib6Native.g.cs
+-		  • raygui — manifest + dotnet run tools/raylib6-pipeline/generate-raygui-interop.cs
+-		  • debug hooks — raylib-debug.manifest.json + generate-raylib-debug-hooks.cs
+-
+-		Set RAYLIB6_RUN_CLANGSHARP=1 to attempt ClangSharp (requires dotnet tool restore in tools/raylib6-pipeline; wire PInvokeGenerator locally).
+-		""");
+-	return 0;
+-}
+-
+-if (!string.Equals(Environment.GetEnvironmentVariable("RAYLIB6_RUN_CLANGSHARP"), "1", StringComparison.Ordinal))
+-{
+-	Console.WriteLine("generate-bindings: skipped (manifest-driven interop). Set RAYLIB6_RUN_CLANGSHARP=1 to run ClangSharp pipeline.");
+-	return 0;
+-}
+-
+-Console.WriteLine("generate-bindings: RAYLIB6_RUN_CLANGSHARP=1 set — integrate ClangSharpPInvokeGenerator locally (no committed rsp yet).");
+-return 0;
+diff --git a/pipeline/raylib6/generate-raygui-interop.cs b/pipeline/raylib6/generate-raygui-interop.cs
+deleted file mode 100644
+index 62e1653..0000000
+--- a/pipeline/raylib6/generate-raygui-interop.cs
++++ /dev/null
+@@ -1,141 +0,0 @@
+-// DEPRECATED: use dotnet run --project codegen/Novolis.Raylib.CodeGen -- generate
+-// Legacy file-based emitter; run.cs no longer invokes this script.
+-// Emit RayguiShimExports.g.cs from raygui-exports.manifest.json (deterministic: sorted exports, fixed layout).
+-// Usage (repo root): dotnet run tools/raylib6-pipeline/generate-raygui-interop.cs
+-#:sdk Microsoft.NET.Sdk
+-#:property TargetFramework=net10.0
+-#:property PublishAot=false
+-#:property PackAsTool=false
+-#:property ImplicitUsings=enable
+-#:property Nullable=enable
+-#:property ManagePackageVersionsCentrally=false
+-
+-using System.Security.Cryptography;
+-using System.Text;
+-using System.Text.Json;
+-using System.Text.Json.Serialization;
+-
+-if (args is ["-h"] or ["--help"])
+-{
+-	Console.WriteLine("""
+-		generate-raygui-interop — reads tools/raylib6-pipeline/raygui-exports.manifest.json
+-		and writes src/StarConflictsRevolt.Raylib6.Bindings/Interop/RayguiShimExports.g.cs
+-		""");
+-	return 0;
+-}
+-
+-var repoRoot = FindRepoRoot();
+-var manifestPath = Path.Combine(repoRoot, "tools", "raylib6-pipeline", "raygui-exports.manifest.json");
+-var outPath = Path.Combine(repoRoot, "src", "StarConflictsRevolt.Raylib6.Bindings", "Interop", "RayguiShimExports.g.cs");
+-if (!File.Exists(manifestPath))
+-{
+-	Console.Error.WriteLine($"Missing manifest: {manifestPath}");
+-	return 2;
+-}
+-
+-var jsonBytes = File.ReadAllBytes(manifestPath);
+-var json = Encoding.UTF8.GetString(jsonBytes);
+-var doc = JsonSerializer.Deserialize<Manifest>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+-if (doc?.Functions is null || doc.Functions.Count == 0)
+-{
+-	Console.Error.WriteLine("Manifest has no functions.");
+-	return 3;
+-}
+-
+-var manifestSha256 = Convert.ToHexString(SHA256.HashData(jsonBytes)).ToLowerInvariant();
+-var sorted = doc.Functions
+-	.Where(f => !string.IsNullOrEmpty(f.Export) && !string.IsNullOrEmpty(f.Template))
+-	.OrderBy(f => f.Export, StringComparer.Ordinal)
+-	.ToList();
+-
+-var sb = new StringBuilder();
+-sb.AppendLine("// <auto-generated />");
+-sb.AppendLine("// Regenerate: dotnet run tools/raylib6-pipeline/generate-raygui-interop.cs");
+-sb.AppendLine($"// ManifestSha256: {manifestSha256}");
+-sb.AppendLine("#nullable enable");
+-sb.AppendLine("using System.Runtime.InteropServices;");
+-sb.AppendLine();
+-sb.AppendLine("namespace StarConflictsRevolt.Raylib.Interop;");
+-sb.AppendLine();
+-sb.AppendLine("internal static unsafe partial class RayguiShimExports");
+-sb.AppendLine("{");
+-sb.AppendLine("    [StructLayout(LayoutKind.Sequential)]");
+-sb.AppendLine("    internal struct RayguiRectangle");
+-sb.AppendLine("    {");
+-sb.AppendLine("        public float X;");
+-sb.AppendLine("        public float Y;");
+-sb.AppendLine("        public float Width;");
+-sb.AppendLine("        public float Height;");
+-sb.AppendLine("    }");
+-sb.AppendLine();
+-
+-foreach (var fn in sorted)
+-{
+-	var (fieldType, _) = TemplateToDelegate(fn.Template!, fn.Export!);
+-	sb.AppendLine($"    internal static {fieldType} {fn.Export}_ptr;");
+-}
+-
+-sb.AppendLine();
+-sb.AppendLine("    internal static bool TryBindShim(nint module, out string? error)");
+-sb.AppendLine("    {");
+-sb.AppendLine("        error = null;");
+-foreach (var fn in sorted)
+-{
+-	var (fieldType, exportName) = TemplateToDelegate(fn.Template!, fn.Export!);
+-	sb.AppendLine($"        var p{exportName} = NativeLibrary.GetExport(module, \"{exportName}\");");
+-	sb.AppendLine($"        if (p{exportName} == 0)");
+-	sb.AppendLine("        {");
+-	sb.AppendLine($"            error = \"Missing export: {exportName}\";");
+-	sb.AppendLine("            return false;");
+-	sb.AppendLine("        }");
+-	sb.AppendLine($"        {exportName}_ptr = ({fieldType})p{exportName};");
+-}
+-
+-sb.AppendLine("        return true;");
+-sb.AppendLine("    }");
+-sb.AppendLine("}");
+-
+-Directory.CreateDirectory(Path.GetDirectoryName(outPath)!);
+-File.WriteAllText(outPath, sb.ToString(), new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
+-Console.WriteLine($"Wrote {sorted.Count} exports to {outPath}");
+-return 0;
+-
+-static (string delegateType, string exportName) TemplateToDelegate(string template, string exportName) => template switch
+-{
+-	"void_void" => ("delegate* unmanaged<void>", exportName),
+-	"void_float" => ("delegate* unmanaged<float, void>", exportName),
+-	"void_int" => ("delegate* unmanaged<int, void>", exportName),
+-	"int_void" => ("delegate* unmanaged<int>", exportName),
+-	"void_int_int_int" => ("delegate* unmanaged<int, int, int, void>", exportName),
+-	"int_int_int" => ("delegate* unmanaged<int, int, int>", exportName),
+-	"int_rect_utf8" => ("delegate* unmanaged<RayguiRectangle, byte*, int>", exportName),
+-	"int_rect_utf8_ptrbyte" => ("delegate* unmanaged<RayguiRectangle, byte*, byte*, int>", exportName),
+-	"int_rect_utf8_ptrint" => ("delegate* unmanaged<RayguiRectangle, byte*, int*, int>", exportName),
+-	"int_rect_utf8_utf8_ptrfloat_float_float" => ("delegate* unmanaged<RayguiRectangle, byte*, byte*, float*, float, float, int>", exportName),
+-	_ => throw new InvalidOperationException($"Unknown template '{template}' for {exportName}")
+-};
+-
+-static string FindRepoRoot()
+-{
+-	var dir = new DirectoryInfo(AppContext.BaseDirectory);
+-	while (dir is not null)
+-	{
+-		if (File.Exists(Path.Combine(dir.FullName, "Directory.Packages.props")))
+-			return dir.FullName;
+-		dir = dir.Parent;
+-	}
+-
+-	return Directory.GetCurrentDirectory();
+-}
+-
+-internal sealed class Manifest
+-{
+-	[JsonPropertyName("functions")]
+-	public List<ManifestFn>? Functions { get; set; }
+-}
+-
+-internal sealed class ManifestFn
+-{
+-	public string? Export { get; set; }
+-	public string? Template { get; set; }
+-}
+diff --git a/pipeline/raylib6/generate-raylib-debug-hooks.cs b/pipeline/raylib6/generate-raylib-debug-hooks.cs
+deleted file mode 100644
+index 366cef6..0000000
+--- a/pipeline/raylib6/generate-raylib-debug-hooks.cs
++++ /dev/null
+@@ -1,9 +0,0 @@
+-// DEPRECATED — use: dotnet run --project codegen/Novolis.Raylib.CodeGen -- generate
+-#:sdk Microsoft.NET.Sdk
+-#:property TargetFramework=net10.0
+-#:property PublishAot=false
+-#:property PackAsTool=false
+-
+-Console.Error.WriteLine(
+-    "This script is obsolete. Regenerate debug hooks with: dotnet run --project codegen/Novolis.Raylib.CodeGen -- generate");
+-return 1;
+diff --git a/pipeline/raylib6/generate-raylib-interop.cs b/pipeline/raylib6/generate-raylib-interop.cs
+deleted file mode 100644
+index 3af7047..0000000
+--- a/pipeline/raylib6/generate-raylib-interop.cs
++++ /dev/null
+@@ -1,274 +0,0 @@
+-// DEPRECATED: use dotnet run --project codegen/Novolis.Raylib.CodeGen -- generate
+-// Legacy file-based emitter kept for reference; run.cs no longer invokes this script.
+-// Emit Raylib6Native.g.cs from raylib-exports.manifest.json (deterministic: sorted imports, fixed layout).
+-// Usage (repo root): dotnet run tools/raylib6-pipeline/generate-raylib-interop.cs
+-#:sdk Microsoft.NET.Sdk
+-#:property TargetFramework=net10.0
+-#:property PublishAot=false
+-#:property PackAsTool=false
+-#:property ImplicitUsings=enable
+-#:property Nullable=enable
+-#:property ManagePackageVersionsCentrally=false
+-
+-using System.Security.Cryptography;
+-using System.Text;
+-using System.Text.Json;
+-using System.Text.Json.Serialization;
+-
+-if (args is ["-h"] or ["--help"])
+-{
+-	Console.WriteLine("""
+-		generate-raylib-interop — reads tools/raylib6-pipeline/raylib-exports.manifest.json
+-		and writes src/StarConflictsRevolt.Raylib6.Bindings/Interop/Raylib6Native.g.cs
+-		""");
+-	return 0;
+-}
+-
+-var repoRoot = FindRepoRoot();
+-var manifestPath = Path.Combine(repoRoot, "tools", "raylib6-pipeline", "raylib-exports.manifest.json");
+-var outPath = Path.Combine(repoRoot, "src", "StarConflictsRevolt.Raylib6.Bindings", "Interop", "Raylib6Native.g.cs");
+-if (!File.Exists(manifestPath))
+-{
+-	Console.Error.WriteLine($"Missing manifest: {manifestPath}");
+-	return 2;
+-}
+-
+-var jsonBytes = File.ReadAllBytes(manifestPath);
+-var json = Encoding.UTF8.GetString(jsonBytes);
+-var doc = JsonSerializer.Deserialize<RaylibManifest>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+-if (doc?.Imports is null || doc.Imports.Count == 0)
+-{
+-	Console.Error.WriteLine("Manifest has no imports.");
+-	return 3;
+-}
+-
+-var manifestSha256 = Convert.ToHexString(SHA256.HashData(jsonBytes)).ToLowerInvariant();
+-var sortedImports = doc.Imports.OrderBy(i => i.Name, StringComparer.Ordinal).ToList();
+-
+-var sb = new StringBuilder();
+-sb.AppendLine("// <auto-generated />");
+-sb.AppendLine("// Regenerate: dotnet run tools/raylib6-pipeline/generate-raylib-interop.cs");
+-sb.AppendLine($"// ManifestSha256: {manifestSha256}");
+-sb.AppendLine("#nullable enable");
+-sb.AppendLine("using System.Runtime.InteropServices;");
+-sb.AppendLine("using StarConflictsRevolt.Raylib.Colors;");
+-sb.AppendLine("using StarConflictsRevolt.Raylib.Transformations;");
+-sb.AppendLine();
+-sb.AppendLine("namespace StarConflictsRevolt.Raylib.Interop;");
+-sb.AppendLine();
+-
+-if (doc.Structs is not null)
+-{
+-	foreach (var st in doc.Structs.OrderBy(s => s.Name, StringComparer.Ordinal))
+-	{
+-		sb.AppendLine("/// <summary>Blittable layout for raylib C struct (generated from manifest).</summary>");
+-		sb.AppendLine("[StructLayout(LayoutKind.Sequential)]");
+-		sb.AppendLine($"internal struct {st.Name}");
+-		sb.AppendLine("{");
+-		foreach (var f in st.Fields ?? [])
+-			sb.AppendLine($"    public {f.ClrType} {f.Name};");
+-		sb.AppendLine("}");
+-		sb.AppendLine();
+-	}
+-}
+-
+-var dll = string.IsNullOrEmpty(doc.DllName) ? "raylib" : doc.DllName;
+-sb.AppendLine("/// <summary>Low-level raylib 6 entry points (manifest-generated <c>[LibraryImport]</c>).</summary>");
+-sb.AppendLine("internal static partial class Raylib6Native");
+-sb.AppendLine("{");
+-sb.AppendLine($"    private const string RaylibDll = \"{dll}\";");
+-sb.AppendLine();
+-
+-foreach (var imp in sortedImports)
+-{
+-	if (string.IsNullOrEmpty(imp.Name) || string.IsNullOrEmpty(imp.Template))
+-		throw new InvalidOperationException("Each import requires name and template.");
+-
+-	EmitImport(sb, imp.Name, imp.Template);
+-}
+-
+-sb.AppendLine("}");
+-
+-Directory.CreateDirectory(Path.GetDirectoryName(outPath)!);
+-File.WriteAllText(outPath, sb.ToString(), new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
+-Console.WriteLine($"Wrote {sortedImports.Count} imports to {outPath}");
+-return 0;
+-
+-static void EmitImport(StringBuilder sb, string name, string template)
+-{
+-	switch (template)
+-	{
+-		case "void_void":
+-			Li(sb, "RaylibDll");
+-			sb.AppendLine($"    internal static partial void {name}();");
+-			sb.AppendLine();
+-			break;
+-		case "bool_void":
+-			Li(sb, "RaylibDll");
+-			sb.AppendLine("    [return: MarshalAs(UnmanagedType.I1)]");
+-			sb.AppendLine($"    internal static partial bool {name}();");
+-			sb.AppendLine();
+-			break;
+-		case "int_void":
+-			Li(sb, "RaylibDll");
+-			sb.AppendLine($"    internal static partial int {name}();");
+-			sb.AppendLine();
+-			break;
+-		case "float_void":
+-			Li(sb, "RaylibDll");
+-			sb.AppendLine($"    internal static partial float {name}();");
+-			sb.AppendLine();
+-			break;
+-		case "void_int":
+-			Li(sb, "RaylibDll");
+-			sb.AppendLine($"    internal static partial void {name}(int value);");
+-			sb.AppendLine();
+-			break;
+-		case "void_uint":
+-			Li(sb, "RaylibDll");
+-			sb.AppendLine($"    internal static partial void {name}(uint flags);");
+-			sb.AppendLine();
+-			break;
+-		case "bool_int":
+-			Li(sb, "RaylibDll");
+-			sb.AppendLine("    [return: MarshalAs(UnmanagedType.I1)]");
+-			sb.AppendLine($"    internal static partial bool {name}(int key);");
+-			sb.AppendLine();
+-			break;
+-		case "void_int_int_string_utf8":
+-			LiUtf8(sb, "RaylibDll");
+-			sb.AppendLine($"    internal static partial void {name}(int width, int height, string title);");
+-			sb.AppendLine();
+-			break;
+-		case "void_color":
+-			Li(sb, "RaylibDll");
+-			sb.AppendLine($"    internal static partial void {name}(Color color);");
+-			sb.AppendLine();
+-			break;
+-		case "void_string_utf8_int_int_int_color":
+-			LiUtf8(sb, "RaylibDll");
+-			sb.AppendLine($"    internal static partial void {name}(string text, int posX, int posY, int fontSize, Color color);");
+-			sb.AppendLine();
+-			break;
+-		case "void_int_int_int_int_color":
+-			Li(sb, "RaylibDll");
+-			sb.AppendLine($"    internal static partial void {name}(int a, int b, int c, int d, Color color);");
+-			sb.AppendLine();
+-			break;
+-		case "void_int_int_float_color":
+-			Li(sb, "RaylibDll");
+-			sb.AppendLine($"    internal static partial void {name}(int centerX, int centerY, float radius, Color color);");
+-			sb.AppendLine();
+-			break;
+-		case "void_int_int":
+-			Li(sb, "RaylibDll");
+-			sb.AppendLine($"    internal static partial void {name}(int posX, int posY);");
+-			sb.AppendLine();
+-			break;
+-		case "int_string_utf8_int":
+-			LiUtf8(sb, "RaylibDll");
+-			sb.AppendLine($"    internal static partial int {name}(string text, int fontSize);");
+-			sb.AppendLine();
+-			break;
+-		case "void_rectangle_color":
+-			Li(sb, "RaylibDll");
+-			sb.AppendLine($"    internal static partial void {name}(Rectangle rec, Color color);");
+-			sb.AppendLine();
+-			break;
+-		case "void_int_int_int_int":
+-			Li(sb, "RaylibDll");
+-			sb.AppendLine($"    internal static partial void {name}(int x, int y, int width, int height);");
+-			sb.AppendLine();
+-			break;
+-		case "void_string_utf8":
+-			LiUtf8(sb, "RaylibDll");
+-			sb.AppendLine($"    internal static partial void {name}(string title);");
+-			sb.AppendLine();
+-			break;
+-		case "vector2_void":
+-			Li(sb, "RaylibDll");
+-			sb.AppendLine($"    internal static partial Vector2 {name}();");
+-			sb.AppendLine();
+-			break;
+-		case "image_void":
+-			Li(sb, "RaylibDll");
+-			sb.AppendLine($"    internal static partial Raylib6NativeImage {name}();");
+-			sb.AppendLine();
+-			break;
+-		case "void_image":
+-			Li(sb, "RaylibDll");
+-			sb.AppendLine($"    internal static partial void {name}(Raylib6NativeImage image);");
+-			sb.AppendLine();
+-			break;
+-		case "nint_image_string_utf8_out_int":
+-			LiUtf8(sb, "RaylibDll");
+-			sb.AppendLine($"    internal static partial nint {name}(Raylib6NativeImage image, string fileType, out int fileSize);");
+-			sb.AppendLine();
+-			break;
+-		case "void_nint":
+-			Li(sb, "RaylibDll");
+-			sb.AppendLine($"    internal static partial void {name}(nint ptr);");
+-			sb.AppendLine();
+-			break;
+-		default:
+-			throw new InvalidOperationException($"Unknown template '{template}' for import '{name}'.");
+-	}
+-}
+-
+-static void Li(StringBuilder sb, string dllConst) =>
+-	sb.AppendLine($"    [LibraryImport({dllConst})]");
+-
+-static void LiUtf8(StringBuilder sb, string dllConst) =>
+-	sb.AppendLine($"    [LibraryImport({dllConst}, StringMarshalling = StringMarshalling.Utf8)]");
+-
+-static string FindRepoRoot()
+-{
+-	var dir = new DirectoryInfo(AppContext.BaseDirectory);
+-	while (dir is not null)
+-	{
+-		if (File.Exists(Path.Combine(dir.FullName, "Directory.Packages.props")))
+-			return dir.FullName;
+-		dir = dir.Parent;
+-	}
+-
+-	return Directory.GetCurrentDirectory();
+-}
+-
+-internal sealed class RaylibManifest
+-{
+-	[JsonPropertyName("dllName")]
+-	public string? DllName { get; set; }
+-
+-	[JsonPropertyName("structs")]
+-	public List<RaylibStruct>? Structs { get; set; }
+-
+-	[JsonPropertyName("imports")]
+-	public List<RaylibImport>? Imports { get; set; }
+-}
+-
+-internal sealed class RaylibStruct
+-{
+-	[JsonPropertyName("name")]
+-	public string? Name { get; set; }
+-
+-	[JsonPropertyName("fields")]
+-	public List<RaylibField>? Fields { get; set; }
+-}
+-
+-internal sealed class RaylibField
+-{
+-	[JsonPropertyName("name")]
+-	public string? Name { get; set; }
+-
+-	[JsonPropertyName("clrType")]
+-	public string? ClrType { get; set; }
+-}
+-
+-internal sealed class RaylibImport
+-{
+-	[JsonPropertyName("name")]
+-	public string? Name { get; set; }
+-
+-	[JsonPropertyName("template")]
+-	public string? Template { get; set; }
+-}
+diff --git a/pipeline/raylib6/hooks/README.md b/pipeline/raylib6/hooks/README.md
+index 4fed768..b6cb371 100644
+--- a/pipeline/raylib6/hooks/README.md
++++ b/pipeline/raylib6/hooks/README.md
+@@ -30,7 +30,7 @@ dotnet run --project codegen/Novolis.Raylib.CodeGen -- hooks list
+ dotnet run --project codegen/Novolis.Raylib.CodeGen -- generate
+ ```
+ 
+-Codegen also runs automatically when building `StarConflictsRevolt.Raylib6.Bindings` (see MSBuild target in that project).
++Codegen also runs automatically when building `Novolis.Raylib.Bindings` (see MSBuild target in `build/Novolis.Raylib.CodeGen.targets`).
+ 
+ ## Shipped hooks
+ 
+diff --git a/pipeline/raylib6/run.cs b/pipeline/raylib6/run.cs
+index 982ccf7..6fe8d96 100644
+--- a/pipeline/raylib6/run.cs
++++ b/pipeline/raylib6/run.cs
+@@ -1,5 +1,4 @@
+-// Orchestrator: fetch vendor → optional native shim build (CMake) → optional ClangSharp (see --help).
+-// Usage (repo root): dotnet run tools/raylib6-pipeline/run.cs [fetch|native|generate|all]
++// Obsolete forwarder — use: dotnet run --project codegen/Novolis.Raylib.Pipeline -- run <profile>
+ #:sdk Microsoft.NET.Sdk
+ #:property TargetFramework=net10.0
+ #:property PublishAot=false
+@@ -8,143 +7,47 @@
+ #:property Nullable=enable
+ #:property ManagePackageVersionsCentrally=false
+ 
+-using System.Diagnostics;
+-using System.Linq;
+-
+ var repoRoot = FindRepoRoot();
++var pipeline = Path.Combine(repoRoot, "codegen", "Novolis.Raylib.Pipeline", "Novolis.Raylib.Pipeline.csproj");
++
+ if (args is [] or ["-h"] or ["--help"])
+ {
+ 	Console.WriteLine("""
+-		Star Conflicts Revolt — raylib 6 pipeline
++		Obsolete — use codegen/Novolis.Raylib.Pipeline instead.
+ 
+-		Commands:
+-		  fetch    — dotnet run tools/raylib6-pipeline/fetch-sources.cs
+-		  native   — cmake configure/build tools/native/raylib6-with-raygui (Windows + MSVC)
+-		  generate — Roslyn codegen (verify → interop → imgui/raygui → debug hooks → façades + hooks)
+-		  all      — fetch, then native, then generate (same codegen chain as generate)
+-
+-		Prerequisites (native): CMake + VS C toolchain; run fetch first so tools/vendor/raylib-6 contains raylib.dll.
++		  dotnet run --project codegen/Novolis.Raylib.Pipeline -- run maintainer
++		  dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_01_source
++		  dotnet run --project codegen/Novolis.Raylib.Pipeline -- list
+ 		""");
+ 	return args is [] ? 1 : 0;
+ }
+ 
+-var cmd = args[0].ToLowerInvariant();
+-try
+-{
+-	switch (cmd)
+-	{
+-		case "fetch":
+-			return RunDotnetFile(Path.Combine(repoRoot, "pipeline", "raylib6", "fetch-sources.cs"), []);
+-		case "native":
+-			return RunNative(repoRoot);
+-		case "generate":
+-			return RunGenerateChain(repoRoot);
+-		case "all":
+-		{
+-			var a = RunDotnetFile(Path.Combine(repoRoot, "pipeline", "raylib6", "fetch-sources.cs"), []);
+-			if (a != 0)
+-				return a;
+-			a = RunNative(repoRoot);
+-			if (a != 0)
+-				return a;
+-			return RunGenerateChain(repoRoot);
+-		}
+-		default:
+-			Console.Error.WriteLine($"Unknown command: {args[0]}");
+-			return 1;
+-	}
+-}
+-	catch (Exception ex)
+-{
+-	Console.Error.WriteLine(ex.Message);
+-	return 1;
+-}
+-
+-static int RunGenerateChain(string repoRoot)
++var profile = args[0].ToLowerInvariant() switch
+ {
+-	var codegenProject = Path.Combine(repoRoot, "codegen", "Novolis.Raylib.CodeGen", "Novolis.Raylib.CodeGen.csproj");
+-	return Run("dotnet", $"run --project \"{codegenProject}\" -- generate", repoRoot);
+-}
+-
+-static int RunNative(string repoRoot)
+-{
+-	var rayguiDir = Path.Combine(repoRoot, "native", "raylib6-with-raygui");
+-	var defPath = Path.Combine(rayguiDir, "generated", "raylib.win-x64.def");
+-	if (OperatingSystem.IsWindows())
+-	{
+-		var raylibDll = Path.Combine(repoRoot, "vendor", "raylib-6", "prebuilt", "win-x64", "raylib.dll");
+-		if (File.Exists(raylibDll) && !File.Exists(defPath))
+-		{
+-			var gen = Path.Combine(repoRoot, "pipeline", "raylib6", "generate-raylib-windows-def.cs");
+-			var a = RunDotnetFile(gen, [raylibDll, defPath]);
+-			if (a != 0)
+-				return a;
+-		}
+-	}
+-
+-	foreach (var nativeDir in new[]
+-	         {
+-		         Path.Combine(repoRoot, "native", "raylib6-with-raygui"),
+-		         Path.Combine(repoRoot, "native", "raylib6-platform"),
+-		         Path.Combine(repoRoot, "native", "raylib6-with-imgui"),
+-	         })
+-	{
+-		if (!Directory.Exists(nativeDir))
+-			continue;
+-
+-		var buildDir = Path.Combine(nativeDir, "build");
+-		Directory.CreateDirectory(buildDir);
+-		var configureArgs = $"-S \"{nativeDir}\" -B \"{buildDir}\"";
+-		if (Run("cmake", configureArgs, repoRoot) != 0)
+-		{
+-			try
+-			{
+-				Directory.Delete(buildDir, recursive: true);
+-			}
+-			catch
+-			{
+-				// ignore; second cmake will surface the real error
+-			}
+-
+-			Directory.CreateDirectory(buildDir);
+-			if (Run("cmake", configureArgs, repoRoot) != 0)
+-				return 1;
+-		}
+-
+-		if (Run("cmake", $"--build \"{buildDir}\" --config Release", repoRoot) != 0)
+-			return 1;
+-	}
++	"fetch" => "step_01_source",
++	"native" => "step_02_native",
++	"generate" => "generate",
++	"all" => "maintainer",
++	_ => args[0],
++};
+ 
+-	return 0;
+-}
++Console.Error.WriteLine($"run.cs is obsolete. Forwarding to Pipeline profile '{profile}'.");
++return Run("dotnet", $"run --project \"{pipeline}\" -- run {profile}", repoRoot);
+ 
+ static int Run(string file, string arguments, string workingDirectory)
+ {
+-	var psi = new ProcessStartInfo
++	var psi = new System.Diagnostics.ProcessStartInfo
+ 	{
+ 		FileName = file,
+ 		Arguments = arguments,
+ 		WorkingDirectory = workingDirectory,
+ 		UseShellExecute = false,
+ 	};
+-	using var p = Process.Start(psi) ?? throw new InvalidOperationException($"Failed to start {file}");
++	using var p = System.Diagnostics.Process.Start(psi) ?? throw new InvalidOperationException($"Failed to start {file}");
+ 	p.WaitForExit();
+ 	return p.ExitCode;
+ }
+ 
+-static int RunDotnetFile(string path, string[] extraArgs)
+-{
+-	var parts = new List<string> { "run", $"\"{path}\"" };
+-	if (extraArgs.Length > 0)
+-	{
+-		parts.Add("--");
+-		parts.AddRange(extraArgs.Select(a => $"\"{a}\""));
+-	}
+-
+-	var args = string.Join(' ', parts);
+-	return Run("dotnet", args, FindRepoRoot());
+-}
+-
+ static string FindRepoRoot()
+ {
+ 	var dir = new DirectoryInfo(AppContext.BaseDirectory);
+diff --git a/pipeline/raylib6/verify-raylib-manifest-against-vendor.cs b/pipeline/raylib6/verify-raylib-manifest-against-vendor.cs
+deleted file mode 100644
+index f14cb0b..0000000
+--- a/pipeline/raylib6/verify-raylib-manifest-against-vendor.cs
++++ /dev/null
+@@ -1,98 +0,0 @@
+-// Fail if raylib-exports.manifest.json lists symbols missing from vendor raylib.h (when header exists).
+-// Usage (repo root): dotnet run tools/raylib6-pipeline/verify-raylib-manifest-against-vendor.cs
+-#:sdk Microsoft.NET.Sdk
+-#:property TargetFramework=net10.0
+-#:property PublishAot=false
+-#:property PackAsTool=false
+-#:property ImplicitUsings=enable
+-#:property Nullable=enable
+-#:property ManagePackageVersionsCentrally=false
+-
+-using System.Text.Json;
+-using System.Text.Json.Serialization;
+-
+-if (args is ["-h"] or ["--help"])
+-{
+-	Console.WriteLine("""
+-		verify-raylib-manifest-against-vendor — ensures each manifest import name appears in tools/vendor/raylib-6/include/raylib.h
+-		Skips with exit 0 if the header file is missing (e.g. before fetch).
+-		""");
+-	return 0;
+-}
+-
+-var repoRoot = FindRepoRoot();
+-var manifestPath = Path.Combine(repoRoot, "tools", "raylib6-pipeline", "raylib-exports.manifest.json");
+-var headerPath = Path.Combine(repoRoot, "tools", "vendor", "raylib-6", "include", "raylib.h");
+-if (!File.Exists(manifestPath))
+-{
+-	Console.Error.WriteLine($"Missing manifest: {manifestPath}");
+-	return 2;
+-}
+-
+-if (!File.Exists(headerPath))
+-{
+-	Console.WriteLine($"verify-raylib-manifest: skip (no vendor header at {headerPath}).");
+-	return 0;
+-}
+-
+-var json = File.ReadAllText(manifestPath);
+-var doc = JsonSerializer.Deserialize<ManifestRoot>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+-if (doc?.Imports is null || doc.Imports.Count == 0)
+-{
+-	Console.Error.WriteLine("Manifest has no imports.");
+-	return 3;
+-}
+-
+-var header = File.ReadAllText(headerPath);
+-foreach (var imp in doc.Imports.OrderBy(i => i.Name, StringComparer.Ordinal))
+-{
+-	if (string.IsNullOrEmpty(imp.Name))
+-		continue;
+-
+-	if (!HeaderDeclaresSymbol(header, imp.Name))
+-	{
+-		Console.Error.WriteLine($"verify-raylib-manifest: '{imp.Name}' not found as RLAPI declaration in raylib.h.");
+-		return 4;
+-	}
+-}
+-
+-Console.WriteLine($"verify-raylib-manifest: OK ({doc.Imports.Count} imports).");
+-return 0;
+-
+-static bool HeaderDeclaresSymbol(string header, string symbol)
+-{
+-	var needle = symbol + "(";
+-	foreach (var raw in header.Split('\n'))
+-	{
+-		var line = raw.TrimStart();
+-		if (line.StartsWith("RLAPI", StringComparison.Ordinal) && line.Contains(needle, StringComparison.Ordinal))
+-			return true;
+-	}
+-
+-	return false;
+-}
+-
+-static string FindRepoRoot()
+-{
+-	var dir = new DirectoryInfo(AppContext.BaseDirectory);
+-	while (dir is not null)
+-	{
+-		if (File.Exists(Path.Combine(dir.FullName, "Directory.Packages.props")))
+-			return dir.FullName;
+-		dir = dir.Parent;
+-	}
+-
+-	return Directory.GetCurrentDirectory();
+-}
+-
+-internal sealed class ManifestRoot
+-{
+-	[JsonPropertyName("imports")]
+-	public List<ImportEntry>? Imports { get; set; }
+-}
+-
+-internal sealed class ImportEntry
+-{
+-	[JsonPropertyName("name")]
+-	public string? Name { get; set; }
+-}
+diff --git a/src/Novolis.Raylib.Bindings/Novolis.Raylib.Bindings.csproj b/src/Novolis.Raylib.Bindings/Novolis.Raylib.Bindings.csproj
+index 923f5a8..5d26ce2 100644
+--- a/src/Novolis.Raylib.Bindings/Novolis.Raylib.Bindings.csproj
++++ b/src/Novolis.Raylib.Bindings/Novolis.Raylib.Bindings.csproj
+@@ -13,6 +13,8 @@
+     <PackageReadmeFile>README.md</PackageReadmeFile>
+     <Description>Generated raylib 6 + ImGui P/Invoke (manifest-driven; do not hand-edit Interop/*.g.cs).</Description>
+     <IncludeRaygui Condition="'$(IncludeRaygui)' == ''">false</IncludeRaygui>
++    <PipelineStep01>$(MSBuildThisFileDirectory)..\..\pipeline\raylib6\steps\step_01_source\artifacts</PipelineStep01>
++    <PipelineStep02>$(MSBuildThisFileDirectory)..\..\pipeline\raylib6\steps\step_02_native\artifacts</PipelineStep02>
+   </PropertyGroup>
+ 
+   <ItemGroup>
+@@ -20,22 +22,34 @@
+   </ItemGroup>
+ 
+   <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+-    <None Include="$(MSBuildThisFileDirectory)..\..\vendor\raylib-6\prebuilt\win-x64\raylib.dll"
++    <None Include="$(PipelineStep01)\raylib-6\prebuilt\win-x64\raylib.dll"
+           Link="raylib.dll"
+           CopyToOutputDirectory="PreserveNewest"
+-          Condition="Exists('$(MSBuildThisFileDirectory)..\..\vendor\raylib-6\prebuilt\win-x64\raylib.dll')" />
++          Condition="Exists('$(PipelineStep01)\raylib-6\prebuilt\win-x64\raylib.dll')" />
++    <None Include="$(PipelineStep02)\novolis_raylib_trace.dll"
++          Link="novolis_raylib_trace.dll"
++          CopyToOutputDirectory="PreserveNewest"
++          Condition="Exists('$(PipelineStep02)\novolis_raylib_trace.dll')" />
+     <None Include="$(MSBuildThisFileDirectory)..\..\native\raylib6-platform\out\novolis_raylib_trace.dll"
+           Link="novolis_raylib_trace.dll"
+           CopyToOutputDirectory="PreserveNewest"
+-          Condition="Exists('$(MSBuildThisFileDirectory)..\..\native\raylib6-platform\out\novolis_raylib_trace.dll')" />
++          Condition="!Exists('$(PipelineStep02)\novolis_raylib_trace.dll') and Exists('$(MSBuildThisFileDirectory)..\..\native\raylib6-platform\out\novolis_raylib_trace.dll')" />
++    <None Include="$(PipelineStep02)\novolis_imgui.dll"
++          Link="novolis_imgui.dll"
++          CopyToOutputDirectory="PreserveNewest"
++          Condition="Exists('$(PipelineStep02)\novolis_imgui.dll')" />
+     <None Include="$(MSBuildThisFileDirectory)..\..\native\raylib6-with-imgui\out\novolis_imgui.dll"
+           Link="novolis_imgui.dll"
+           CopyToOutputDirectory="PreserveNewest"
+-          Condition="Exists('$(MSBuildThisFileDirectory)..\..\native\raylib6-with-imgui\out\novolis_imgui.dll')" />
++          Condition="!Exists('$(PipelineStep02)\novolis_imgui.dll') and Exists('$(MSBuildThisFileDirectory)..\..\native\raylib6-with-imgui\out\novolis_imgui.dll')" />
++    <None Include="$(PipelineStep02)\novolis_raygui.dll"
++          Link="novolis_raygui.dll"
++          CopyToOutputDirectory="PreserveNewest"
++          Condition="'$(IncludeRaygui)' == 'true' and Exists('$(PipelineStep02)\novolis_raygui.dll')" />
+     <None Include="$(MSBuildThisFileDirectory)..\..\native\raylib6-with-raygui\out\novolis_raygui.dll"
+           Link="novolis_raygui.dll"
+           CopyToOutputDirectory="PreserveNewest"
+-          Condition="'$(IncludeRaygui)' == 'true' and Exists('$(MSBuildThisFileDirectory)..\..\native\raylib6-with-raygui\out\novolis_raygui.dll')" />
++          Condition="'$(IncludeRaygui)' == 'true' and !Exists('$(PipelineStep02)\novolis_raygui.dll') and Exists('$(MSBuildThisFileDirectory)..\..\native\raylib6-with-raygui\out\novolis_raygui.dll')" />
+   </ItemGroup>
+ 
+   <ItemGroup>
+
+warning: in the working copy of 'src/Novolis.Raylib.Bindings/Interop/ImguiShimExports.g.cs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/Novolis.Raylib.Bindings/Interop/Raylib6Native.g.cs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/Novolis.Raylib.Bindings/Interop/RaylibDebugFrameHooks.g.cs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/Novolis.Raylib.Raygui/Interop/RayguiShimExports.g.cs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/Novolis.Raylib.Raygui/RayGui/RayGui.g.cs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/Novolis.Raylib.Runtime/Audio/AudioDevice.g.cs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/Novolis.Raylib.Runtime/Gui/Gui.g.cs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/Novolis.Raylib.Runtime/Hud/Hud.g.cs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/Novolis.Raylib.Runtime/Interact/Input.g.cs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/Novolis.Raylib.Runtime/Rendering/Graphics.g.cs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/Novolis.Raylib.Runtime/Rendering/Textures.g.cs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/Novolis.Raylib.Runtime/Rendering/World.g.cs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/Novolis.Raylib.Runtime/Timing/Time.g.cs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/Novolis.Raylib.Runtime/Windowing/Window.g.cs', CRLF will be replaced by LF the next time Git touches it
+
+FAILED: git diff detected drift in pipeline manifests or generated C#

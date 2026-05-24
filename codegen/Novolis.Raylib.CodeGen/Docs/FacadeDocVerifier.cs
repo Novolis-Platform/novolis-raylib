@@ -1,6 +1,6 @@
 namespace Novolis.Raylib.CodeGen;
 
-internal static class FacadeDocVerifier
+public static class FacadeDocVerifier
 {
     public static int Verify(string repoRoot)
     {

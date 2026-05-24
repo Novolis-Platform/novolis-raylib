@@ -11,13 +11,13 @@
 ```bash
 # 1. Edit manifests (and hooks if customizing emission)
 # 2. Regenerate
-dotnet run --project codegen/Novolis.Raylib.CodeGen -- generate
+dotnet run --project codegen/Novolis.Raylib.Pipeline -- run generate
 
 # 3. Agent gate (drift + build)
 pwsh ./scripts/agent-verify.ps1
 ```
 
-Commit **manifest and generated `*.g.cs` in the same commit**.
+Commit **manifest and generated `*.g.cs` in the same commit**. After maintainer runs, commit updated `pipeline/raylib6/steps/*/result.json` and `step.log` for steps that ran.
 
 ## Where output goes
 
@@ -31,6 +31,8 @@ Commit **manifest and generated `*.g.cs` in the same commit**.
 | `hud.manifest.json` | `Runtime/Hud/Hud.g.cs` |
 | `gui.manifest.json` | `Runtime/Gui/Gui.g.cs` (Dear ImGui) |
 | `raygui.manifest.json` | `Raygui/RayGui/RayGui.g.cs` (add-on) |
+
+Vendor sources live under `pipeline/raylib6/steps/step_01_source/artifacts/` (not `vendor/`).
 
 ## Adding a raylib function
 
@@ -47,4 +49,10 @@ Commit **manifest and generated `*.g.cs` in the same commit**.
 
 ## CI parity
 
-Job `codegen-drift` runs the same check as `scripts/raylib-codegen-check.ps1`.
+Job `codegen-drift` runs `step_01_source` then `ci-codegen` (same as `scripts/raylib-codegen-check.ps1`).
+
+## Debugging failures
+
+1. Scan `pipeline/raylib6/steps/*/result.json` for `"status": "Failed"`.
+2. Read that step’s `step.log`.
+3. Re-run: `dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_XX --force`

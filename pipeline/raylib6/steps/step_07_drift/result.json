@@ -1,0 +1,12 @@
+{
+  "stepId": "step_07_drift",
+  "status": "Failed",
+  "startedUtc": "2026-05-24T00:19:36.5614604+00:00",
+  "durationMs": 68,
+  "pipelineVersion": "1",
+  "inputs": {},
+  "outputs": [],
+  "error": {
+    "message": "git diff detected drift in pipeline manifests or generated C#"
+  }
+}

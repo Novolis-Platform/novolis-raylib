@@ -1,0 +1,90 @@
+{
+  "stepId": "step_06_codegen",
+  "status": "Skipped",
+  "startedUtc": "2026-05-24T00:19:36.5524705+00:00",
+  "durationMs": 0,
+  "pipelineVersion": "1",
+  "inputs": {
+    "pipeline/raylib6/facades.manifest.json": "f3c88e0e8244512cf130f0ff29b862755f849b2b1701d23d00f25870374c1452",
+    "pipeline/raylib6/gui.manifest.json": "0b5e7be3893bc052947b3f8e1562f09bb92dec436710f852864fc729d5d7ec8e",
+    "pipeline/raylib6/hud.manifest.json": "fbebec821bd81035234330c3e6b8a12b352e637dee42387aefead84a8109548b",
+    "pipeline/raylib6/imgui-exports.manifest.json": "07f21762a674b542535031b64bf5d0264bd4117b0bf48b3d17b38bc8a3ca355d",
+    "pipeline/raylib6/raygui-exports.manifest.json": "1196244c8eb4c9a5133b4bdfa3a842e041d860a17958b2853e11a8a8a9c2026c",
+    "pipeline/raylib6/raygui.manifest.json": "71032bcb88307b297903a7f4e5f203130576c8488289d90a868f104b41a1b80b",
+    "pipeline/raylib6/raylib-debug.manifest.json": "cb91d931e8430a55bab3c3649711531b9c2c943c7efd9791564f087c1613a9ca",
+    "pipeline/raylib6/raylib-exports.manifest.json": "7f59eacfc7cee6a4c81793868568d0300417eceac7ed2ca8de1ecbdac3b91031"
+  },
+  "outputs": [
+    {
+      "path": "src/Novolis.Raylib.Bindings/Interop/ImguiShimExports.g.cs",
+      "sha256": "713f6f2a91066ccc39806449668cd9b0f1773179e12d4f16cef1b0f80323dbb1",
+      "bytes": 5387
+    },
+    {
+      "path": "src/Novolis.Raylib.Bindings/Interop/Raylib6Native.g.cs",
+      "sha256": "612aa5d87186869b1773b71a4de75e9be80be3cdfff5daa401002a624356f7c0",
+      "bytes": 9307
+    },
+    {
+      "path": "src/Novolis.Raylib.Bindings/Interop/RaylibDebugFrameHooks.g.cs",
+      "sha256": "0a92ab920bec0e431cf5349b90f0522d9bca025010f7acd1348e9c8b5974c947",
+      "bytes": 2218
+    },
+    {
+      "path": "src/Novolis.Raylib.Runtime/Rendering/Graphics.g.cs",
+      "sha256": "216b48d4a74ba6582b5fc3c781d816251fd5a10aa8b3fbc18c9cc515ae945567",
+      "bytes": 4098
+    },
+    {
+      "path": "src/Novolis.Raylib.Runtime/Rendering/Textures.g.cs",
+      "sha256": "df82bf77231f43c2e26f85dab21bbf46413555a8bc3bf6de82ce84fb023848fa",
+      "bytes": 1911
+    },
+    {
+      "path": "src/Novolis.Raylib.Runtime/Rendering/World.g.cs",
+      "sha256": "da655079a85690b7aa4359c4432603e15c3cdd8d6af98b9460d04b0ad63c5d78",
+      "bytes": 4433
+    },
+    {
+      "path": "src/Novolis.Raylib.Runtime/Windowing/Window.g.cs",
+      "sha256": "bb8bacd13982a57e09891d715dccbf2a288952f57415cd3c533f3589db50f058",
+      "bytes": 3805
+    },
+    {
+      "path": "src/Novolis.Raylib.Runtime/Interact/Input.g.cs",
+      "sha256": "ccb1d2c645dc4b16613559b7515a76728675e54157e179650d9d4d55d2daf907",
+      "bytes": 3713
+    },
+    {
+      "path": "src/Novolis.Raylib.Runtime/Timing/Time.g.cs",
+      "sha256": "fb16835fbb7f27033f09ad9e5434357addb7efcfcbffb9f2f57cb6b8c36f0dc6",
+      "bytes": 860
+    },
+    {
+      "path": "src/Novolis.Raylib.Runtime/Audio/AudioDevice.g.cs",
+      "sha256": "d7bf3809fcb3c00e03cfd462537d0eed7b92c38318d083c70cda41dfbcb10eec",
+      "bytes": 839
+    },
+    {
+      "path": "src/Novolis.Raylib.Runtime/Hud/Hud.g.cs",
+      "sha256": "87e2b158d7c2d00aa0d9605011db1089bdbcb41592b721dbeecb3244ce084d29",
+      "bytes": 3549
+    },
+    {
+      "path": "src/Novolis.Raylib.Runtime/Gui/Gui.g.cs",
+      "sha256": "36cca1fafc1e3173344885ca9bc4df72b44a266bcf4d5848fd748ec8d63660c6",
+      "bytes": 3256
+    },
+    {
+      "path": "src/Novolis.Raylib.Raygui/Interop/RayguiShimExports.g.cs",
+      "sha256": "f1037517ec35466c46b0baca4fd94dafb4148aec27bf661d3493ac04603ee549",
+      "bytes": 9799
+    },
+    {
+      "path": "src/Novolis.Raylib.Raygui/RayGui/RayGui.g.cs",
+      "sha256": "5a02015e750e5c01cfbf6bf94254075718d667f8874107434ce6903da90d5949",
+      "bytes": 4357
+    }
+  ],
+  "skipReason": "outputs up to date"
+}

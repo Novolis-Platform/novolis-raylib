@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Novolis.Raylib.CodeGen;
 
-internal sealed class RaylibCodegenPipeline
+public sealed class RaylibCodegenPipeline
 {
     private readonly string _repoRoot;
     private readonly IReadOnlyList<IRaylibCodegenHook> _hooks;
@@ -22,15 +22,28 @@ internal sealed class RaylibCodegenPipeline
         if (verify != 0)
             return verify;
 
-        EmitRaylibInterop();
-        EmitImguiInterop();
-        EmitRayguiInterop();
-        EmitDebugHooks();
-        EmitFacades();
-        EmitHud();
-        EmitGui();
-        EmitRayGui();
+        GenerateBindingsOnly();
         return 0;
+    }
+
+    public void GenerateBindingsOnly(TextWriter? log = null)
+    {
+        log?.WriteLine("emit: raylib interop");
+        EmitRaylibInterop();
+        log?.WriteLine("emit: imgui interop");
+        EmitImguiInterop();
+        log?.WriteLine("emit: raygui interop");
+        EmitRayguiInterop();
+        log?.WriteLine("emit: debug hooks");
+        EmitDebugHooks();
+        log?.WriteLine("emit: facades");
+        EmitFacades();
+        log?.WriteLine("emit: hud");
+        EmitHud();
+        log?.WriteLine("emit: gui");
+        EmitGui();
+        log?.WriteLine("emit: raygui");
+        EmitRayGui();
     }
 
     public void EmitRaylibInterop()
