@@ -1,0 +1,72 @@
+# After CI succeeds on main: pack with .novolis/version.props, publish, bump build.
+name: CI: main
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  publish:
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_branch == 'main'
+    runs-on: ubuntu-latest
+    environment: nuget.org
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Read package version
+        id: ver
+        shell: bash
+        run: |
+          FILE=".novolis/version.props"
+          major=$(grep -oP '(?<=<NovolisVersionMajor>)[0-9]+' "$FILE" | head -1)
+          minor=$(grep -oP '(?<=<NovolisVersionMinor>)[0-9]+' "$FILE" | head -1)
+          patch=$(grep -oP '(?<=<NovolisVersionPatch>)[0-9]+' "$FILE" | head -1)
+          build=$(grep -oP '(?<=<NovolisVersionBuild>)[0-9]+' "$FILE" | head -1)
+          echo "version=${major}.${minor}.${patch}.${build}" >> "$GITHUB_OUTPUT"
+
+      - run: dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_01_source
+
+      - name: Pack NuGet packages
+        shell: pwsh
+        run: ./scripts/pack-all.ps1 -Version ${{ steps.ver.outputs.version }}
+
+      - name: NuGet login (OIDC)
+        uses: NuGet/login@v1
+        with:
+          user: ${{ vars.NUGET_USERNAME }}
+
+      - name: Push packages to nuget.org
+        shell: pwsh
+        run: |
+          $apiKey = '${{ steps.login.outputs.NUGET_API_KEY }}'
+          $source = 'https://api.nuget.org/v3/index.json'
+          Get-ChildItem artifacts/packages/*.nupkg | ForEach-Object {
+            dotnet nuget push $_.FullName --source $source --api-key $apiKey --skip-duplicate
+          }
+
+      - uses: Novolis-Platform/novolis-workflows/actions/bump-build-version@main
+        id: bump
+
+      - name: Commit build version bump
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .novolis/version.props
+          git commit -m "chore: bump build to ${{ steps.bump.outputs.next_version }} [skip ci]"
+          git push

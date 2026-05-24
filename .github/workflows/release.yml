@@ -1,8 +1,7 @@
 # Publishes Novolis.Raylib.* packages to nuget.org when a GitHub Release is published.
 # Trusted publishing on nuget.org must reference this file name: release.yml
 # (Novolis-Platform/novolis-raylib, OIDC via NuGet/login — no long-lived API key).
-#
-# Manual test (pack only, no push): Actions → Release → Run workflow (dry_run defaults to true).
+# Day-to-day publishes use merge.yml with auto build bump (see .novolis/version.props).
 
 name: Release
 
@@ -12,60 +11,37 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: Semver to pack (release events use the release tag instead)
         required: false
-      dry_run:
-        description: Pack and upload CI artifacts only; do not push to nuget.org
+        type: string
+        description: SemVer override when not triggered by a release tag
+      pack_only:
+        required: false
         type: boolean
-        default: true
-
-concurrency:
-  group: release-${{ github.event.release.id || github.run_id }}
-  cancel-in-progress: false
+        default: false
+        description: Pack and upload CI artifacts only; do not push to nuget.org
 
 permissions:
   contents: read
+  id-token: write
 
 jobs:
-  verify:
-    name: Verify (codegen + build + test)
-    runs-on: windows-latest
+  validate:
+    name: Validate
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 10.0.x
-
-      - name: Fetch vendor sources
-        run: dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_01_source
-
-      - name: Regenerate bindings
-        run: dotnet run --project codegen/Novolis.Raylib.Pipeline -- run generate
-
-      - name: Assert no codegen drift
-        shell: bash
-        run: git diff --exit-code src/Novolis.Raylib.Bindings/ src/Novolis.Raylib.Runtime/ src/Novolis.Raylib.Raygui/
-
-      - name: Build native shim
-        run: dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_02_native
-
-      - name: Build solution
-        run: dotnet build Novolis.Raylib.slnx -c Release
-
-      - name: Test (unit, no native)
-        run: dotnet test Novolis.Raylib.slnx -c Release --filter "Category!=Native" -- --maximum-parallel-tests 1
+      - run: dotnet build -c Release
 
   publish:
     name: Pack and publish
-    needs: verify
-    runs-on: windows-latest
-    permissions:
-      id-token: write
-      contents: read
+    needs: validate
+    runs-on: ubuntu-latest
+    environment: nuget.org
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 10.0.x
@@ -74,7 +50,6 @@ jobs:
         id: version
         shell: bash
         run: |
-          set -euo pipefail
           if [ "${{ github.event_name }}" = "release" ]; then
             TAG="${{ github.event.release.tag_name }}"
           elif [ -n "${{ inputs.version }}" ]; then
@@ -84,48 +59,36 @@ jobs:
             exit 1
           fi
           VERSION="${TAG#v}"
-          if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.+-]+)?(\+[a-zA-Z0-9.+-]+)?$ ]]; then
-            echo "Tag/version is not a valid SemVer 2.0 string: $VERSION"
+          if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(\.[0-9]+)?(-[a-zA-Z0-9.+-]+)?(\+[a-zA-Z0-9.+-]+)?$ ]]; then
+            echo "Tag/version is not a valid version string: $VERSION"
             exit 1
           fi
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "Resolved NovolisRaylibVersion=$VERSION"
 
-      - name: Fetch vendor sources
-        run: dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_01_source
-
-      - name: Build native shim
-        run: dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_02_native
-
       - name: Pack NuGet packages
         shell: pwsh
         run: ./scripts/pack-all.ps1 -Version ${{ steps.version.outputs.version }}
 
-      - name: Upload package artifacts
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
           name: nuget-packages-${{ steps.version.outputs.version }}
-          path: |
-            artifacts/*.nupkg
-            artifacts/*.snupkg
+          path: artifacts/packages/*.nupkg
           if-no-files-found: error
 
       - name: NuGet login (OIDC trusted publishing)
-        if: github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && inputs.dry_run == false)
+        if: inputs.pack_only != true
         uses: NuGet/login@v1
         id: nuget_login
         with:
-          user: ${{ secrets.NUGET_USER }}
+          user: ${{ vars.NUGET_USERNAME }}
 
       - name: Push packages to nuget.org
-        if: github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && inputs.dry_run == false)
+        if: inputs.pack_only != true
         shell: pwsh
         run: |
           $apiKey = '${{ steps.nuget_login.outputs.NUGET_API_KEY }}'
           $source = 'https://api.nuget.org/v3/index.json'
-          $packages = Get-ChildItem artifacts -Include *.nupkg,*.snupkg
-          if ($packages.Count -eq 0) { throw 'No packages found in artifacts/' }
-          foreach ($pkg in $packages) {
-            Write-Host "Pushing $($pkg.Name)"
-            dotnet nuget push $pkg.FullName --source $source --api-key $apiKey --skip-duplicate
+          Get-ChildItem artifacts/packages/*.nupkg | ForEach-Object {
+            dotnet nuget push $_.FullName --source $source --api-key $apiKey --skip-duplicate
           }

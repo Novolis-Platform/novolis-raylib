@@ -1,0 +1,7 @@
+name: CI: pull request
+
+on:
+  pull_request:
+    branches: [main]
+
+# Full validation runs in ci.yml (also triggered on pull_request).
