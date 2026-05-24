@@ -54,13 +54,21 @@ public sealed class RaylibCpuFramePresenter : IFramePresenter, IDisposable
             _uploadBuffer = new byte[pixels.Length * 4];
         }
 
-        for (var i = 0; i < pixels.Length; i++)
+        var width = _width;
+        var height = _height;
+        for (var y = 0; y < height; y++)
         {
-            var p = pixels[i];
-            _uploadBuffer[i * 4] = p.R;
-            _uploadBuffer[i * 4 + 1] = p.G;
-            _uploadBuffer[i * 4 + 2] = p.B;
-            _uploadBuffer[i * 4 + 3] = p.A;
+            var srcRow = y * width;
+            var dstRow = (height - 1 - y) * width;
+            for (var x = 0; x < width; x++)
+            {
+                var p = pixels[srcRow + x];
+                var i = (dstRow + x) * 4;
+                _uploadBuffer[i] = p.R;
+                _uploadBuffer[i + 1] = p.G;
+                _uploadBuffer[i + 2] = p.B;
+                _uploadBuffer[i + 3] = p.A;
+            }
         }
     }
 }
