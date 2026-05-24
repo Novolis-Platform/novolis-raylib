@@ -12,7 +12,7 @@
   </Target>
 
   <ItemGroup>
-    <RaylibCodegenInput Include="$(RaylibCodegenRepoRoot)pipeline\raylib6\*.manifest.json" />
+    <RaylibCodegenInput Include="$(RaylibCodegenRepoRoot)codegen\pipeline\raylib6\*.manifest.json" />
     <RaylibCodegenInput Include="$(RaylibCodegenRepoRoot)codegen\Novolis.Raylib.CodeGen\**\*.cs" />
     <RaylibCodegenInput Include="$(RaylibCodegenRepoRoot)codegen\Novolis.Raylib.CodeGen.Abstractions\**\*.cs" />
     <RaylibCodegenInput Include="$(RaylibCodegenRepoRoot)codegen\Novolis.Raylib.CodeGen.Hooks\**\*.cs" />

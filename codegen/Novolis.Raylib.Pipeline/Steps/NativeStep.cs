@@ -91,13 +91,13 @@ internal sealed class NativeStep : IPipelineStep
     private static async Task EnsureRaylibDefAsync(PipelineContext context, CancellationToken cancellationToken)
     {
         var repoRoot = context.RepoRoot;
-        var rayguiDir = Path.Combine(repoRoot, "native", "raylib6-with-raygui");
+        var rayguiDir = Path.Combine(PipelinePaths.NativeRoot(repoRoot), "raylib6-with-raygui");
         var defPath = Path.Combine(rayguiDir, "generated", "raylib.win-x64.def");
         var raylibDll = Path.Combine(PipelinePaths.RaylibPrebuiltWinDir(repoRoot), "raylib.dll");
         if (!File.Exists(raylibDll) || File.Exists(defPath))
             return;
 
-        var gen = Path.Combine(repoRoot, "pipeline", "raylib6", "generate-raylib-windows-def.cs");
+        var gen = Path.Combine(PipelinePaths.PipelineRaylibDir(repoRoot), "generate-raylib-windows-def.cs");
         if (!File.Exists(gen))
             throw new InvalidOperationException($"Missing {gen}");
 
@@ -117,9 +117,9 @@ internal static class NativeShimCatalog
 {
     public static IEnumerable<string> NativeProjectDirs(string repoRoot) =>
     [
-        Path.Combine(repoRoot, "native", "raylib6-with-raygui"),
-        Path.Combine(repoRoot, "native", "raylib6-platform"),
-        Path.Combine(repoRoot, "native", "raylib6-with-imgui"),
+        Path.Combine(PipelinePaths.NativeRoot(repoRoot), "raylib6-with-raygui"),
+        Path.Combine(PipelinePaths.NativeRoot(repoRoot), "raylib6-platform"),
+        Path.Combine(PipelinePaths.NativeRoot(repoRoot), "raylib6-with-imgui"),
     ];
 
     public static IReadOnlyList<string> ArtifactPaths(string repoRoot)

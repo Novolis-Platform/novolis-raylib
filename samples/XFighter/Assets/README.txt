@@ -1,7 +1,7 @@
 X-Fighter assets
 
 cockpit_overlay.png — optional 1920x1080 HUD frame (transparent center viewport).
-Generate with: pwsh ../../scripts/generate-cockpit-asset.ps1
+Add cockpit_overlay.png manually (1920x1080 HUD frame with transparent center viewport) if desired.
 
 Controls:
   Mouse     — aim (pitch/yaw)

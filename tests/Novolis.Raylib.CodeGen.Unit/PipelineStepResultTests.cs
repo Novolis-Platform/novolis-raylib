@@ -15,7 +15,7 @@ public sealed class PipelineStepResultTests
             Status = StepStatus.Succeeded,
             StartedUtc = DateTimeOffset.Parse("2026-05-18T12:00:00Z"),
             DurationMs = 42,
-            Inputs = new Dictionary<string, string> { ["pipeline/raylib6/versions.json"] = "abc" },
+            Inputs = new Dictionary<string, string> { ["codegen/pipeline/raylib6/versions.json"] = "abc" },
             Outputs = [new StepOutputRecord { Path = "artifacts/raylib-6/include/raylib.h", Sha256 = "def", Bytes = 100 }],
         };
 

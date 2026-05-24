@@ -13,8 +13,8 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <Description>Generated raylib 6 + ImGui P/Invoke (manifest-driven; do not hand-edit Interop/*.g.cs).</Description>
     <IncludeRaygui Condition="'$(IncludeRaygui)' == ''">false</IncludeRaygui>
-    <PipelineStep01>$(MSBuildThisFileDirectory)..\..\pipeline\raylib6\steps\step_01_source\artifacts</PipelineStep01>
-    <PipelineStep02>$(MSBuildThisFileDirectory)..\..\pipeline\raylib6\steps\step_02_native\artifacts</PipelineStep02>
+    <PipelineStep01>$(MSBuildThisFileDirectory)..\..\codegen\pipeline\raylib6\steps\step_01_source\artifacts</PipelineStep01>
+    <PipelineStep02>$(MSBuildThisFileDirectory)..\..\codegen\pipeline\raylib6\steps\step_02_native\artifacts</PipelineStep02>
   </PropertyGroup>
 
   <ItemGroup>
@@ -30,26 +30,26 @@
           Link="novolis_raylib_trace.dll"
           CopyToOutputDirectory="PreserveNewest"
           Condition="Exists('$(PipelineStep02)\novolis_raylib_trace.dll')" />
-    <None Include="$(MSBuildThisFileDirectory)..\..\native\raylib6-platform\out\novolis_raylib_trace.dll"
+    <None Include="$(MSBuildThisFileDirectory)..\..\codegen\native\raylib6-platform\out\novolis_raylib_trace.dll"
           Link="novolis_raylib_trace.dll"
           CopyToOutputDirectory="PreserveNewest"
-          Condition="!Exists('$(PipelineStep02)\novolis_raylib_trace.dll') and Exists('$(MSBuildThisFileDirectory)..\..\native\raylib6-platform\out\novolis_raylib_trace.dll')" />
+          Condition="!Exists('$(PipelineStep02)\novolis_raylib_trace.dll') and Exists('$(MSBuildThisFileDirectory)..\..\codegen\native\raylib6-platform\out\novolis_raylib_trace.dll')" />
     <None Include="$(PipelineStep02)\novolis_imgui.dll"
           Link="novolis_imgui.dll"
           CopyToOutputDirectory="PreserveNewest"
           Condition="Exists('$(PipelineStep02)\novolis_imgui.dll')" />
-    <None Include="$(MSBuildThisFileDirectory)..\..\native\raylib6-with-imgui\out\novolis_imgui.dll"
+    <None Include="$(MSBuildThisFileDirectory)..\..\codegen\native\raylib6-with-imgui\out\novolis_imgui.dll"
           Link="novolis_imgui.dll"
           CopyToOutputDirectory="PreserveNewest"
-          Condition="!Exists('$(PipelineStep02)\novolis_imgui.dll') and Exists('$(MSBuildThisFileDirectory)..\..\native\raylib6-with-imgui\out\novolis_imgui.dll')" />
+          Condition="!Exists('$(PipelineStep02)\novolis_imgui.dll') and Exists('$(MSBuildThisFileDirectory)..\..\codegen\native\raylib6-with-imgui\out\novolis_imgui.dll')" />
     <None Include="$(PipelineStep02)\novolis_raygui.dll"
           Link="novolis_raygui.dll"
           CopyToOutputDirectory="PreserveNewest"
           Condition="'$(IncludeRaygui)' == 'true' and Exists('$(PipelineStep02)\novolis_raygui.dll')" />
-    <None Include="$(MSBuildThisFileDirectory)..\..\native\raylib6-with-raygui\out\novolis_raygui.dll"
+    <None Include="$(MSBuildThisFileDirectory)..\..\codegen\native\raylib6-with-raygui\out\novolis_raygui.dll"
           Link="novolis_raygui.dll"
           CopyToOutputDirectory="PreserveNewest"
-          Condition="'$(IncludeRaygui)' == 'true' and !Exists('$(PipelineStep02)\novolis_raygui.dll') and Exists('$(MSBuildThisFileDirectory)..\..\native\raylib6-with-raygui\out\novolis_raygui.dll')" />
+          Condition="'$(IncludeRaygui)' == 'true' and !Exists('$(PipelineStep02)\novolis_raygui.dll') and Exists('$(MSBuildThisFileDirectory)..\..\codegen\native\raylib6-with-raygui\out\novolis_raygui.dll')" />
   </ItemGroup>
 
   <ItemGroup>

@@ -82,7 +82,7 @@ internal static class Program
               ci-codegen         step_04 .. step_07
               agent-verify       ci-codegen + step_08_build
 
-            Step results: pipeline/raylib6/steps/<step>/result.json + step.log
+            Step results: codegen/pipeline/raylib6/steps/<step>/result.json + step.log
             """);
     }
 }

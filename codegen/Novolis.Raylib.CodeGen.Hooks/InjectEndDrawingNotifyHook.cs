@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Novolis.Raylib.CodeGen;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -24,7 +25,7 @@ public sealed class InjectEndDrawingNotifyHook : IRaylibCodegenHook
 
     private static DebugManifestDocument LoadDebugManifest(string repoRoot)
     {
-        var path = Path.Combine(repoRoot, "pipeline", "raylib6", "raylib-debug.manifest.json");
+        var path = Path.Combine(PipelinePaths.PipelineRaylibDir(repoRoot), "raylib-debug.manifest.json");
         if (!File.Exists(path))
             return new DebugManifestDocument("EndDrawing", "EndDrawing");
 

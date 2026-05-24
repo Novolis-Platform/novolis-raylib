@@ -149,7 +149,7 @@ public sealed class RaylibManifestVerifierTests
     public async Task Verify_skips_when_header_missing()
     {
         var tempRoot = Path.Combine(Path.GetTempPath(), "novolis-pipeline-unit", Guid.NewGuid().ToString("N"));
-        var pipelineDir = Path.Combine(tempRoot, "pipeline", "raylib6");
+        var pipelineDir = PipelinePaths.PipelineRaylibDir(tempRoot);
         Directory.CreateDirectory(pipelineDir);
         File.WriteAllText(
             Path.Combine(pipelineDir, "raylib-exports.manifest.json"),
@@ -163,7 +163,7 @@ public sealed class RaylibManifestVerifierTests
     public async Task Verify_fails_when_symbol_missing_from_header()
     {
         var tempRoot = Path.Combine(Path.GetTempPath(), "novolis-pipeline-unit", Guid.NewGuid().ToString("N"));
-        var pipelineDir = Path.Combine(tempRoot, "pipeline", "raylib6");
+        var pipelineDir = PipelinePaths.PipelineRaylibDir(tempRoot);
         var artifacts = Path.Combine(pipelineDir, "steps", "step_01_source", "artifacts", "raylib-6", "include");
         Directory.CreateDirectory(artifacts);
         File.WriteAllText(
@@ -179,7 +179,7 @@ public sealed class RaylibManifestVerifierTests
     public async Task Verify_succeeds_when_symbol_present()
     {
         var tempRoot = Path.Combine(Path.GetTempPath(), "novolis-pipeline-unit", Guid.NewGuid().ToString("N"));
-        var pipelineDir = Path.Combine(tempRoot, "pipeline", "raylib6");
+        var pipelineDir = PipelinePaths.PipelineRaylibDir(tempRoot);
         var artifacts = Path.Combine(pipelineDir, "steps", "step_01_source", "artifacts", "raylib-6", "include");
         Directory.CreateDirectory(artifacts);
         File.WriteAllText(

@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using Novolis.Raylib.CodeGen;
 using Novolis.Raylib.Interop;
 
 namespace Novolis.Raylib.CodeGen.Unit;
@@ -42,7 +43,7 @@ public sealed class RaylibManifestVerifierEdgeTests
     public async Task Verify_returns_2_when_manifest_missing()
     {
         var tempRoot = Path.Combine(Path.GetTempPath(), "novolis-codegen-unit", Guid.NewGuid().ToString("N"));
-        Directory.CreateDirectory(Path.Combine(tempRoot, "pipeline", "raylib6"));
+        Directory.CreateDirectory(PipelinePaths.PipelineRaylibDir(tempRoot));
         var code = RaylibManifestVerifier.Verify(tempRoot);
         await Assert.That(code).IsEqualTo(2);
         Directory.Delete(tempRoot, recursive: true);
@@ -52,7 +53,7 @@ public sealed class RaylibManifestVerifierEdgeTests
     public async Task Verify_returns_3_when_imports_empty()
     {
         var tempRoot = Path.Combine(Path.GetTempPath(), "novolis-codegen-unit", Guid.NewGuid().ToString("N"));
-        var dir = Path.Combine(tempRoot, "pipeline", "raylib6");
+        var dir = PipelinePaths.PipelineRaylibDir(tempRoot);
         var artifacts = Path.Combine(dir, "steps", "step_01_source", "artifacts", "raylib-6", "include");
         Directory.CreateDirectory(artifacts);
         File.WriteAllText(Path.Combine(dir, "raylib-exports.manifest.json"), """{"imports":[]}""");

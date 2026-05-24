@@ -14,7 +14,7 @@ public sealed class RaylibInteropOptimizationTests
     {
         var root = RepoTestPaths.TryRepositoryRoot()
                    ?? throw new InvalidOperationException("Could not resolve repository root.");
-        var manifestPath = Path.Combine(root, "pipeline", "raylib6", "raylib-exports.manifest.json");
+        var manifestPath = Path.Combine(PipelinePaths.PipelineRaylibDir(root), "raylib-exports.manifest.json");
         var policy = RaylibManifestModels.LoadInteropPolicy(manifestPath);
 
         var beginDrawing = RaylibManifestModels.LoadImports(manifestPath)

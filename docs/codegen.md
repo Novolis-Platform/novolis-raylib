@@ -1,10 +1,10 @@
 # Codegen
 
-Bindings are generated from JSON manifests under `pipeline/raylib6/`.
+Bindings are generated from JSON manifests under `codegen/pipeline/raylib6/`.
 
 ## Linear pipeline
 
-Maintainer flow is a **step pipeline** under `pipeline/raylib6/steps/`. Each step writes:
+Maintainer flow is a **step pipeline** under `codegen/pipeline/raylib6/steps/`. Each step writes:
 
 - `result.json` — status, input hashes, output fingerprints (committed)
 - `step.log` — full console capture (committed)
@@ -57,4 +57,4 @@ Regenerate bindings only:
 dotnet run --project codegen/Novolis.Raylib.Pipeline -- run generate
 ```
 
-Agent gate (drift + build): `pwsh ./scripts/agent-verify.ps1` — see [agentic-tools/README.md](../agentic-tools/README.md).
+Agent gate (drift + build): `dotnet run --project codegen/Novolis.Raylib.Pipeline -- run agent-verify` — see [agentic-tools/README.md](../agentic-tools/README.md).

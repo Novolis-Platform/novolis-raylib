@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using Novolis.Raylib.CodeGen;
 using Novolis.Raylib.Interop;
 
 namespace Novolis.Raylib.CodeGen.Unit;
@@ -15,7 +16,7 @@ public sealed class RaylibInteropReflectionTests
         var root = RepoTestPaths.TryRepositoryRoot()
                    ?? throw new InvalidOperationException("Could not resolve repository root.");
 
-        var manifestPath = Path.Combine(root, "pipeline", "raylib6", "raylib-exports.manifest.json");
+        var manifestPath = Path.Combine(PipelinePaths.PipelineRaylibDir(root), "raylib-exports.manifest.json");
         using var doc = JsonDocument.Parse(await File.ReadAllTextAsync(manifestPath));
         var imports = doc.RootElement.GetProperty("imports");
         var names = new List<string>();
@@ -42,7 +43,7 @@ public sealed class RaylibInteropReflectionTests
         var root = RepoTestPaths.TryRepositoryRoot()
                    ?? throw new InvalidOperationException("Could not resolve repository root.");
 
-        var manifestPath = Path.Combine(root, "pipeline", "raylib6", "raylib-exports.manifest.json");
+        var manifestPath = Path.Combine(PipelinePaths.PipelineRaylibDir(root), "raylib-exports.manifest.json");
         using var doc = JsonDocument.Parse(await File.ReadAllTextAsync(manifestPath));
         var imports = doc.RootElement.GetProperty("imports");
         var templates = new HashSet<string>(StringComparer.Ordinal);
@@ -66,7 +67,7 @@ public sealed class RaylibInteropReflectionTests
         var root = RepoTestPaths.TryRepositoryRoot()
                    ?? throw new InvalidOperationException("Could not resolve repository root.");
 
-        var manifestPath = Path.Combine(root, "pipeline", "raylib6", "raylib-exports.manifest.json");
+        var manifestPath = Path.Combine(PipelinePaths.PipelineRaylibDir(root), "raylib-exports.manifest.json");
         var manifestBytes = await File.ReadAllBytesAsync(manifestPath);
         var expected = Convert.ToHexString(SHA256.HashData(manifestBytes)).ToLowerInvariant();
 
@@ -86,7 +87,7 @@ public sealed class RaylibInteropReflectionTests
         var root = RepoTestPaths.TryRepositoryRoot()
                    ?? throw new InvalidOperationException("Could not resolve repository root.");
 
-        var manifestPath = Path.Combine(root, "pipeline", "raylib6", "raygui-exports.manifest.json");
+        var manifestPath = Path.Combine(PipelinePaths.PipelineRaylibDir(root), "raygui-exports.manifest.json");
         using var doc = JsonDocument.Parse(await File.ReadAllTextAsync(manifestPath));
         var functions = doc.RootElement.GetProperty("functions");
         var exports = new List<string>();
@@ -109,7 +110,7 @@ public sealed class RaylibInteropReflectionTests
         var root = RepoTestPaths.TryRepositoryRoot()
                    ?? throw new InvalidOperationException("Could not resolve repository root.");
 
-        var manifestPath = Path.Combine(root, "pipeline", "raylib6", "raygui-exports.manifest.json");
+        var manifestPath = Path.Combine(PipelinePaths.PipelineRaylibDir(root), "raygui-exports.manifest.json");
         using var doc = JsonDocument.Parse(await File.ReadAllTextAsync(manifestPath));
         var functions = doc.RootElement.GetProperty("functions");
         var templates = new HashSet<string>(StringComparer.Ordinal);
@@ -140,7 +141,7 @@ public sealed class RaylibInteropReflectionTests
         var root = RepoTestPaths.TryRepositoryRoot()
                    ?? throw new InvalidOperationException("Could not resolve repository root.");
 
-        var manifestPath = Path.Combine(root, "pipeline", "raylib6", "imgui-exports.manifest.json");
+        var manifestPath = Path.Combine(PipelinePaths.PipelineRaylibDir(root), "imgui-exports.manifest.json");
         using var doc = JsonDocument.Parse(await File.ReadAllTextAsync(manifestPath));
         var functions = doc.RootElement.GetProperty("functions");
         var exports = new List<string>();
@@ -163,7 +164,7 @@ public sealed class RaylibInteropReflectionTests
         var root = RepoTestPaths.TryRepositoryRoot()
                    ?? throw new InvalidOperationException("Could not resolve repository root.");
 
-        var manifestPath = Path.Combine(root, "pipeline", "raylib6", "imgui-exports.manifest.json");
+        var manifestPath = Path.Combine(PipelinePaths.PipelineRaylibDir(root), "imgui-exports.manifest.json");
         using var doc = JsonDocument.Parse(await File.ReadAllTextAsync(manifestPath));
         var functions = doc.RootElement.GetProperty("functions");
         var templates = new HashSet<string>(StringComparer.Ordinal);

@@ -41,13 +41,18 @@ Every run writes a review folder under:
 
 Open `index.html` in a browser for human or agentic visual review, even when SHA256 assert passes in CI.
 
-Local helpers:
+Local golden run (Windows + native raylib):
 
-```powershell
-./scripts/run-golden-tests.ps1
-./scripts/open-latest-golden-report.ps1
-./scripts/seed-golden-baselines.ps1
+```bash
+dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_01_source
+dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_02_native
+dotnet build Novolis.Raylib.slnx -c Release
+dotnet test tests/Novolis.Raylib.Golden/Novolis.Raylib.Golden.csproj -c Release --filter "Category=Golden" -- --maximum-parallel-tests 1
 ```
+
+Refresh committed baselines: `dotnet run --project tests/Novolis.Raylib.Golden.Seed/Novolis.Raylib.Golden.Seed.csproj -c Release` (after `run maintainer` if native assets changed).
+
+Golden QA HTML reports live under `temp/test-renders/` — open the newest `index.html` after a run.
 
 ### Committed baselines
 
@@ -78,7 +83,7 @@ See `tests/Novolis.Raylib.Golden/UpdateBaselinesTests` (`[Explicit]`) or `dotnet
 - **Canonical CI platform:** Windows (`golden-tests` job).
 - **Assertion:** exact SHA256 of PNG bytes (no per-pixel tolerance in v1).
 - **Stories:** fixed `width` / `height` / `maxFrames`; avoid time-based animation.
-- **On hash failure:** open `index.html`, compare the expectations column, then run `seed-golden-baselines.ps1` only if the visual change is intentional.
+- **On hash failure:** open `index.html`, compare the expectations column, then re-seed baselines only if the visual change is intentional (`Novolis.Raylib.Golden.Seed` or `GoldenRunMode.UpdateBaselines`).
 - **v2 (deferred):** tolerance thresholds and diff images in the HTML report.
 
 ### Capture vs debug
@@ -183,12 +188,6 @@ Prefer `RaylibTestRuntime.EnableForAssembly()` and `RaylibTestRuntime.EnterNativ
 - `RaylibHostingTestHost` — in-process `IHost`
 - `NativeRaylibTestGate.IsAvailable` — probe native offscreen availability
 
-E2E (native):
-
-```powershell
-./scripts/raylib-e2e.ps1
-```
-
 ## Coverage
 
 Line coverage targets **hand-written C#** in `src/` and `codegen/`. Generated `*.g.cs` files are excluded (guarded by codegen drift and golden tests instead).
@@ -201,13 +200,11 @@ Line coverage targets **hand-written C#** in `src/` and `codegen/`. Generated `*
 
 Local run:
 
-```powershell
-./scripts/run-coverage.ps1
+```bash
+dotnet test Novolis.Raylib.slnx -c Release --coverage --coverage-output-format cobertura --results-directory artifacts/coverage --filter "Category!=Native"
 ```
 
-Output: `artifacts/coverage/index.html` and `coverage/baseline-summary.json`.
-
-Configuration: `build/Novolis.Raylib.Coverage.props`, `coverage.runsettings`, and `dotnet test --coverage` (Microsoft Testing Platform / dotnet-coverage).
+Output: `artifacts/coverage/` (cobertura + HTML when merged). Configuration: `build/Novolis.Raylib.Coverage.props`, `coverage.runsettings`.
 
 CI job `coverage` (Windows) runs tests with coverage and fails below the current floor (**48%** line rate on hand-written assemblies). Ratchet milestones: **70%** → **85%** → **95%** (raise `COVERAGE_THRESHOLD` in CI as coverage improves).
 

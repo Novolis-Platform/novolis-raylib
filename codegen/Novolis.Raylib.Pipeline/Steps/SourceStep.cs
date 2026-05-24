@@ -118,9 +118,9 @@ internal sealed class SourceStep : IPipelineStep
         var repoRoot = context.RepoRoot;
         var pairs = new[]
         {
-            (Path.Combine(repoRoot, "vendor", "raylib-6"), PipelinePaths.RaylibRoot(repoRoot)),
-            (Path.Combine(repoRoot, "vendor", "raygui-6"), PipelinePaths.RayguiRoot(repoRoot)),
-            (Path.Combine(repoRoot, "vendor", "raylib-cimgui"), PipelinePaths.RaylibCimguiRoot(repoRoot)),
+            (Path.Combine(PipelinePaths.VendorRoot(repoRoot), "raylib-6"), PipelinePaths.RaylibRoot(repoRoot)),
+            (Path.Combine(PipelinePaths.VendorRoot(repoRoot), "raygui-6"), PipelinePaths.RayguiRoot(repoRoot)),
+            (Path.Combine(PipelinePaths.VendorRoot(repoRoot), "raylib-cimgui"), PipelinePaths.RaylibCimguiRoot(repoRoot)),
         };
 
         foreach (var (source, dest) in pairs)

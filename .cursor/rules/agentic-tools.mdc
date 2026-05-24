@@ -10,8 +10,8 @@ Read [agentic-tools/README.md](agentic-tools/README.md) and [AGENTS.md](AGENTS.m
 ## Required after manifest / codegen hook edits
 
 ```bash
-dotnet run --project codegen/Novolis.Raylib.CodeGen -- generate
-pwsh ./scripts/agent-verify.ps1
+dotnet run --project codegen/Novolis.Raylib.Pipeline -- run generate
+dotnet run --project codegen/Novolis.Raylib.Pipeline -- run agent-verify
 ```
 
 Machine-readable catalog: [agentic-tools/registry.json](agentic-tools/registry.json).

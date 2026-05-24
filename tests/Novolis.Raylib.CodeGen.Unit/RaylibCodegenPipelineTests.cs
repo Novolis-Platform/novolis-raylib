@@ -12,7 +12,7 @@ public sealed class RaylibCodegenPipelineTests
         var root = RepoTestPaths.TryRepositoryRoot()
                    ?? throw new InvalidOperationException("Could not resolve repository root.");
 
-        var manifestPath = Path.Combine(root, "pipeline", "raylib6", "raylib-exports.manifest.json");
+        var manifestPath = Path.Combine(PipelinePaths.PipelineRaylibDir(root), "raylib-exports.manifest.json");
         var manifestBytes = await File.ReadAllBytesAsync(manifestPath);
         var manifestSha256 = Convert.ToHexString(SHA256.HashData(manifestBytes)).ToLowerInvariant();
 

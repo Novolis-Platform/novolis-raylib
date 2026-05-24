@@ -1,0 +1,11 @@
+{
+  "stepId": "step_03_verify_manifest",
+  "status": "Succeeded",
+  "pipelineVersion": "1",
+  "inputs": {
+    "codegen/pipeline/raylib6/versions.json": "23fbffd47a4a3e031862ab30db3020aee731d91e88cfce450e1d97e78a5b22ad",
+    "codegen/pipeline/raylib6/raylib-exports.manifest.json": "462b400c8e7754f9d678c8c8d8c9149243ac9a0ad42c4946f4b7bf2b245fc3e1",
+    "codegen/pipeline/raylib6/steps/step_01_source/artifacts/raylib-6/include/raylib.h": "1842111e48260e622d0ff2e6f4ac6141508d6f369791265ba518e7502c760ccf"
+  },
+  "outputs": []
+}

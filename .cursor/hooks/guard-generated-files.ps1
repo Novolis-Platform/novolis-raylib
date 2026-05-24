@@ -41,9 +41,9 @@ if (-not $isGenerated) {
 
 $msg = @"
 Direct edits to generated *.g.cs are not allowed in this repo.
-Edit pipeline/raylib6/*.manifest.json (or CodeGen hooks), then run:
-  dotnet run --project codegen/Novolis.Raylib.CodeGen -- generate
-  pwsh ./scripts/agent-verify.ps1
+Edit codegen/pipeline/raylib6/*.manifest.json (or CodeGen hooks), then run:
+  dotnet run --project codegen/Novolis.Raylib.Pipeline -- run generate
+  dotnet run --project codegen/Novolis.Raylib.Pipeline -- run agent-verify
 See agentic-tools/workflows/codegen.md
 "@
 

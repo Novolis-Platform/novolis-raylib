@@ -60,8 +60,9 @@ Legacy env vars (`NOVOLIS_RAYLIB_OFFSCREEN_TESTS`, `NOVOLIS_RAYLIB_NATIVE_TESTS`
 
 Full details: [docs/testing.md](../../docs/testing.md).
 
-## E2E (maintainers)
+## Maintainer pipeline (native + tests)
 
-```powershell
-./scripts/raylib-e2e.ps1
+```bash
+dotnet run --project codegen/Novolis.Raylib.Pipeline -- run maintainer
+dotnet test Novolis.Raylib.slnx -c Release -- --maximum-parallel-tests 1
 ```

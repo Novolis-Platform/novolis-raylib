@@ -6,7 +6,7 @@ Generated P/Invoke for raylib 6 and the raygui shim (`Raylib6Native`, `RayguiShi
 
 ## Maintainer rules
 
-- **Do not hand-edit** `Interop/*.g.cs` — change manifests under `pipeline/raylib6/` and run codegen.
+- **Do not hand-edit** `Interop/*.g.cs` — change manifests under `codegen/pipeline/raylib6/` and run codegen.
 - **Hand-edited public types:** `Camera`, `Texture`, input enums, `RaylibColors` presets.
 
 ```bash

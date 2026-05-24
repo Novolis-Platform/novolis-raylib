@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
-  <!-- Generated from build/version.json via scripts/sync-version-props.ps1 -->
+  <!-- Platform version — see .novolis/version.props and build/version.json -->
   <PropertyGroup Label="Novolis platform version (YEAR.MAJOR.MINOR; BUILD from CI)">
     <NovolisYear>2026</NovolisYear>
     <NovolisMajor>1</NovolisMajor>

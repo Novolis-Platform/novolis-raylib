@@ -16,7 +16,7 @@ internal static class RepoPaths
     }
 
     public static string PipelineDir(string repoRoot) =>
-        Path.Combine(repoRoot, "pipeline", "raylib6");
+        PipelinePaths.PipelineRaylibDir(repoRoot);
 
     public static string BindingsDir(string repoRoot) =>
         Path.Combine(repoRoot, "src", "Novolis.Raylib.Bindings");

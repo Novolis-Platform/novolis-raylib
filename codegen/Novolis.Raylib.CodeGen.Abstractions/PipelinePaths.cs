@@ -15,8 +15,17 @@ public static class PipelinePaths
         return Directory.GetCurrentDirectory();
     }
 
+    public static string CodegenRoot(string repoRoot) =>
+        Path.Combine(repoRoot, "codegen");
+
     public static string PipelineRaylibDir(string repoRoot) =>
-        Path.Combine(repoRoot, "pipeline", "raylib6");
+        Path.Combine(CodegenRoot(repoRoot), "pipeline", "raylib6");
+
+    public static string VendorRoot(string repoRoot) =>
+        Path.Combine(CodegenRoot(repoRoot), "vendor");
+
+    public static string NativeRoot(string repoRoot) =>
+        Path.Combine(CodegenRoot(repoRoot), "native");
 
     public static string StepsRoot(string repoRoot) =>
         Path.Combine(PipelineRaylibDir(repoRoot), "steps");
@@ -64,5 +73,5 @@ public static class PipelinePaths
         StepArtifactsDir(repoRoot, "step_02_native");
 
     public static string NativeShimOutDir(string repoRoot, string shimFolder) =>
-        Path.Combine(repoRoot, "native", shimFolder, "out");
+        Path.Combine(NativeRoot(repoRoot), shimFolder, "out");
 }

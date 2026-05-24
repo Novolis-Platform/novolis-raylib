@@ -4,7 +4,7 @@ Guidance for AI agents and contributors working in **novolis-raylib**.
 
 ## What this repo is
 
-Multi-package **.NET 10** bindings for [raylib](https://www.raylib.com/) 6 and raygui, published as NuGet packages under the `Novolis.Raylib.*` id prefix. Bindings are **manifest-driven**: JSON under `pipeline/raylib6/` drives Roslyn codegen. **Interop** (`*.g.cs` in `Novolis.Raylib.Bindings`) and **public API** (façades, `Hud`, `Gui` in `Novolis.Raylib.Runtime`) are generated. Hand-crafted shell/debug live in `Runtime/` beside generated code.
+Multi-package **.NET 10** bindings for [raylib](https://www.raylib.com/) 6 and raygui, published as NuGet packages under the `Novolis.Raylib.*` id prefix. Bindings are **manifest-driven**: JSON under `codegen/pipeline/raylib6/` drives Roslyn codegen. **Interop** (`*.g.cs` in `Novolis.Raylib.Bindings`) and **public API** (façades, `Hud`, `Gui` in `Novolis.Raylib.Runtime`) are generated. Hand-crafted shell/debug live in `Runtime/` beside generated code.
 
 **Consumer entry point:** `Novolis.Raylib` (meta package). Do not tell app authors to reference `Novolis.Raylib.Native` or `Novolis.Raylib.Abstractions` directly.
 
@@ -22,7 +22,7 @@ Multi-package **.NET 10** bindings for [raylib](https://www.raylib.com/) 6 and r
 
 ```bash
 dotnet run --project codegen/Novolis.Raylib.Pipeline -- run generate
-pwsh ./scripts/agent-verify.ps1
+dotnet run --project codegen/Novolis.Raylib.Pipeline -- run agent-verify
 ```
 
 ## Repository layout
@@ -41,17 +41,16 @@ pwsh ./scripts/agent-verify.ps1
 | `codegen/Novolis.Raylib.CodeGen/` | Roslyn emitters: `verify`, `suggest-raylib`, `hooks list` (not published) |
 | `codegen/Novolis.Raylib.Pipeline/` | Linear maintainer pipeline (`run maintainer`, `run generate`, step folders) |
 | `codegen/Novolis.Raylib.CodeGen.Hooks/` | `IRaylibCodegenHook` implementations (not published) |
-| `pipeline/raylib6/` | Manifests + `steps/` (result.json, step.log, artifacts/) |
-| `pipeline/raylib6/steps/step_01_source/artifacts/` | Fetched raylib, raygui, raylib-cimgui (gitignored under artifacts/) |
-| `native/raylib6-platform/` | Trace forwarder (`novolis_raylib_trace`) |
-| `native/raylib6-with-imgui/` | ImGui shim (`novolis_imgui.dll`) |
-| `native/raylib6-with-raygui/` | RayGui add-on shim (`novolis_raygui.dll`) |
+| `codegen/pipeline/raylib6/` | Manifests + `steps/` (result.json, step.log, artifacts/) |
+| `codegen/pipeline/raylib6/steps/step_01_source/artifacts/` | Fetched raylib, raygui, raylib-cimgui (gitignored under artifacts/) |
+| `codegen/native/raylib6-platform/` | Trace forwarder (`novolis_raylib_trace`) |
+| `codegen/native/raylib6-with-imgui/` | ImGui shim (`novolis_imgui.dll`) |
+| `codegen/native/raylib6-with-raygui/` | RayGui add-on shim (`novolis_raygui.dll`) |
 | `src/Novolis.Raylib.Raygui/` | Optional raygui widgets add-on package |
 | `build/` | MSBuild targets (codegen on compile, native copy) |
 | `tests/` | TUnit unit/integration tests |
 | `samples/` | HelloGame, HelloRuntime, HelloHosting, HelloCapture, HelloTesting |
 | `docs/` | `codegen.md`, `testing.md` |
-| `scripts/` | `agent-verify.ps1`, `raylib-codegen-check.ps1`, `raylib-e2e.ps1`, `pack-all.ps1` |
 | `agentic-tools/` | Agent registry, workflows (codegen discipline) |
 
 Solution file: `Novolis.Raylib.slnx`. Central package versions: `Directory.Packages.props`.
@@ -91,7 +90,7 @@ Hand-written shell code lives in `Runtime/` (`Shell/`, `Debug/`, …). Shared ty
 
 ## Codegen rules (read before touching bindings)
 
-1. **Source of truth:** `pipeline/raylib6/*.manifest.json` (exports, raygui, debug hooks, façades).
+1. **Source of truth:** `codegen/pipeline/raylib6/*.manifest.json` (exports, raygui, debug hooks, façades).
 2. **Generated output:** `src/Novolis.Raylib.Bindings/Interop/*.g.cs` and `src/Novolis.Raylib.Runtime/**/*.g.cs` — each file has `ManifestSha256` in the header.
 3. **Regenerate:**
    ```bash
@@ -101,10 +100,10 @@ Hand-written shell code lives in `Runtime/` (`Shell/`, `Debug/`, …). Shared ty
    ```bash
    dotnet run --project codegen/Novolis.Raylib.Pipeline -- run maintainer
    ```
-4. **Extend behavior:** add or change hooks in `codegen/Novolis.Raylib.CodeGen.Hooks/` (see `pipeline/raylib6/hooks/README.md`).
+4. **Extend behavior:** add or change hooks in `codegen/Novolis.Raylib.CodeGen.Hooks/` (see `codegen/pipeline/raylib6/hooks/README.md`).
 5. **Drift check (CI/local):**
-   ```powershell
-   ./scripts/raylib-codegen-check.ps1
+   ```bash
+   dotnet run --project codegen/Novolis.Raylib.Pipeline -- run ci-codegen
    ```
    CI job `codegen-drift` runs the same check on Ubuntu.
 6. **MSBuild:** `build/Novolis.Raylib.CodeGen.targets` runs codegen before `CoreCompile` on `Novolis.Raylib.Bindings` when manifests/hooks change. Packing sets `RunRaylibCodegen=false`.
@@ -126,7 +125,7 @@ dotnet build Novolis.Raylib.slnx -c Release
 dotnet test Novolis.Raylib.slnx -c Release --filter "Category!=Native" -- --maximum-parallel-tests 1
 ```
 
-**Golden image tests** (preferred for visuals): `tests/Novolis.Raylib.Golden`, `[Category("Golden")]`, no env vars — use `RaylibTestRuntime.EnableForAssembly()`. CI job `golden-tests` on Windows. See [docs/testing.md](docs/testing.md). Scripts: `./scripts/run-golden-tests.ps1`, `./scripts/seed-golden-baselines.ps1`.
+**Golden image tests** (preferred for visuals): `tests/Novolis.Raylib.Golden`, `[Category("Golden")]`, no env vars — use `RaylibTestRuntime.EnableForAssembly()`. CI job `golden-tests` on Windows. See [docs/testing.md](docs/testing.md).
 
 Legacy native/offscreen tests may still use environment variables (default unit CI does not set them):
 
@@ -137,9 +136,7 @@ Legacy native/offscreen tests may still use environment variables (default unit 
 | `NOVOLIS_RAYLIB_HEADLESS=1` | Skip blocking window loop (samples/CI) |
 | `NOVOLIS_RAYLIB_DEBUG_CAPTURE=1` | Debug frame capture in Bindings (not golden CI) |
 
-Full native E2E: `./scripts/raylib-e2e.ps1` (sets offscreen + native env, runs pipeline + CodeGen unit tests).
-
-Pack all NuGet packages: `./scripts/pack-all.ps1` → `artifacts/`.
+Pack shipping packages: `dotnet pack Novolis.Raylib.slnx -c Release -o artifacts/packages`.
 
 ## CI (`.github/workflows/ci.yml`)
 
@@ -160,7 +157,7 @@ Pack all NuGet packages: `./scripts/pack-all.ps1` → `artifacts/`.
 
 ## Stale references in the tree
 
-Some comments and help text still mention **Star Conflicts Revolt**, `tools/raylib6-pipeline/`, or `StarConflictsRevolt.Raylib6.Bindings`. The live paths are `pipeline/raylib6/` and `src/Novolis.Raylib.*`. Prefer updating call sites to current paths when you touch those files; do not copy stale paths into new code.
+Some comments and help text still mention **Star Conflicts Revolt**, `tools/raylib6-pipeline/`, or `StarConflictsRevolt.Raylib6.Bindings`. The live paths are `codegen/pipeline/raylib6/` and `src/Novolis.Raylib.*`. Prefer updating call sites to current paths when you touch those files; do not copy stale paths into new code.
 
 ## Common agent tasks
 

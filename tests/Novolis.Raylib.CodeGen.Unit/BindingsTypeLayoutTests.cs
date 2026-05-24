@@ -1,5 +1,6 @@
 using System.Numerics;
 using System.Runtime.InteropServices;
+using Novolis.Raylib.CodeGen;
 using Novolis.Raylib.Interop;
 using Novolis.Raylib.Rendering;
 
@@ -28,7 +29,7 @@ public sealed class RaylibManifestSuggesterUnitTests
     public async Task Suggest_returns_2_when_header_missing()
     {
         var tempRoot = Path.Combine(Path.GetTempPath(), "novolis-codegen-unit", Guid.NewGuid().ToString("N"));
-        Directory.CreateDirectory(Path.Combine(tempRoot, "pipeline", "raylib6"));
+        Directory.CreateDirectory(PipelinePaths.PipelineRaylibDir(tempRoot));
         var code = RaylibManifestSuggester.Suggest(tempRoot);
         await Assert.That(code).IsEqualTo(2);
         Directory.Delete(tempRoot, recursive: true);
@@ -38,7 +39,7 @@ public sealed class RaylibManifestSuggesterUnitTests
     public async Task Suggest_reports_missing_symbols()
     {
         var tempRoot = Path.Combine(Path.GetTempPath(), "novolis-codegen-unit", Guid.NewGuid().ToString("N"));
-        var pipelineDir = Path.Combine(tempRoot, "pipeline", "raylib6");
+        var pipelineDir = PipelinePaths.PipelineRaylibDir(tempRoot);
         var artifacts = Path.Combine(pipelineDir, "steps", "step_01_source", "artifacts", "raylib-6", "include");
         Directory.CreateDirectory(artifacts);
         File.WriteAllText(Path.Combine(pipelineDir, "raylib-exports.manifest.json"), """{"imports":[{"name":"InitWindow"}]}""");

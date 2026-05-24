@@ -1,6 +1,6 @@
 ---
 description: Manifest-driven codegen — edit JSON, then regenerate
-globs: pipeline/raylib6/**/*.json,codegen/**/*
+globs: codegen/pipeline/raylib6/**/*.json,codegen/**/*
 alwaysApply: false
 ---
 
@@ -14,8 +14,8 @@ alwaysApply: false
 | New interop template | `RaylibInteropEmitter.cs` + manifest row | `generate` |
 
 ```bash
-dotnet run --project codegen/Novolis.Raylib.CodeGen -- generate
-pwsh ./scripts/agent-verify.ps1
+dotnet run --project codegen/Novolis.Raylib.Pipeline -- run generate
+dotnet run --project codegen/Novolis.Raylib.Pipeline -- run agent-verify
 ```
 
 Façades emit to **`src/Novolis.Raylib.Runtime/`**. Interop emits to **`src/Novolis.Raylib.Bindings/Interop/`**.

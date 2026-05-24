@@ -186,7 +186,7 @@ internal sealed class DriftStep : IPipelineStep
     {
         var paths = new[]
         {
-            "pipeline/raylib6/",
+            "codegen/pipeline/raylib6/",
             "src/Novolis.Raylib.Bindings/",
             "src/Novolis.Raylib.Runtime/",
             "src/Novolis.Raylib.Raygui/",
