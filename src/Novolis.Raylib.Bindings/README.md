@@ -4,6 +4,20 @@ Generated P/Invoke for raylib 6 and the raygui shim (`Raylib6Native`, `RayguiShi
 
 **Application authors:** use **`Novolis.Raylib.Runtime`** façades (`Graphics`, `World`, `Hud`, `Gui`). This package is for advanced scenarios and is pulled in transitively.
 
+## Install
+
+```bash
+dotnet add package Novolis.Raylib
+```
+
+## Quick start
+
+Regenerate bindings from manifests (maintainers only):
+
+```bash
+dotnet run --project codegen/Novolis.Raylib.Pipeline -- run generate
+```
+
 ## Maintainer rules
 
 - **Do not hand-edit** `Interop/*.g.cs` — change manifests under `codegen/pipeline/raylib6/` and run codegen.

@@ -2,7 +2,17 @@
 
 Transitive NuGet package: **raylib**, **novolis_raylib_trace**, and **novolis_imgui** native binaries per RID.
 
-No C# API. Install **`Novolis.Raylib`** only; native assets copy to the app output via `buildTransitive/Novolis.Raylib.Native.targets`.
+No C# API. Native assets copy to the app output via `buildTransitive/Novolis.Raylib.Native.targets`.
+
+## Install
+
+```bash
+dotnet add package Novolis.Raylib
+```
+
+## Quick start
+
+Do not reference this package directly. Add **`Novolis.Raylib`** to your app; native runtimes are restored automatically for your RID.
 
 RayGui (`novolis_raygui`) ships in **`Novolis.Raylib.Raygui.Native`** when you reference the add-on package.
 

@@ -1,8 +1,14 @@
 # Novolis.Raylib.Hosting
 
-`IHost` integration with phased game-loop systems. Install **`Novolis.Raylib`** for apps.
+`IHost` integration with phased game-loop systems (included transitively by **`Novolis.Raylib`**).
 
-## Example
+## Install
+
+```bash
+dotnet add package Novolis.Raylib
+```
+
+## Quick start
 
 ```csharp
 using Microsoft.Extensions.DependencyInjection;

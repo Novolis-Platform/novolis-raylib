@@ -2,6 +2,16 @@
 
 Manifest-generated raylib façades plus HUD/GUI layers, with a hand-crafted window shell.
 
+## Install
+
+```bash
+dotnet add package Novolis.Raylib
+```
+
+## Quick start
+
+Use `RaylibRuntimeShell` or the static `Graphics` / `World` / `Hud` / `Gui` entry points inside an active shell loop (see frame order below).
+
 ## Frame order
 
 Each frame inside the shell loop:

@@ -1,8 +1,14 @@
 # Novolis.Raylib.Game
 
-Low-ceremony API for jams and tutorials. Install **`Novolis.Raylib`** in applications (this package is included transitively).
+Low-ceremony API for jams and tutorials (included transitively by **`Novolis.Raylib`**).
 
-## Example
+## Install
+
+```bash
+dotnet add package Novolis.Raylib
+```
+
+## Quick start
 
 ```csharp
 using Novolis.Raylib.Colors;

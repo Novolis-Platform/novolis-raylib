@@ -4,6 +4,15 @@ Optional test helpers for projects that use **`Novolis.Raylib`**. Reference this
 
 This package references **[`Novolis.Raylib.Capture`](../Novolis.Raylib.Capture/)** for framebuffer streaming. Golden-specific streaming glue lives here (`GoldenStreamingCapture`), not in Capture.
 
+## Install
+
+```bash
+dotnet add package Novolis.Raylib
+dotnet add package Novolis.Raylib.Testing
+```
+
+## Quick start
+
 ## Golden tests (preferred for visuals)
 
 No environment variables. Enable native offscreen per assembly:
