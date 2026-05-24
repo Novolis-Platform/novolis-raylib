@@ -60,21 +60,15 @@ public sealed class RaylibBindingParityTests
         var root = RepoTestPaths.TryRepositoryRoot()
                    ?? throw new InvalidOperationException("Could not resolve repository root.");
 
-        var rayguiManifest = Path.Combine(PipelinePaths.PipelineRaylibDir(root), "raygui-exports.manifest.json");
-        if (!File.Exists(rayguiManifest))
+        var raygui = RaylibBindingManifestSource.Instance.TryGet<ShimExportsFragment>(FragmentKind.ShimExports, "raygui");
+        if (raygui is null)
             return;
 
         var committed = SnapshotGenerated(root);
         try
         {
             var host = new RaylibBindingCodegenHost();
-            host.GenerateBindingsOnly(new BindingCodegenOptions
-            {
-                RepoRoot = root,
-                IncludeRaygui = false,
-                VerifyManifest = false,
-                RegenerateHint = "dotnet run --project codegen/Novolis.Raylib.Pipeline -- run generate",
-            });
+            host.GenerateBindingsOnly(CreateOptions(root, verifyManifest: false, includeRaygui: false));
 
             foreach (var relativePath in GeneratedRelativePaths.Where(p => !p.Contains("Raygui", StringComparison.Ordinal)))
             {
@@ -96,6 +90,19 @@ public sealed class RaylibBindingParityTests
             RestoreGenerated(root, committed);
         }
     }
+
+    private static BindingCodegenOptions CreateOptions(
+        string repoRoot,
+        bool verifyManifest,
+        bool includeRaygui = true) =>
+        new()
+        {
+            Environment = CodegenEnvironment.Physical(repoRoot),
+            Manifests = RaylibBindingManifestSource.Instance,
+            IncludeRaygui = includeRaygui,
+            VerifyManifest = verifyManifest,
+            RegenerateHint = "dotnet run --project codegen/Novolis.Raylib.Pipeline -- run generate",
+        };
 
     private static Dictionary<string, string> SnapshotGenerated(string root)
     {

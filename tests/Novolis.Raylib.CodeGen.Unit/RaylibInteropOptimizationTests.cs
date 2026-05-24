@@ -2,8 +2,10 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Drawing;
 using System.Numerics;
+using Novolis.CodeGen.Bindings;
 using Novolis.Raylib.Interop;
 using Novolis.Raylib.CodeGen;
+using Novolis.Raylib.Manifests;
 
 namespace Novolis.Raylib.CodeGen.Unit;
 
@@ -12,15 +14,15 @@ public sealed class RaylibInteropOptimizationTests
     [Test]
     public async Task Interop_policy_suppresses_gc_for_frame_loop_templates()
     {
-        var root = RepoTestPaths.TryRepositoryRoot()
-                   ?? throw new InvalidOperationException("Could not resolve repository root.");
-        var manifestPath = Path.Combine(PipelinePaths.PipelineRaylibDir(root), "raylib-exports.manifest.json");
-        var policy = RaylibManifestModels.LoadInteropPolicy(manifestPath);
+        var interop = RaylibBindingManifestSource.Instance.GetRequired<InteropExportsFragment>(
+            FragmentKind.InteropExports,
+            "raylib6");
+        var policy = RaylibManifestMapping.ToPolicy(interop.Policy);
 
-        var beginDrawing = RaylibManifestModels.LoadImports(manifestPath)
-            .Single(i => i.Name == "BeginDrawing");
-        var exportImage = RaylibManifestModels.LoadImports(manifestPath)
-            .Single(i => i.Name == "ExportImageToMemory");
+        var beginDrawing = RaylibManifestMapping.ToImport(
+            interop.Imports.Single(i => i.Name == "BeginDrawing"));
+        var exportImage = RaylibManifestMapping.ToImport(
+            interop.Imports.Single(i => i.Name == "ExportImageToMemory"));
 
         await Assert.That(policy.ShouldSuppressGcTransition(beginDrawing)).IsTrue();
         await Assert.That(policy.ShouldSuppressGcTransition(exportImage)).IsFalse();

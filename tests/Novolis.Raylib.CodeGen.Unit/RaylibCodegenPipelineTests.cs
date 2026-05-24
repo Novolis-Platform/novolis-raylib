@@ -1,6 +1,7 @@
 using System.Security.Cryptography;
-using System.Text;
+using Novolis.CodeGen.Bindings;
 using Novolis.Raylib.CodeGen;
+using Novolis.Raylib.Manifests;
 
 namespace Novolis.Raylib.CodeGen.Unit;
 
@@ -12,9 +13,10 @@ public sealed class RaylibCodegenPipelineTests
         var root = RepoTestPaths.TryRepositoryRoot()
                    ?? throw new InvalidOperationException("Could not resolve repository root.");
 
-        var manifestPath = Path.Combine(PipelinePaths.PipelineRaylibDir(root), "raylib-exports.manifest.json");
-        var manifestBytes = await File.ReadAllBytesAsync(manifestPath);
-        var manifestSha256 = Convert.ToHexString(SHA256.HashData(manifestBytes)).ToLowerInvariant();
+        var interop = RaylibBindingManifestSource.Instance.GetRequired<InteropExportsFragment>(
+            FragmentKind.InteropExports,
+            "raylib6");
+        var manifestSha256 = interop.Sha256Hex();
 
         var committedPath = Path.Combine(
             root,
@@ -24,7 +26,8 @@ public sealed class RaylibCodegenPipelineTests
         var committedShaLine = committed.Split('\n').First(l => l.Contains("// ManifestSha256:", StringComparison.Ordinal));
         await Assert.That(committedShaLine).Contains(manifestSha256);
 
-        var emitted = RaylibInteropEmitter.Emit(manifestPath, manifestBytes, manifestSha256);
+        var policy = RaylibManifestMapping.ToPolicy(interop.Policy);
+        var emitted = RaylibInteropEmitter.Emit(interop, manifestSha256, policy);
         await Assert.That(emitted).Contains($"// ManifestSha256: {manifestSha256}");
         await Assert.That(emitted).Contains("internal static partial void BeginDrawing();");
     }

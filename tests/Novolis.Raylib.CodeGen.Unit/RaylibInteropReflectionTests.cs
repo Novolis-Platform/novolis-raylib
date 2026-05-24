@@ -1,10 +1,10 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Security.Cryptography;
-using System.Text.Json;
 using System.Text.RegularExpressions;
+using Novolis.CodeGen.Bindings;
 using Novolis.Raylib.CodeGen;
 using Novolis.Raylib.Interop;
+using Novolis.Raylib.Manifests;
 
 namespace Novolis.Raylib.CodeGen.Unit;
 
@@ -13,15 +13,10 @@ public sealed class RaylibInteropReflectionTests
     [Test]
     public async Task Raylib_manifest_import_count_matches_LibraryImport_methods()
     {
-        var root = RepoTestPaths.TryRepositoryRoot()
-                   ?? throw new InvalidOperationException("Could not resolve repository root.");
-
-        var manifestPath = Path.Combine(PipelinePaths.PipelineRaylibDir(root), "raylib-exports.manifest.json");
-        using var doc = JsonDocument.Parse(await File.ReadAllTextAsync(manifestPath));
-        var imports = doc.RootElement.GetProperty("imports");
-        var names = new List<string>();
-        foreach (var el in imports.EnumerateArray())
-            names.Add(el.GetProperty("name").GetString()!);
+        var interop = RaylibBindingManifestSource.Instance.GetRequired<InteropExportsFragment>(
+            FragmentKind.InteropExports,
+            "raylib6");
+        var names = interop.Imports.Select(i => i.Name).ToList();
 
         var methods = typeof(Raylib6Native)
             .GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
@@ -43,12 +38,10 @@ public sealed class RaylibInteropReflectionTests
         var root = RepoTestPaths.TryRepositoryRoot()
                    ?? throw new InvalidOperationException("Could not resolve repository root.");
 
-        var manifestPath = Path.Combine(PipelinePaths.PipelineRaylibDir(root), "raylib-exports.manifest.json");
-        using var doc = JsonDocument.Parse(await File.ReadAllTextAsync(manifestPath));
-        var imports = doc.RootElement.GetProperty("imports");
-        var templates = new HashSet<string>(StringComparer.Ordinal);
-        foreach (var el in imports.EnumerateArray())
-            templates.Add(el.GetProperty("template").GetString()!);
+        var interop = RaylibBindingManifestSource.Instance.GetRequired<InteropExportsFragment>(
+            FragmentKind.InteropExports,
+            "raylib6");
+        var templates = interop.Imports.Select(i => i.Template).ToHashSet(StringComparer.Ordinal);
 
         var genPath = Path.Combine(root, "codegen", "Novolis.Raylib.CodeGen", "Emit", "RaylibInteropEmitter.cs");
         var gen = await File.ReadAllTextAsync(genPath);
@@ -62,14 +55,15 @@ public sealed class RaylibInteropReflectionTests
     }
 
     [Test]
-    public async Task Raylib_generated_sha256_matches_manifest_file_bytes()
+    public async Task Raylib_generated_sha256_matches_manifest_fingerprint()
     {
         var root = RepoTestPaths.TryRepositoryRoot()
                    ?? throw new InvalidOperationException("Could not resolve repository root.");
 
-        var manifestPath = Path.Combine(PipelinePaths.PipelineRaylibDir(root), "raylib-exports.manifest.json");
-        var manifestBytes = await File.ReadAllBytesAsync(manifestPath);
-        var expected = Convert.ToHexString(SHA256.HashData(manifestBytes)).ToLowerInvariant();
+        var interop = RaylibBindingManifestSource.Instance.GetRequired<InteropExportsFragment>(
+            FragmentKind.InteropExports,
+            "raylib6");
+        var expected = interop.Sha256Hex();
 
         var genPath = Path.Combine(
             root,
@@ -84,15 +78,10 @@ public sealed class RaylibInteropReflectionTests
     [Test]
     public async Task Raygui_function_count_matches_export_pointer_fields()
     {
-        var root = RepoTestPaths.TryRepositoryRoot()
-                   ?? throw new InvalidOperationException("Could not resolve repository root.");
-
-        var manifestPath = Path.Combine(PipelinePaths.PipelineRaylibDir(root), "raygui-exports.manifest.json");
-        using var doc = JsonDocument.Parse(await File.ReadAllTextAsync(manifestPath));
-        var functions = doc.RootElement.GetProperty("functions");
-        var exports = new List<string>();
-        foreach (var el in functions.EnumerateArray())
-            exports.Add(el.GetProperty("export").GetString()!);
+        var raygui = RaylibBindingManifestSource.Instance.GetRequired<ShimExportsFragment>(
+            FragmentKind.ShimExports,
+            "raygui");
+        var exports = raygui.Exports.Select(e => e.Export).ToList();
 
         var ptrFields = typeof(RayguiShimExports)
             .GetFields(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
@@ -110,12 +99,10 @@ public sealed class RaylibInteropReflectionTests
         var root = RepoTestPaths.TryRepositoryRoot()
                    ?? throw new InvalidOperationException("Could not resolve repository root.");
 
-        var manifestPath = Path.Combine(PipelinePaths.PipelineRaylibDir(root), "raygui-exports.manifest.json");
-        using var doc = JsonDocument.Parse(await File.ReadAllTextAsync(manifestPath));
-        var functions = doc.RootElement.GetProperty("functions");
-        var templates = new HashSet<string>(StringComparer.Ordinal);
-        foreach (var el in functions.EnumerateArray())
-            templates.Add(el.GetProperty("template").GetString()!);
+        var raygui = RaylibBindingManifestSource.Instance.GetRequired<ShimExportsFragment>(
+            FragmentKind.ShimExports,
+            "raygui");
+        var templates = raygui.Exports.Select(e => e.Template).ToHashSet(StringComparer.Ordinal);
 
         var genPath = Path.Combine(root, "codegen", "Novolis.Raylib.CodeGen", "Emit", "RayguiInteropEmitter.cs");
         var gen = await File.ReadAllTextAsync(genPath);
@@ -138,15 +125,10 @@ public sealed class RaylibInteropReflectionTests
     [Test]
     public async Task Imgui_function_count_matches_export_pointer_fields()
     {
-        var root = RepoTestPaths.TryRepositoryRoot()
-                   ?? throw new InvalidOperationException("Could not resolve repository root.");
-
-        var manifestPath = Path.Combine(PipelinePaths.PipelineRaylibDir(root), "imgui-exports.manifest.json");
-        using var doc = JsonDocument.Parse(await File.ReadAllTextAsync(manifestPath));
-        var functions = doc.RootElement.GetProperty("functions");
-        var exports = new List<string>();
-        foreach (var el in functions.EnumerateArray())
-            exports.Add(el.GetProperty("export").GetString()!);
+        var imgui = RaylibBindingManifestSource.Instance.GetRequired<ShimExportsFragment>(
+            FragmentKind.ShimExports,
+            "imgui");
+        var exports = imgui.Exports.Select(e => e.Export).ToList();
 
         var ptrFields = typeof(ImguiShimExports)
             .GetFields(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
@@ -164,12 +146,10 @@ public sealed class RaylibInteropReflectionTests
         var root = RepoTestPaths.TryRepositoryRoot()
                    ?? throw new InvalidOperationException("Could not resolve repository root.");
 
-        var manifestPath = Path.Combine(PipelinePaths.PipelineRaylibDir(root), "imgui-exports.manifest.json");
-        using var doc = JsonDocument.Parse(await File.ReadAllTextAsync(manifestPath));
-        var functions = doc.RootElement.GetProperty("functions");
-        var templates = new HashSet<string>(StringComparer.Ordinal);
-        foreach (var el in functions.EnumerateArray())
-            templates.Add(el.GetProperty("template").GetString()!);
+        var imgui = RaylibBindingManifestSource.Instance.GetRequired<ShimExportsFragment>(
+            FragmentKind.ShimExports,
+            "imgui");
+        var templates = imgui.Exports.Select(e => e.Template).ToHashSet(StringComparer.Ordinal);
 
         var genPath = Path.Combine(root, "codegen", "Novolis.Raylib.CodeGen", "Emit", "ImguiInteropEmitter.cs");
         var gen = await File.ReadAllTextAsync(genPath);
