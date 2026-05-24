@@ -1,5 +1,6 @@
-using System.Text.Json;
 using System.Text.RegularExpressions;
+using Novolis.CodeGen.Bindings;
+using Novolis.Raylib.Manifests;
 
 namespace Novolis.Raylib.CodeGen;
 
@@ -9,25 +10,24 @@ internal static class RaylibManifestSuggester
         @"^\s*RLAPI\s+\w+\s+(\w+)\s*\(",
         RegexOptions.Compiled | RegexOptions.Multiline);
 
-    public static int Suggest(string repoRoot)
+    public static int Suggest(string repoRoot) =>
+        Suggest(CodegenEnvironment.Physical(repoRoot), RaylibBindingManifestSource.Instance);
+
+    public static int Suggest(CodegenEnvironment environment, IBindingManifestSource manifests)
     {
-        var manifestPath = Path.Combine(RepoPaths.PipelineDir(repoRoot), "raylib-exports.manifest.json");
-        var headerPath = PipelinePaths.RaylibHeaderPath(repoRoot);
-        if (!File.Exists(headerPath))
+        var headerPath = PipelinePaths.RaylibHeaderPath(environment.RepoRoot);
+        if (!environment.FileSystem.File.Exists(headerPath))
         {
             Console.Error.WriteLine($"Missing vendor header: {headerPath}");
             return 2;
         }
 
-        var manifestNames = new HashSet<string>(StringComparer.Ordinal);
-        if (File.Exists(manifestPath))
-        {
-            using var doc = JsonDocument.Parse(File.ReadAllText(manifestPath));
-            foreach (var el in doc.RootElement.GetProperty("imports").EnumerateArray())
-                manifestNames.Add(el.GetProperty("name").GetString()!);
-        }
+        var interop = manifests.GetRequired<InteropExportsFragment>(FragmentKind.InteropExports, "raylib6");
+        var manifestNames = new HashSet<string>(
+            interop.Imports.Select(i => i.Name),
+            StringComparer.Ordinal);
 
-        var header = File.ReadAllText(headerPath);
+        var header = environment.FileSystem.File.ReadAllText(headerPath);
         var missing = new List<string>();
         foreach (Match m in RlapiRegex.Matches(header))
         {

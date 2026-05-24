@@ -5,13 +5,12 @@ namespace Novolis.Raylib.CodeGen;
 
 public static class RaylibManifestVerifier
 {
-    public static int Verify(string repoRoot) => Verify(CodegenEnvironment.Physical(repoRoot));
+    public static int Verify(string repoRoot) =>
+        Verify(CodegenEnvironment.Physical(repoRoot), RaylibBindingManifestSource.Instance);
 
-    public static int Verify(CodegenEnvironment environment)
+    public static int Verify(CodegenEnvironment environment, IBindingManifestSource manifests)
     {
-        var interop = RaylibBindingManifestSource.Instance.GetRequired<InteropExportsFragment>(
-            FragmentKind.InteropExports,
-            "raylib6");
+        var interop = manifests.GetRequired<InteropExportsFragment>(FragmentKind.InteropExports, "raylib6");
         var headerPath = PipelinePaths.RaylibHeaderPath(environment.RepoRoot);
         if (!environment.FileSystem.File.Exists(headerPath))
         {
