@@ -1,11 +1,26 @@
-# CI validates committed library output. Codegen pipeline runs locally only (see codegen/README.md).
+# Single CI workflow: PR = build/test committed libraries; main = pack + GitHub Packages.
+# Codegen pipeline runs locally only (see codegen/README.md).
 name: CI
 
 on:
-  workflow_call:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+    paths-ignore:
+      - '.novolis/version.props'
+      - 'docs/**'
+      - '**.md'
+  workflow_dispatch:
+    inputs:
+      skip_publish:
+        description: Build only; do not push to GitHub Packages
+        type: boolean
+        default: false
 
 permissions:
-  contents: read
+  contents: write
+  packages: write
 
 jobs:
   libraries:
@@ -16,18 +31,7 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 10.0.x
-
-      - name: Authenticate to GitHub Packages (optional for public feed)
-        continue-on-error: true
-        shell: pwsh
-        run: |
-          if (-not $env:GITHUB_TOKEN) { exit 0 }
-          dotnet nuget update source github `
-            --username $env:GITHUB_ACTOR `
-            --password $env:GITHUB_TOKEN `
-            --store-password-in-clear-text `
-            --configfile nuget.config
-
+      - uses: Novolis-Platform/novolis-workflows/actions/authenticate-github-packages@main
       - name: Restore shipping + unit test projects
         run: |
           set -euo pipefail
@@ -41,14 +45,12 @@ jobs:
             tests/Novolis.Raylib.Capture.Unit/Novolis.Raylib.Capture.Unit.csproj; do
             dotnet restore "$proj" --configfile nuget.config
           done
-
       - name: Build shipping libraries
         run: |
           set -euo pipefail
           for proj in src/*/*.csproj; do
             dotnet build "$proj" -c Release --no-restore
           done
-
       - name: Unit tests (no codegen pipeline, no native golden)
         run: |
           set -euo pipefail
@@ -59,3 +61,38 @@ jobs:
             tests/Novolis.Raylib.Capture.Unit/Novolis.Raylib.Capture.Unit.csproj; do
             dotnet test "$proj" -c Release --no-build -- --maximum-parallel-tests 1
           done
+
+  publish:
+    name: Pack and publish
+    needs: libraries
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.skip_publish != true)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - uses: Novolis-Platform/novolis-workflows/actions/authenticate-github-packages@main
+      - name: Build shipping libraries
+        run: |
+          set -euo pipefail
+          for proj in src/*/*.csproj; do
+            dotnet restore "$proj" --configfile nuget.config
+            dotnet build "$proj" -c Release
+          done
+      - uses: Novolis-Platform/novolis-workflows/actions/resolve-version@main
+        id: ver
+      - name: Pack shipping packages
+        shell: pwsh
+        run: ./scripts/pack-all.ps1 -Version ${{ steps.ver.outputs.version }}
+      - uses: Novolis-Platform/novolis-workflows/actions/publish-github-packages@main
+      - uses: Novolis-Platform/novolis-workflows/actions/bump-build-version@main
+        id: bump
+      - name: Commit build version bump
+        continue-on-error: true
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .novolis/version.props
+          git commit -m "chore: bump build to ${{ steps.bump.outputs.next_version }} [skip ci]"
+          git push || echo "::warning::Could not push version bump."
