@@ -1,4 +1,5 @@
 <Project>
+  <Import Project="$(MSBuildThisFileDirectory)version.props" Condition="Exists('$(MSBuildThisFileDirectory)version.props')" />
   <Import Project="$(MSBuildThisFileDirectory)Novolis.Raylib.Documentation.props" />
 
   <PropertyGroup Label="Novolis.Raylib NuGet metadata">

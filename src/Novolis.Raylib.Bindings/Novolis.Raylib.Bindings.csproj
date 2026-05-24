@@ -54,7 +54,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Novolis.Raylib.Native\Novolis.Raylib.Native.csproj">
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <Version>$(NovolisPlatformVersion)</Version>
     </ProjectReference>
   </ItemGroup>
 

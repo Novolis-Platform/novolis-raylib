@@ -10,20 +10,19 @@
     <IsPackable>true</IsPackable>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <Description>raylib 6, ImGui shim, and trace forwarder native binaries per RID (transitive dependency; do not reference directly).</Description>
-    <PipelineStep01>$(MSBuildThisFileDirectory)..\..\pipeline\raylib6\steps\step_01_source\artifacts</PipelineStep01>
-    <PipelineStep02>$(MSBuildThisFileDirectory)..\..\pipeline\raylib6\steps\step_02_native\artifacts</PipelineStep02>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="$(PipelineStep01)\raylib-6\prebuilt\win-x64\raylib.dll" Pack="true" PackagePath="runtimes/win-x64/native" Condition="Exists('$(PipelineStep01)\raylib-6\prebuilt\win-x64\raylib.dll')" />
-    <None Include="$(PipelineStep02)\novolis_raylib_trace.dll" Pack="true" PackagePath="runtimes/win-x64/native" Condition="Exists('$(PipelineStep02)\novolis_raylib_trace.dll')" />
-    <None Include="$(PipelineStep02)\novolis_imgui.dll" Pack="true" PackagePath="runtimes/win-x64/native" Condition="Exists('$(PipelineStep02)\novolis_imgui.dll')" />
-    <None Include="$(PipelineStep01)\raylib-6\prebuilt\linux-x64\libraylib.so" Pack="true" PackagePath="runtimes/linux-x64/native" Condition="Exists('$(PipelineStep01)\raylib-6\prebuilt\linux-x64\libraylib.so')" />
-    <None Include="$(PipelineStep02)\libnovolis_raylib_trace.so" Pack="true" PackagePath="runtimes/linux-x64/native" Condition="Exists('$(PipelineStep02)\libnovolis_raylib_trace.so')" />
-    <None Include="$(PipelineStep02)\libnovolis_imgui.so" Pack="true" PackagePath="runtimes/linux-x64/native" Condition="Exists('$(PipelineStep02)\libnovolis_imgui.so')" />
-    <None Include="$(PipelineStep01)\raylib-6\prebuilt\osx\libraylib.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Condition="Exists('$(PipelineStep01)\raylib-6\prebuilt\osx\libraylib.dylib')" />
-    <None Include="$(PipelineStep02)\libnovolis_raylib_trace.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Condition="Exists('$(PipelineStep02)\libnovolis_raylib_trace.dylib')" />
-    <None Include="$(PipelineStep02)\libnovolis_imgui.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Condition="Exists('$(PipelineStep02)\libnovolis_imgui.dylib')" />
+    <!-- Checked-in runtimes/ (git-tracked) — used by CI and GPR consumers. -->
+    <None Include="$(MSBuildThisFileDirectory)runtimes\win-x64\native\raylib.dll" Pack="true" PackagePath="runtimes/win-x64/native" Condition="Exists('$(MSBuildThisFileDirectory)runtimes\win-x64\native\raylib.dll')" />
+    <None Include="$(MSBuildThisFileDirectory)runtimes\win-x64\native\novolis_raylib_trace.dll" Pack="true" PackagePath="runtimes/win-x64/native" Condition="Exists('$(MSBuildThisFileDirectory)runtimes\win-x64\native\novolis_raylib_trace.dll')" />
+    <None Include="$(MSBuildThisFileDirectory)runtimes\win-x64\native\novolis_imgui.dll" Pack="true" PackagePath="runtimes/win-x64/native" Condition="Exists('$(MSBuildThisFileDirectory)runtimes\win-x64\native\novolis_imgui.dll')" />
+    <None Include="$(MSBuildThisFileDirectory)runtimes\linux-x64\native\libraylib.so" Pack="true" PackagePath="runtimes/linux-x64/native" Condition="Exists('$(MSBuildThisFileDirectory)runtimes\linux-x64\native\libraylib.so')" />
+    <None Include="$(MSBuildThisFileDirectory)runtimes\linux-x64\native\libnovolis_raylib_trace.so" Pack="true" PackagePath="runtimes/linux-x64/native" Condition="Exists('$(MSBuildThisFileDirectory)runtimes\linux-x64\native\libnovolis_raylib_trace.so')" />
+    <None Include="$(MSBuildThisFileDirectory)runtimes\linux-x64\native\libnovolis_imgui.so" Pack="true" PackagePath="runtimes/linux-x64/native" Condition="Exists('$(MSBuildThisFileDirectory)runtimes\linux-x64\native\libnovolis_imgui.so')" />
+    <None Include="$(MSBuildThisFileDirectory)runtimes\osx-x64\native\libraylib.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Condition="Exists('$(MSBuildThisFileDirectory)runtimes\osx-x64\native\libraylib.dylib')" />
+    <None Include="$(MSBuildThisFileDirectory)runtimes\osx-x64\native\libnovolis_raylib_trace.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Condition="Exists('$(MSBuildThisFileDirectory)runtimes\osx-x64\native\libnovolis_raylib_trace.dylib')" />
+    <None Include="$(MSBuildThisFileDirectory)runtimes\osx-x64\native\libnovolis_imgui.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Condition="Exists('$(MSBuildThisFileDirectory)runtimes\osx-x64\native\libnovolis_imgui.dylib')" />
   </ItemGroup>
 
   <ItemGroup>
