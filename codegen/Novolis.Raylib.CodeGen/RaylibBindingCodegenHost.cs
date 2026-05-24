@@ -89,7 +89,7 @@ public sealed class RaylibBindingCodegenHost : IBindingCodegenHost
     {
         if (options.VerifyManifest)
         {
-            var verify = RaylibManifestVerifier.Verify(options.Environment);
+            var verify = RaylibManifestVerifier.Verify(options.Environment, options.Manifests);
             if (verify != 0)
                 return verify;
         }

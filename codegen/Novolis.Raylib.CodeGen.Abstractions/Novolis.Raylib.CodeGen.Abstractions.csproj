@@ -10,9 +10,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\novolis-codegen\src\Novolis.CodeGen.Bindings\Novolis.CodeGen.Bindings.csproj" />
-    <ProjectReference Include="..\..\..\novolis-codegen\src\Novolis.CodeGen.Bindings.Roslyn\Novolis.CodeGen.Bindings.Roslyn.csproj" />
-    <ProjectReference Include="..\..\..\novolis-codegen\src\Novolis.CodeGen.Pipeline\Novolis.CodeGen.Pipeline.csproj" />
+    <PackageReference Include="Novolis.CodeGen.Bindings" />
+    <PackageReference Include="Novolis.CodeGen.Bindings.Roslyn" />
+    <PackageReference Include="Novolis.CodeGen.Pipeline" />
   </ItemGroup>
 
 </Project>

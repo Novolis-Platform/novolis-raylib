@@ -4,7 +4,19 @@
   "pipelineVersion": "1",
   "inputs": {
     "codegen/pipeline/raylib6/versions.json": "23fbffd47a4a3e031862ab30db3020aee731d91e88cfce450e1d97e78a5b22ad",
-    "codegen/pipeline/raylib6/raylib-exports.manifest.json": "462b400c8e7754f9d678c8c8d8c9149243ac9a0ad42c4946f4b7bf2b245fc3e1",
+    "codegen/Novolis.Raylib.Manifests/FacadesManifest.cs": "43b03e69808d0b36500afb9ea1d13ad0e3690157a7679ba23668b2924dba6cfd",
+    "codegen/Novolis.Raylib.Manifests/GuiManifest.cs": "8abf17f69f1e54bf8384ccac5faa7325a657c8c3b53da1bfca0091fb6fa7f766",
+    "codegen/Novolis.Raylib.Manifests/HudManifest.cs": "cf53fd23f567596d3f771267951a5fe4b42fed4da7d96333bbed57769f6428a1",
+    "codegen/Novolis.Raylib.Manifests/ImguiShimManifest.cs": "d0d08c460a5f06a346c6ae6eb767dff8bb5bdf97a235cc83a2ae73a93fc3d60f",
+    "codegen/Novolis.Raylib.Manifests/RayguiFacadeManifest.cs": "fcb590df74f168b99092b1e4ce50d128a1f187b1ecf8ba200bc8e0cdfd2f234f",
+    "codegen/Novolis.Raylib.Manifests/RayguiShimManifest.cs": "8fa07399c5b157f5599192d45465db6fa0d88d1903e09ebbcbea6267757d4860",
+    "codegen/Novolis.Raylib.Manifests/Raylib6InteropManifest.cs": "ee6f0a975109ffa58a46e4413660c40087edb4a66dfc3ae40ad52ea8d6366f5a",
+    "codegen/Novolis.Raylib.Manifests/RaylibBindingManifestSource.cs": "2277bb53038bd8bf03b127774b8eb87575655cd289daa9195b12037cbc512058",
+    "codegen/Novolis.Raylib.Manifests/RaylibDebugManifest.cs": "8d18165eb9e54ec47570ef096c9aa4ab83fb7151c051350d4ab6736a7372c375",
+    "codegen/Novolis.Raylib.Manifests/RaylibManifestInputPaths.cs": "7f5f627ab8cb29888d22735af1b853bb89f190d99098f37ae42384e5a8f4716d",
+    "codegen/Novolis.Raylib.Manifests/obj/Release/net10.0/.NETCoreApp,Version=v10.0.AssemblyAttributes.cs": "93d67476196ebfc80d1d7d8844b91146cfd678d105f5ce635eb900ca40610c9b",
+    "codegen/Novolis.Raylib.Manifests/obj/Release/net10.0/Novolis.Raylib.Manifests.AssemblyInfo.cs": "0de22e6293e0843ead9f397a60abde6ab11ac2b8f8dc550cc6593bcda03ff2cc",
+    "codegen/Novolis.Raylib.Manifests/obj/Release/net10.0/Novolis.Raylib.Manifests.GlobalUsings.g.cs": "a3c6048bb4d922b1799a9977f84362a3787b68810cac67aa86ac3aa23295f227",
     "codegen/pipeline/raylib6/steps/step_01_source/artifacts/raylib-6/include/raylib.h": "1842111e48260e622d0ff2e6f4ac6141508d6f369791265ba518e7502c760ccf"
   },
   "outputs": []

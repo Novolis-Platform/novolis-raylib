@@ -1,11 +1,40 @@
 using Microsoft.CodeAnalysis.CSharp;
+using Novolis.CodeGen.Bindings;
 using Novolis.Raylib.CodeGen;
 using Novolis.Raylib.CodeGen.Hooks;
+using Novolis.Raylib.Manifests;
 
 namespace Novolis.Raylib.CodeGen.Unit;
 
 public sealed class RaylibCodegenHookTests
 {
+    private static RaylibCodegenContext CreateContext(
+        RaylibCodegenPhase phase,
+        IManifestFragment fragment,
+        string? facadeTypeName = null,
+        string? facadeMethodImpl = null,
+        IReadOnlyDictionary<string, string>? importDescriptions = null)
+    {
+        var env = CodegenEnvironment.Physical(@"C:\novolis\raylib-hook-test");
+        return new RaylibCodegenContext
+        {
+            Environment = env,
+            OutputPath = "generated/Test.g.cs",
+            Fragment = fragment,
+            ManifestSha256 = fragment.Sha256Hex(),
+            RegenerateHint = "test",
+            Phase = phase,
+            FacadeTypeName = facadeTypeName,
+            FacadeMethodImpl = facadeMethodImpl,
+            ImportDescriptions = importDescriptions
+                ?? new Dictionary<string, string>(StringComparer.Ordinal),
+            DebugConfig = fragment as DebugConfigFragment
+                ?? RaylibBindingManifestSource.Instance.TryGet<DebugConfigFragment>(
+                    FragmentKind.DebugConfig,
+                    "raylib-debug"),
+        };
+    }
+
     [Test]
     public async Task InjectEndDrawingNotifyHook_adds_notify_after_native_call()
     {
@@ -21,16 +50,10 @@ public sealed class RaylibCodegenHookTests
 
         var unit = CodegenFormatter.ParseGenerated(source);
         var hook = new InjectEndDrawingNotifyHook();
-        var context = new RaylibCodegenContext
-        {
-            RepoRoot = "",
-            Phase = RaylibCodegenPhase.Facade,
-            OutputPath = "",
-            ManifestPath = "",
-            ManifestSha256 = "",
-            RegenerateHint = "",
-            FacadeTypeName = "Graphics",
-        };
+        var fragment = RaylibBindingManifestSource.Instance.GetRequired<FacadeTypesFragment>(
+            FragmentKind.FacadeTypes,
+            "facades");
+        var context = CreateContext(RaylibCodegenPhase.Facade, fragment, facadeTypeName: "Graphics");
 
         var transformed = hook.Transform(unit, context);
         var text = transformed.ToFullString();
@@ -56,19 +79,16 @@ public sealed class RaylibCodegenHookTests
 
         var unit = CodegenFormatter.ParseGenerated(source);
         var hook = new AnnotateLibraryImportHook();
-        var context = new RaylibCodegenContext
-        {
-            RepoRoot = "",
-            Phase = RaylibCodegenPhase.Interop,
-            OutputPath = "",
-            ManifestPath = "",
-            ManifestSha256 = "",
-            RegenerateHint = "",
-            ImportDescriptions = new Dictionary<string, string>
+        var interop = RaylibBindingManifestSource.Instance.GetRequired<InteropExportsFragment>(
+            FragmentKind.InteropExports,
+            "raylib6");
+        var context = CreateContext(
+            RaylibCodegenPhase.Interop,
+            interop,
+            importDescriptions: new Dictionary<string, string>
             {
                 ["SetTargetFPS"] = "Sets the target frame rate for the game loop.",
-            },
-        };
+            });
 
         var transformed = hook.Transform(unit, context);
         var text = transformed.ToFullString();
@@ -94,17 +114,14 @@ public sealed class RaylibCodegenHookTests
 
         var unit = CodegenFormatter.ParseGenerated(source);
         var hook = new FacadeInliningHook();
-        var context = new RaylibCodegenContext
-        {
-            RepoRoot = "",
-            Phase = RaylibCodegenPhase.Facade,
-            OutputPath = "",
-            ManifestPath = "",
-            ManifestSha256 = "",
-            RegenerateHint = "",
-            FacadeTypeName = "Graphics",
-            FacadeMethodImpl = "AggressiveInlining",
-        };
+        var fragment = RaylibBindingManifestSource.Instance.GetRequired<FacadeTypesFragment>(
+            FragmentKind.FacadeTypes,
+            "facades");
+        var context = CreateContext(
+            RaylibCodegenPhase.Facade,
+            fragment,
+            facadeTypeName: "Graphics",
+            facadeMethodImpl: "AggressiveInlining");
 
         var transformed = hook.Transform(unit, context);
         var text = transformed.ToFullString();

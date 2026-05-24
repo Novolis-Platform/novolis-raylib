@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using Novolis.CodeGen.Bindings;
 using Novolis.Raylib.CodeGen;
 using Novolis.Raylib.Interop;
 
@@ -40,27 +41,35 @@ public sealed class Utf8StringMarshallerTests
 public sealed class RaylibManifestVerifierEdgeTests
 {
     [Test]
-    public async Task Verify_returns_2_when_manifest_missing()
+    public async Task Verify_returns_3_when_imports_empty()
     {
-        var tempRoot = Path.Combine(Path.GetTempPath(), "novolis-codegen-unit", Guid.NewGuid().ToString("N"));
-        Directory.CreateDirectory(PipelinePaths.PipelineRaylibDir(tempRoot));
-        var code = RaylibManifestVerifier.Verify(tempRoot);
-        await Assert.That(code).IsEqualTo(2);
-        Directory.Delete(tempRoot, recursive: true);
+        const string repoRoot = @"C:\novolis\raylib-test";
+        var env = CodegenTestEnvironment.CreateMock(
+            repoRoot,
+            new Dictionary<string, string>
+            {
+                [CodegenTestEnvironment.RaylibHeaderRelativePath] = "/* header present */\n",
+            });
+        var manifests = CodegenTestEnvironment.Manifests(CodegenTestEnvironment.InteropFragment());
+        var code = RaylibManifestVerifier.Verify(env, manifests);
+        await Assert.That(code).IsEqualTo(3);
     }
 
     [Test]
-    public async Task Verify_returns_3_when_imports_empty()
+    public async Task Verify_returns_4_when_symbol_missing_from_header()
     {
-        var tempRoot = Path.Combine(Path.GetTempPath(), "novolis-codegen-unit", Guid.NewGuid().ToString("N"));
-        var dir = PipelinePaths.PipelineRaylibDir(tempRoot);
-        var artifacts = Path.Combine(dir, "steps", "step_01_source", "artifacts", "raylib-6", "include");
-        Directory.CreateDirectory(artifacts);
-        File.WriteAllText(Path.Combine(dir, "raylib-exports.manifest.json"), """{"imports":[]}""");
-        File.WriteAllText(Path.Combine(artifacts, "raylib.h"), "/* header present */\n");
-        var code = RaylibManifestVerifier.Verify(tempRoot);
-        await Assert.That(code).IsEqualTo(3);
-        Directory.Delete(tempRoot, recursive: true);
+        const string repoRoot = @"C:\novolis\raylib-test";
+        var env = CodegenTestEnvironment.CreateMock(
+            repoRoot,
+            new Dictionary<string, string>
+            {
+                [CodegenTestEnvironment.RaylibHeaderRelativePath] =
+                    "RLAPI void InitWindow(int w, int h, const char* t);\n",
+            });
+        var manifests = CodegenTestEnvironment.Manifests(
+            CodegenTestEnvironment.InteropFragment(new InteropImportSpec("MissingSymbol", "void_v")));
+        var code = RaylibManifestVerifier.Verify(env, manifests);
+        await Assert.That(code).IsEqualTo(4);
     }
 }
 
