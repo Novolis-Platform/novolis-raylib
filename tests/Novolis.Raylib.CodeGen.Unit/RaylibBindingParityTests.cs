@@ -1,6 +1,7 @@
 using Novolis.CodeGen.Bindings;
 using Novolis.CodeGen.Bindings.Roslyn;
 using Novolis.Raylib.CodeGen;
+using Novolis.Raylib.Manifests;
 
 namespace Novolis.Raylib.CodeGen.Unit;
 
@@ -35,13 +36,7 @@ public sealed class RaylibBindingParityTests
         try
         {
             var host = new RaylibBindingCodegenHost();
-            host.GenerateBindingsOnly(new BindingCodegenOptions
-            {
-                RepoRoot = root,
-                IncludeRaygui = true,
-                VerifyManifest = false,
-                RegenerateHint = "dotnet run --project codegen/Novolis.Raylib.Pipeline -- run generate",
-            });
+            host.GenerateBindingsOnly(CreateOptions(root, verifyManifest: false));
 
             foreach (var relativePath in GeneratedRelativePaths)
             {
