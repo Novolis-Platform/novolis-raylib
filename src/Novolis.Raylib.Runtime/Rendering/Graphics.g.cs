@@ -20,7 +20,6 @@ public static partial class Graphics
     /// <summary>
     /// End canvas drawing and swap buffers (double buffering)
     /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void EndDrawing()
     {
         Raylib6Native.EndDrawing();
