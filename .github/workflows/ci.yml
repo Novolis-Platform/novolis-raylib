@@ -76,7 +76,7 @@ jobs:
           dotnet-version: 10.0.x
       - uses: Novolis-Platform/novolis-workflows/actions/authenticate-github-packages@main
         with:
-          token: ${{ secrets.NOVOLIS_GPR_TOKEN }}
+          token: ${{ github.token }}
       - name: Build shipping libraries
         run: |
           set -euo pipefail
@@ -90,6 +90,7 @@ jobs:
         shell: pwsh
         run: ./scripts/pack-all.ps1 -Version ${{ steps.ver.outputs.version }}
       - uses: Novolis-Platform/novolis-workflows/actions/publish-github-packages@main
+      - uses: Novolis-Platform/novolis-workflows/actions/set-github-packages-public@main
       - uses: Novolis-Platform/novolis-workflows/actions/bump-build-version@main
         id: bump
       - name: Commit build version bump
