@@ -21,5 +21,6 @@
     <PackageVersion Include="Novolis.CodeGen.Bindings" Version="2026.1.*" />
     <PackageVersion Include="Novolis.CodeGen.Bindings.Roslyn" Version="2026.1.*" />
     <PackageVersion Include="Novolis.CodeGen.Pipeline" Version="2026.1.*" />
+    <PackageVersion Include="Novolis.Math.Geometry" Version="2026.1.*" />
   </ItemGroup>
 </Project>

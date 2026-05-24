@@ -7,6 +7,6 @@
     <RootNamespace>Novolis.Raylib.Loaders</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Novolis.Math.Geometry" Version="2026.1.*" />
+    <PackageReference Include="Novolis.Math.Geometry" />
   </ItemGroup>
 </Project>
