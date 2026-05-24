@@ -49,7 +49,8 @@ dotnet run --project codegen/Novolis.Raylib.Pipeline -- run agent-verify
 | `src/Novolis.Raylib.Raygui/` | Optional raygui widgets add-on package |
 | `build/` | MSBuild targets (codegen on compile, native copy) |
 | `tests/` | TUnit unit/integration tests |
-| `samples/` | HelloGame, HelloRuntime, HelloHosting, HelloCapture, HelloTesting |
+| `samples/` | HelloGame, HelloRuntime, HelloHosting, HelloCapture, HelloTesting, HelloGui, HelloRaygui (in-repo API only) |
+| `novolis-dogfooding` | XFighter and other published-package demos |
 | `docs/` | `codegen.md`, `testing.md` |
 | `agentic-tools/` | Agent registry, workflows (codegen discipline) |
 

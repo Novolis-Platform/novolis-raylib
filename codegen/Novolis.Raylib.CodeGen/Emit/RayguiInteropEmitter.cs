@@ -1,19 +1,16 @@
 using System.Text;
-using System.Text.Json;
+using Novolis.CodeGen.Bindings;
 
 namespace Novolis.Raylib.CodeGen;
 
 internal static class RayguiInteropEmitter
 {
-    public static string Emit(string manifestPath, byte[] manifestBytes, string manifestSha256)
+    public static string Emit(ShimExportsFragment fragment, string manifestSha256)
     {
-        var json = Encoding.UTF8.GetString(manifestBytes);
-        var doc = JsonSerializer.Deserialize<RayguiManifest>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
-                  ?? throw new InvalidOperationException($"Failed to parse {manifestPath}");
-        if (doc.Functions is null || doc.Functions.Count == 0)
+        if (fragment.Exports.Count == 0)
             throw new InvalidOperationException("Manifest has no functions.");
 
-        var sorted = doc.Functions
+        var sorted = fragment.Exports
             .Where(f => !string.IsNullOrEmpty(f.Export) && !string.IsNullOrEmpty(f.Template))
             .OrderBy(f => f.Export, StringComparer.Ordinal)
             .ToList();
@@ -41,7 +38,7 @@ internal static class RayguiInteropEmitter
 
         foreach (var fn in sorted)
         {
-            var (fieldType, _) = TemplateToDelegate(fn.Template!, fn.Export!);
+            var (fieldType, _) = TemplateToDelegate(fn.Template, fn.Export);
             sb.AppendLine($"    internal static {fieldType} {fn.Export}_ptr;");
         }
 
@@ -51,7 +48,7 @@ internal static class RayguiInteropEmitter
         sb.AppendLine("        error = null;");
         foreach (var fn in sorted)
         {
-            var (fieldType, exportName) = TemplateToDelegate(fn.Template!, fn.Export!);
+            var (fieldType, exportName) = TemplateToDelegate(fn.Template, fn.Export);
             sb.AppendLine($"        var p{exportName} = NativeLibrary.GetExport(module, \"{exportName}\");");
             sb.AppendLine($"        if (p{exportName} == 0)");
             sb.AppendLine("        {");

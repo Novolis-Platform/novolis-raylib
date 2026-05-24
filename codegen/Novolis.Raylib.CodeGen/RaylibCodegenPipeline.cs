@@ -1,4 +1,5 @@
 using Novolis.CodeGen.Bindings;
+using Novolis.Raylib.Manifests;
 
 namespace Novolis.Raylib.CodeGen;
 
@@ -10,31 +11,26 @@ public sealed class RaylibCodegenPipeline
     public RaylibCodegenPipeline(string repoRoot, IReadOnlyList<IRaylibCodegenHook>? hooks = null)
     {
         _repoRoot = repoRoot;
-        _host = new RaylibBindingCodegenHost(hooks);
+        _host = new RaylibBindingCodegenHost(RaylibBindingManifestSource.Instance, hooks);
     }
 
     public int GenerateAll()
     {
-        return _host.GenerateAll(new BindingCodegenOptions
-        {
-            RepoRoot = _repoRoot,
-            IncludeRaygui = ManifestExists("raygui-exports.manifest.json"),
-            VerifyManifest = true,
-            RegenerateHint = CodegenHeaders.RegenerateHint,
-        });
+        return _host.GenerateAll(CreateOptions(verifyManifest: true));
     }
 
     public void GenerateBindingsOnly(TextWriter? log = null)
     {
-        _host.GenerateBindingsOnly(new BindingCodegenOptions
-        {
-            RepoRoot = _repoRoot,
-            IncludeRaygui = ManifestExists("raygui-exports.manifest.json"),
-            VerifyManifest = false,
-            RegenerateHint = CodegenHeaders.RegenerateHint,
-        }, log);
+        _host.GenerateBindingsOnly(CreateOptions(verifyManifest: false), log);
     }
 
-    private bool ManifestExists(string fileName) =>
-        File.Exists(Path.Combine(RepoPaths.PipelineDir(_repoRoot), fileName));
+    private BindingCodegenOptions CreateOptions(bool verifyManifest) =>
+        new()
+        {
+            Environment = CodegenEnvironment.Physical(_repoRoot),
+            Manifests = RaylibBindingManifestSource.Instance,
+            IncludeRaygui = true,
+            VerifyManifest = verifyManifest,
+            RegenerateHint = CodegenHeaders.RegenerateHint,
+        };
 }

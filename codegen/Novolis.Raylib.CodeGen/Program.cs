@@ -23,6 +23,7 @@ internal static class Program
                 "enrich-docs" => FacadeDocEnricher.Enrich(repoRoot, write: args.Contains("--write")),
                 "suggest-raylib" => RaylibManifestSuggester.Suggest(repoRoot),
                 "hooks" => RunHooksCommand(args.Skip(1).ToArray()),
+                "export-manifests-cs" => Tools.ManifestCsExporter.Export(repoRoot, Path.Combine(repoRoot, "codegen", "Novolis.Raylib.Manifests")),
                 _ => Unknown(cmd),
             };
         }

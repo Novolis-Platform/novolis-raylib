@@ -34,6 +34,7 @@ flowchart TB
 | Low-level control | `Graphics`, `World`, `Hud`, `Gui` | `samples/HelloRuntime` |
 | Automated tests | `Novolis.Raylib.Testing` | `samples/HelloTesting` |
 | Frame streaming / clips | `Novolis.Raylib.Capture` (optional) | `samples/HelloCapture` |
+| Full 3D cockpit demo | `Novolis.Raylib.Game` | `novolis-dogfooding/apps/raylib/XFighter` |
 
 Do **not** add direct package references to `Novolis.Raylib.Native` or `Novolis.Raylib.Abstractions` unless you extend the stack.
 

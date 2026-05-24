@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="Novolis.Raylib.CodeGen.Unit" />
+    <ProjectReference Include="..\Novolis.Raylib.Manifests\Novolis.Raylib.Manifests.csproj" />
     <ProjectReference Include="..\Novolis.Raylib.CodeGen.Abstractions\Novolis.Raylib.CodeGen.Abstractions.csproj" />
     <ProjectReference Include="..\Novolis.Raylib.CodeGen.Hooks\Novolis.Raylib.CodeGen.Hooks.csproj" />
   </ItemGroup>

@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Novolis.Raylib.Manifests</RootNamespace>
+    <AssemblyName>Novolis.Raylib.Manifests</AssemblyName>
+    <Description>C#-authoritative binding manifests for Novolis.Raylib.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\novolis-codegen\src\Novolis.CodeGen.Bindings\Novolis.CodeGen.Bindings.csproj" />
+  </ItemGroup>
+
+</Project>

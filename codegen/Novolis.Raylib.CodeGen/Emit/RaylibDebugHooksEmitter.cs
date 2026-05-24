@@ -1,20 +1,13 @@
 using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Novolis.CodeGen.Bindings;
 
 namespace Novolis.Raylib.CodeGen;
 
 internal static class RaylibDebugHooksEmitter
 {
-    public static string Emit(string manifestPath, byte[] manifestBytes, string manifestSha256)
+    public static string Emit(DebugConfigFragment fragment, string manifestSha256)
     {
-        var json = Encoding.UTF8.GetString(manifestBytes);
-        var doc = JsonSerializer.Deserialize<DebugManifest>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
-                  ?? throw new InvalidOperationException($"Failed to parse {manifestPath}");
-        if (doc.Symbols is null)
-            throw new InvalidOperationException("Manifest missing symbols.");
-
-        var s = doc.Symbols;
+        var s = fragment.Symbols;
         if (string.IsNullOrEmpty(s.LoadImageFromScreen) || string.IsNullOrEmpty(s.ExportImageToMemory) ||
             string.IsNullOrEmpty(s.UnloadImage) || string.IsNullOrEmpty(s.MemFree))
         {
@@ -22,9 +15,9 @@ internal static class RaylibDebugHooksEmitter
                 "Manifest symbols.loadImageFromScreen, exportImageToMemory, unloadImage, memFree are required.");
         }
 
-        var envVar = string.IsNullOrWhiteSpace(doc.CaptureEnvVar) ? "NOVOLIS_RAYLIB_DEBUG_CAPTURE" : doc.CaptureEnvVar!;
-        var pngType = string.IsNullOrWhiteSpace(doc.CapturePngFileType) ? ".png" : doc.CapturePngFileType!;
-        var notify = doc.NotifyAfterNativeCall;
+        var envVar = string.IsNullOrWhiteSpace(fragment.CaptureEnvVar) ? "NOVOLIS_RAYLIB_DEBUG_CAPTURE" : fragment.CaptureEnvVar;
+        var pngType = string.IsNullOrWhiteSpace(fragment.CapturePngFileType) ? ".png" : fragment.CapturePngFileType;
+        var notify = fragment.NotifyAfterNativeCall;
         var load = s.LoadImageFromScreen;
         var export = s.ExportImageToMemory;
         var unload = s.UnloadImage;
@@ -49,7 +42,7 @@ internal static class RaylibDebugHooksEmitter
         sb.AppendLine($"    public static event Action? After{notify};");
         sb.AppendLine("#endif");
         sb.AppendLine();
-        sb.AppendLine("    /// <summary>Notify subscribers after the native call named in raylib-debug.manifest.json (<c>notifyAfterNativeCall</c>).</summary>");
+        sb.AppendLine("    /// <summary>Notify subscribers after the configured native call (<c>notifyAfterNativeCall</c>).</summary>");
         sb.AppendLine($"    internal static void NotifyAfter{notify}()");
         sb.AppendLine("    {");
         sb.AppendLine("#if DEBUG");
@@ -94,34 +87,4 @@ internal static class RaylibDebugHooksEmitter
     }
 
     private static string EscapeCSharpString(string s) => s.Replace("\\", "\\\\").Replace("\"", "\\\"");
-}
-
-internal sealed class DebugManifest
-{
-    [JsonPropertyName("notifyAfterNativeCall")]
-    public string NotifyAfterNativeCall { get; set; } = "EndDrawing";
-
-    [JsonPropertyName("captureEnvVar")]
-    public string? CaptureEnvVar { get; set; }
-
-    [JsonPropertyName("capturePngFileType")]
-    public string? CapturePngFileType { get; set; }
-
-    [JsonPropertyName("symbols")]
-    public SymbolMap? Symbols { get; set; }
-}
-
-internal sealed class SymbolMap
-{
-    [JsonPropertyName("loadImageFromScreen")]
-    public string? LoadImageFromScreen { get; set; }
-
-    [JsonPropertyName("exportImageToMemory")]
-    public string? ExportImageToMemory { get; set; }
-
-    [JsonPropertyName("unloadImage")]
-    public string? UnloadImage { get; set; }
-
-    [JsonPropertyName("memFree")]
-    public string? MemFree { get; set; }
 }

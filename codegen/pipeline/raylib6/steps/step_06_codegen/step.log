@@ -1,5 +1,5 @@
-# step_06_codegen — 2026-05-24T18:25:01.0459029+00:00
-# force=False
+# step_06_codegen — 2026-05-24T19:47:00.5547132+00:00
+# force=True
 
 emit: raylib interop
 emit: imgui interop

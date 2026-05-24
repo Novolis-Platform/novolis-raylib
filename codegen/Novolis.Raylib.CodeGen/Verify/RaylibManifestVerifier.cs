@@ -1,36 +1,32 @@
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Novolis.CodeGen.Bindings;
+using Novolis.Raylib.Manifests;
 
 namespace Novolis.Raylib.CodeGen;
 
 public static class RaylibManifestVerifier
 {
-    public static int Verify(string repoRoot)
-    {
-        var manifestPath = Path.Combine(RepoPaths.PipelineDir(repoRoot), "raylib-exports.manifest.json");
-        var headerPath = PipelinePaths.RaylibHeaderPath(repoRoot);
-        if (!File.Exists(manifestPath))
-        {
-            Console.Error.WriteLine($"Missing manifest: {manifestPath}");
-            return 2;
-        }
+    public static int Verify(string repoRoot) => Verify(CodegenEnvironment.Physical(repoRoot));
 
-        if (!File.Exists(headerPath))
+    public static int Verify(CodegenEnvironment environment)
+    {
+        var interop = RaylibBindingManifestSource.Instance.GetRequired<InteropExportsFragment>(
+            FragmentKind.InteropExports,
+            "raylib6");
+        var headerPath = PipelinePaths.RaylibHeaderPath(environment.RepoRoot);
+        if (!environment.FileSystem.File.Exists(headerPath))
         {
             Console.WriteLine($"verify-raylib-manifest: skip (no vendor header at {headerPath}).");
             return 0;
         }
 
-        var json = File.ReadAllText(manifestPath);
-        var doc = JsonSerializer.Deserialize<ManifestRoot>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-        if (doc?.Imports is null || doc.Imports.Count == 0)
+        if (interop.Imports.Count == 0)
         {
             Console.Error.WriteLine("Manifest has no imports.");
             return 3;
         }
 
-        var header = File.ReadAllText(headerPath);
-        foreach (var imp in doc.Imports.OrderBy(i => i.Name, StringComparer.Ordinal))
+        var header = environment.FileSystem.File.ReadAllText(headerPath);
+        foreach (var imp in interop.Imports.OrderBy(i => i.Name, StringComparer.Ordinal))
         {
             if (string.IsNullOrEmpty(imp.Name))
                 continue;
@@ -42,7 +38,7 @@ public static class RaylibManifestVerifier
             }
         }
 
-        Console.WriteLine($"verify-raylib-manifest: OK ({doc.Imports.Count} imports).");
+        Console.WriteLine($"verify-raylib-manifest: OK ({interop.Imports.Count} imports).");
         return 0;
     }
 
@@ -58,16 +54,4 @@ public static class RaylibManifestVerifier
 
         return false;
     }
-}
-
-internal sealed class ManifestRoot
-{
-    [JsonPropertyName("imports")]
-    public List<ImportEntry>? Imports { get; set; }
-}
-
-internal sealed class ImportEntry
-{
-    [JsonPropertyName("name")]
-    public string? Name { get; set; }
 }

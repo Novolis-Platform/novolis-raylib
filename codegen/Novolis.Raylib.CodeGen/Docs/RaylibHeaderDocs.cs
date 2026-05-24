@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using Novolis.CodeGen.Bindings;
 
 namespace Novolis.Raylib.CodeGen;
 
@@ -8,12 +9,12 @@ internal static partial class RaylibHeaderDocs
         @"^\s*(?:RLAPI|RAYGUIAPI)\s+.+?\s+(\w+)\s*\([^;]*\)\s*;\s*(?://\s*(.+))?\s*$",
         RegexOptions.Compiled | RegexOptions.Multiline);
 
-    public static IReadOnlyDictionary<string, string> LoadFromFile(string headerPath)
+    public static IReadOnlyDictionary<string, string> Load(CodegenEnvironment environment, string headerPath)
     {
-        if (!File.Exists(headerPath))
+        if (!environment.FileSystem.File.Exists(headerPath))
             return new Dictionary<string, string>(StringComparer.Ordinal);
 
-        var text = File.ReadAllText(headerPath);
+        var text = environment.FileSystem.File.ReadAllText(headerPath);
         var map = new Dictionary<string, string>(StringComparer.Ordinal);
         foreach (Match match in RlApiLine.Matches(text))
         {

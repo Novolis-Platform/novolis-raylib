@@ -36,7 +36,6 @@
     <Project Path="samples/HelloHosting/HelloHosting.csproj" />
     <Project Path="samples/HelloTesting/HelloTesting.csproj" />
     <Project Path="samples/HelloCapture/HelloCapture.csproj" />
-    <Project Path="samples/XFighter/XFighter.csproj" />
     <Project Path="samples/HelloGui/HelloGui.csproj" />
     <Project Path="samples/HelloRaygui/HelloRaygui.csproj" />
   </Folder>
