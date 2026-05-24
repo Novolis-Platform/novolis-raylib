@@ -1,4 +1,4 @@
-using Novolis.Raylib.CodeGen;
+using Novolis.Raylib.Manifests;
 
 namespace Novolis.Raylib.Pipeline.Steps;
 
@@ -13,7 +13,7 @@ internal sealed class VerifyManifestStep : IPipelineStep
     public IReadOnlyList<string> InputPaths(PipelineContext context) =>
     [
         PipelinePaths.VersionsJson(context.RepoRoot),
-        Path.Combine(PipelinePaths.PipelineRaylibDir(context.RepoRoot), "raylib-exports.manifest.json"),
+        ..RaylibManifestInputPaths.AllManifestSourceFiles(context.RepoRoot),
         PipelinePaths.RaylibHeaderPath(context.RepoRoot),
     ];
 
@@ -48,29 +48,14 @@ internal sealed class EnrichDocsStep : IPipelineStep
 
     public IReadOnlyList<string> DependsOn => ["step_01_source"];
 
-    public IReadOnlyList<string> InputPaths(PipelineContext context)
-    {
-        var dir = PipelinePaths.PipelineRaylibDir(context.RepoRoot);
-        return
-        [
-            PipelinePaths.RaylibHeaderPath(context.RepoRoot),
-            PipelinePaths.RayguiHeaderPath(context.RepoRoot),
-            Path.Combine(dir, "facades.manifest.json"),
-            Path.Combine(dir, "hud.manifest.json"),
-            Path.Combine(dir, "gui.manifest.json"),
-        ];
-    }
+    public IReadOnlyList<string> InputPaths(PipelineContext context) =>
+    [
+        PipelinePaths.RaylibHeaderPath(context.RepoRoot),
+        PipelinePaths.RayguiHeaderPath(context.RepoRoot),
+        ..RaylibManifestInputPaths.AllManifestSourceFiles(context.RepoRoot),
+    ];
 
-    public IReadOnlyList<string> ExpectedOutputPaths(PipelineContext context)
-    {
-        var dir = PipelinePaths.PipelineRaylibDir(context.RepoRoot);
-        return
-        [
-            Path.Combine(dir, "facades.manifest.json"),
-            Path.Combine(dir, "hud.manifest.json"),
-            Path.Combine(dir, "gui.manifest.json"),
-        ];
-    }
+    public IReadOnlyList<string> ExpectedOutputPaths(PipelineContext context) => [];
 
     public ValueTask<StepExecutionResult> ExecuteAsync(PipelineContext context, CancellationToken cancellationToken)
     {
@@ -85,12 +70,10 @@ internal sealed class EnrichDocsStep : IPipelineStep
         }
 
         context.Log.WriteLine("enrich-docs: OK");
-        var outputs = StepFileFingerprint.DescribeOutputs(ExpectedOutputPaths(context), context.RepoRoot);
         return ValueTask.FromResult(new StepExecutionResult
         {
             Status = StepStatus.Succeeded,
             Inputs = StepFileFingerprint.HashFiles(InputPaths(context), context.RepoRoot),
-            Outputs = outputs,
         });
     }
 }
@@ -137,11 +120,8 @@ internal sealed class CodegenStep : IPipelineStep
 
     public IReadOnlyList<string> DependsOn => ["step_03_verify_manifest"];
 
-    public IReadOnlyList<string> InputPaths(PipelineContext context)
-    {
-        var dir = PipelinePaths.PipelineRaylibDir(context.RepoRoot);
-        return Directory.GetFiles(dir, "*.manifest.json").OrderBy(f => f, StringComparer.Ordinal).ToList();
-    }
+    public IReadOnlyList<string> InputPaths(PipelineContext context) =>
+        RaylibManifestInputPaths.AllManifestSourceFiles(context.RepoRoot);
 
     public IReadOnlyList<string> ExpectedOutputPaths(PipelineContext context) =>
         CodegenOutputCatalog.AllGeneratedFiles(context.RepoRoot);
@@ -186,7 +166,7 @@ internal sealed class DriftStep : IPipelineStep
     {
         var paths = new[]
         {
-            "codegen/pipeline/raylib6/",
+            "codegen/Novolis.Raylib.Manifests/",
             "src/Novolis.Raylib.Bindings/",
             "src/Novolis.Raylib.Runtime/",
             "src/Novolis.Raylib.Raygui/",
@@ -205,7 +185,7 @@ internal sealed class DriftStep : IPipelineStep
             return new StepExecutionResult
             {
                 Status = StepStatus.Failed,
-                Error = new StepErrorRecord { Message = "git diff detected drift in pipeline manifests or generated C#" },
+                Error = new StepErrorRecord { Message = "git diff detected drift in C# manifests or generated C#" },
             };
         }
 
