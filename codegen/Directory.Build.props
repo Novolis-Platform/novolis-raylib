@@ -1,7 +1,8 @@
 <Project>
   <Import Project="$(MSBuildThisFileDirectory)..\Directory.Build.props" />
+  <Import Project="$(MSBuildThisFileDirectory)..\..\novolis-governance\build\Novolis.PackageReadme.props"
+          Condition="Exists('$(MSBuildThisFileDirectory)..\..\novolis-governance\build\Novolis.PackageReadme.props')" />
   <PropertyGroup>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageProjectUrl Condition="'$(NovolisGitHubRepository)' != '' and '$(MSBuildProjectName)' == 'Novolis.Raylib.Manifests'">https://github.com/Novolis-Platform/$(NovolisGitHubRepository)/blob/main/codegen/Novolis.Raylib.Manifests/README.md</PackageProjectUrl>
   </PropertyGroup>
 </Project>
