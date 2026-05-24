@@ -1,4 +1,4 @@
-using System.Text.Json;
+using Novolis.CodeGen.Bindings;
 using Novolis.Raylib.CodeGen;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -18,22 +18,18 @@ public sealed class InjectEndDrawingNotifyHook : IRaylibCodegenHook
         if (!string.Equals(context.FacadeTypeName, "Graphics", StringComparison.Ordinal))
             return unit;
 
-        var debugManifest = LoadDebugManifest(context.RepoRoot);
+        var debugManifest = LoadDebugManifest(context);
         var rewriter = new EndDrawingRewriter(debugManifest);
         return (CompilationUnitSyntax)rewriter.Visit(unit);
     }
 
-    private static DebugManifestDocument LoadDebugManifest(string repoRoot)
+    private static DebugManifestDocument LoadDebugManifest(RaylibCodegenContext context)
     {
-        var path = Path.Combine(PipelinePaths.PipelineRaylibDir(repoRoot), "raylib-debug.manifest.json");
-        if (!File.Exists(path))
+        var debug = context.DebugConfig;
+        if (debug is null)
             return new DebugManifestDocument("EndDrawing", "EndDrawing");
 
-        var json = File.ReadAllText(path);
-        var doc = JsonSerializer.Deserialize<DebugManifestDocument>(
-            json,
-            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-        return doc ?? new DebugManifestDocument("EndDrawing", "EndDrawing");
+        return new DebugManifestDocument(debug.NotifyAfterNativeCall, debug.FrameHubNotifyAfter);
     }
 
     private sealed class EndDrawingRewriter(DebugManifestDocument manifest) : CSharpSyntaxRewriter

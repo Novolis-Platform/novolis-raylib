@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Novolis.Raylib.CodeGen.Abstractions\Novolis.Raylib.CodeGen.Abstractions.csproj" />
     <ProjectReference Include="..\Novolis.Raylib.CodeGen\Novolis.Raylib.CodeGen.csproj" />
+    <ProjectReference Include="..\..\..\novolis-codegen\src\Novolis.CodeGen.Pipeline\Novolis.CodeGen.Pipeline.csproj" />
   </ItemGroup>
 
   <ItemGroup>

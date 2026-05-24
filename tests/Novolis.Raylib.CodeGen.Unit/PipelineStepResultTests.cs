@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Novolis.CodeGen.Pipeline;
 using Novolis.Raylib.CodeGen;
 using Novolis.Raylib.Pipeline;
 
@@ -37,7 +38,7 @@ public sealed class PipelineStepResultTests
         var step = new Pipeline.Steps.VerifyManifestStep();
         var context = new PipelineContext
         {
-            RepoRoot = repoRoot,
+            Layout = new RaylibPipelineLayout(repoRoot),
             Log = TextWriter.Null,
             Force = false,
         };

@@ -1,12 +1,6 @@
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Novolis.CodeGen.Bindings;
+using Novolis.CodeGen.Bindings.Roslyn;
 
 namespace Novolis.Raylib.CodeGen;
 
-public interface IRaylibCodegenHook
-{
-    int Order { get; }
-
-    RaylibCodegenPhase Phase { get; }
-
-    CompilationUnitSyntax Transform(CompilationUnitSyntax unit, RaylibCodegenContext context);
-}
+public interface IRaylibCodegenHook : ICodegenHook<RaylibCodegenPhase, RaylibCodegenContext>;

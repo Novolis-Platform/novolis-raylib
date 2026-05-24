@@ -1,2 +1,1 @@
 global using Novolis.CodeGen.Pipeline;
-global using Novolis.Raylib.CodeGen;

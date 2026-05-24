@@ -37,7 +37,7 @@ internal static class Program
     {
         if (args is [] or ["list"])
         {
-            foreach (var hook in HookDiscovery.DiscoverAll())
+            foreach (var hook in RaylibHookDiscovery.DiscoverAll())
                 Console.WriteLine($"{hook.Order,4}  {hook.Phase,-8}  {hook.GetType().FullName}");
             return 0;
         }

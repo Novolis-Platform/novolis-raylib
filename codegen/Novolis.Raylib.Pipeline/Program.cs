@@ -1,3 +1,5 @@
+using Novolis.CodeGen.Pipeline;
+
 namespace Novolis.Raylib.Pipeline;
 
 internal static class Program
@@ -18,13 +20,14 @@ internal static class Program
             return 1;
         }
 
-        var runner = new PipelineRunner(PipelineStepRegistry.CreateAll());
+        var layout = RaylibPipelineLayout.Find();
+        var runner = new PipelineRunner(PipelineStepRegistry.CreateAll(), layout);
 
         try
         {
             return filtered[0].ToLowerInvariant() switch
             {
-                "run" when filtered.Length >= 2 => await runner.RunProfileAsync(filtered[1], force),
+                "run" when filtered.Length >= 2 => await runner.RunProfileAsync(PipelineProfiles.Resolve(filtered[1]), force),
                 "list" => ListSteps(),
                 "explain" when filtered.Length >= 2 => Explain(filtered[1]),
                 _ => Unknown(filtered[0]),

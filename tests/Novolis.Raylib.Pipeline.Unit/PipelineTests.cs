@@ -38,8 +38,9 @@ public sealed class StepSkipEvaluatorTests
     public async Task Force_never_skips()
     {
         var repoRoot = PipelinePaths.FindRepoRoot();
+        var layout = new RaylibPipelineLayout(repoRoot);
         var step = new VerifyManifestStep();
-        var context = new PipelineContext { RepoRoot = repoRoot, Log = TextWriter.Null, Force = true };
+        var context = new PipelineContext { Layout = layout, Log = TextWriter.Null, Force = true };
         var previous = new StepResultDocument { StepId = step.Id, Status = StepStatus.Succeeded, Inputs = [] };
         var skip = StepSkipEvaluator.ShouldSkip(step, context, previous, out _);
         await Assert.That(skip).IsFalse();
@@ -49,8 +50,9 @@ public sealed class StepSkipEvaluatorTests
     public async Task Missing_previous_result_does_not_skip()
     {
         var repoRoot = PipelinePaths.FindRepoRoot();
+        var layout = new RaylibPipelineLayout(repoRoot);
         var step = new VerifyManifestStep();
-        var context = new PipelineContext { RepoRoot = repoRoot, Log = TextWriter.Null, Force = false };
+        var context = new PipelineContext { Layout = layout, Log = TextWriter.Null, Force = false };
         var skip = StepSkipEvaluator.ShouldSkip(step, context, previous: null, out _);
         await Assert.That(skip).IsFalse();
     }
@@ -59,8 +61,9 @@ public sealed class StepSkipEvaluatorTests
     public async Task Input_hash_mismatch_does_not_skip()
     {
         var repoRoot = PipelinePaths.FindRepoRoot();
+        var layout = new RaylibPipelineLayout(repoRoot);
         var step = new VerifyManifestStep();
-        var context = new PipelineContext { RepoRoot = repoRoot, Log = TextWriter.Null, Force = false };
+        var context = new PipelineContext { Layout = layout, Log = TextWriter.Null, Force = false };
         var previous = new StepResultDocument
         {
             StepId = step.Id,
@@ -85,7 +88,8 @@ public sealed class PipelineRunnerTests
         var stepDir = PipelinePaths.StepDir(tempRoot, stepId);
         Directory.CreateDirectory(stepDir);
 
-        var runner = new PipelineRunner([new FakeSuccessStep(stepId)], tempRoot);
+        var layout = new RaylibPipelineLayout(tempRoot);
+        var runner = new PipelineRunner([new FakeSuccessStep(stepId)], layout);
         var exit = await runner.RunStepAsync(stepId, force: true);
         await Assert.That(exit).IsEqualTo(0);
 
@@ -106,7 +110,8 @@ public sealed class PipelineRunnerTests
         File.WriteAllText(Path.Combine(tempRoot, "Directory.Packages.props"), "<Project/>");
 
         var failId = "step_fake_fail";
-        var runner = new PipelineRunner([new FakeFailStep(failId)], tempRoot);
+        var layout = new RaylibPipelineLayout(tempRoot);
+        var runner = new PipelineRunner([new FakeFailStep(failId)], layout);
 
         var exit = await runner.RunStepAsync(failId, force: true);
         await Assert.That(exit).IsEqualTo(1);
