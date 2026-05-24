@@ -4,7 +4,4 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageProjectUrl Condition="'$(NovolisGitHubRepository)' != '' and '$(MSBuildProjectName)' == 'Novolis.Raylib.Manifests'">https://github.com/Novolis-Platform/$(NovolisGitHubRepository)/blob/main/codegen/Novolis.Raylib.Manifests/README.md</PackageProjectUrl>
   </PropertyGroup>
-  <ItemGroup>
-    <None Include="$(MSBuildProjectDirectory)\README.md" Pack="true" PackagePath="\" Condition="Exists('$(MSBuildProjectDirectory)\README.md')" />
-  </ItemGroup>
 </Project>

@@ -8,7 +8,6 @@
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
     <PackageId>Novolis.Raylib.Native</PackageId>
     <IsPackable>true</IsPackable>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
     <Description>raylib 6, ImGui shim, and trace forwarder native binaries per RID (transitive dependency; do not reference directly).</Description>
   </PropertyGroup>
 
@@ -26,7 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="README.md" Pack="true" PackagePath="\" />
     <None Include="$(MSBuildThisFileDirectory)..\..\build\Novolis.Raylib.Native.targets" Pack="true" PackagePath="buildTransitive/Novolis.Raylib.Native.targets" />
   </ItemGroup>
 

@@ -7,12 +7,7 @@
     <AssemblyName>Novolis.Raylib.Capture</AssemblyName>
     <IsPackable>true</IsPackable>
     <PackageId>Novolis.Raylib.Capture</PackageId>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Include="README.md" Pack="true" PackagePath="\" Condition="Exists('README.md')" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Novolis.Raylib.Runtime\Novolis.Raylib.Runtime.csproj" />

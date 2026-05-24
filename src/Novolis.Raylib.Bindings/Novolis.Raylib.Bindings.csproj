@@ -10,16 +10,11 @@
     <AssemblyName>Novolis.Raylib.Bindings</AssemblyName>
     <PackageId>Novolis.Raylib.Bindings</PackageId>
     <IsPackable>true</IsPackable>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
     <Description>Generated raylib 6 + ImGui P/Invoke (manifest-driven; do not hand-edit Interop/*.g.cs).</Description>
     <IncludeRaygui Condition="'$(IncludeRaygui)' == ''">false</IncludeRaygui>
     <PipelineStep01>$(MSBuildThisFileDirectory)..\..\codegen\pipeline\raylib6\steps\step_01_source\artifacts</PipelineStep01>
     <PipelineStep02>$(MSBuildThisFileDirectory)..\..\codegen\pipeline\raylib6\steps\step_02_native\artifacts</PipelineStep02>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Include="README.md" Pack="true" PackagePath="\" Condition="Exists('README.md')" />
-  </ItemGroup>
 
   <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
     <None Include="$(PipelineStep01)\raylib-6\prebuilt\win-x64\raylib.dll"

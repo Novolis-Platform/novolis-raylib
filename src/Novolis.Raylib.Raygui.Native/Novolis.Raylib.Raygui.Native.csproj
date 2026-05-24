@@ -8,7 +8,6 @@
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
     <PackageId>Novolis.Raylib.Raygui.Native</PackageId>
     <IsPackable>true</IsPackable>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
     <Description>novolis_raygui native binaries per RID (transitive with Novolis.Raylib.Raygui).</Description>
     <PipelineStep02>$(MSBuildThisFileDirectory)..\..\codegen\pipeline\raylib6\steps\step_02_native\artifacts</PipelineStep02>
     <LegacyNativeOut>$(MSBuildThisFileDirectory)..\..\codegen\native\raylib6-with-raygui\out</LegacyNativeOut>
@@ -27,7 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="README.md" Pack="true" PackagePath="\" />
     <None Include="$(MSBuildThisFileDirectory)..\..\build\Novolis.Raylib.Raygui.Native.targets" Pack="true" PackagePath="buildTransitive/Novolis.Raylib.Raygui.Native.targets" />
   </ItemGroup>
 

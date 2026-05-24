@@ -11,13 +11,8 @@
     <AssemblyName>Novolis.Raylib.Testing</AssemblyName>
     <PackageId>Novolis.Raylib.Testing</PackageId>
     <IsPackable>true</IsPackable>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
     <Description>Offscreen raylib test harness and debug helpers (optional; for test projects only).</Description>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Include="README.md" Pack="true" PackagePath="\" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="TUnit" />
