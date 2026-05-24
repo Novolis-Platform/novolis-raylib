@@ -15,5 +15,6 @@
     "Center: red filled circle radius 28 at screen center.",
     "Top bar: DarkGray strip with white text \u0027Novolis smoke\u0027 at (24, 22), 18px.",
     "Footer: \u0027pre-Game visual check\u0027 in DarkGray at y near height - 36."
-  ]
+  ],
+  "frames": []
 }

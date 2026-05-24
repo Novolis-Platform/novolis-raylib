@@ -21,7 +21,7 @@ public sealed class QueuedGoldenStoryRendererTests
         renderer.BeginFrame("step-a");
         renderer.OnFrame(0.016f, 320, 240);
 
-        await Assert.That(order).IsEqualTo([
+         await Assert.That(order).IsEqualTo([
             "drain",
             "scene:step-a",
             "drain",
