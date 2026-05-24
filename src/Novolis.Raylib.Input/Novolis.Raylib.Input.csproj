@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Novolis.Raylib.Packaging.props" />
+  <PropertyGroup>
+    <PackageId>Novolis.Raylib.Input</PackageId>
+    <Description>Input source abstractions for Raylib hosts (Frank.GameEngine.Input subset).</Description>
+    <IsPackable>true</IsPackable>
+    <RootNamespace>Novolis.Raylib.Input</RootNamespace>
+  </PropertyGroup>
+</Project>

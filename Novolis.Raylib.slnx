@@ -17,6 +17,8 @@
     <Project Path="src/Novolis.Raylib.Capture/Novolis.Raylib.Capture.csproj" />
     <Project Path="src/Novolis.Raylib.Raygui/Novolis.Raylib.Raygui.csproj" />
     <Project Path="src/Novolis.Raylib.Raygui.Native/Novolis.Raylib.Raygui.Native.csproj" />
+    <Project Path="src/Novolis.Raylib.Loaders/Novolis.Raylib.Loaders.csproj" />
+    <Project Path="src/Novolis.Raylib.Input/Novolis.Raylib.Input.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Novolis.Raylib.CodeGen.Unit/Novolis.Raylib.CodeGen.Unit.csproj" />
@@ -26,6 +28,7 @@
     <Project Path="tests/Novolis.Raylib.Runtime.Unit/Novolis.Raylib.Runtime.Unit.csproj" />
     <Project Path="tests/Novolis.Raylib.Hosting.Unit/Novolis.Raylib.Hosting.Unit.csproj" />
     <Project Path="tests/Novolis.Raylib.Game.Unit/Novolis.Raylib.Game.Unit.csproj" />
+    <Project Path="tests/Novolis.Raylib.Loaders.Unit/Novolis.Raylib.Loaders.Unit.csproj" />
     <Project Path="tests/Novolis.Raylib.Testing.Integration/Novolis.Raylib.Testing.Integration.csproj" />
     <Project Path="tests/Novolis.Raylib.Golden/Novolis.Raylib.Golden.csproj" />
     <Project Path="tests/Novolis.Raylib.Golden.Seed/Novolis.Raylib.Golden.Seed.csproj" />

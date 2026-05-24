@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\Novolis.Raylib.Packaging.props" />
+  <PropertyGroup>
+    <PackageId>Novolis.Raylib.Loaders</PackageId>
+    <Description>Wavefront OBJ mesh loading for Raylib samples (Frank.GameEngine.Assets subset).</Description>
+    <IsPackable>true</IsPackable>
+    <RootNamespace>Novolis.Raylib.Loaders</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Novolis.Math.Geometry" Version="2026.1.*" />
+  </ItemGroup>
+</Project>
