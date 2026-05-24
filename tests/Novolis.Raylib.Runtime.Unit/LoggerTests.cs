@@ -14,6 +14,8 @@ public sealed class LoggerTests
     }
 
     [Test]
+    [RunOnlyIfNativeRaylib]
+    [Category("Native")]
     public async Task SetTraceLogLevel_accepts_enum_values()
     {
         Logger.SetTraceLogLevel(TraceLogLevel.Warning);
