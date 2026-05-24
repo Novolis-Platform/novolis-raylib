@@ -1,14 +1,11 @@
 {
   "stepId": "step_03_verify_manifest",
-  "status": "Skipped",
-  "startedUtc": "2026-05-24T11:57:13.276763+00:00",
-  "durationMs": 0,
+  "status": "Succeeded",
   "pipelineVersion": "1",
   "inputs": {
     "pipeline/raylib6/versions.json": "23fbffd47a4a3e031862ab30db3020aee731d91e88cfce450e1d97e78a5b22ad",
     "pipeline/raylib6/raylib-exports.manifest.json": "7f59eacfc7cee6a4c81793868568d0300417eceac7ed2ca8de1ecbdac3b91031",
     "pipeline/raylib6/steps/step_01_source/artifacts/raylib-6/include/raylib.h": "1842111e48260e622d0ff2e6f4ac6141508d6f369791265ba518e7502c760ccf"
   },
-  "outputs": [],
-  "skipReason": "outputs up to date"
+  "outputs": []
 }
