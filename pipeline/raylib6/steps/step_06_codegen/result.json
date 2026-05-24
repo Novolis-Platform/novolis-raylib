@@ -1,8 +1,8 @@
 {
   "stepId": "step_06_codegen",
   "status": "Succeeded",
-  "startedUtc": "2026-05-24T15:00:37.7403462+00:00",
-  "durationMs": 1690,
+  "startedUtc": "2026-05-24T18:05:58.6234873+00:00",
+  "durationMs": 1102,
   "pipelineVersion": "1",
   "inputs": {
     "pipeline/raylib6/facades.manifest.json": "f3c88e0e8244512cf130f0ff29b862755f849b2b1701d23d00f25870374c1452",
@@ -32,8 +32,8 @@
     },
     {
       "path": "src/Novolis.Raylib.Runtime/Rendering/Graphics.g.cs",
-      "sha256": "0acb26a49509a7b14c786a9fce94f27bfe3c8ba77f8107415add18527f5f2977",
-      "bytes": 3939
+      "sha256": "b2a1b66d2d53a08ee685598bfefd35a7b9845593b521f4c4196eb0d0decf2257",
+      "bytes": 3947
     },
     {
       "path": "src/Novolis.Raylib.Runtime/Rendering/Textures.g.cs",

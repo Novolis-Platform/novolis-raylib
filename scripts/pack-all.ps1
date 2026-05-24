@@ -26,7 +26,6 @@ $shipping = @(
     "src/Novolis.Raylib.Game/Novolis.Raylib.Game.csproj",
     "src/Novolis.Raylib/Novolis.Raylib.csproj",
     "src/Novolis.Raylib.Testing/Novolis.Raylib.Testing.csproj",
-    "src/Novolis.Raylib.Presentation/Novolis.Raylib.Presentation.csproj",
     "src/Novolis.Raylib.Raygui/Novolis.Raylib.Raygui.csproj",
     "src/Novolis.Raylib.Raygui.Native/Novolis.Raylib.Raygui.Native.csproj"
 )

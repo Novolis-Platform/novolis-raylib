@@ -65,7 +65,7 @@ public sealed class InjectEndDrawingNotifyHook : IRaylibCodegenHook
                         SyntaxFactory.InvocationExpression(
                             SyntaxFactory.MemberAccessExpression(
                                 SyntaxKind.SimpleMemberAccessExpression,
-                                SyntaxFactory.ParseName("Novolis.Raylib.Presentation.RaylibPresentationHooks"),
+                                SyntaxFactory.ParseName("Novolis.Raylib.Runtime.Presentation.RaylibPresentationHooks"),
                                 SyntaxFactory.IdentifierName("Notify")))));
             }
 

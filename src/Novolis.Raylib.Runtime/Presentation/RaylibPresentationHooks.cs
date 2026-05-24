@@ -1,4 +1,4 @@
-namespace Novolis.Raylib.Presentation;
+namespace Novolis.Raylib.Runtime.Presentation;
 
 /// <summary>Opt-in callbacks after a frame is presented (<c>EndDrawing</c>). Zero cost when disabled.</summary>
 public static class RaylibPresentationHooks

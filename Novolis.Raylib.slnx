@@ -17,7 +17,6 @@
     <Project Path="src/Novolis.Raylib.Capture/Novolis.Raylib.Capture.csproj" />
     <Project Path="src/Novolis.Raylib.Raygui/Novolis.Raylib.Raygui.csproj" />
     <Project Path="src/Novolis.Raylib.Raygui.Native/Novolis.Raylib.Raygui.Native.csproj" />
-    <Project Path="src/Novolis.Raylib.Presentation/Novolis.Raylib.Presentation.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Novolis.Raylib.CodeGen.Unit/Novolis.Raylib.CodeGen.Unit.csproj" />
