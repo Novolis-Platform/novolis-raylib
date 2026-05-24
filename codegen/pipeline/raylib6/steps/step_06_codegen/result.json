@@ -1,8 +1,8 @@
 {
   "stepId": "step_06_codegen",
-  "status": "Skipped",
-  "startedUtc": "2026-05-24T21:20:23.2954191+00:00",
-  "durationMs": 0,
+  "status": "Succeeded",
+  "startedUtc": "2026-05-24T23:16:50.9187406+00:00",
+  "durationMs": 649,
   "pipelineVersion": "1",
   "inputs": {
     "codegen/Novolis.Raylib.Manifests/FacadesManifest.cs": "43b03e69808d0b36500afb9ea1d13ad0e3690157a7679ba23668b2924dba6cfd",
@@ -16,7 +16,7 @@
     "codegen/Novolis.Raylib.Manifests/RaylibDebugManifest.cs": "8d18165eb9e54ec47570ef096c9aa4ab83fb7151c051350d4ab6736a7372c375",
     "codegen/Novolis.Raylib.Manifests/RaylibManifestInputPaths.cs": "7f5f627ab8cb29888d22735af1b853bb89f190d99098f37ae42384e5a8f4716d",
     "codegen/Novolis.Raylib.Manifests/obj/Debug/net10.0/.NETCoreApp,Version=v10.0.AssemblyAttributes.cs": "93d67476196ebfc80d1d7d8844b91146cfd678d105f5ce635eb900ca40610c9b",
-    "codegen/Novolis.Raylib.Manifests/obj/Debug/net10.0/Novolis.Raylib.Manifests.AssemblyInfo.cs": "5fff4d65f008c1d0d3d6b784f11f0898f7568b3449727b63848e9be77b5783d0",
+    "codegen/Novolis.Raylib.Manifests/obj/Debug/net10.0/Novolis.Raylib.Manifests.AssemblyInfo.cs": "67da27880be49a63e29d40aad63b8ff1b5db09b4dd266f8f3bab8ec443eb8782",
     "codegen/Novolis.Raylib.Manifests/obj/Debug/net10.0/Novolis.Raylib.Manifests.GlobalUsings.g.cs": "a3c6048bb4d922b1799a9977f84362a3787b68810cac67aa86ac3aa23295f227",
     "codegen/Novolis.Raylib.Manifests/obj/Release/net10.0/.NETCoreApp,Version=v10.0.AssemblyAttributes.cs": "93d67476196ebfc80d1d7d8844b91146cfd678d105f5ce635eb900ca40610c9b",
     "codegen/Novolis.Raylib.Manifests/obj/Release/net10.0/Novolis.Raylib.Manifests.AssemblyInfo.cs": "0de22e6293e0843ead9f397a60abde6ab11ac2b8f8dc550cc6593bcda03ff2cc",
@@ -93,6 +93,5 @@
       "sha256": "0f30d85ae62e1426ec493901890578ea78484e95f62ca726d502ea7bc980b73b",
       "bytes": 4362
     }
-  ],
-  "skipReason": "outputs up to date"
+  ]
 }
