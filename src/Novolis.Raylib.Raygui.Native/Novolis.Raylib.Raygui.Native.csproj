@@ -8,13 +8,27 @@
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
     <PackageId>Novolis.Raylib.Raygui.Native</PackageId>
     <IsPackable>true</IsPackable>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <Description>novolis_raygui native binaries per RID (transitive with Novolis.Raylib.Raygui).</Description>
+    <PipelineStep02>$(MSBuildThisFileDirectory)..\..\pipeline\raylib6\steps\step_02_native\artifacts</PipelineStep02>
+    <LegacyNativeOut>$(MSBuildThisFileDirectory)..\..\native\raylib6-with-raygui\out</LegacyNativeOut>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)..\..\native\raylib6-with-raygui\out\novolis_raygui.dll" Pack="true" PackagePath="runtimes/win-x64/native" Condition="Exists('$(MSBuildThisFileDirectory)..\..\native\raylib6-with-raygui\out\novolis_raygui.dll')" />
-    <None Include="$(MSBuildThisFileDirectory)..\..\native\raylib6-with-raygui\out\libnovolis_raygui.so" Pack="true" PackagePath="runtimes/linux-x64/native" Condition="Exists('$(MSBuildThisFileDirectory)..\..\native\raylib6-with-raygui\out\libnovolis_raygui.so')" />
-    <None Include="$(MSBuildThisFileDirectory)..\..\native\raylib6-with-raygui\out\libnovolis_raygui.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Condition="Exists('$(MSBuildThisFileDirectory)..\..\native\raylib6-with-raygui\out\libnovolis_raygui.dylib')" />
+    <None Include="$(MSBuildThisFileDirectory)runtimes\win-x64\native\novolis_raygui.dll" Pack="true" PackagePath="runtimes/win-x64/native" Condition="Exists('$(MSBuildThisFileDirectory)runtimes\win-x64\native\novolis_raygui.dll')" />
+    <None Include="$(MSBuildThisFileDirectory)runtimes\linux-x64\native\libnovolis_raygui.so" Pack="true" PackagePath="runtimes/linux-x64/native" Condition="Exists('$(MSBuildThisFileDirectory)runtimes\linux-x64\native\libnovolis_raygui.so')" />
+    <None Include="$(MSBuildThisFileDirectory)runtimes\osx-x64\native\libnovolis_raygui.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Condition="Exists('$(MSBuildThisFileDirectory)runtimes\osx-x64\native\libnovolis_raygui.dylib')" />
+    <None Include="$(PipelineStep02)\novolis_raygui.dll" Pack="true" PackagePath="runtimes/win-x64/native" Condition="Exists('$(PipelineStep02)\novolis_raygui.dll')" />
+    <None Include="$(PipelineStep02)\libnovolis_raygui.so" Pack="true" PackagePath="runtimes/linux-x64/native" Condition="Exists('$(PipelineStep02)\libnovolis_raygui.so')" />
+    <None Include="$(PipelineStep02)\libnovolis_raygui.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Condition="Exists('$(PipelineStep02)\libnovolis_raygui.dylib')" />
+    <None Include="$(LegacyNativeOut)\novolis_raygui.dll" Pack="true" PackagePath="runtimes/win-x64/native" Condition="Exists('$(LegacyNativeOut)\novolis_raygui.dll')" />
+    <None Include="$(LegacyNativeOut)\libnovolis_raygui.so" Pack="true" PackagePath="runtimes/linux-x64/native" Condition="Exists('$(LegacyNativeOut)\libnovolis_raygui.so')" />
+    <None Include="$(LegacyNativeOut)\libnovolis_raygui.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Condition="Exists('$(LegacyNativeOut)\libnovolis_raygui.dylib')" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+    <None Include="$(MSBuildThisFileDirectory)..\..\build\Novolis.Raylib.Raygui.Native.targets" Pack="true" PackagePath="buildTransitive/Novolis.Raylib.Raygui.Native.targets" />
   </ItemGroup>
 
 </Project>

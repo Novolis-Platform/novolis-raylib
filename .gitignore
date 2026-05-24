@@ -13,3 +13,4 @@ native/raylib6-with-raygui/build/
 *.so
 *.dylib
 !src/Novolis.Raylib.Native/runtimes/**
+!src/Novolis.Raylib.Raygui.Native/runtimes/**
