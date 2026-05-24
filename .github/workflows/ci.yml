@@ -32,6 +32,8 @@ jobs:
         with:
           dotnet-version: 10.0.x
       - uses: Novolis-Platform/novolis-workflows/actions/authenticate-github-packages@main
+        with:
+          token: ${{ secrets.NOVOLIS_GPR_TOKEN }}
       - name: Restore shipping + unit test projects
         run: |
           set -euo pipefail
@@ -73,6 +75,8 @@ jobs:
         with:
           dotnet-version: 10.0.x
       - uses: Novolis-Platform/novolis-workflows/actions/authenticate-github-packages@main
+        with:
+          token: ${{ secrets.NOVOLIS_GPR_TOKEN }}
       - name: Build shipping libraries
         run: |
           set -euo pipefail
