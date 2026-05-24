@@ -5,12 +5,22 @@ namespace Novolis.Raylib.Testing.Golden;
 /// <summary>Golden image tests with QA review bundles and SHA256 validation (no environment variables).</summary>
 public static class RaylibGoldenTest
 {
+    /// <summary>Runs a golden story using a plain frame renderer.</summary>
+    /// <param name="storyId">Committed story identifier.</param>
+    /// <param name="renderer">Per-frame draw callback.</param>
+    /// <param name="options">Run options (defaults when null).</param>
+    /// <returns>Golden test outcome with QA report paths.</returns>
     public static GoldenTestResult Run(
         string storyId,
         IRaylibFrameRenderer renderer,
         GoldenRunOptions? options = null) =>
         Run(storyId, new GoldenStoryRendererAdapter(renderer), options);
 
+    /// <summary>Runs a golden story using a multi-frame-aware renderer.</summary>
+    /// <param name="storyId">Committed story identifier.</param>
+    /// <param name="renderer">Story renderer with per-frame setup.</param>
+    /// <param name="options">Run options (defaults when null).</param>
+    /// <returns>Golden test outcome with QA report paths.</returns>
     public static GoldenTestResult Run(
         string storyId,
         IGoldenStoryRenderer renderer,

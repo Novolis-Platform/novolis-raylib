@@ -1,3 +1,5 @@
+using Novolis.Raylib.Abstractions;
+
 namespace Novolis.Raylib.Hosting;
 
 /// <summary>Window and loop configuration for <see cref="RaylibHost"/>.</summary>

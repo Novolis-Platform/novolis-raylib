@@ -15,6 +15,7 @@ public static class RaylibTraceHost
     private static int _state;
     private static string? _failureMessage;
 
+    /// <summary>Loads the raylib trace forwarder native module; throws if it is missing.</summary>
     public static void EnsureInitialized()
     {
         if (Volatile.Read(ref _state) == StateReady)

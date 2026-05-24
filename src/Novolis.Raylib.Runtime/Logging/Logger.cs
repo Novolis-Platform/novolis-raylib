@@ -44,6 +44,8 @@ public static class Logger
         }
     }
 
+    /// <summary>Sets the native raylib minimum trace log level.</summary>
+    /// <param name="level">Minimum level forwarded to raylib.</param>
     public static void SetTraceLogLevel(TraceLogLevel level) => Raylib6Native.SetTraceLogLevel((int)level);
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]

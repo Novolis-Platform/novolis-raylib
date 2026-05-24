@@ -1,4 +1,5 @@
 using Novolis.CodeGen.Bindings;
+using Novolis.CodeGen.Bindings.Roslyn;
 using Novolis.Raylib.CodeGen;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -20,7 +21,54 @@ public sealed class InjectEndDrawingNotifyHook : IRaylibCodegenHook
 
         var debugManifest = LoadDebugManifest(context);
         var rewriter = new EndDrawingRewriter(debugManifest);
-        return (CompilationUnitSyntax)rewriter.Visit(unit);
+        unit = (CompilationUnitSyntax)rewriter.Visit(unit)!;
+        return EnsureEndDrawingDocumentation(unit, context, debugManifest.NotifyAfterNativeCall);
+    }
+
+    private static CompilationUnitSyntax EnsureEndDrawingDocumentation(
+        CompilationUnitSyntax unit,
+        RaylibCodegenContext context,
+        string methodName)
+    {
+        var text = unit.NormalizeWhitespace(eol: Environment.NewLine).ToFullString();
+        if (text.Contains("/// End canvas drawing", StringComparison.Ordinal) ||
+            text.Contains($"/// {methodName}", StringComparison.Ordinal))
+        {
+            return unit;
+        }
+
+        var summary = ResolveMethodSummary(context, methodName)
+            ?? "End canvas drawing and swap buffers (double buffering)";
+        var doc = $"""
+                /// <summary>
+                /// {summary}
+                /// </summary>
+                public static void {methodName}()
+            """;
+
+        var needle = $"    public static void {methodName}()";
+        if (!text.Contains(needle, StringComparison.Ordinal))
+            return unit;
+
+        text = text.Replace(needle, doc, StringComparison.Ordinal);
+        return CodegenSyntaxParser.ParseGenerated(text);
+    }
+
+    private static string? ResolveMethodSummary(RaylibCodegenContext context, string methodName)
+    {
+        if (context.Fragment is FacadeTypesFragment facades)
+        {
+            var type = facades.Types.FirstOrDefault(t =>
+                string.Equals(t.Name, context.FacadeTypeName, StringComparison.Ordinal));
+            var fromManifest = type?.Methods.FirstOrDefault(m =>
+                string.Equals(m.Name, methodName, StringComparison.Ordinal))?.Summary;
+            if (!string.IsNullOrWhiteSpace(fromManifest))
+                return fromManifest.Trim();
+        }
+
+        return string.Equals(methodName, "EndDrawing", StringComparison.Ordinal)
+            ? "End canvas drawing and swap buffers (double buffering)"
+            : null;
     }
 
     private static DebugManifestDocument LoadDebugManifest(RaylibCodegenContext context)
@@ -76,6 +124,7 @@ public sealed class InjectEndDrawingNotifyHook : IRaylibCodegenHook
                 .WithBody(SyntaxFactory.Block(statements))
                 .WithSemicolonToken(default);
         }
+
     }
 
     private sealed class DebugManifestDocument

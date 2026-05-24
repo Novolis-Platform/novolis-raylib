@@ -8,6 +8,8 @@ public static class RaylibGlfwTestSync
 {
     private const string MutexName = @"Global\Novolis.Raylib.GlfwTests";
 
+    /// <summary>Acquires the global GLFW test mutex (blocks up to two minutes).</summary>
+    /// <returns>Scope that releases the mutex on dispose.</returns>
     public static LockScope Enter()
     {
         var mutex = new Mutex(initiallyOwned: false, name: MutexName);
@@ -25,8 +27,11 @@ public static class RaylibGlfwTestSync
         return new LockScope(mutex);
     }
 
+    /// <summary>RAII holder for the GLFW test mutex.</summary>
+    /// <param name="mutex">Acquired mutex instance.</param>
     public readonly struct LockScope(Mutex mutex) : IDisposable
     {
+        /// <inheritdoc />
         public void Dispose()
         {
             try

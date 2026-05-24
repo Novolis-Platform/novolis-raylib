@@ -9,11 +9,13 @@ namespace Novolis.Raylib.Testing.Golden;
 /// </summary>
 public sealed class GoldenAdhocRunBucketLayout : IGoldenRunBucketLayout
 {
+    /// <summary>Shared singleton layout instance.</summary>
     public static GoldenAdhocRunBucketLayout Instance { get; } = new();
 
     private static readonly object RunLock = new();
     private static string? _sharedRunFolder;
 
+    /// <inheritdoc />
     public GoldenRenderRunContext Resolve(Assembly testAssembly, string storyId, string outputRoot)
     {
         ArgumentNullException.ThrowIfNull(testAssembly);
@@ -45,6 +47,7 @@ public sealed class GoldenAdhocRunBucketLayout : IGoldenRunBucketLayout
         }
     }
 
+    /// <summary>Current shared adhoc run folder, or null before first resolve.</summary>
     public static string? SharedRunFolder
     {
         get
@@ -54,6 +57,7 @@ public sealed class GoldenAdhocRunBucketLayout : IGoldenRunBucketLayout
         }
     }
 
+    /// <summary>Clears the shared run folder so the next resolve creates a new bucket.</summary>
     public static void ResetSharedRun()
     {
         lock (RunLock)

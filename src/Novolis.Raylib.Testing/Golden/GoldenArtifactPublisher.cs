@@ -18,6 +18,11 @@ public static class GoldenArtifactPublisher
         "assert.txt",
     ];
 
+    /// <summary>Copies a QA bundle into a stable browsable destination folder.</summary>
+    /// <param name="sourceStoryDirectory">Source story output directory.</param>
+    /// <param name="destinationDirectory">Target publish directory.</param>
+    /// <param name="options">Publish options (defaults when null).</param>
+    /// <returns>Paths to written artifacts.</returns>
     public static GoldenPublishResult Publish(
         string sourceStoryDirectory,
         string destinationDirectory,

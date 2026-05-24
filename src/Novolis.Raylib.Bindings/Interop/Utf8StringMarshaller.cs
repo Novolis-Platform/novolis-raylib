@@ -8,6 +8,9 @@ namespace Novolis.Raylib.Interop;
 [CustomMarshaller(typeof(string), MarshalMode.ManagedToUnmanagedIn, typeof(Utf8StringMarshaller))]
 public static unsafe class Utf8StringMarshaller
 {
+    /// <summary>Allocates a null-terminated UTF-8 buffer for the managed string.</summary>
+    /// <param name="managed">Source string, or <see langword="null"/> for a null pointer.</param>
+    /// <returns>Unmanaged pointer; call <see cref="Free"/> when done.</returns>
     public static nint ConvertToUnmanaged(string? managed)
     {
         if (managed is null)
@@ -21,6 +24,8 @@ public static unsafe class Utf8StringMarshaller
         return ptr;
     }
 
+    /// <summary>Frees memory allocated by <see cref="ConvertToUnmanaged"/>.</summary>
+    /// <param name="unmanaged">Pointer returned from <see cref="ConvertToUnmanaged"/>.</param>
     public static void Free(nint unmanaged)
     {
         if (unmanaged != 0)

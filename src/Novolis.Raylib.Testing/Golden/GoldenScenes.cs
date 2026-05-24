@@ -8,6 +8,10 @@ namespace Novolis.Raylib.Testing.Golden;
 /// <summary>Shared draw routines for golden tests and baseline seeding.</summary>
 public static class GoldenScenes
 {
+    /// <summary>Draws the standard smoke-test scene (panels, diagonals, circle).</summary>
+    /// <param name="deltaSeconds">Frame delta time (unused).</param>
+    /// <param name="screenWidth">Framebuffer width in pixels.</param>
+    /// <param name="screenHeight">Framebuffer height in pixels.</param>
     public static void DrawSmokeScene(float deltaSeconds, int screenWidth, int screenHeight)
     {
         _ = deltaSeconds;
@@ -30,6 +34,10 @@ public static class GoldenScenes
         Graphics.DrawText("pre-Game visual check", 24, screenHeight - 36, 14, RaylibColors.DarkGray);
     }
 
+    /// <summary>Draws a minimal HUD overlay scene for golden tests.</summary>
+    /// <param name="deltaSeconds">Frame delta time (unused).</param>
+    /// <param name="screenWidth">Framebuffer width in pixels.</param>
+    /// <param name="screenHeight">Framebuffer height in pixels.</param>
     public static void DrawHudScene(float deltaSeconds, int screenWidth, int screenHeight)
     {
         _ = deltaSeconds;
@@ -43,6 +51,10 @@ public static class GoldenScenes
         Hud.Line(0, screenHeight - 1, screenWidth, screenHeight - 1, gold);
     }
 
+    /// <summary>Draws a 3D cube in world space for golden tests.</summary>
+    /// <param name="deltaSeconds">Frame delta time (unused).</param>
+    /// <param name="screenWidth">Framebuffer width in pixels (unused).</param>
+    /// <param name="screenHeight">Framebuffer height in pixels (unused).</param>
     public static void DrawWorldCube(float deltaSeconds, int screenWidth, int screenHeight)
     {
         _ = deltaSeconds;

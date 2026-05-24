@@ -63,6 +63,35 @@ public sealed class RaylibCodegenHookTests
     }
 
     [Test]
+    public async Task InjectEndDrawingNotifyHook_preserves_xml_documentation()
+    {
+        const string source = """
+            #nullable enable
+            using Novolis.Raylib.Interop;
+            namespace Novolis.Raylib.Rendering;
+            public static partial class Graphics
+            {
+                /// <summary>
+                /// End canvas drawing and swap buffers (double buffering)
+                /// </summary>
+                public static void EndDrawing() => Raylib6Native.EndDrawing();
+            }
+            """;
+
+        var unit = CodegenFormatter.ParseGenerated(source);
+        var hook = new InjectEndDrawingNotifyHook();
+        var fragment = RaylibBindingManifestSource.Instance.GetRequired<FacadeTypesFragment>(
+            FragmentKind.FacadeTypes,
+            "facades");
+        var context = CreateContext(RaylibCodegenPhase.Facade, fragment, facadeTypeName: "Graphics");
+
+        var transformed = hook.Transform(unit, context);
+        var text = transformed.ToFullString();
+        await Assert.That(text).Contains("End canvas drawing and swap buffers");
+        await Assert.That(text).Contains("void EndDrawing()");
+    }
+
+    [Test]
     public async Task AnnotateLibraryImportHook_adds_xml_doc_from_manifest_description()
     {
         const string source = """

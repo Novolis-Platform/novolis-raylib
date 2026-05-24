@@ -11,6 +11,7 @@ public sealed class QueuedGoldenStoryRenderer(
     Action drainMainThreadQueue,
     IGoldenSceneScript sceneScript) : IGoldenStoryRenderer
 {
+    /// <inheritdoc />
     public void BeginFrame(string frameId)
     {
         drainMainThreadQueue();
@@ -18,6 +19,7 @@ public sealed class QueuedGoldenStoryRenderer(
         drainMainThreadQueue();
     }
 
+    /// <inheritdoc />
     public void OnFrame(float deltaSeconds, int screenWidth, int screenHeight)
     {
         drainMainThreadQueue();

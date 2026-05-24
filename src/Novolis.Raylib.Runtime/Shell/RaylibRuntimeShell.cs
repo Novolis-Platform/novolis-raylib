@@ -13,9 +13,13 @@ namespace Novolis.Raylib.Shell;
 /// </summary>
 public static class RaylibRuntimeShell
 {
+    /// <summary>When set to <c>1</c>, <c>true</c>, or <c>yes</c>, skips window creation (CI/headless).</summary>
     public const string HeadlessEnvironmentVariable = "NOVOLIS_RAYLIB_HEADLESS";
 
+    /// <summary>Default initial window width for <see cref="RunShellFrame(string, IRaylibFrameRenderer, CancellationToken)"/>.</summary>
     public const int DefaultWindowWidth = 1920;
+
+    /// <summary>Default initial window height for <see cref="RunShellFrame(string, IRaylibFrameRenderer, CancellationToken)"/>.</summary>
     public const int DefaultWindowHeight = 1080;
 
     /// <summary>Runs the default-sized window loop with a frame renderer.</summary>

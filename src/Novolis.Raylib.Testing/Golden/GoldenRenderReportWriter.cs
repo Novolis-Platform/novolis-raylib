@@ -10,6 +10,12 @@ public static class GoldenRenderReportWriter
 {
     private const double RingCircumference = 339.29;
 
+    /// <summary>Writes the full QA review bundle for a golden story run.</summary>
+    /// <param name="context">Output paths for this run.</param>
+    /// <param name="spec">Story specification.</param>
+    /// <param name="frames">Per-frame capture results.</param>
+    /// <param name="storyAssert">Aggregate assert outcome.</param>
+    /// <returns>Absolute path to <c>index.html</c>.</returns>
     public static string Write(
         GoldenRenderRunContext context,
         GoldenStorySpec spec,
@@ -40,6 +46,11 @@ public static class GoldenRenderReportWriter
         return htmlPath;
     }
 
+    /// <summary>Writes a skipped-run QA bundle with no captures.</summary>
+    /// <param name="context">Output paths for this run.</param>
+    /// <param name="spec">Story specification.</param>
+    /// <param name="skipReason">Reason the run was skipped.</param>
+    /// <returns>Absolute path to <c>index.html</c>.</returns>
     public static string WriteSkippedReport(
         GoldenRenderRunContext context,
         GoldenStorySpec spec,

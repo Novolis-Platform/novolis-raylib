@@ -13,16 +13,22 @@ namespace Novolis.Raylib.Testing;
 /// <summary>Opt-in bounded raylib loop for tests: hidden window, <see cref="IRaylibFrameRenderer"/>, optional PNG capture.</summary>
 public static class RaylibOffscreenTestHarness
 {
+    /// <summary>Environment variable name for legacy offscreen test opt-in.</summary>
     public const string OffscreenTestsEnvironmentVariable = RaylibDebug.OffscreenTestsEnvironmentVariable;
 
+    /// <summary>Environment variable name for legacy native test opt-in.</summary>
     public const string NativeTestsEnvironmentVariable = RaylibDebug.NativeTestsEnvironmentVariable;
 
+    /// <summary>True when legacy offscreen env flag is set.</summary>
+    /// <returns>Whether offscreen tests were requested via environment.</returns>
     public static bool IsOffscreenTestsRequested()
     {
         RaylibDebug.RefreshFromEnvironment();
         return RaylibDebug.OffscreenTestsRequestedFromEnvironment;
     }
 
+    /// <summary>True when legacy native env flag is set.</summary>
+    /// <returns>Whether native tests were requested via environment.</returns>
     public static bool IsNativeTestsRequested()
     {
         RaylibDebug.RefreshFromEnvironment();
@@ -45,6 +51,11 @@ public static class RaylibOffscreenTestHarness
                || (RaylibDebug.OffscreenTestsRequestedFromEnvironment && RaylibDebug.NativeTestsRequestedFromEnvironment);
     }
 
+    /// <summary>Runs a bounded native raylib loop with optional PNG capture.</summary>
+    /// <param name="frameRenderer">Per-frame draw callback.</param>
+    /// <param name="options">Harness options (defaults when null).</param>
+    /// <param name="cancellationToken">Cancellation token for the frame loop.</param>
+    /// <returns>Run outcome including captured PNGs when requested.</returns>
     public static RaylibOffscreenTestRunResult Run(
         IRaylibFrameRenderer frameRenderer,
         RaylibOffscreenTestOptions? options = null,

@@ -1,11 +1,4 @@
-# step_06_codegen — 2026-05-24T20:10:35.2277184+00:00
+# step_06_codegen — 2026-05-24T21:20:23.2954191+00:00
 # force=False
 
-emit: raylib interop
-emit: imgui interop
-emit: raygui interop
-emit: debug hooks
-emit: facades
-emit: hud
-emit: gui
-emit: raygui
+SKIPPED: outputs up to date

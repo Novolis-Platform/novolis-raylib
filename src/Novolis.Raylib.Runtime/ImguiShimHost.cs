@@ -16,6 +16,7 @@ public static class ImguiShimHost
     private static int _state;
     private static string? _failureMessage;
 
+    /// <summary>Loads and binds the ImGui native shim; throws if the module or exports are missing.</summary>
     public static void EnsureInitialized()
     {
         if (Volatile.Read(ref _state) == StateReady)
