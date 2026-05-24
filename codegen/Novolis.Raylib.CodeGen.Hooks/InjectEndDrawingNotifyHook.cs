@@ -69,7 +69,12 @@ public sealed class InjectEndDrawingNotifyHook : IRaylibCodegenHook
                                 SyntaxFactory.IdentifierName("Notify")))));
             }
 
+            var attributes = node.AttributeLists
+                .Where(list => !list.Attributes.Any(a =>
+                    a.Name.ToString().Contains("MethodImpl", StringComparison.Ordinal)));
+
             return node
+                .WithAttributeLists(SyntaxFactory.List(attributes))
                 .WithExpressionBody(null)
                 .WithBody(SyntaxFactory.Block(statements))
                 .WithSemicolonToken(default);
