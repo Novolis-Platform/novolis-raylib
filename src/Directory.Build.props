@@ -4,8 +4,9 @@
           Condition="Exists('$(MSBuildThisFileDirectory)..\build\Novolis.Raylib.Documentation.props')" />
   <PropertyGroup>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl Condition="'$(NovolisGitHubRepository)' != ''">https://github.com/Novolis-Platform/$(NovolisGitHubRepository)/blob/main/src/$(MSBuildProjectName)/README.md</PackageProjectUrl>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="README.md" Pack="true" PackagePath="\" Condition="Exists('README.md')" />
+    <None Include="$(MSBuildProjectDirectory)\README.md" Pack="true" PackagePath="\" Condition="Exists('$(MSBuildProjectDirectory)\README.md')" />
   </ItemGroup>
 </Project>

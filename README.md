@@ -1,3 +1,27 @@
+<!-- novolis-package-index:start -->
+> **GitHub Packages shows this repository README on every package page** (upstream limitation).
+> Open the **package README** for install and quick start — embedded in each .nupkg and linked below.
+
+## Published packages
+
+| Package | Install | Package README |
+|---------|---------|----------------|
+| `Novolis.Raylib` | `dotnet add package Novolis.Raylib` | [README](https://github.com/Novolis-Platform/novolis-raylib/blob/main/src/Novolis.Raylib/README.md) |
+| `Novolis.Raylib.Abstractions` | `dotnet add package Novolis.Raylib.Abstractions` | [README](https://github.com/Novolis-Platform/novolis-raylib/blob/main/src/Novolis.Raylib.Abstractions/README.md) |
+| `Novolis.Raylib.Bindings` | `dotnet add package Novolis.Raylib.Bindings` | [README](https://github.com/Novolis-Platform/novolis-raylib/blob/main/src/Novolis.Raylib.Bindings/README.md) |
+| `Novolis.Raylib.Capture` | `dotnet add package Novolis.Raylib.Capture` | [README](https://github.com/Novolis-Platform/novolis-raylib/blob/main/src/Novolis.Raylib.Capture/README.md) |
+| `Novolis.Raylib.Game` | `dotnet add package Novolis.Raylib.Game` | [README](https://github.com/Novolis-Platform/novolis-raylib/blob/main/src/Novolis.Raylib.Game/README.md) |
+| `Novolis.Raylib.Hosting` | `dotnet add package Novolis.Raylib.Hosting` | [README](https://github.com/Novolis-Platform/novolis-raylib/blob/main/src/Novolis.Raylib.Hosting/README.md) |
+| `Novolis.Raylib.Manifests` | `dotnet add package Novolis.Raylib.Manifests` | [README](https://github.com/Novolis-Platform/novolis-raylib/blob/main/codegen/Novolis.Raylib.Manifests/README.md) |
+| `Novolis.Raylib.Native` | `dotnet add package Novolis.Raylib.Native` | [README](https://github.com/Novolis-Platform/novolis-raylib/blob/main/src/Novolis.Raylib.Native/README.md) |
+| `Novolis.Raylib.Raygui` | `dotnet add package Novolis.Raylib.Raygui` | [README](https://github.com/Novolis-Platform/novolis-raylib/blob/main/src/Novolis.Raylib.Raygui/README.md) |
+| `Novolis.Raylib.Raygui.Native` | `dotnet add package Novolis.Raylib.Raygui.Native` | [README](https://github.com/Novolis-Platform/novolis-raylib/blob/main/src/Novolis.Raylib.Raygui.Native/README.md) |
+| `Novolis.Raylib.Runtime` | `dotnet add package Novolis.Raylib.Runtime` | [README](https://github.com/Novolis-Platform/novolis-raylib/blob/main/src/Novolis.Raylib.Runtime/README.md) |
+| `Novolis.Raylib.Testing` | `dotnet add package Novolis.Raylib.Testing` | [README](https://github.com/Novolis-Platform/novolis-raylib/blob/main/src/Novolis.Raylib.Testing/README.md) |
+
+For NuGet.org and Visual Studio, the **embedded** README.md inside each package is authoritative.
+
+<!-- novolis-package-index:end -->
 # Novolis.Raylib
 
 Multi-package .NET bindings for [raylib](https://www.raylib.com/) 6 + raygui.
@@ -93,3 +117,4 @@ dotnet build Novolis.Raylib.slnx
 ```
 
 See [docs/codegen.md](docs/codegen.md), [docs/testing.md](docs/testing.md), and [agentic-tools/README.md](agentic-tools/README.md) (AI agent workflows).
+

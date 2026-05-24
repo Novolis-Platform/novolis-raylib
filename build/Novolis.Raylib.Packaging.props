@@ -5,7 +5,7 @@
   <PropertyGroup Label="Novolis.Raylib NuGet metadata">
     <Authors>Novolis</Authors>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/novolis/novolis-raylib</PackageProjectUrl>
+    <!-- PackageProjectUrl: per-package README link set in src/Directory.Build.props (GPR shows repo README on package pages). -->
     <RepositoryUrl>https://github.com/novolis/novolis-raylib</RepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
