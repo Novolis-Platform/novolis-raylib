@@ -2,6 +2,8 @@
 
 Build-time Roslyn tooling for `Novolis.Raylib.Bindings`. These projects are **never** packed as NuGet packages.
 
+**CI does not run the maintainer pipeline** (`step_01_source`, native fetch, `ci-codegen`, etc.). Run `dotnet run --project codegen/Novolis.Raylib.Pipeline -- run maintainer` locally, commit generated sources under `src/`, then push. GitHub Actions builds and tests those committed results only.
+
 | Project | Role |
 |---------|------|
 | `Novolis.Raylib.Pipeline` | Linear maintainer pipeline (`run maintainer`, step folders + `result.json`) |

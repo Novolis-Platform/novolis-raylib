@@ -6,12 +6,11 @@
     <IsPackable>true</IsPackable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Description>Present CPU RGBA frames via Raylib textures. Does not reference rendering scene types.</Description>
-    <Version>0.4.0-local</Version>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\novolis-rendering\src\Novolis.Rendering.Presentation.Abstractions\Novolis.Rendering.Presentation.Abstractions.csproj" />
+    <PackageReference Include="Novolis.Rendering.Presentation.Abstractions" />
     <ProjectReference Include="..\Novolis.Raylib.Runtime\Novolis.Raylib.Runtime.csproj" />
   </ItemGroup>
 </Project>

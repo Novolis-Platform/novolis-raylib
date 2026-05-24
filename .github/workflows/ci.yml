@@ -1,13 +1,61 @@
+# CI validates committed library output. Codegen pipeline runs locally only (see codegen/README.md).
 name: CI
 
 on:
-  pull_request:
-    branches: [main]
+  workflow_call:
 
 permissions:
   contents: read
 
 jobs:
-  ci:
-    uses: Novolis-Platform/novolis-workflows/.github/workflows/dotnet-pull-request.yml@main
-    secrets: inherit
+  libraries:
+    name: Build and test (shipping)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Authenticate to GitHub Packages (optional for public feed)
+        continue-on-error: true
+        shell: pwsh
+        run: |
+          if (-not $env:GITHUB_TOKEN) { exit 0 }
+          dotnet nuget update source github `
+            --username $env:GITHUB_ACTOR `
+            --password $env:GITHUB_TOKEN `
+            --store-password-in-clear-text `
+            --configfile nuget.config
+
+      - name: Restore shipping + unit test projects
+        run: |
+          set -euo pipefail
+          for proj in src/*/*.csproj; do
+            dotnet restore "$proj" --configfile nuget.config
+          done
+          for proj in \
+            tests/Novolis.Raylib.CodeGen.Unit/Novolis.Raylib.CodeGen.Unit.csproj \
+            tests/Novolis.Raylib.Pipeline.Unit/Novolis.Raylib.Pipeline.Unit.csproj \
+            tests/Novolis.Raylib.Testing.Unit/Novolis.Raylib.Testing.Unit.csproj \
+            tests/Novolis.Raylib.Capture.Unit/Novolis.Raylib.Capture.Unit.csproj; do
+            dotnet restore "$proj" --configfile nuget.config
+          done
+
+      - name: Build shipping libraries
+        run: |
+          set -euo pipefail
+          for proj in src/*/*.csproj; do
+            dotnet build "$proj" -c Release --no-restore
+          done
+
+      - name: Unit tests (no codegen pipeline, no native golden)
+        run: |
+          set -euo pipefail
+          for proj in \
+            tests/Novolis.Raylib.CodeGen.Unit/Novolis.Raylib.CodeGen.Unit.csproj \
+            tests/Novolis.Raylib.Pipeline.Unit/Novolis.Raylib.Pipeline.Unit.csproj \
+            tests/Novolis.Raylib.Testing.Unit/Novolis.Raylib.Testing.Unit.csproj \
+            tests/Novolis.Raylib.Capture.Unit/Novolis.Raylib.Capture.Unit.csproj; do
+            dotnet test "$proj" -c Release --no-build -- --maximum-parallel-tests 1
+          done

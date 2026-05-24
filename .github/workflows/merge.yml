@@ -1,52 +1,66 @@
-# After CI succeeds on main: pack, push to GitHub Packages, bump build.
+# Publish shipping packages from committed sources. No codegen pipeline in CI.
 name: 'CI: main'
 
 on:
-  workflow_run:
-    workflows: [CI]
-    types: [completed]
+  push:
     branches: [main]
+    paths-ignore:
+      - '.novolis/version.props'
+      - 'docs/**'
+      - '**.md'
+  workflow_dispatch:
+    inputs:
+      skip_publish:
+        description: Pack only; do not push to GitHub Packages
+        type: boolean
+        default: false
 
 permissions:
   contents: write
   packages: write
 
 jobs:
+  ci:
+    uses: ./.github/workflows/ci.yml
+
   publish:
-    if: >
-      github.event.workflow_run.conclusion == 'success' &&
-      github.event.workflow_run.event == 'push' &&
-      github.event.workflow_run.head_branch == 'main'
+    name: Pack and publish
+    needs: ci
+    if: github.event_name == 'push' || inputs.skip_publish != true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.workflow_run.head_sha }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 10.0.x
 
+      - name: Build shipping libraries
+        run: |
+          set -euo pipefail
+          for proj in src/*/*.csproj; do
+            dotnet build "$proj" -c Release
+          done
+
       - uses: Novolis-Platform/novolis-workflows/actions/resolve-version@main
         id: ver
 
-      - run: dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_01_source
-
-      - name: Pack NuGet packages
+      - name: Pack shipping packages
         shell: pwsh
         run: ./scripts/pack-all.ps1 -Version ${{ steps.ver.outputs.version }}
 
       - uses: Novolis-Platform/novolis-workflows/actions/publish-github-packages@main
+        if: inputs.skip_publish != true
 
       - uses: Novolis-Platform/novolis-workflows/actions/bump-build-version@main
         id: bump
+        if: inputs.skip_publish != true
 
       - name: Commit build version bump
+        if: inputs.skip_publish != true
         continue-on-error: true
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add .novolis/version.props
           git commit -m "chore: bump build to ${{ steps.bump.outputs.next_version }} [skip ci]"
-          git push || echo "::warning::Could not push version bump (branch protection?)."
+          git push || echo "::warning::Could not push version bump."

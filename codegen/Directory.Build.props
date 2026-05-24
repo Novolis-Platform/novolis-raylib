@@ -1,0 +1,6 @@
+<Project>
+  <!-- Codegen is maintainer-local; never publish from CI. -->
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+</Project>
