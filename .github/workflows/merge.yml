@@ -1,5 +1,5 @@
 # After CI succeeds on main: pack with .novolis/version.props, publish, bump build.
-name: CI: main
+name: 'CI: main'
 
 on:
   workflow_run:
