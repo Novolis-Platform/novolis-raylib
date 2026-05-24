@@ -4,6 +4,7 @@ using Novolis.Raylib.CodeGen;
 
 namespace Novolis.Raylib.CodeGen.Unit;
 
+[NotInParallel("codegen-emit")]
 public sealed class RaylibBindingParityTests
 {
     private static readonly string[] GeneratedRelativePaths =
@@ -66,10 +67,7 @@ public sealed class RaylibBindingParityTests
 
         var rayguiManifest = Path.Combine(PipelinePaths.PipelineRaylibDir(root), "raygui-exports.manifest.json");
         if (!File.Exists(rayguiManifest))
-        {
-            await Assert.That(true).IsTrue();
             return;
-        }
 
         var committed = SnapshotGenerated(root);
         try

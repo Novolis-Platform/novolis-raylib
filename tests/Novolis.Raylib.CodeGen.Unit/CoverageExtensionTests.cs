@@ -64,6 +64,7 @@ public sealed class RaylibManifestVerifierEdgeTests
     }
 }
 
+[NotInParallel("codegen-emit")]
 public sealed class RaylibCodegenPipelineGenerateTests
 {
     [Test]
