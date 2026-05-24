@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Novolis.Raylib.Runtime.Unit</RootNamespace>
+    <RootNamespace>Novolis.Raylib.Capture.Unit</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,8 +10,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Novolis.Raylib.Capture\Novolis.Raylib.Capture.csproj" />
     <ProjectReference Include="..\..\src\Novolis.Raylib.Runtime\Novolis.Raylib.Runtime.csproj" />
-    <ProjectReference Include="..\..\src\Novolis.Raylib.Testing\Novolis.Raylib.Testing.csproj" />
   </ItemGroup>
 
 </Project>

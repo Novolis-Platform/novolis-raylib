@@ -1,0 +1,63 @@
+{
+  "generatedUtc": "2026-05-24T09:49:43.1577622Z",
+  "lineRatePercent": 52.46,
+  "linesValid": 3910,
+  "linesCovered": 2051,
+  "thresholdPercent": 48.0,
+  "failOnThreshold": true,
+  "exclusions": [
+    "**/*.g.cs",
+    "**/samples/**"
+  ],
+  "ratchetMilestones": [
+    70,
+    85,
+    95
+  ],
+  "assemblies": [
+    {
+      "name": "Novolis.Raylib.Bindings",
+      "lineRate": 58.33
+    },
+    {
+      "name": "Novolis.Raylib.Capture",
+      "lineRate": 67.12
+    },
+    {
+      "name": "Novolis.Raylib.CodeGen",
+      "lineRate": 73.28
+    },
+    {
+      "name": "Novolis.Raylib.CodeGen.Abstractions",
+      "lineRate": 69.7
+    },
+    {
+      "name": "Novolis.Raylib.CodeGen.Hooks",
+      "lineRate": 91.58
+    },
+    {
+      "name": "Novolis.Raylib.Game",
+      "lineRate": 20.57
+    },
+    {
+      "name": "Novolis.Raylib.Hosting",
+      "lineRate": 82.47
+    },
+    {
+      "name": "Novolis.Raylib.Pipeline",
+      "lineRate": 22.83
+    },
+    {
+      "name": "Novolis.Raylib.Raygui",
+      "lineRate": 0.0
+    },
+    {
+      "name": "Novolis.Raylib.Runtime",
+      "lineRate": 18.6
+    },
+    {
+      "name": "Novolis.Raylib.Testing",
+      "lineRate": 63.71
+    }
+  ]
+}

@@ -20,6 +20,9 @@
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Novolis.Raylib.CodeGen.Unit/Novolis.Raylib.CodeGen.Unit.csproj" />
+    <Project Path="tests/Novolis.Raylib.Pipeline.Unit/Novolis.Raylib.Pipeline.Unit.csproj" />
+    <Project Path="tests/Novolis.Raylib.Testing.Unit/Novolis.Raylib.Testing.Unit.csproj" />
+    <Project Path="tests/Novolis.Raylib.Capture.Unit/Novolis.Raylib.Capture.Unit.csproj" />
     <Project Path="tests/Novolis.Raylib.Runtime.Unit/Novolis.Raylib.Runtime.Unit.csproj" />
     <Project Path="tests/Novolis.Raylib.Hosting.Unit/Novolis.Raylib.Hosting.Unit.csproj" />
     <Project Path="tests/Novolis.Raylib.Game.Unit/Novolis.Raylib.Game.Unit.csproj" />

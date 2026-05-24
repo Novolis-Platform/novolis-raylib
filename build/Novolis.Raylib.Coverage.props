@@ -1,0 +1,9 @@
+<Project>
+  <PropertyGroup Label="Code coverage (hand-written C# only)">
+    <CollectCoverage>true</CollectCoverage>
+    <CoverletOutputFormat>cobertura,json</CoverletOutputFormat>
+    <CoverletOutput>$(MSBuildThisFileDirectory)../artifacts/coverage/</CoverletOutput>
+    <ExcludeByFile>$(MSBuildThisFileDirectory)../**/*.g.cs</ExcludeByFile>
+    <ExcludeByAttribute>Obsolete,GeneratedCode,CompilerGenerated</ExcludeByAttribute>
+  </PropertyGroup>
+</Project>

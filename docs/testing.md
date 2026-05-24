@@ -188,3 +188,27 @@ E2E (native):
 ```powershell
 ./scripts/raylib-e2e.ps1
 ```
+
+## Coverage
+
+Line coverage targets **hand-written C#** in `src/` and `codegen/`. Generated `*.g.cs` files are excluded (guarded by codegen drift and golden tests instead).
+
+| Excluded | Included |
+|----------|----------|
+| `**/*.g.cs` | Bindings hand types, Runtime shell/debug, Game, Hosting, Capture, Testing helpers, CodeGen + Pipeline |
+| `samples/` | CLI logic via unit tests |
+| `Novolis.Raylib.Native` (no C#) | |
+
+Local run:
+
+```powershell
+./scripts/run-coverage.ps1
+```
+
+Output: `artifacts/coverage/index.html` and `coverage/baseline-summary.json`.
+
+Configuration: `build/Novolis.Raylib.Coverage.props`, `coverage.runsettings`, and `dotnet test --coverage` (Microsoft Testing Platform / dotnet-coverage).
+
+CI job `coverage` (Windows) runs tests with coverage and fails below the current floor (**48%** line rate on hand-written assemblies). Ratchet milestones: **70%** → **85%** → **95%** (raise `COVERAGE_THRESHOLD` in CI as coverage improves).
+
+Optional `[ExcludeFromCodeCoverage]` requires a justification comment in source.

@@ -11,5 +11,6 @@
     <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.8" />
     <PackageVersion Include="PeNet" Version="4.1.2" />
     <PackageVersion Include="TUnit" Version="1.44.39" />
+    <PackageVersion Include="coverlet.collector" Version="6.0.4" />
   </ItemGroup>
 </Project>

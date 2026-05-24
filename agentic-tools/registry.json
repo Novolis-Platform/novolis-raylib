@@ -81,6 +81,15 @@
       "title": "Regenerate committed golden baseline PNGs and spec hashes",
       "command": "pwsh ./scripts/seed-golden-baselines.ps1",
       "platforms": ["windows"]
+    },
+    {
+      "id": "coverage.run",
+      "title": "Run unit tests with line coverage (hand-written C# only)",
+      "command": "pwsh ./scripts/run-coverage.ps1",
+      "outputs": [
+        "artifacts/coverage/index.html",
+        "coverage/baseline-summary.json"
+      ]
     }
   ],
   "workflows": {

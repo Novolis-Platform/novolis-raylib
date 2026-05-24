@@ -33,7 +33,20 @@ jobs:
       - name: Build solution
         run: dotnet build Novolis.Raylib.slnx -c Release
       - name: Test (unit, no native)
-        run: dotnet test Novolis.Raylib.slnx -c Release --filter "Category!=Native" -- --maximum-parallel-tests 1
+        run: |
+          $projects = @(
+            'tests/Novolis.Raylib.CodeGen.Unit/Novolis.Raylib.CodeGen.Unit.csproj',
+            'tests/Novolis.Raylib.Pipeline.Unit/Novolis.Raylib.Pipeline.Unit.csproj',
+            'tests/Novolis.Raylib.Testing.Unit/Novolis.Raylib.Testing.Unit.csproj',
+            'tests/Novolis.Raylib.Capture.Unit/Novolis.Raylib.Capture.Unit.csproj',
+            'tests/Novolis.Raylib.Runtime.Unit/Novolis.Raylib.Runtime.Unit.csproj',
+            'tests/Novolis.Raylib.Hosting.Unit/Novolis.Raylib.Hosting.Unit.csproj',
+            'tests/Novolis.Raylib.Game.Unit/Novolis.Raylib.Game.Unit.csproj',
+            'tests/Novolis.Raylib.Testing.Integration/Novolis.Raylib.Testing.Integration.csproj'
+          )
+          foreach ($p in $projects) {
+            dotnet test --project $p -c Release -- --maximum-parallel-tests 1
+          }
 
   golden-tests:
     runs-on: windows-latest
@@ -50,12 +63,44 @@ jobs:
         run: dotnet build Novolis.Raylib.slnx -c Release
       - name: Golden tests
         run: dotnet test --project tests/Novolis.Raylib.Golden -c Release -- --maximum-parallel-tests 1
+      - name: Native unit tests
+        run: |
+          dotnet test --project tests/Novolis.Raylib.Runtime.Unit/Novolis.Raylib.Runtime.Unit.csproj -c Release -- --maximum-parallel-tests 1
+          dotnet test --project tests/Novolis.Raylib.CodeGen.Unit/Novolis.Raylib.CodeGen.Unit.csproj -c Release -- --maximum-parallel-tests 1
       - name: Upload golden render reports on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: golden-render-reports
           path: temp/test-renders/
+          if-no-files-found: ignore
+
+  coverage:
+    runs-on: windows-latest
+    env:
+      COVERAGE_THRESHOLD: '48'
+      NOVOLIS_RAYLIB_NATIVE_TESTS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Fetch sources
+        run: dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_01_source
+      - name: Build native shim
+        run: dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_02_native
+      - name: Build solution
+        run: dotnet build Novolis.Raylib.slnx -c Release
+      - name: Run tests with coverage
+        run: pwsh ./scripts/run-coverage.ps1
+      - name: Upload coverage on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: |
+            artifacts/coverage/
+            coverage/baseline-summary.json
           if-no-files-found: ignore
 
   pack-smoke:

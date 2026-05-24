@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="Novolis.Raylib.CodeGen.Unit" />
+    <InternalsVisibleTo Include="Novolis.Raylib.Pipeline.Unit" />
   </ItemGroup>
 
 </Project>

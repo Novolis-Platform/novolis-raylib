@@ -5,9 +5,13 @@ namespace Novolis.Raylib.Pipeline;
 internal sealed class PipelineRunner
 {
     private readonly IReadOnlyList<IPipelineStep> _steps;
+    private readonly string? _repoRootOverride;
 
-    public PipelineRunner(IEnumerable<IPipelineStep> steps) =>
+    public PipelineRunner(IEnumerable<IPipelineStep> steps, string? repoRootOverride = null)
+    {
         _steps = steps.ToList();
+        _repoRootOverride = repoRootOverride;
+    }
 
     public async Task<int> RunProfileAsync(string profileName, bool force, CancellationToken cancellationToken = default)
     {
@@ -42,9 +46,9 @@ internal sealed class PipelineRunner
         return 0;
     }
 
-    private static async Task<int> RunSingleStepAsync(IPipelineStep step, bool force, CancellationToken cancellationToken)
+    private async Task<int> RunSingleStepAsync(IPipelineStep step, bool force, CancellationToken cancellationToken)
     {
-        var repoRoot = PipelinePaths.FindRepoRoot();
+        var repoRoot = _repoRootOverride ?? PipelinePaths.FindRepoRoot();
         var stepDir = PipelinePaths.StepDir(repoRoot, step.Id);
         Directory.CreateDirectory(stepDir);
 

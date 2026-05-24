@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Novolis.Raylib.Pipeline.Unit</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="TUnit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\codegen\Novolis.Raylib.Pipeline\Novolis.Raylib.Pipeline.csproj" />
+    <ProjectReference Include="..\..\codegen\Novolis.Raylib.CodeGen\Novolis.Raylib.CodeGen.csproj" />
+  </ItemGroup>
+
+</Project>
