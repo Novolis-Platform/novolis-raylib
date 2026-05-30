@@ -111,8 +111,8 @@ public static class ScreenFramebufferCapture
         int x,
         int y)
     {
-        var flippedY = srcH - 1 - y;
-        var index = (flippedY * srcW + x) * bytesPerPixel;
+        // Raylib Image scanlines are top-down; do not flip or Avalonia hosts render upside-down.
+        var index = (y * srcW + x) * bytesPerPixel;
         if ((uint)index + (uint)(bytesPerPixel - 1) >= (uint)src.Length
             || (uint)dstIndex + 3 >= (uint)dst.Length)
         {
