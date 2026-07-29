@@ -9,6 +9,10 @@
   <ItemGroup>
     <PackageReference Include="TUnit" />
     <PackageReference Include="System.IO.Abstractions.TestingHelpers" />
+    <PackageReference Include="Novolis.CodeGen.Bindings" />
+    <PackageReference Include="Novolis.CodeGen.Bindings.Roslyn" />
+    <PackageReference Include="Novolis.CodeGen.Pipeline" />
+    <PackageReference Include="System.IO.Abstractions" />
   </ItemGroup>
 
   <ItemGroup>

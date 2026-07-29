@@ -10,6 +10,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
+    <PackageReference Include="Novolis.CodeGen.Bindings" />
+    <PackageReference Include="Novolis.CodeGen.Bindings.Roslyn" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Novolis.Raylib.CodeGen.Abstractions\Novolis.Raylib.CodeGen.Abstractions.csproj" />
   </ItemGroup>
 

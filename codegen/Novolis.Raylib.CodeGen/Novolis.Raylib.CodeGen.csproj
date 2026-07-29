@@ -13,6 +13,10 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" />
+    <PackageReference Include="Novolis.CodeGen.Bindings" />
+    <PackageReference Include="Novolis.CodeGen.Bindings.Roslyn" />
+    <PackageReference Include="Novolis.CodeGen.Pipeline" />
+    <PackageReference Include="System.IO.Abstractions" />
   </ItemGroup>
 
   <ItemGroup>

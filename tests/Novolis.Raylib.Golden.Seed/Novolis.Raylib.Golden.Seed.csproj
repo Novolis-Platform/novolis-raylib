@@ -4,9 +4,11 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>Novolis.Raylib.Golden.Seed</RootNamespace>
     <IsTestProject>false</IsTestProject>
+    <IsTestingPlatformApplication>false</IsTestingPlatformApplication>
     <EnableTestingPlatform>false</EnableTestingPlatform>
     <EnableMicrosoftTestingPlatform>false</EnableMicrosoftTestingPlatform>
     <UseMicrosoftTestingPlatform>false</UseMicrosoftTestingPlatform>
+    <DisableTestingPlatformServerCapability>true</DisableTestingPlatformServerCapability>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,8 +1,8 @@
 {
   "stepId": "step_06_codegen",
   "status": "Succeeded",
-  "startedUtc": "2026-07-28T20:24:08.2283006+00:00",
-  "durationMs": 725,
+  "startedUtc": "2026-07-28T22:21:36.9448256+00:00",
+  "durationMs": 733,
   "pipelineVersion": "1",
   "inputs": {
     "codegen/Novolis.Raylib.Manifests/FacadesManifest.cs": "43b03e69808d0b36500afb9ea1d13ad0e3690157a7679ba23668b2924dba6cfd",
@@ -16,10 +16,10 @@
     "codegen/Novolis.Raylib.Manifests/RaylibDebugManifest.cs": "8d18165eb9e54ec47570ef096c9aa4ab83fb7151c051350d4ab6736a7372c375",
     "codegen/Novolis.Raylib.Manifests/RaylibManifestInputPaths.cs": "7f5f627ab8cb29888d22735af1b853bb89f190d99098f37ae42384e5a8f4716d",
     "codegen/Novolis.Raylib.Manifests/obj/Debug/net10.0/.NETCoreApp,Version=v10.0.AssemblyAttributes.cs": "93d67476196ebfc80d1d7d8844b91146cfd678d105f5ce635eb900ca40610c9b",
-    "codegen/Novolis.Raylib.Manifests/obj/Debug/net10.0/Novolis.Raylib.Manifests.AssemblyInfo.cs": "7d09dbfd875d231863bb029041c237bfef90e4b75170781fffa162ba694a414f",
+    "codegen/Novolis.Raylib.Manifests/obj/Debug/net10.0/Novolis.Raylib.Manifests.AssemblyInfo.cs": "59011612e9d5213ba1a1d9fd94b4495cbe3766422dd10dc139e72ca3a0b0e54a",
     "codegen/Novolis.Raylib.Manifests/obj/Debug/net10.0/Novolis.Raylib.Manifests.GlobalUsings.g.cs": "a3c6048bb4d922b1799a9977f84362a3787b68810cac67aa86ac3aa23295f227",
     "codegen/Novolis.Raylib.Manifests/obj/Release/net10.0/.NETCoreApp,Version=v10.0.AssemblyAttributes.cs": "93d67476196ebfc80d1d7d8844b91146cfd678d105f5ce635eb900ca40610c9b",
-    "codegen/Novolis.Raylib.Manifests/obj/Release/net10.0/Novolis.Raylib.Manifests.AssemblyInfo.cs": "0de22e6293e0843ead9f397a60abde6ab11ac2b8f8dc550cc6593bcda03ff2cc",
+    "codegen/Novolis.Raylib.Manifests/obj/Release/net10.0/Novolis.Raylib.Manifests.AssemblyInfo.cs": "8f07c528ff2cad6471c9ca1dc42a320be4b59dd66847ffbd401fecb1e41e87a7",
     "codegen/Novolis.Raylib.Manifests/obj/Release/net10.0/Novolis.Raylib.Manifests.GlobalUsings.g.cs": "a3c6048bb4d922b1799a9977f84362a3787b68810cac67aa86ac3aa23295f227"
   },
   "outputs": [

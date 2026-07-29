@@ -4,7 +4,9 @@
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
+    <!-- Packable harness — not an MTP test host (TUnit is compile-only for SkipAttribute). -->
     <IsTestProject>false</IsTestProject>
+    <IsTestingPlatformApplication>false</IsTestingPlatformApplication>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>Novolis.Raylib.Testing</RootNamespace>
