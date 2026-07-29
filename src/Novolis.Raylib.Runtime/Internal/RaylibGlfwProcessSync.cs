@@ -9,14 +9,25 @@ public static class RaylibGlfwProcessSync
     private const string MutexName = @"Global\Novolis.Raylib.Glfw";
 
     /// <summary>Acquires the global GLFW mutex (blocks up to two minutes).</summary>
+    /// <remarks>
+    /// <see cref="AbandonedMutexException"/> means a previous owner exited without
+    /// <c>ReleaseMutex</c>; the wait still grants ownership — treat as success.
+    /// </remarks>
     public static LockScope Enter()
     {
         var mutex = new Mutex(initiallyOwned: false, name: MutexName);
         try
         {
-            if (!mutex.WaitOne(TimeSpan.FromMinutes(2)))
+            try
             {
-                throw new InvalidOperationException("Timed out waiting for the Raylib GLFW lock.");
+                if (!mutex.WaitOne(TimeSpan.FromMinutes(2)))
+                {
+                    throw new InvalidOperationException("Timed out waiting for the Raylib GLFW lock.");
+                }
+            }
+            catch (AbandonedMutexException)
+            {
+                // Previous process/thread died holding the lock; we now own it.
             }
         }
         catch
