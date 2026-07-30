@@ -40,7 +40,7 @@ public static class RaylibEmbeddedShell
         {
             if (options.HideWindow)
             {
-                Window.SetConfigFlags(WindowStateFlags.Hidden);
+                Window.SetConfigFlags(WindowStateFlags.Hidden | WindowStateFlags.Msaa4x);
             }
 
             Window.Init(width, height, options.WindowTitle);

@@ -134,7 +134,7 @@ public sealed class RaylibEmbeddedHost : IDisposable
             return;
 
         if (_options.HideWindow)
-            Window.SetConfigFlags(WindowStateFlags.Hidden);
+            Window.SetConfigFlags(WindowStateFlags.Hidden | WindowStateFlags.Msaa4x);
 
         Window.Init(_options.Width, _options.Height, _options.WindowTitle);
         if (!Window.IsReady())
