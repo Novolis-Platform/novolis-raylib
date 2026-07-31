@@ -22,19 +22,30 @@ internal static class CodegenTestEnvironment
         return new CodegenEnvironment { FileSystem = fileSystem, RepoRoot = repoRoot };
     }
 
-    /// <summary>Maps <c>C:\…</c> mock roots to <c>/…</c> on non-Windows so IO.Abstractions accepts them.</summary>
+    /// <summary>Cross-platform mock root accepted by <see cref="MockFileSystem"/>.</summary>
+    internal static string DefaultMockRoot =>
+        OperatingSystem.IsWindows() ? @"C:\novolis\raylib-test" : "/novolis/raylib-test";
+
+    /// <summary>Maps <c>C:\…</c> (and relative) mock roots so IO.Abstractions accepts them on Linux/macOS.</summary>
     internal static string NormalizeMockRoot(string repoRoot)
     {
-        if (OperatingSystem.IsWindows())
-            return repoRoot;
+        if (string.IsNullOrWhiteSpace(repoRoot))
+            return DefaultMockRoot;
 
-        if (repoRoot.Length >= 2 && char.IsAsciiLetter(repoRoot[0]) && repoRoot[1] == ':')
+        // Always rewrite Windows drive-letter paths on non-Windows (Path.IsPathRooted is true for C:\… even on Linux).
+        if (!OperatingSystem.IsWindows()
+            && repoRoot.Length >= 2
+            && char.IsAsciiLetter(repoRoot[0])
+            && repoRoot[1] == ':')
         {
             var rest = repoRoot[2..].TrimStart('\\', '/').Replace('\\', '/');
-            return "/" + rest;
+            return string.IsNullOrEmpty(rest) ? DefaultMockRoot : "/" + rest;
         }
 
-        return Path.IsPathRooted(repoRoot) ? repoRoot : Path.GetFullPath(repoRoot);
+        if (Path.IsPathRooted(repoRoot))
+            return repoRoot.Replace('\\', Path.DirectorySeparatorChar);
+
+        return Path.GetFullPath(repoRoot);
     }
 
     public static InteropExportsFragment InteropFragment(params InteropImportSpec[] imports) =>

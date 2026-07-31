@@ -7,6 +7,8 @@ internal static class PipelineTestEnvironment
 {
     public static CodegenEnvironment CreateMock(string repoRoot, IReadOnlyDictionary<string, string> relativeFiles)
     {
+        repoRoot = NormalizeMockRoot(repoRoot);
+
         var files = new Dictionary<string, MockFileData>(StringComparer.OrdinalIgnoreCase);
         foreach (var (relativePath, contents) in relativeFiles)
         {
@@ -19,6 +21,26 @@ internal static class PipelineTestEnvironment
             FileSystem = new MockFileSystem(files, repoRoot),
             RepoRoot = repoRoot,
         };
+    }
+
+    internal static string NormalizeMockRoot(string repoRoot)
+    {
+        if (string.IsNullOrWhiteSpace(repoRoot))
+            return OperatingSystem.IsWindows() ? @"C:\novolis\pipeline-test" : "/novolis/pipeline-test";
+
+        if (!OperatingSystem.IsWindows()
+            && repoRoot.Length >= 2
+            && char.IsAsciiLetter(repoRoot[0])
+            && repoRoot[1] == ':')
+        {
+            var rest = repoRoot[2..].TrimStart('\\', '/').Replace('\\', '/');
+            return string.IsNullOrEmpty(rest) ? "/novolis/pipeline-test" : "/" + rest;
+        }
+
+        if (Path.IsPathRooted(repoRoot))
+            return repoRoot.Replace('\\', Path.DirectorySeparatorChar);
+
+        return Path.GetFullPath(repoRoot);
     }
 
     public static string RaylibHeaderRelativePath =>
