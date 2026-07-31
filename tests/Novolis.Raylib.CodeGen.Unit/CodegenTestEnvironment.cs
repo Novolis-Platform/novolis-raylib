@@ -8,6 +8,9 @@ internal static class CodegenTestEnvironment
 {
     public static CodegenEnvironment CreateMock(string repoRoot, IReadOnlyDictionary<string, string> relativeFiles)
     {
+        // Tests historically used Windows drive roots; MockFileSystem on Linux requires a Unix-rooted path.
+        repoRoot = NormalizeMockRoot(repoRoot);
+
         var files = new Dictionary<string, MockFileData>(StringComparer.OrdinalIgnoreCase);
         foreach (var (relativePath, contents) in relativeFiles)
         {
@@ -17,6 +20,21 @@ internal static class CodegenTestEnvironment
 
         var fileSystem = new MockFileSystem(files, repoRoot);
         return new CodegenEnvironment { FileSystem = fileSystem, RepoRoot = repoRoot };
+    }
+
+    /// <summary>Maps <c>C:\…</c> mock roots to <c>/…</c> on non-Windows so IO.Abstractions accepts them.</summary>
+    internal static string NormalizeMockRoot(string repoRoot)
+    {
+        if (OperatingSystem.IsWindows())
+            return repoRoot;
+
+        if (repoRoot.Length >= 2 && char.IsAsciiLetter(repoRoot[0]) && repoRoot[1] == ':')
+        {
+            var rest = repoRoot[2..].TrimStart('\\', '/').Replace('\\', '/');
+            return "/" + rest;
+        }
+
+        return Path.IsPathRooted(repoRoot) ? repoRoot : Path.GetFullPath(repoRoot);
     }
 
     public static InteropExportsFragment InteropFragment(params InteropImportSpec[] imports) =>
