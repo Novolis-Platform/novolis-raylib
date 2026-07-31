@@ -11,8 +11,21 @@ dotnet add package Novolis.Raylib.Raygui
 
 ## Quick start
 
-Application authors only need `Novolis.Raylib.Raygui`. Maintainers refresh natives with:
+Application authors only need `Novolis.Raylib.Raygui`. Native assets copy automatically via `buildTransitive/Novolis.Raylib.Raygui.Native.targets`.
+
+Maintainers refresh natives with:
 
 ```bash
 dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_02_native
 ```
+
+## API
+
+No C# API. Ships `runtimes/{win-x64,linux-x64,osx-x64}/native/novolis_raygui.*`.
+
+## Related
+
+| Package | When to use |
+|---------|-------------|
+| `Novolis.Raylib.Raygui` | C# raygui widget wrappers |
+| `Novolis.Raylib.Native` | Core raylib + imgui natives |

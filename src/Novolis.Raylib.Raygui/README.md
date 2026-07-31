@@ -1,8 +1,8 @@
 # Novolis.Raylib.Raygui
 
-Optional add-on: **raygui** rectangle widgets via `RayGui` (legacy API).
+Optional add-on: **raygui** rectangle widgets via `RayGuiControls` and the legacy `RayGui` façade.
 
-Install alongside `Novolis.Raylib` when you need raygui-style controls. Core `Gui` uses Dear ImGui.
+Install alongside `Novolis.Raylib` when you need raygui-style controls. Core `Gui` in Runtime uses Dear ImGui.
 
 ## Install
 
@@ -13,9 +13,27 @@ dotnet add package Novolis.Raylib.Raygui
 
 ## Quick start
 
-```xml
-<PackageReference Include="Novolis.Raylib" />
-<PackageReference Include="Novolis.Raylib.Raygui" />
+```csharp
+using Novolis.Raylib.Raygui;
+
+RayguiShimHost.EnsureInitialized();
+if (RayGuiControls.Button(new RectangleF(8, 8, 120, 28), "Play"))
+    /* clicked */;
 ```
 
-Native: `novolis_raygui` (transitive via `Novolis.Raylib.Raygui.Native`).
+Call `RayguiShimHost.EnsureInitialized()` once before any widget. Native `novolis_raygui` is transitive via `Novolis.Raylib.Raygui.Native`.
+
+## API
+
+| Type | Role |
+|------|------|
+| `RayguiShimHost` | `EnsureInitialized()` |
+| `RayGuiControls` | `Button`, `Label`, `Panel`, `Toggle`, `CheckBox`, `ComboBox`, `Slider`, `ProgressBar`, style helpers |
+| `RayGui` | Legacy static partial façade (same widgets) |
+
+## Related
+
+| Package | When to use |
+|---------|-------------|
+| `Novolis.Raylib.Runtime` | Primary `Gui` (ImGui) and shell loop |
+| `Novolis.Raylib.Raygui.Native` | Native raygui binaries (transitive) |

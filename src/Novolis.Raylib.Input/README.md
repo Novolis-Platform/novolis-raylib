@@ -14,8 +14,24 @@ dotnet add package Novolis.Raylib.Input
 using Novolis.Raylib.Input;
 
 IInputSource input = new NullInputSource(); // headless tests
-input.OnKeyPress(args => { /* ... */ });
+input.OnKeyPress += args => { /* KeyCode */ };
 input.Start();
 ```
 
 Provide a platform implementation (for example SharpHook-backed) in the host app or a future provider package.
+
+## API
+
+| Type | Role |
+|------|------|
+| `IInputSource` | `OnMouseMove`, `OnMouseClick`, `OnKeyPress`, `OnKeyRelease`; `Start`, `Stop` |
+| `NullInputSource` | No-op for headless/CI |
+| `MouseEventArgs` | `X`, `Y`, `Button` |
+| `KeyboardEventArgs` | `KeyCode` |
+
+## Related
+
+| Package | When to use |
+|---------|-------------|
+| `Novolis.Raylib.Runtime` | Built-in `Input` façade inside the shell loop |
+| `Novolis.Raylib.Bindings` | `KeyboardKey`, `MouseButton` enums |

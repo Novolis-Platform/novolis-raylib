@@ -1,6 +1,6 @@
 # Novolis.Raylib.Bindings
 
-Generated P/Invoke for raylib 6 and the raygui shim (`Raylib6Native`, `RayguiShimExports`, debug hooks).
+Generated P/Invoke for raylib 6 and the raygui shim, plus hand-edited public wrappers.
 
 **Application authors:** use **`Novolis.Raylib.Runtime`** façades (`Graphics`, `World`, `Hud`, `Gui`). This package is for advanced scenarios and is pulled in transitively.
 
@@ -18,26 +18,26 @@ Regenerate bindings from manifests (maintainers only):
 dotnet run --project codegen/Novolis.Raylib.Pipeline -- run generate
 ```
 
-## Maintainer rules
-
-- **Do not hand-edit** `Interop/*.g.cs` — change manifests under `codegen/pipeline/raylib6/` and run codegen.
-- **Hand-edited public types:** `Camera`, `Texture`, input enums, `RaylibColors` presets.
-
-```bash
-dotnet run --project codegen/Novolis.Raylib.CodeGen -- generate
-```
-
-## Public API surface
+## API
 
 | Type | Role |
 |------|------|
-| `Camera`, `Texture` | Blittable-friendly wrappers used by façades |
-| `RaylibColors` | Common `Color` presets |
-| `KeyboardKey`, `MouseButton` | Input enums |
+| `Camera` | Perspective/orthographic camera struct |
+| `Texture` | `Id`, `Width`, `Height`, `IsValid` |
+| `RaylibColors` | Common color presets |
+| `RaylibVector3` | `ForwardFromYawPitch` |
+| `KeyboardKey`, `MouseButton` | Input enums aligned with raylib |
+| `Utf8StringMarshaller` | UTF-8 interop helper |
 
-Generated interop types are `internal`.
+Generated interop types (`Raylib6Native`, …) are `internal`.
 
-## See also
+## Maintainer rules
 
-- [Runtime](https://github.com/novolis/novolis-raylib/blob/main/src/Novolis.Raylib.Runtime/README.md)
-- [Codegen docs](https://github.com/novolis/novolis-raylib/blob/main/docs/codegen.md)
+- **Do not hand-edit** `Interop/*.g.cs` — change manifests under `codegen/pipeline/raylib6/` and run codegen.
+
+## Related
+
+| Package | When to use |
+|---------|-------------|
+| `Novolis.Raylib.Runtime` | Application-facing façades |
+| [Codegen docs](https://github.com/novolis/novolis-raylib/blob/main/docs/codegen.md) | Manifest and pipeline reference |

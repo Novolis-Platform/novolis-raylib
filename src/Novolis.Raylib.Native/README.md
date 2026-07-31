@@ -12,11 +12,11 @@ dotnet add package Novolis.Raylib
 
 ## Quick start
 
-Do not reference this package directly. Add **`Novolis.Raylib`** to your app; native runtimes are restored automatically for your RID.
+Do not reference this package directly. Add **`Novolis.Raylib`** to your app; native runtimes restore automatically for your RID.
 
 RayGui (`novolis_raygui`) ships in **`Novolis.Raylib.Raygui.Native`** when you reference the add-on package.
 
-## RIDs packaged (when prebuilts exist)
+## RIDs packaged
 
 | RID | Files |
 |-----|--------|
@@ -24,14 +24,15 @@ RayGui (`novolis_raygui`) ships in **`Novolis.Raylib.Raygui.Native`** when you r
 | `linux-x64` | `libraylib.so`, `libnovolis_raylib_trace.so`, `libnovolis_imgui.so` |
 | `osx-x64` | `libraylib.dylib`, `libnovolis_raylib_trace.dylib`, `libnovolis_imgui.dylib` |
 
-Maintainers run the linear pipeline: `dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_01_source` then `step_02_native`.
+Maintainers: `dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_01_source` then `step_02_native`.
 
 ## Troubleshooting
 
-- **DllNotFoundException:** Ensure the app RID matches a packaged runtime and that `raylib`, `novolis_raylib_trace`, and `novolis_imgui` are present in `runtimes/<rid>/native/`.
-- **Custom deployment:** Copy the same files from the NuGet package cache or `artifacts/` after `dotnet pack`.
+- **DllNotFoundException:** Ensure the app RID matches a packaged runtime and natives are present under `runtimes/<rid>/native/`.
 
-## See also
+## Related
 
-- [Novolis.Raylib meta package](https://github.com/novolis/novolis-raylib/blob/main/src/Novolis.Raylib/README.md)
-- [Novolis.Raylib.Raygui](../Novolis.Raylib.Raygui/) optional raygui add-on
+| Package | When to use |
+|---------|-------------|
+| `Novolis.Raylib` | Meta package for application authors |
+| `Novolis.Raylib.Raygui.Native` | Optional raygui natives |
