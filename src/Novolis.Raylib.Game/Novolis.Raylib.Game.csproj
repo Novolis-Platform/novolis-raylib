@@ -14,4 +14,8 @@
     <ProjectReference Include="..\Novolis.Raylib.Runtime\Novolis.Raylib.Runtime.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="Novolis.Raylib.Game.Unit" />
+  </ItemGroup>
+
 </Project>

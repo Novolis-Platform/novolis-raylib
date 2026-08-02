@@ -82,4 +82,26 @@ public sealed class CaptureStreamOptionsTests
         await Assert.That(options.CaptureEveryNFrames).IsEqualTo(1);
         await Assert.That(options.MaxBufferedFrames).IsEqualTo(32);
     }
+
+    [Test]
+    public async Task Custom_options_flow_into_runtime_state()
+    {
+        var options = new CaptureStreamOptions { CaptureEveryNFrames = 3, MaxBufferedFrames = 16 };
+        using (RaylibCaptureRuntimeState.Enter(options))
+        {
+            await Assert.That(RaylibCaptureRuntimeState.CurrentOptions!.CaptureEveryNFrames).IsEqualTo(3);
+            await Assert.That(RaylibCaptureRuntimeState.CurrentOptions!.MaxBufferedFrames).IsEqualTo(16);
+        }
+    }
+}
+
+public sealed class FrameCapturePipelineExtendedTests
+{
+    [Test]
+    public async Task Stop_clears_reader()
+    {
+        FrameCapturePipeline.Start(new CaptureStreamOptions { MaxBufferedFrames = 2 });
+        FrameCapturePipeline.Stop();
+        await Assert.That(FrameCapturePipeline.Reader).IsNull();
+    }
 }
