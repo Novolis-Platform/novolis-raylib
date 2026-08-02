@@ -81,6 +81,9 @@ public enum KeyboardKey
     /// <summary>F key.</summary>
     F = 70,
 
+    /// <summary>G key.</summary>
+    G = 71,
+
     /// <summary>M key.</summary>
     M = 77,
 
