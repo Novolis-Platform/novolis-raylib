@@ -72,6 +72,12 @@ public static class PipelinePaths
     public static string NativeArtifactsDir(string repoRoot) =>
         StepArtifactsDir(repoRoot, "step_02_native");
 
+    public static string AndroidNativeArtifactsDir(string repoRoot) =>
+        StepArtifactsDir(repoRoot, "step_02a_android");
+
+    public static string RaylibNativeAndroidArm64Dir(string repoRoot) =>
+        Path.Combine(repoRoot, "src", "Novolis.Raylib.Native", "runtimes", "android-arm64", "native");
+
     public static string NativeShimOutDir(string repoRoot, string shimFolder) =>
         Path.Combine(NativeRoot(repoRoot), shimFolder, "out");
 }

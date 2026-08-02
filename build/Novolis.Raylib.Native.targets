@@ -1,6 +1,7 @@
 <Project>
   <!-- Copy RID native assets from the nupkg (not repo build output paths). -->
-  <Target Name="CopyNovolisRaylibNativeAssets" AfterTargets="Build">
+  <Target Name="CopyNovolisRaylibNativeAssets" AfterTargets="Build"
+          Condition="!$([System.String]::Copy('$(TargetFramework)').Contains('-android'))">
     <ItemGroup>
       <_NovolisRaylibNativeRuntime Include="$(MSBuildThisFileDirectory)..\runtimes\win-x64\native\*" Condition="$([MSBuild]::IsOSPlatform('Windows'))" />
       <_NovolisRaylibNativeRuntime Include="$(MSBuildThisFileDirectory)..\runtimes\linux-x64\native\*" Condition="$([MSBuild]::IsOSPlatform('Linux'))" />
@@ -12,4 +13,20 @@
       SkipUnchangedFiles="true"
       Condition="'@(_NovolisRaylibNativeRuntime)' != ''" />
   </Target>
+
+  <!--
+    Android: inject NativeActivity host .so into APK lib/arm64-v8a.
+    Nupkg layout: buildTransitive/../runtimes/...
+    Repo layout (Import from build/): ../src/Novolis.Raylib.Native/runtimes/...
+  -->
+  <ItemGroup Condition="$([System.String]::Copy('$(TargetFramework)').Contains('-android'))">
+    <AndroidNativeLibrary Include="$(MSBuildThisFileDirectory)..\runtimes\android-arm64\native\libnovolis_raylib_android.so"
+                          Condition="Exists('$(MSBuildThisFileDirectory)..\runtimes\android-arm64\native\libnovolis_raylib_android.so')">
+      <Abi>arm64-v8a</Abi>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="$(MSBuildThisFileDirectory)..\src\Novolis.Raylib.Native\runtimes\android-arm64\native\libnovolis_raylib_android.so"
+                          Condition="Exists('$(MSBuildThisFileDirectory)..\src\Novolis.Raylib.Native\runtimes\android-arm64\native\libnovolis_raylib_android.so')">
+      <Abi>arm64-v8a</Abi>
+    </AndroidNativeLibrary>
+  </ItemGroup>
 </Project>

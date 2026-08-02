@@ -6,6 +6,7 @@ internal static class PipelineStepRegistry
     [
         new Steps.SourceStep(),
         new Steps.NativeStep(),
+        new Steps.AndroidNativeStep(),
         new Steps.VerifyManifestStep(),
         new Steps.EnrichDocsStep(),
         new Steps.VerifyDocsStep(),

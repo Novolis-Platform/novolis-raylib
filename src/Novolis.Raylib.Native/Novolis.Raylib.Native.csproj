@@ -8,7 +8,7 @@
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
     <PackageId>Novolis.Raylib.Native</PackageId>
     <IsPackable>true</IsPackable>
-    <Description>raylib 6, ImGui shim, and trace forwarder native binaries per RID (transitive dependency; do not reference directly).</Description>
+    <Description>raylib 6, ImGui shim, and trace forwarder native binaries per RID (desktop); android-arm64 static libraylib.a + NativeActivity host .so (transitive; do not reference directly).</Description>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,6 +22,8 @@
     <None Include="$(MSBuildThisFileDirectory)runtimes\osx-x64\native\libraylib.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Condition="Exists('$(MSBuildThisFileDirectory)runtimes\osx-x64\native\libraylib.dylib')" />
     <None Include="$(MSBuildThisFileDirectory)runtimes\osx-x64\native\libnovolis_raylib_trace.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Condition="Exists('$(MSBuildThisFileDirectory)runtimes\osx-x64\native\libnovolis_raylib_trace.dylib')" />
     <None Include="$(MSBuildThisFileDirectory)runtimes\osx-x64\native\libnovolis_imgui.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Condition="Exists('$(MSBuildThisFileDirectory)runtimes\osx-x64\native\libnovolis_imgui.dylib')" />
+    <None Include="$(MSBuildThisFileDirectory)runtimes\android-arm64\native\libraylib.a" Pack="true" PackagePath="runtimes/android-arm64/native" Condition="Exists('$(MSBuildThisFileDirectory)runtimes\android-arm64\native\libraylib.a')" />
+    <None Include="$(MSBuildThisFileDirectory)runtimes\android-arm64\native\libnovolis_raylib_android.so" Pack="true" PackagePath="runtimes/android-arm64/native" Condition="Exists('$(MSBuildThisFileDirectory)runtimes\android-arm64\native\libnovolis_raylib_android.so')" />
   </ItemGroup>
 
   <ItemGroup>

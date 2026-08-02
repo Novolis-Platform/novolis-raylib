@@ -1,6 +1,6 @@
 # Novolis.Raylib.Native
 
-Transitive NuGet package: **raylib**, **novolis_raylib_trace**, and **novolis_imgui** native binaries per RID.
+Transitive NuGet package: **raylib**, **novolis_raylib_trace**, and **novolis_imgui** native binaries per RID (desktop), plus **android-arm64** static raylib + NativeActivity host.
 
 No C# API. Native assets copy to the app output via `buildTransitive/Novolis.Raylib.Native.targets`.
 
@@ -23,12 +23,26 @@ RayGui (`novolis_raygui`) ships in **`Novolis.Raylib.Raygui.Native`** when you r
 | `win-x64` | `raylib.dll`, `novolis_raylib_trace.dll`, `novolis_imgui.dll` |
 | `linux-x64` | `libraylib.so`, `libnovolis_raylib_trace.so`, `libnovolis_imgui.so` |
 | `osx-x64` | `libraylib.dylib`, `libnovolis_raylib_trace.dylib`, `libnovolis_imgui.dylib` |
+| `android-arm64` | `libraylib.a` (static), `libnovolis_raylib_android.so` (NativeActivity host; static-links raylib) |
 
-Maintainers: `dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_01_source` then `step_02_native`.
+### Android notes
+
+Upstream raylib Android is **static-link oriented** (`android_main` → user `main`). Do not expect desktop-style managed `InitWindow` / `LibraryImport("raylib")` for the game loop yet.
+
+`net*-android` apps that consume this package (without excluding `buildTransitive`) get `libnovolis_raylib_android.so` as an `AndroidNativeLibrary` (`arm64-v8a`). Point `NativeActivity` / `android.app.lib_name` at **`novolis_raylib_android`**.
+
+Maintainers (NDK + Ninja required):
+
+```powershell
+dotnet run --project d:\novolis\novolis-raylib\codegen\Novolis.Raylib.Pipeline -- run step_02a_android --force
+```
+
+Desktop maintainers: `dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_01_source` then `step_02_native`.
 
 ## Troubleshooting
 
 - **DllNotFoundException:** Ensure the app RID matches a packaged runtime and natives are present under `runtimes/<rid>/native/`.
+- **Android UnsatisfiedLinkError:** Confirm the host `.so` is packed into the APK and `android.app.lib_name` is `novolis_raylib_android`.
 
 ## Related
 
