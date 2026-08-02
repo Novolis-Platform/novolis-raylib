@@ -6,6 +6,15 @@ public enum KeyboardKey
     /// <summary>Escape key.</summary>
     Escape = 256,
 
+    /// <summary>Enter / return.</summary>
+    Enter = 257,
+
+    /// <summary>Arrow up.</summary>
+    Up = 265,
+
+    /// <summary>Arrow down.</summary>
+    Down = 264,
+
     /// <summary>Digit 0.</summary>
     Zero = 48,
 
@@ -50,6 +59,12 @@ public enum KeyboardKey
 
     /// <summary>D key.</summary>
     D = 68,
+
+    /// <summary>T key.</summary>
+    T = 84,
+
+    /// <summary>C key.</summary>
+    C = 67,
 
     /// <summary>R key.</summary>
     R = 82,
