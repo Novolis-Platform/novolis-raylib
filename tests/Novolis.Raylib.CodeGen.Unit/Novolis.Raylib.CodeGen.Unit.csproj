@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\codegen\Novolis.Raylib.Manifests\Novolis.Raylib.Manifests.csproj" />
     <ProjectReference Include="..\..\src\Novolis.Raylib.Bindings\Novolis.Raylib.Bindings.csproj" />
     <ProjectReference Include="..\..\src\Novolis.Raylib.Testing\Novolis.Raylib.Testing.csproj" />
     <ProjectReference Include="..\..\src\Novolis.Raylib.Runtime\Novolis.Raylib.Runtime.csproj" />

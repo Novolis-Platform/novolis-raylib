@@ -10,6 +10,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Novolis.Raylib.Abstractions\Novolis.Raylib.Abstractions.csproj" />
+    <ProjectReference Include="..\..\src\Novolis.Raylib.Input\Novolis.Raylib.Input.csproj" />
     <ProjectReference Include="..\..\src\Novolis.Raylib.Testing\Novolis.Raylib.Testing.csproj" />
   </ItemGroup>
 
