@@ -29,11 +29,11 @@ flowchart TB
 
 | Use case | API | Sample |
 |----------|-----|--------|
-| Jam / prototype | `Novolis.Raylib.Game` → `RayGame.Run` | `samples/HelloGame` |
-| DI / phased loop | `Novolis.Raylib.Hosting` → `AddRaylib`, `IRenderSystem` | `samples/HelloHosting` |
-| Low-level control | `Graphics`, `World`, `Hud`, `Gui` | `samples/HelloRuntime` |
-| Automated tests | `Novolis.Raylib.Testing` | `samples/HelloTesting` |
-| Frame streaming / clips | `Novolis.Raylib.Capture` (optional) | `samples/HelloCapture` |
+| Jam / prototype | `Novolis.Raylib.Game` → `RayGame.Run` | `novolis-dogfooding/apps/raylib/HelloGame` |
+| DI / phased loop | `Novolis.Raylib.Hosting` → `AddRaylib`, `IRenderSystem` | `novolis-dogfooding/apps/raylib/HelloHosting` |
+| Low-level control | `Graphics`, `World`, `Hud`, `Gui` | `novolis-dogfooding/apps/raylib/HelloRuntime` |
+| Automated tests | `Novolis.Raylib.Testing` | `novolis-dogfooding/apps/raylib/HelloTesting` |
+| Frame streaming / clips | `Novolis.Raylib.Capture` (optional) | `novolis-dogfooding/apps/raylib/HelloCapture` |
 | Full 3D cockpit demo | `Novolis.Raylib.Game` | `novolis-dogfooding/apps/raylib/XFighter` |
 
 Do **not** add direct package references to `Novolis.Raylib.Native` or `Novolis.Raylib.Abstractions` unless you extend the stack.

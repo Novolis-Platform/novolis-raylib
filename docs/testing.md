@@ -195,7 +195,7 @@ Line coverage targets **hand-written C#** in `src/` and `codegen/`. Generated `*
 | Excluded | Included |
 |----------|----------|
 | `**/*.g.cs` | Bindings hand types, Runtime shell/debug, Game, Hosting, Capture, Testing helpers, CodeGen + Pipeline |
-| `samples/` | CLI logic via unit tests |
+| `novolis-dogfooding/apps/raylib/Hello*` | Sample walkthroughs (PackageReference) |
 | `Novolis.Raylib.Native` (no C#) | |
 
 Local run:

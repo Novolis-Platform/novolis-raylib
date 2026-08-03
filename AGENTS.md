@@ -49,7 +49,7 @@ dotnet run --project codegen/Novolis.Raylib.Pipeline -- run agent-verify
 | `src/Novolis.Raylib.Raygui/` | Optional raygui widgets add-on package |
 | `build/` | MSBuild targets (codegen on compile, native copy) |
 | `tests/` | TUnit unit/integration tests |
-| `samples/` | HelloGame, HelloRuntime, HelloHosting, HelloCapture, HelloTesting, HelloGui, HelloRaygui (in-repo API only) |
+| `novolis-dogfooding/apps/raylib/Hello*` | HelloGame, HelloRuntime, HelloHosting, HelloCapture, HelloTesting, HelloGui, HelloRaygui |
 | `novolis-dogfooding` | XFighter and other published-package demos |
 | `docs/` | `codegen.md`, `testing.md` |
 | `agentic-tools/` | Agent registry, workflows (codegen discipline) |
@@ -167,7 +167,7 @@ Some comments and help text still mention **Star Conflicts Revolt**, `tools/rayl
 | Add raylib function | Manifest row → `generate` → commit `.g.cs` + manifest |
 | Add façade method | `facades.manifest.json` → `generate` |
 | Customize emitted C# | New `IRaylibCodegenHook` in CodeGen.Hooks |
-| New sample | `samples/Hello*` pattern; reference `Novolis.Raylib` |
+| New sample | `novolis-dogfooding/apps/raylib/Hello*` pattern; PackageReference `Novolis.Raylib` |
 | Game loop with systems | `HelloHosting` sample + `IStartupSystem` / `IRenderSystem` / … |
 | Test rendering | `Novolis.Raylib.Testing` + env gates; see `docs/testing.md` |
 

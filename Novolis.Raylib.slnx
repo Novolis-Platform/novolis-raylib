@@ -33,13 +33,4 @@
     <Project Path="tests/Novolis.Raylib.Golden/Novolis.Raylib.Golden.csproj" />
     <Project Path="tests/Novolis.Raylib.Golden.Seed/Novolis.Raylib.Golden.Seed.csproj" />
   </Folder>
-  <Folder Name="/samples/">
-    <Project Path="samples/HelloGame/HelloGame.csproj" />
-    <Project Path="samples/HelloRuntime/HelloRuntime.csproj" />
-    <Project Path="samples/HelloHosting/HelloHosting.csproj" />
-    <Project Path="samples/HelloTesting/HelloTesting.csproj" />
-    <Project Path="samples/HelloCapture/HelloCapture.csproj" />
-    <Project Path="samples/HelloGui/HelloGui.csproj" />
-    <Project Path="samples/HelloRaygui/HelloRaygui.csproj" />
-  </Folder>
 </Solution>
