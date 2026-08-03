@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-raylib">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Raylib.Testing
 
 Optional test helpers for projects that use **`Novolis.Raylib`**. Reference this package **only from test projects**.
@@ -75,3 +83,4 @@ Full details: [docs/testing.md](../../docs/testing.md).
 dotnet run --project codegen/Novolis.Raylib.Pipeline -- run maintainer
 dotnet test Novolis.Raylib.slnx -c Release -- --maximum-parallel-tests 1
 ```
+

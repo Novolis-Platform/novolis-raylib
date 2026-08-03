@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-raylib">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Raylib.Loaders
 
 Wavefront OBJ parsing for indexed triangle meshes (`Novolis.Math.Geometry.TriangleMesh`).
@@ -31,3 +39,4 @@ Depends on `Novolis.Math.Geometry` (PackageReference only). No Raylib window req
 |---------|-------------|
 | `Novolis.Raylib.Runtime` | Upload meshes via `World` draw helpers |
 | `Novolis.Physics.Collision.Simple` | `BvhStaticWorld` from `TriangleMesh` |
+

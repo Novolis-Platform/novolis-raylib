@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-raylib">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Raylib.Raygui
 
 Optional add-on: **raygui** rectangle widgets via `RayGuiControls` and the legacy `RayGui` façade.
@@ -37,3 +45,4 @@ Call `RayguiShimHost.EnsureInitialized()` once before any widget. Native `novoli
 |---------|-------------|
 | `Novolis.Raylib.Runtime` | Primary `Gui` (ImGui) and shell loop |
 | `Novolis.Raylib.Raygui.Native` | Native raygui binaries (transitive) |
+

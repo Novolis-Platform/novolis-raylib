@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-raylib">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Raylib.Hosting
 
 `IHost` integration with phased game-loop systems (included transitively by **`Novolis.Raylib`**).
@@ -64,3 +72,4 @@ Set `NOVOLIS_RAYLIB_HEADLESS=1` before `RunAsync` to start the host without a bl
 
 - [Getting started](https://github.com/novolis/novolis-raylib/blob/main/docs/getting-started.md)
 - [Game API](https://github.com/novolis/novolis-raylib/blob/main/src/Novolis.Raylib.Game/README.md)
+

@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-raylib">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Raylib.Runtime
 
 Manifest-generated raylib façades plus HUD/GUI layers, with a hand-crafted window shell.
@@ -70,3 +78,4 @@ Install **`Novolis.Raylib`** for apps; this package is pulled in transitively.
 
 - [Game](https://github.com/novolis/novolis-raylib/blob/main/src/Novolis.Raylib.Game/README.md)
 - [Hosting](https://github.com/novolis/novolis-raylib/blob/main/src/Novolis.Raylib.Hosting/README.md)
+

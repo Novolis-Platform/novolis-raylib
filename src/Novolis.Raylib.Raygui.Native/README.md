@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-raylib">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Raylib.Raygui.Native
 
 Native `novolis_raygui` shim binaries per RID. Referenced transitively by `Novolis.Raylib.Raygui`; do not reference this package directly.
@@ -29,3 +37,4 @@ No C# API. Ships `runtimes/{win-x64,linux-x64,osx-x64}/native/novolis_raygui.*`.
 |---------|-------------|
 | `Novolis.Raylib.Raygui` | C# raygui widget wrappers |
 | `Novolis.Raylib.Native` | Core raylib + imgui natives |
+

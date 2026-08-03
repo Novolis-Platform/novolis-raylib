@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-raylib">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Raylib.Capture
 
 Optional **per-frame framebuffer streaming** for apps using [`Novolis.Raylib`](../Novolis.Raylib/). Not included in the meta package — add explicitly when you need capture.
@@ -43,3 +51,4 @@ Capture hooks presentation after `Graphics.EndDrawing` (zero cost when no sessio
 |---------|-------------|
 | `Novolis.Raylib.Testing` | Golden image tests (references Capture transitively) |
 | `Novolis.Raylib.Runtime` | Shell loop and draw hooks |
+

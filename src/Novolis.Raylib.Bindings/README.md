@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-raylib">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Raylib.Bindings
 
 Generated P/Invoke for raylib 6 and the raygui shim, plus hand-edited public wrappers.
@@ -41,3 +49,4 @@ Generated interop types (`Raylib6Native`, …) are `internal`.
 |---------|-------------|
 | `Novolis.Raylib.Runtime` | Application-facing façades |
 | [Codegen docs](https://github.com/novolis/novolis-raylib/blob/main/docs/codegen.md) | Manifest and pipeline reference |
+

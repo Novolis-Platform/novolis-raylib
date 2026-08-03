@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-raylib">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Raylib.Abstractions
 
 Transitive contracts for Raylib shell hosts: frame renderers, lifecycle systems, and invalidation hooks.
@@ -40,3 +48,4 @@ public sealed class MyRenderer : IRaylibFrameRenderer
 |---------|-------------|
 | `Novolis.Raylib.Runtime` | Generated `Graphics`, `World`, `Hud`, `Gui` façades |
 | `Novolis.Raylib.Game` | ECS-style game loop on top of the shell |
+

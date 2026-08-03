@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-raylib">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Raylib
 
 One-line install for the full Novolis Raylib stack: [raylib](https://www.raylib.com/) 6, raygui, generated façades, Game and Hosting entry APIs.
@@ -51,3 +59,4 @@ Set `NOVOLIS_RAYLIB_HEADLESS=1` to skip the blocking window loop (samples and te
 ## Support
 
 Pre-release (`0.1.x-alpha`). Windows is the primary CI platform; Linux/macOS RIDs are packaged when vendor prebuilts exist.
+

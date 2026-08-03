@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-raylib">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Raylib.Game
 
 Low-ceremony API for jams and tutorials (included transitively by **`Novolis.Raylib`**).
@@ -45,3 +53,4 @@ When `NOVOLIS_RAYLIB_HEADLESS=1`, the shell skips window creation (useful in CI)
 
 - [Novolis.Raylib meta package](https://github.com/novolis/novolis-raylib/blob/main/src/Novolis.Raylib/README.md)
 - [Hosting](https://github.com/novolis/novolis-raylib/blob/main/src/Novolis.Raylib.Hosting/README.md) for `IHost` integration
+

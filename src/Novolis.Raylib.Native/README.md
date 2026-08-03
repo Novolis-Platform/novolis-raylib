@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-raylib">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Raylib.Native
 
 Transitive NuGet package: **raylib**, **novolis_raylib_trace**, and **novolis_imgui** native binaries per RID (desktop), plus **android-arm64** static raylib + NativeActivity host.
@@ -50,3 +58,4 @@ Desktop maintainers: `dotnet run --project codegen/Novolis.Raylib.Pipeline -- ru
 |---------|-------------|
 | `Novolis.Raylib` | Meta package for application authors |
 | `Novolis.Raylib.Raygui.Native` | Optional raygui natives |
+

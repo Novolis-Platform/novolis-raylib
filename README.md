@@ -1,3 +1,35 @@
+<!-- novolis-marketing:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-brand-transparent.svg" width="360" alt="Novolis"/>
+  </a>
+</p>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/banners/novolis-raylib.svg" width="100%" alt="novolis-raylib"/>
+</p>
+
+<p align="center">
+  <strong>Raylib 6 for modern .NET</strong><br/>
+  Multi-package Raylib 6 + raygui bindings, game API, hosting, and testing.
+</p>
+
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-raylib/actions"><img src="https://img.shields.io/github/actions/workflow/status/Novolis-Platform/novolis-raylib/merge.yml?branch=main&label=merge&logo=github" alt="merge"/></a>
+  <a href="https://github.com/orgs/Novolis-Platform/packages?repo_name=novolis-raylib"><img src="https://img.shields.io/badge/packages-GitHub%20Packages-0a7ea3?logo=nuget" alt="packages"/></a>
+  <a href="https://github.com/Novolis-Platform"><img src="https://img.shields.io/badge/org-Novolis--Platform-111827" alt="org"/></a>
+</p>
+
+<p align="center">
+  <a href="https://nuget.pkg.github.com/Novolis-Platform/index.json"><code>https://nuget.pkg.github.com/Novolis-Platform/index.json</code></a>
+  ·
+  <a href="https://github.com/Novolis-Platform/.github/blob/main/profile/README.md">Org landing</a>
+  ·
+  <a href="https://github.com/Novolis-Platform/novolis-governance">Governance</a>
+</p>
+
+---
+<!-- novolis-marketing:end -->
 <!-- novolis-package-index:start -->
 > **GitHub Packages shows this repository README on every package page** (upstream limitation).
 > Open the **package README** for install and quick start — embedded in each .nupkg and linked below.
@@ -12,6 +44,8 @@
 | `Novolis.Raylib.Capture` | `dotnet add package Novolis.Raylib.Capture` | [README](https://github.com/Novolis-Platform/novolis-raylib/blob/main/src/Novolis.Raylib.Capture/README.md) |
 | `Novolis.Raylib.Game` | `dotnet add package Novolis.Raylib.Game` | [README](https://github.com/Novolis-Platform/novolis-raylib/blob/main/src/Novolis.Raylib.Game/README.md) |
 | `Novolis.Raylib.Hosting` | `dotnet add package Novolis.Raylib.Hosting` | [README](https://github.com/Novolis-Platform/novolis-raylib/blob/main/src/Novolis.Raylib.Hosting/README.md) |
+| `Novolis.Raylib.Input` | `dotnet add package Novolis.Raylib.Input` | [README](https://github.com/Novolis-Platform/novolis-raylib/blob/main/src/Novolis.Raylib.Input/README.md) |
+| `Novolis.Raylib.Loaders` | `dotnet add package Novolis.Raylib.Loaders` | [README](https://github.com/Novolis-Platform/novolis-raylib/blob/main/src/Novolis.Raylib.Loaders/README.md) |
 | `Novolis.Raylib.Manifests` | `dotnet add package Novolis.Raylib.Manifests` | [README](https://github.com/Novolis-Platform/novolis-raylib/blob/main/codegen/Novolis.Raylib.Manifests/README.md) |
 | `Novolis.Raylib.Native` | `dotnet add package Novolis.Raylib.Native` | [README](https://github.com/Novolis-Platform/novolis-raylib/blob/main/src/Novolis.Raylib.Native/README.md) |
 | `Novolis.Raylib.Raygui` | `dotnet add package Novolis.Raylib.Raygui` | [README](https://github.com/Novolis-Platform/novolis-raylib/blob/main/src/Novolis.Raylib.Raygui/README.md) |

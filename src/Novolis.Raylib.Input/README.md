@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-raylib">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Raylib.Input
 
 Input capture abstractions for Raylib hosts (keyboard/mouse). No dependency on Simulation.
@@ -35,3 +43,4 @@ Provide a platform implementation (for example SharpHook-backed) in the host app
 |---------|-------------|
 | `Novolis.Raylib.Runtime` | Built-in `Input` façade inside the shell loop |
 | `Novolis.Raylib.Bindings` | `KeyboardKey`, `MouseButton` enums |
+

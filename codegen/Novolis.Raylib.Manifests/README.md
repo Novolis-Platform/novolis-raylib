@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-raylib">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Raylib.Manifests
 
 C#-authoritative binding manifest fragments for `Novolis.Raylib` codegen (interop exports, façades, HUD, raygui/imgui shims).
@@ -42,3 +50,4 @@ Maintainers run the raylib pipeline (`Novolis.Raylib.Pipeline`) which consumes t
 ## Support
 
 Pre-release (`2026.1.*` on GitHub Packages). Manifest IDs and fingerprints are verified in CI (`step_03_verify_manifest`).
+
