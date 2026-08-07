@@ -15,10 +15,10 @@
     "codegen/Novolis.Raylib.Manifests/RaylibDebugManifest.cs": "8d18165eb9e54ec47570ef096c9aa4ab83fb7151c051350d4ab6736a7372c375",
     "codegen/Novolis.Raylib.Manifests/RaylibManifestInputPaths.cs": "7f5f627ab8cb29888d22735af1b853bb89f190d99098f37ae42384e5a8f4716d",
     "codegen/Novolis.Raylib.Manifests/obj/Debug/net10.0/.NETCoreApp,Version=v10.0.AssemblyAttributes.cs": "93d67476196ebfc80d1d7d8844b91146cfd678d105f5ce635eb900ca40610c9b",
-    "codegen/Novolis.Raylib.Manifests/obj/Debug/net10.0/Novolis.Raylib.Manifests.AssemblyInfo.cs": "3775861f4ccdbaf9b0e5d349cc155ec27a7f775d9d84067e5306602043e2ad1a",
+    "codegen/Novolis.Raylib.Manifests/obj/Debug/net10.0/Novolis.Raylib.Manifests.AssemblyInfo.cs": "e7b952c88a3c94a36f06211805263c0bfc6201ce46387221d8f5af3cddfa1558",
     "codegen/Novolis.Raylib.Manifests/obj/Debug/net10.0/Novolis.Raylib.Manifests.GlobalUsings.g.cs": "a3c6048bb4d922b1799a9977f84362a3787b68810cac67aa86ac3aa23295f227",
     "codegen/Novolis.Raylib.Manifests/obj/Release/net10.0/.NETCoreApp,Version=v10.0.AssemblyAttributes.cs": "93d67476196ebfc80d1d7d8844b91146cfd678d105f5ce635eb900ca40610c9b",
-    "codegen/Novolis.Raylib.Manifests/obj/Release/net10.0/Novolis.Raylib.Manifests.AssemblyInfo.cs": "4a5ff69a0137f6f6974fb260634c6471e042db2bfbdbacb69c484969afcb5df0",
+    "codegen/Novolis.Raylib.Manifests/obj/Release/net10.0/Novolis.Raylib.Manifests.AssemblyInfo.cs": "0167b86316cf5d46b2633a5bf6102d8f1b67cab96245c07b80e38140d28e84f9",
     "codegen/Novolis.Raylib.Manifests/obj/Release/net10.0/Novolis.Raylib.Manifests.GlobalUsings.g.cs": "a3c6048bb4d922b1799a9977f84362a3787b68810cac67aa86ac3aa23295f227",
     "codegen/pipeline/raylib6/steps/step_01_source/artifacts/raylib-6/include/raylib.h": "1842111e48260e622d0ff2e6f4ac6141508d6f369791265ba518e7502c760ccf"
   },
