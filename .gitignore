@@ -16,3 +16,6 @@ codegen/native/raylib6-android-host/out/
 *.dylib
 !src/Novolis.Raylib.Native/runtimes/**
 !src/Novolis.Raylib.Raygui.Native/runtimes/**
+# MTP / VS test output
+TestResults/
+[Tt]est[Rr]esults/
