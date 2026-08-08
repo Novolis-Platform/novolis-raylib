@@ -5,6 +5,7 @@ using Novolis.Raylib.Testing.Golden;
 
 namespace Novolis.Raylib.Testing.Unit;
 
+[NotInParallel("novolis-test-gate-env")]
 public sealed class GoldenTestGateTests
 {
     [Test]
@@ -35,7 +36,14 @@ public sealed class GoldenTestGateTests
     public async Task IsOptInEnabled_false_when_unset()
     {
         Environment.SetEnvironmentVariable("NOVOLIS_TEST_GATE", null);
-        await Assert.That(GoldenTestGate.IsOptInEnabled("NOVOLIS_TEST_GATE")).IsFalse();
+        try
+        {
+            await Assert.That(GoldenTestGate.IsOptInEnabled("NOVOLIS_TEST_GATE")).IsFalse();
+        }
+        finally
+        {
+            Environment.SetEnvironmentVariable("NOVOLIS_TEST_GATE", null);
+        }
     }
 }
 
@@ -107,6 +115,7 @@ public sealed class DelegateRaylibFrameRendererTests
     }
 }
 
+[NotInParallel("golden-adhoc-bucket")]
 public sealed class GoldenAdhocRunBucketLayoutTests
 {
     [Test]
@@ -132,6 +141,7 @@ public sealed class GoldenAdhocRunBucketLayoutTests
     }
 }
 
+[NotInParallel("golden-adhoc-bucket")]
 public sealed class GoldenRenderOutputLayoutTests
 {
     [Test]

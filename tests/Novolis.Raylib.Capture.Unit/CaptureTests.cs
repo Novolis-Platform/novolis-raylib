@@ -36,6 +36,10 @@ public sealed class RaylibCaptureRuntimeStateTests
     }
 }
 
+/// <summary>
+/// <see cref="FrameCapturePipeline"/> / <see cref="RaylibPresentationHooks"/> are process-wide statics.
+/// </summary>
+[NotInParallel("raylib-capture-pipeline")]
 public sealed class FrameCapturePipelineTests
 {
     [Test]
@@ -63,13 +67,20 @@ public sealed class FrameCapturePipelineTests
     [Test]
     public async Task FrameCaptureSession_dispose_stops_pipeline()
     {
-        using (var session = new FrameCaptureSession(new CaptureStreamOptions { MaxBufferedFrames = 2 }))
+        try
         {
-            await Assert.That(session.Reader).IsNotNull();
-        }
+            using (var session = new FrameCaptureSession(new CaptureStreamOptions { MaxBufferedFrames = 2 }))
+            {
+                await Assert.That(session.Reader).IsNotNull();
+            }
 
-        await Assert.That(FrameCapturePipeline.Reader).IsNull();
-        await Assert.That(RaylibCaptureRuntimeState.IsStreamingActive).IsFalse();
+            await Assert.That(FrameCapturePipeline.Reader).IsNull();
+            await Assert.That(RaylibCaptureRuntimeState.IsStreamingActive).IsFalse();
+        }
+        finally
+        {
+            FrameCapturePipeline.Stop();
+        }
     }
 }
 
@@ -95,13 +106,21 @@ public sealed class CaptureStreamOptionsTests
     }
 }
 
+[NotInParallel("raylib-capture-pipeline")]
 public sealed class FrameCapturePipelineExtendedTests
 {
     [Test]
     public async Task Stop_clears_reader()
     {
-        FrameCapturePipeline.Start(new CaptureStreamOptions { MaxBufferedFrames = 2 });
-        FrameCapturePipeline.Stop();
-        await Assert.That(FrameCapturePipeline.Reader).IsNull();
+        try
+        {
+            FrameCapturePipeline.Start(new CaptureStreamOptions { MaxBufferedFrames = 2 });
+            FrameCapturePipeline.Stop();
+            await Assert.That(FrameCapturePipeline.Reader).IsNull();
+        }
+        finally
+        {
+            FrameCapturePipeline.Stop();
+        }
     }
 }

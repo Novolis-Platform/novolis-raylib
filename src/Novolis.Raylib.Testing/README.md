@@ -81,6 +81,6 @@ Full details: [docs/testing.md](../../docs/testing.md).
 
 ```bash
 dotnet run --project codegen/Novolis.Raylib.Pipeline -- run maintainer
-dotnet test Novolis.Raylib.slnx -c Release -- --maximum-parallel-tests 1
+dotnet test Novolis.Raylib.slnx -c Release --filter "Category!=Native"
 ```
 

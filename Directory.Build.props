@@ -34,7 +34,7 @@
 
   <PropertyGroup Condition="$(MSBuildProjectDirectory.Contains('\tests\')) Or $(MSBuildProjectDirectory.Contains('/tests/'))">
     <IsTestProject Condition="'$(IsTestProject)' == ''">true</IsTestProject>
-    <TestingPlatformCommandLineArguments>--maximum-parallel-tests 1</TestingPlatformCommandLineArguments>
+    <!-- Parallel by default. Native/GLFW suites use NotInParallel(raylib-glfw); golden CLI may still pass maximum-parallel-tests 1. -->
   </PropertyGroup>
   <PropertyGroup Label="NuGet / SourceLink">
     <Authors>Novolis</Authors>

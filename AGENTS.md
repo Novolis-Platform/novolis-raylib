@@ -123,7 +123,9 @@ dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_01_source
 dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_02_native
 
 dotnet build Novolis.Raylib.slnx -c Release
-dotnet test Novolis.Raylib.slnx -c Release --filter "Category!=Native" -- --maximum-parallel-tests 1
+dotnet test Novolis.Raylib.slnx -c Release --filter "Category!=Native"
+# Optional for golden/native-only runs that share GLFW:
+# dotnet test ... --filter "Category=Golden" -- --maximum-parallel-tests 1
 ```
 
 **Golden image tests** (preferred for visuals): `tests/Novolis.Raylib.Golden`, `[Category("Golden")]`, no env vars — use `RaylibTestRuntime.EnableForAssembly()`. CI job `golden-tests` on Windows. See [docs/testing.md](docs/testing.md).

@@ -50,6 +50,8 @@ dotnet build Novolis.Raylib.slnx -c Release
 dotnet test tests/Novolis.Raylib.Golden/Novolis.Raylib.Golden.csproj -c Release --filter "Category=Golden" -- --maximum-parallel-tests 1
 ```
 
+(`--maximum-parallel-tests 1` is optional insurance alongside `[assembly: NotInParallel("raylib-glfw")]`.)
+
 Refresh committed baselines: `dotnet run --project tests/Novolis.Raylib.Golden.Seed/Novolis.Raylib.Golden.Seed.csproj -c Release` (after `run maintainer` if native assets changed).
 
 Golden QA HTML reports live under `temp/test-renders/` — open the newest `index.html` after a run.
@@ -98,9 +100,10 @@ See `tests/Novolis.Raylib.Golden/UpdateBaselinesTests` (`[Explicit]`) or `dotnet
 
 Native / GLFW tests must not run concurrently:
 
-- `[assembly: NotInParallel("raylib-glfw")]` on golden and native test assemblies
+- `[assembly: NotInParallel("raylib-glfw")]` on golden and native-integration test assemblies
 - `RaylibGlfwTestSync` global mutex inside `RaylibOffscreenTestHarness`
-- `Directory.Build.props` sets `--maximum-parallel-tests 1` for all test projects
+- Optional CLI `--maximum-parallel-tests 1` when running golden/native filters only (unit suites stay parallel by default)
+- Shared adhoc-run bucket tests use `[NotInParallel("golden-adhoc-bucket")]` (process-wide `SharedRunFolder`)
 - `AsyncLocal` scopes: `RaylibTestRuntimeState`, `RaylibCaptureRuntimeState`
 - Streaming capture channel: single writer (render thread), single reader (test thread)
 
