@@ -22,9 +22,13 @@ public sealed class HostingExtensionsTests
     }
 
     [Test]
+    [NotInParallel("raylib-headless-env")]
     public async Task Shell_runtime_adapter_runs_headless_without_window()
     {
-        Environment.SetEnvironmentVariable(RaylibRuntimeShell.HeadlessEnvironmentVariable, "1");
+        Environment.SetEnvironmentVariable(
+            RaylibRuntimeShell.HeadlessEnvironmentVariable,
+            "1",
+            EnvironmentVariableTarget.Process);
         try
         {
             var builder = RaylibHost.CreateApplicationBuilder([]);
@@ -36,7 +40,10 @@ public sealed class HostingExtensionsTests
         }
         finally
         {
-            Environment.SetEnvironmentVariable(RaylibRuntimeShell.HeadlessEnvironmentVariable, null);
+            Environment.SetEnvironmentVariable(
+                RaylibRuntimeShell.HeadlessEnvironmentVariable,
+                null,
+                EnvironmentVariableTarget.Process);
         }
     }
 

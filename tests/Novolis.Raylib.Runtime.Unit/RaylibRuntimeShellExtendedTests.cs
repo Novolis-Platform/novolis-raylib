@@ -7,13 +7,17 @@ namespace Novolis.Raylib.Runtime.Unit;
 public sealed class RaylibRuntimeShellExtendedTests
 {
     [Test]
+    [NotInParallel("raylib-headless-env")]
     [Arguments("1")]
     [Arguments("true")]
     [Arguments("yes")]
     [Arguments("TRUE")]
     public async Task RunShellFrame_skips_window_for_headless_env(string value)
     {
-        Environment.SetEnvironmentVariable(RaylibRuntimeShell.HeadlessEnvironmentVariable, value);
+        Environment.SetEnvironmentVariable(
+            RaylibRuntimeShell.HeadlessEnvironmentVariable,
+            value,
+            EnvironmentVariableTarget.Process);
         try
         {
             var invoked = false;
@@ -25,7 +29,10 @@ public sealed class RaylibRuntimeShellExtendedTests
         }
         finally
         {
-            Environment.SetEnvironmentVariable(RaylibRuntimeShell.HeadlessEnvironmentVariable, null);
+            Environment.SetEnvironmentVariable(
+                RaylibRuntimeShell.HeadlessEnvironmentVariable,
+                null,
+                EnvironmentVariableTarget.Process);
         }
     }
 

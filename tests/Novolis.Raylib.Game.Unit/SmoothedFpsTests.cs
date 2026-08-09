@@ -36,9 +36,13 @@ public sealed class SmoothedFpsTests
 public sealed class RayGameContextTests
 {
     [Test]
+    [NotInParallel("raylib-headless-env")]
     public async Task Run_headless_skips_game_loop_callback()
     {
-        Environment.SetEnvironmentVariable(RaylibRuntimeShell.HeadlessEnvironmentVariable, "1");
+        Environment.SetEnvironmentVariable(
+            RaylibRuntimeShell.HeadlessEnvironmentVariable,
+            "1",
+            EnvironmentVariableTarget.Process);
         try
         {
             var invoked = false;
@@ -48,7 +52,10 @@ public sealed class RayGameContextTests
         }
         finally
         {
-            Environment.SetEnvironmentVariable(RaylibRuntimeShell.HeadlessEnvironmentVariable, null);
+            Environment.SetEnvironmentVariable(
+                RaylibRuntimeShell.HeadlessEnvironmentVariable,
+                null,
+                EnvironmentVariableTarget.Process);
         }
     }
 }

@@ -9,8 +9,12 @@
       <_NovolisRaylibCopyRid Condition="'$(_NovolisRaylibCopyRid)' == '' And $([MSBuild]::IsOSPlatform('OSX'))">osx-x64</_NovolisRaylibCopyRid>
     </PropertyGroup>
     <ItemGroup>
+      <!-- Nupkg layout: buildTransitive/../runtimes/... -->
       <_NovolisRaylibNativeRuntime Include="$(MSBuildThisFileDirectory)..\runtimes\$(_NovolisRaylibCopyRid)\native\*"
-                                   Condition="'$(_NovolisRaylibCopyRid)' != ''" />
+                                   Condition="'$(_NovolisRaylibCopyRid)' != '' and Exists('$(MSBuildThisFileDirectory)..\runtimes\$(_NovolisRaylibCopyRid)\native')" />
+      <!-- Repo layout when this targets file is imported from build/ -->
+      <_NovolisRaylibNativeRuntime Include="$(MSBuildThisFileDirectory)..\src\Novolis.Raylib.Native\runtimes\$(_NovolisRaylibCopyRid)\native\*"
+                                   Condition="'$(_NovolisRaylibCopyRid)' != '' and '@(_NovolisRaylibNativeRuntime)' == '' and Exists('$(MSBuildThisFileDirectory)..\src\Novolis.Raylib.Native\runtimes\$(_NovolisRaylibCopyRid)\native')" />
     </ItemGroup>
     <Copy
       SourceFiles="@(_NovolisRaylibNativeRuntime)"

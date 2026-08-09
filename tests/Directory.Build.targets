@@ -1,0 +1,5 @@
+<Project>
+  <!-- Ensure ProjectReference test hosts get RID natives (nupkg buildTransitive is PackageReference-only). -->
+  <Import Project="$(MSBuildThisFileDirectory)..\build\Novolis.Raylib.Native.targets"
+          Condition="Exists('$(MSBuildThisFileDirectory)..\build\Novolis.Raylib.Native.targets')" />
+</Project>

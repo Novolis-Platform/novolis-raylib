@@ -55,9 +55,13 @@ public sealed class RayGameContextScreenTests
     }
 
     [Test]
+    [NotInParallel("raylib-headless-env")]
     public async Task Run_with_initialize_invokes_once_in_headless_mode()
     {
-        Environment.SetEnvironmentVariable(Raylib.Shell.RaylibRuntimeShell.HeadlessEnvironmentVariable, "1");
+        Environment.SetEnvironmentVariable(
+            Raylib.Shell.RaylibRuntimeShell.HeadlessEnvironmentVariable,
+            "1",
+            EnvironmentVariableTarget.Process);
         try
         {
             var initCount = 0;
@@ -74,7 +78,10 @@ public sealed class RayGameContextScreenTests
         }
         finally
         {
-            Environment.SetEnvironmentVariable(Raylib.Shell.RaylibRuntimeShell.HeadlessEnvironmentVariable, null);
+            Environment.SetEnvironmentVariable(
+                Raylib.Shell.RaylibRuntimeShell.HeadlessEnvironmentVariable,
+                null,
+                EnvironmentVariableTarget.Process);
         }
     }
 

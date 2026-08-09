@@ -16,27 +16,47 @@
     <PipelineStep02>$(MSBuildThisFileDirectory)..\..\codegen\pipeline\raylib6\steps\step_02_native\artifacts</PipelineStep02>
   </PropertyGroup>
 
+  <!--
+    ProjectReference builds do not import Native buildTransitive targets. Stage host RID natives
+    next to Bindings (and thus Game.Unit / Runtime.Unit) for CI and local runs.
+  -->
+  <PropertyGroup>
+    <_RaylibNativeRuntimes>$(MSBuildThisFileDirectory)..\Novolis.Raylib.Native\runtimes</_RaylibNativeRuntimes>
+  </PropertyGroup>
+
   <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+    <None Include="$(_RaylibNativeRuntimes)\win-x64\native\raylib.dll"
+          Link="raylib.dll"
+          CopyToOutputDirectory="PreserveNewest"
+          Condition="Exists('$(_RaylibNativeRuntimes)\win-x64\native\raylib.dll')" />
     <None Include="$(PipelineStep01)\raylib-6\prebuilt\win-x64\raylib.dll"
           Link="raylib.dll"
           CopyToOutputDirectory="PreserveNewest"
-          Condition="Exists('$(PipelineStep01)\raylib-6\prebuilt\win-x64\raylib.dll')" />
+          Condition="!Exists('$(_RaylibNativeRuntimes)\win-x64\native\raylib.dll') and Exists('$(PipelineStep01)\raylib-6\prebuilt\win-x64\raylib.dll')" />
+    <None Include="$(_RaylibNativeRuntimes)\win-x64\native\novolis_raylib_trace.dll"
+          Link="novolis_raylib_trace.dll"
+          CopyToOutputDirectory="PreserveNewest"
+          Condition="Exists('$(_RaylibNativeRuntimes)\win-x64\native\novolis_raylib_trace.dll')" />
     <None Include="$(PipelineStep02)\novolis_raylib_trace.dll"
           Link="novolis_raylib_trace.dll"
           CopyToOutputDirectory="PreserveNewest"
-          Condition="Exists('$(PipelineStep02)\novolis_raylib_trace.dll')" />
+          Condition="!Exists('$(_RaylibNativeRuntimes)\win-x64\native\novolis_raylib_trace.dll') and Exists('$(PipelineStep02)\novolis_raylib_trace.dll')" />
     <None Include="$(MSBuildThisFileDirectory)..\..\codegen\native\raylib6-platform\out\novolis_raylib_trace.dll"
           Link="novolis_raylib_trace.dll"
           CopyToOutputDirectory="PreserveNewest"
-          Condition="!Exists('$(PipelineStep02)\novolis_raylib_trace.dll') and Exists('$(MSBuildThisFileDirectory)..\..\codegen\native\raylib6-platform\out\novolis_raylib_trace.dll')" />
+          Condition="!Exists('$(_RaylibNativeRuntimes)\win-x64\native\novolis_raylib_trace.dll') and !Exists('$(PipelineStep02)\novolis_raylib_trace.dll') and Exists('$(MSBuildThisFileDirectory)..\..\codegen\native\raylib6-platform\out\novolis_raylib_trace.dll')" />
+    <None Include="$(_RaylibNativeRuntimes)\win-x64\native\novolis_imgui.dll"
+          Link="novolis_imgui.dll"
+          CopyToOutputDirectory="PreserveNewest"
+          Condition="Exists('$(_RaylibNativeRuntimes)\win-x64\native\novolis_imgui.dll')" />
     <None Include="$(PipelineStep02)\novolis_imgui.dll"
           Link="novolis_imgui.dll"
           CopyToOutputDirectory="PreserveNewest"
-          Condition="Exists('$(PipelineStep02)\novolis_imgui.dll')" />
+          Condition="!Exists('$(_RaylibNativeRuntimes)\win-x64\native\novolis_imgui.dll') and Exists('$(PipelineStep02)\novolis_imgui.dll')" />
     <None Include="$(MSBuildThisFileDirectory)..\..\codegen\native\raylib6-with-imgui\out\novolis_imgui.dll"
           Link="novolis_imgui.dll"
           CopyToOutputDirectory="PreserveNewest"
-          Condition="!Exists('$(PipelineStep02)\novolis_imgui.dll') and Exists('$(MSBuildThisFileDirectory)..\..\codegen\native\raylib6-with-imgui\out\novolis_imgui.dll')" />
+          Condition="!Exists('$(_RaylibNativeRuntimes)\win-x64\native\novolis_imgui.dll') and !Exists('$(PipelineStep02)\novolis_imgui.dll') and Exists('$(MSBuildThisFileDirectory)..\..\codegen\native\raylib6-with-imgui\out\novolis_imgui.dll')" />
     <None Include="$(PipelineStep02)\novolis_raygui.dll"
           Link="novolis_raygui.dll"
           CopyToOutputDirectory="PreserveNewest"
@@ -45,6 +65,40 @@
           Link="novolis_raygui.dll"
           CopyToOutputDirectory="PreserveNewest"
           Condition="'$(IncludeRaygui)' == 'true' and !Exists('$(PipelineStep02)\novolis_raygui.dll') and Exists('$(MSBuildThisFileDirectory)..\..\codegen\native\raylib6-with-raygui\out\novolis_raygui.dll')" />
+  </ItemGroup>
+
+  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+    <None Include="$(_RaylibNativeRuntimes)\linux-x64\native\libraylib.so"
+          Link="libraylib.so"
+          CopyToOutputDirectory="PreserveNewest"
+          Condition="Exists('$(_RaylibNativeRuntimes)\linux-x64\native\libraylib.so')" />
+    <None Include="$(PipelineStep01)\raylib-6\prebuilt\linux-x64\libraylib.so"
+          Link="libraylib.so"
+          CopyToOutputDirectory="PreserveNewest"
+          Condition="!Exists('$(_RaylibNativeRuntimes)\linux-x64\native\libraylib.so') and Exists('$(PipelineStep01)\raylib-6\prebuilt\linux-x64\libraylib.so')" />
+    <None Include="$(_RaylibNativeRuntimes)\linux-x64\native\libnovolis_raylib_trace.so"
+          Link="libnovolis_raylib_trace.so"
+          CopyToOutputDirectory="PreserveNewest"
+          Condition="Exists('$(_RaylibNativeRuntimes)\linux-x64\native\libnovolis_raylib_trace.so')" />
+    <None Include="$(_RaylibNativeRuntimes)\linux-x64\native\libnovolis_imgui.so"
+          Link="libnovolis_imgui.so"
+          CopyToOutputDirectory="PreserveNewest"
+          Condition="Exists('$(_RaylibNativeRuntimes)\linux-x64\native\libnovolis_imgui.so')" />
+  </ItemGroup>
+
+  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+    <None Include="$(_RaylibNativeRuntimes)\osx-x64\native\libraylib.dylib"
+          Link="libraylib.dylib"
+          CopyToOutputDirectory="PreserveNewest"
+          Condition="Exists('$(_RaylibNativeRuntimes)\osx-x64\native\libraylib.dylib')" />
+    <None Include="$(_RaylibNativeRuntimes)\osx-x64\native\libnovolis_raylib_trace.dylib"
+          Link="libnovolis_raylib_trace.dylib"
+          CopyToOutputDirectory="PreserveNewest"
+          Condition="Exists('$(_RaylibNativeRuntimes)\osx-x64\native\libnovolis_raylib_trace.dylib')" />
+    <None Include="$(_RaylibNativeRuntimes)\osx-x64\native\libnovolis_imgui.dylib"
+          Link="libnovolis_imgui.dylib"
+          CopyToOutputDirectory="PreserveNewest"
+          Condition="Exists('$(_RaylibNativeRuntimes)\osx-x64\native\libnovolis_imgui.dylib')" />
   </ItemGroup>
 
   <ItemGroup>
