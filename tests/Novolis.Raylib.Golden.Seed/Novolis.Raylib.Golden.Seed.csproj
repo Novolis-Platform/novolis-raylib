@@ -3,6 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <RootNamespace>Novolis.Raylib.Golden.Seed</RootNamespace>
+    <IsPackable>false</IsPackable>
     <IsTestProject>false</IsTestProject>
     <IsTestingPlatformApplication>false</IsTestingPlatformApplication>
     <EnableTestingPlatform>false</EnableTestingPlatform>
