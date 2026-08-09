@@ -1,8 +1,8 @@
 {
   "stepId": "step_03_verify_manifest",
   "status": "Succeeded",
-  "startedUtc": "2026-08-09T15:21:41.2634936+00:00",
-  "durationMs": 19,
+  "startedUtc": "2026-08-09T18:45:22.729121+00:00",
+  "durationMs": 22,
   "pipelineVersion": "1",
   "inputs": {
     "codegen/pipeline/raylib6/versions.json": "23fbffd47a4a3e031862ab30db3020aee731d91e88cfce450e1d97e78a5b22ad",
@@ -18,7 +18,7 @@
     "codegen/Novolis.Raylib.Manifests/RaylibDebugManifest.cs": "8d18165eb9e54ec47570ef096c9aa4ab83fb7151c051350d4ab6736a7372c375",
     "codegen/Novolis.Raylib.Manifests/RaylibManifestInputPaths.cs": "7f5f627ab8cb29888d22735af1b853bb89f190d99098f37ae42384e5a8f4716d",
     "codegen/Novolis.Raylib.Manifests/obj/Debug/net10.0/.NETCoreApp,Version=v10.0.AssemblyAttributes.cs": "93d67476196ebfc80d1d7d8844b91146cfd678d105f5ce635eb900ca40610c9b",
-    "codegen/Novolis.Raylib.Manifests/obj/Debug/net10.0/Novolis.Raylib.Manifests.AssemblyInfo.cs": "ec5c4ed4006e3a207180f69a00d6bd7aa6eec77e03c3daf30b51ba714ae5de1a",
+    "codegen/Novolis.Raylib.Manifests/obj/Debug/net10.0/Novolis.Raylib.Manifests.AssemblyInfo.cs": "a2cbe46f78d63b25d26e88455db94953e41e3468df9301cfe81b7b95581808af",
     "codegen/Novolis.Raylib.Manifests/obj/Debug/net10.0/Novolis.Raylib.Manifests.GlobalUsings.g.cs": "a3c6048bb4d922b1799a9977f84362a3787b68810cac67aa86ac3aa23295f227",
     "codegen/Novolis.Raylib.Manifests/obj/Release/net10.0/.NETCoreApp,Version=v10.0.AssemblyAttributes.cs": "93d67476196ebfc80d1d7d8844b91146cfd678d105f5ce635eb900ca40610c9b",
     "codegen/Novolis.Raylib.Manifests/obj/Release/net10.0/Novolis.Raylib.Manifests.AssemblyInfo.cs": "bf5ef4f1b94b2825bea97a25b82d2ee218785ac0171dbeeced5e3b8613df52f2",
