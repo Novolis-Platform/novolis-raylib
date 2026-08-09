@@ -47,6 +47,8 @@ dotnet run --project d:\novolis\novolis-raylib\codegen\Novolis.Raylib.Pipeline -
 
 Desktop maintainers: `dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_01_source` then `step_02_native`.
 
+On Windows, `step_02_native` also fetches the linux prebuilt and builds linux shims via WSL (`codegen/native/build-linux-shims.sh`) so `runtimes/linux-x64/native/` is populated for Novolis OS / `-r linux-x64` publish.
+
 ## Troubleshooting
 
 - **DllNotFoundException:** Ensure the app RID matches a packaged runtime and natives are present under `runtimes/<rid>/native/`.

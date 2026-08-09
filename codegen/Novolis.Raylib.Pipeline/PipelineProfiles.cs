@@ -59,7 +59,7 @@ internal static class PipelineProfiles
         stepId switch
         {
             "step_01_source" => "Fetch raylib prebuilts, raygui header, and raylib-cimgui into step_01_source/artifacts/.",
-            "step_02_native" => "CMake build trace/ImGui/raygui shims; copy outputs to step_02_native/artifacts/.",
+            "step_02_native" => "CMake build trace/ImGui/raygui shims; stage desktop natives into Native/runtimes (linux via WSL on Windows).",
             "step_02a_android" => "NDK-build libraylib.a + libnovolis_raylib_android.so for android-arm64; stage into Native/runtimes.",
             "step_03_verify_manifest" => "Verify manifest imports exist in fetched raylib.h.",
             "step_04_enrich_docs" => "Fill missing façade summaries from headers (writes manifests).",

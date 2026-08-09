@@ -1,1 +1,223 @@
-# step_02_native — pipeline log (truncated each run)
+# step_02_native — 2026-08-09T08:50:28.0107151+00:00
+# force=True
+
+$ cmake -S "d:\novolis\novolis-raylib\codegen\native\raylib6-with-raygui" -B "d:\novolis\novolis-raylib\codegen\native\raylib6-with-raygui\build" -DRAYLIB_NATIVE_DIR="d:\novolis\novolis-raylib\codegen\pipeline\raylib6\steps\step_01_source\artifacts\raylib-6\prebuilt\win-x64" -DRAYLIB_HEADER_DIR="d:\novolis\novolis-raylib\codegen\pipeline\raylib6\steps\step_01_source\artifacts\raylib-6\include"
+CMake Error: The current CMakeCache.txt directory D:/novolis/novolis-raylib/codegen/native/raylib6-with-raygui/build/CMakeCache.txt is different than the directory d:/novolis/novolis-raylib/native/raylib6-with-raygui/build where CMakeCache.txt was created. This may result in binaries being created in the wrong place. If you are not sure, reedit the CMakeCache.txt
+CMake Error: The source "D:/novolis/novolis-raylib/codegen/native/raylib6-with-raygui/CMakeLists.txt" does not match the source "D:/novolis/novolis-raylib/native/raylib6-with-raygui/CMakeLists.txt" used to generate cache.  Re-run cmake with a different source directory.
+
+$ cmake -S "d:\novolis\novolis-raylib\codegen\native\raylib6-with-raygui" -B "d:\novolis\novolis-raylib\codegen\native\raylib6-with-raygui\build" -DRAYLIB_NATIVE_DIR="d:\novolis\novolis-raylib\codegen\pipeline\raylib6\steps\step_01_source\artifacts\raylib-6\prebuilt\win-x64" -DRAYLIB_HEADER_DIR="d:\novolis\novolis-raylib\codegen\pipeline\raylib6\steps\step_01_source\artifacts\raylib-6\include"
+-- Building for: Visual Studio 17 2022
+-- Selecting Windows SDK version 10.0.26100.0 to target Windows 10.0.26200.
+-- The C compiler identification is MSVC 19.44.35228.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Configuring done (2.6s)
+-- Generating done (0.0s)
+-- Build files have been written to: D:/novolis/novolis-raylib/codegen/native/raylib6-with-raygui/build
+
+CMake Warning:
+  Manually-specified variables were not used by the project:
+
+    RAYLIB_NATIVE_DIR
+
+
+
+$ cmake --build "d:\novolis\novolis-raylib\codegen\native\raylib6-with-raygui\build" --config Release
+MSBuild version 17.14.51+25f168cee for .NET Framework
+
+  1>Checking Build System
+  Generating raylib_import.lib
+  Microsoft (R) Library Manager Version 14.44.35228.0
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+     Creating library D:/novolis/novolis-raylib/codegen/native/raylib6-with-raygui/build/raylib_import.lib and object D:/novolis/novolis-raylib/codegen/native/raylib6-with-raygui/build/raylib_import.exp
+  Building Custom Rule D:/novolis/novolis-raylib/codegen/native/raylib6-with-raygui/CMakeLists.txt
+  Building Custom Rule D:/novolis/novolis-raylib/codegen/native/raylib6-with-raygui/CMakeLists.txt
+  raygui_shim.c
+     Creating library D:/novolis/novolis-raylib/codegen/native/raylib6-with-raygui/build/Release/novolis_raygui.lib and object D:/novolis/novolis-raylib/codegen/native/raylib6-with-raygui/build/Release/novolis_raygui.exp
+  novolis_raygui.vcxproj -> D:\novolis\novolis-raylib\codegen\native\raylib6-with-raygui\out\novolis_raygui.dll
+  Building Custom Rule D:/novolis/novolis-raylib/codegen/native/raylib6-with-raygui/CMakeLists.txt
+
+$ cmake -S "d:\novolis\novolis-raylib\codegen\native\raylib6-platform" -B "d:\novolis\novolis-raylib\codegen\native\raylib6-platform\build" -DRAYLIB_NATIVE_DIR="d:\novolis\novolis-raylib\codegen\pipeline\raylib6\steps\step_01_source\artifacts\raylib-6\prebuilt\win-x64" -DRAYLIB_HEADER_DIR="d:\novolis\novolis-raylib\codegen\pipeline\raylib6\steps\step_01_source\artifacts\raylib-6\include"
+CMake Error: The current CMakeCache.txt directory D:/novolis/novolis-raylib/codegen/native/raylib6-platform/build/CMakeCache.txt is different than the directory d:/novolis/novolis-raylib/native/raylib6-platform/build where CMakeCache.txt was created. This may result in binaries being created in the wrong place. If you are not sure, reedit the CMakeCache.txt
+CMake Error: The source "D:/novolis/novolis-raylib/codegen/native/raylib6-platform/CMakeLists.txt" does not match the source "D:/novolis/novolis-raylib/native/raylib6-platform/CMakeLists.txt" used to generate cache.  Re-run cmake with a different source directory.
+
+$ cmake -S "d:\novolis\novolis-raylib\codegen\native\raylib6-platform" -B "d:\novolis\novolis-raylib\codegen\native\raylib6-platform\build" -DRAYLIB_NATIVE_DIR="d:\novolis\novolis-raylib\codegen\pipeline\raylib6\steps\step_01_source\artifacts\raylib-6\prebuilt\win-x64" -DRAYLIB_HEADER_DIR="d:\novolis\novolis-raylib\codegen\pipeline\raylib6\steps\step_01_source\artifacts\raylib-6\include"
+-- Building for: Visual Studio 17 2022
+-- Selecting Windows SDK version 10.0.26100.0 to target Windows 10.0.26200.
+-- The C compiler identification is MSVC 19.44.35228.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Configuring done (2.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: D:/novolis/novolis-raylib/codegen/native/raylib6-platform/build
+
+CMake Warning:
+  Manually-specified variables were not used by the project:
+
+    RAYLIB_NATIVE_DIR
+
+
+
+$ cmake --build "d:\novolis\novolis-raylib\codegen\native\raylib6-platform\build" --config Release
+MSBuild version 17.14.51+25f168cee for .NET Framework
+
+  1>Checking Build System
+  Generating raylib_import.lib
+  Microsoft (R) Library Manager Version 14.44.35228.0
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+     Creating library D:/novolis/novolis-raylib/codegen/native/raylib6-platform/build/raylib_import.lib and object D:/novolis/novolis-raylib/codegen/native/raylib6-platform/build/raylib_import.exp
+  Building Custom Rule D:/novolis/novolis-raylib/codegen/native/raylib6-platform/CMakeLists.txt
+  Building Custom Rule D:/novolis/novolis-raylib/codegen/native/raylib6-platform/CMakeLists.txt
+  trace_shim.c
+     Creating library D:/novolis/novolis-raylib/codegen/native/raylib6-platform/build/Release/novolis_raylib_trace.lib and object D:/novolis/novolis-raylib/codegen/native/raylib6-platform/build/Release/novolis_raylib_trace.exp
+  novolis_raylib_trace.vcxproj -> D:\novolis\novolis-raylib\codegen\native\raylib6-platform\out\novolis_raylib_trace.dll
+  Building Custom Rule D:/novolis/novolis-raylib/codegen/native/raylib6-platform/CMakeLists.txt
+
+$ cmake -S "d:\novolis\novolis-raylib\codegen\native\raylib6-with-imgui" -B "d:\novolis\novolis-raylib\codegen\native\raylib6-with-imgui\build" -DRAYLIB_NATIVE_DIR="d:\novolis\novolis-raylib\codegen\pipeline\raylib6\steps\step_01_source\artifacts\raylib-6\prebuilt\win-x64" -DRAYLIB_HEADER_DIR="d:\novolis\novolis-raylib\codegen\pipeline\raylib6\steps\step_01_source\artifacts\raylib-6\include"
+CMake Error: The current CMakeCache.txt directory D:/novolis/novolis-raylib/codegen/native/raylib6-with-imgui/build/CMakeCache.txt is different than the directory d:/novolis/novolis-raylib/native/raylib6-with-imgui/build where CMakeCache.txt was created. This may result in binaries being created in the wrong place. If you are not sure, reedit the CMakeCache.txt
+CMake Error: The source "D:/novolis/novolis-raylib/codegen/native/raylib6-with-imgui/CMakeLists.txt" does not match the source "D:/novolis/novolis-raylib/native/raylib6-with-imgui/CMakeLists.txt" used to generate cache.  Re-run cmake with a different source directory.
+
+$ cmake -S "d:\novolis\novolis-raylib\codegen\native\raylib6-with-imgui" -B "d:\novolis\novolis-raylib\codegen\native\raylib6-with-imgui\build" -DRAYLIB_NATIVE_DIR="d:\novolis\novolis-raylib\codegen\pipeline\raylib6\steps\step_01_source\artifacts\raylib-6\prebuilt\win-x64" -DRAYLIB_HEADER_DIR="d:\novolis\novolis-raylib\codegen\pipeline\raylib6\steps\step_01_source\artifacts\raylib-6\include"
+-- Building for: Visual Studio 17 2022
+-- Selecting Windows SDK version 10.0.26100.0 to target Windows 10.0.26200.
+-- The C compiler identification is MSVC 19.44.35228.0
+-- The CXX compiler identification is MSVC 19.44.35228.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done (4.6s)
+-- Generating done (0.0s)
+-- Build files have been written to: D:/novolis/novolis-raylib/codegen/native/raylib6-with-imgui/build
+
+CMake Warning:
+  Manually-specified variables were not used by the project:
+
+    RAYLIB_NATIVE_DIR
+
+
+
+$ cmake --build "d:\novolis\novolis-raylib\codegen\native\raylib6-with-imgui\build" --config Release
+MSBuild version 17.14.51+25f168cee for .NET Framework
+
+  1>Checking Build System
+  Generating raylib_import.lib
+  Microsoft (R) Library Manager Version 14.44.35228.0
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+     Creating library D:/novolis/novolis-raylib/codegen/native/raylib6-with-imgui/build/raylib_import.lib and object D:/novolis/novolis-raylib/codegen/native/raylib6-with-imgui/build/raylib_import.exp
+  Building Custom Rule D:/novolis/novolis-raylib/codegen/native/raylib6-with-imgui/CMakeLists.txt
+  Building Custom Rule D:/novolis/novolis-raylib/codegen/pipeline/raylib6/steps/step_01_source/artifacts/raylib-cimgui/cimgui-1.92.1-docking/CMakeLists.txt
+  cimgui.cpp
+  imgui.cpp
+  imgui_demo.cpp
+  imgui_draw.cpp
+  imgui_tables.cpp
+  imgui_widgets.cpp
+  Generating Code...
+  cimgui.vcxproj -> D:\novolis\novolis-raylib\codegen\native\raylib6-with-imgui\build\cimgui-build\Release\cimgui.lib
+  Building Custom Rule D:/novolis/novolis-raylib/codegen/native/raylib6-with-imgui/CMakeLists.txt
+  novolis_imgui_exports.cpp
+  raycimgui.c
+D:\novolis\novolis-raylib\codegen\pipeline\raylib6\steps\step_01_source\artifacts\raylib-cimgui\cimgui-1.92.1-docking\cimgui.h(1949,318): warning C5287: operands are different enum types 'ImGuiHoveredFlags_' and '<unnamed-enum-ImGuiHoveredFlags_DelayMask_>'; use an explicit cast to silence this warning [D:\novolis\novolis-raylib\codegen\native\raylib6-with-imgui\build\novolis_imgui.vcxproj]
+  (compiling source file '../../../pipeline/raylib6/steps/step_01_source/artifacts/raylib-cimgui/src/raycimgui.c')
+  
+D:\novolis\novolis-raylib\codegen\pipeline\raylib6\steps\step_01_source\artifacts\raylib-cimgui\cimgui-1.92.1-docking\cimgui.h(2366,58): warning C5287: operands are different enum types 'ImGuiInputFlags_' and '<unnamed-enum-ImGuiInputFlags_RepeatRateDefault>'; use an explicit cast to silence this warning [D:\novolis\novolis-raylib\codegen\native\raylib6-with-imgui\build\novolis_imgui.vcxproj]
+  (compiling source file '../../../pipeline/raylib6/steps/step_01_source/artifacts/raylib-cimgui/src/raycimgui.c')
+  
+D:\novolis\novolis-raylib\codegen\pipeline\raylib6\steps\step_01_source\artifacts\raylib-cimgui\cimgui-1.92.1-docking\cimgui.h(2373,151): warning C5287: operands are different enum types '<unnamed-enum-ImGuiInputFlags_RepeatRateDefault>' and 'ImGuiInputFlags_'; use an explicit cast to silence this warning [D:\novolis\novolis-raylib\codegen\native\raylib6-with-imgui\build\novolis_imgui.vcxproj]
+  (compiling source file '../../../pipeline/raylib6/steps/step_01_source/artifacts/raylib-cimgui/src/raycimgui.c')
+  
+D:\novolis\novolis-raylib\codegen\pipeline\raylib6\steps\step_01_source\artifacts\raylib-cimgui\cimgui-1.92.1-docking\cimgui.h(2586,151): warning C5287: operands are different enum types '<unnamed-enum-ImGuiDockNodeFlags_DockSpace>' and 'ImGuiDockNodeFlags_'; use an explicit cast to silence this warning [D:\novolis\novolis-raylib\codegen\native\raylib6-with-imgui\build\novolis_imgui.vcxproj]
+  (compiling source file '../../../pipeline/raylib6/steps/step_01_source/artifacts/raylib-cimgui/src/raycimgui.c')
+  
+D:\novolis\novolis-raylib\codegen\pipeline\raylib6\steps\step_01_source\artifacts\raylib-cimgui\cimgui-1.92.1-docking\cimgui.h(2588,78): warning C5287: operands are different enum types 'ImGuiDockNodeFlags_' and '<unnamed-enum-ImGuiDockNodeFlags_DockSpace>'; use an explicit cast to silence this warning [D:\novolis\novolis-raylib\codegen\native\raylib6-with-imgui\build\novolis_imgui.vcxproj]
+  (compiling source file '../../../pipeline/raylib6/steps/step_01_source/artifacts/raylib-cimgui/src/raycimgui.c')
+  
+D:\novolis\novolis-raylib\codegen\pipeline\raylib6\steps\step_01_source\artifacts\raylib-cimgui\cimgui-1.92.1-docking\cimgui.h(2589,89): warning C5287: operands are different enum types 'ImGuiDockNodeFlags_' and '<unnamed-enum-ImGuiDockNodeFlags_DockSpace>'; use an explicit cast to silence this warning [D:\novolis\novolis-raylib\codegen\native\raylib6-with-imgui\build\novolis_imgui.vcxproj]
+  (compiling source file '../../../pipeline/raylib6/steps/step_01_source/artifacts/raylib-cimgui/src/raycimgui.c')
+  
+     Creating library D:/novolis/novolis-raylib/codegen/native/raylib6-with-imgui/build/Release/novolis_imgui.lib and object D:/novolis/novolis-raylib/codegen/native/raylib6-with-imgui/build/Release/novolis_imgui.exp
+  novolis_imgui.vcxproj -> D:\novolis\novolis-raylib\codegen\native\raylib6-with-imgui\out\novolis_imgui.dll
+  Building Custom Rule D:/novolis/novolis-raylib/codegen/native/raylib6-with-imgui/CMakeLists.txt
+
+Copied d:\novolis\novolis-raylib\codegen\native\raylib6-platform\out\novolis_raylib_trace.dll -> d:\novolis\novolis-raylib\codegen\pipeline\raylib6\steps\step_02_native\artifacts\novolis_raylib_trace.dll
+Copied d:\novolis\novolis-raylib\codegen\native\raylib6-with-imgui\out\novolis_imgui.dll -> d:\novolis\novolis-raylib\codegen\pipeline\raylib6\steps\step_02_native\artifacts\novolis_imgui.dll
+Copied d:\novolis\novolis-raylib\codegen\native\raylib6-with-raygui\out\novolis_raygui.dll -> d:\novolis\novolis-raylib\codegen\pipeline\raylib6\steps\step_02_native\artifacts\novolis_raygui.dll
+Staged d:\novolis\novolis-raylib\codegen\pipeline\raylib6\steps\step_01_source\artifacts\raylib-6\prebuilt\win-x64\raylib.dll -> d:\novolis\novolis-raylib\src\Novolis.Raylib.Native\runtimes\win-x64\native\raylib.dll
+Staged d:\novolis\novolis-raylib\codegen\native\raylib6-platform\out\novolis_raylib_trace.dll -> d:\novolis\novolis-raylib\src\Novolis.Raylib.Native\runtimes\win-x64\native\novolis_raylib_trace.dll
+Staged d:\novolis\novolis-raylib\codegen\native\raylib6-with-imgui\out\novolis_imgui.dll -> d:\novolis\novolis-raylib\src\Novolis.Raylib.Native\runtimes\win-x64\native\novolis_imgui.dll
+Staged d:\novolis\novolis-raylib\codegen\pipeline\raylib6\steps\step_01_source\artifacts\raylib-6\prebuilt\linux-x64\libraylib.so -> d:\novolis\novolis-raylib\src\Novolis.Raylib.Native\runtimes\linux-x64\native
+$ wsl -e true
+wsl: Failed to start the systemd user session for 'frank'. See journalctl for more details.
+
+Building linux-x64 shims via WSL...
+$ wsl -e bash "/mnt/d/novolis/novolis-raylib/codegen/native/build-linux-shims.sh"
+Downloading portable CMake 3.30.5...
+-- The C compiler identification is GNU 11.4.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Configuring done (2.8s)
+-- Generating done (0.3s)
+-- Build files have been written to: /mnt/d/novolis/novolis-raylib/codegen/native/raylib6-platform/build-linux
+[ 50%] Building C object CMakeFiles/novolis_raylib_trace.dir/trace_shim.c.o
+[100%] Linking C shared library /mnt/d/novolis/novolis-raylib/codegen/native/raylib6-platform/out/libnovolis_raylib_trace.so
+[100%] Built target novolis_raylib_trace
+-- The C compiler identification is GNU 11.4.0
+-- The CXX compiler identification is GNU 11.4.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done (3.9s)
+-- Generating done (0.5s)
+-- Build files have been written to: /mnt/d/novolis/novolis-raylib/codegen/native/raylib6-with-imgui/build-linux
+[ 10%] Building CXX object cimgui-build/CMakeFiles/cimgui.dir/cimgui.cpp.o
+[ 20%] Building CXX object cimgui-build/CMakeFiles/cimgui.dir/imgui/imgui.cpp.o
+[ 30%] Building CXX object cimgui-build/CMakeFiles/cimgui.dir/imgui/imgui_demo.cpp.o
+[ 40%] Building CXX object cimgui-build/CMakeFiles/cimgui.dir/imgui/imgui_draw.cpp.o
+[ 50%] Building CXX object cimgui-build/CMakeFiles/cimgui.dir/imgui/imgui_tables.cpp.o
+[ 60%] Building CXX object cimgui-build/CMakeFiles/cimgui.dir/imgui/imgui_widgets.cpp.o
+[ 70%] Linking CXX static library cimgui.a
+[ 70%] Built target cimgui
+[ 80%] Building CXX object CMakeFiles/novolis_imgui.dir/novolis_imgui_exports.cpp.o
+[ 90%] Building C object CMakeFiles/novolis_imgui.dir/mnt/d/novolis/novolis-raylib/codegen/pipeline/raylib6/steps/step_01_source/artifacts/raylib-cimgui/src/raycimgui.c.o
+[100%] Linking CXX shared library /mnt/d/novolis/novolis-raylib/codegen/native/raylib6-with-imgui/out/libnovolis_imgui.so
+Staged linux-x64 natives:
+total 2068
+drwxrwxrwx 1 frank frank    4096 Aug  9 10:51 .
+drwxrwxrwx 1 frank frank    4096 Aug  9 10:50 ..
+-rwxrwxrwx 1 frank frank   15808 Aug  9 10:51 libnovolis_raylib_trace.so
+-rwxrwxrwx 1 frank frank 2100056 Aug  9 10:51 libraylib.so
+
+/usr/bin/ld: cannot find -lGL: No such file or directory
+/usr/bin/ld: cannot find -lX11: No such file or directory
+collect2: error: ld returned 1 exit status
+gmake[2]: *** [CMakeFiles/novolis_imgui.dir/build.make:115: /mnt/d/novolis/novolis-raylib/codegen/native/raylib6-with-imgui/out/libnovolis_imgui.so] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:99: CMakeFiles/novolis_imgui.dir/all] Error 2
+gmake: *** [Makefile:136: all] Error 2
+WARN: novolis_imgui linux build failed (missing GL/X11?). Staged libraylib + trace only.
+

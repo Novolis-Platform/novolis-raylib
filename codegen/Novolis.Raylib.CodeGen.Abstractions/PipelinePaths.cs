@@ -78,6 +78,18 @@ public static class PipelinePaths
     public static string RaylibNativeAndroidArm64Dir(string repoRoot) =>
         Path.Combine(repoRoot, "src", "Novolis.Raylib.Native", "runtimes", "android-arm64", "native");
 
+    public static string RaylibNativeWinX64Dir(string repoRoot) =>
+        Path.Combine(repoRoot, "src", "Novolis.Raylib.Native", "runtimes", "win-x64", "native");
+
+    public static string RaylibNativeLinuxX64Dir(string repoRoot) =>
+        Path.Combine(repoRoot, "src", "Novolis.Raylib.Native", "runtimes", "linux-x64", "native");
+
+    public static string RaylibNativeOsxX64Dir(string repoRoot) =>
+        Path.Combine(repoRoot, "src", "Novolis.Raylib.Native", "runtimes", "osx-x64", "native");
+
     public static string NativeShimOutDir(string repoRoot, string shimFolder) =>
         Path.Combine(NativeRoot(repoRoot), shimFolder, "out");
+
+    public static string BuildLinuxShimsScript(string repoRoot) =>
+        Path.Combine(NativeRoot(repoRoot), "build-linux-shims.sh");
 }

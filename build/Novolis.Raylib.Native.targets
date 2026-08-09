@@ -2,10 +2,15 @@
   <!-- Copy RID native assets from the nupkg (not repo build output paths). -->
   <Target Name="CopyNovolisRaylibNativeAssets" AfterTargets="Build"
           Condition="!$([System.String]::Copy('$(TargetFramework)').Contains('-android'))">
+    <PropertyGroup>
+      <_NovolisRaylibCopyRid>$(RuntimeIdentifier)</_NovolisRaylibCopyRid>
+      <_NovolisRaylibCopyRid Condition="'$(_NovolisRaylibCopyRid)' == '' And $([MSBuild]::IsOSPlatform('Windows'))">win-x64</_NovolisRaylibCopyRid>
+      <_NovolisRaylibCopyRid Condition="'$(_NovolisRaylibCopyRid)' == '' And $([MSBuild]::IsOSPlatform('Linux'))">linux-x64</_NovolisRaylibCopyRid>
+      <_NovolisRaylibCopyRid Condition="'$(_NovolisRaylibCopyRid)' == '' And $([MSBuild]::IsOSPlatform('OSX'))">osx-x64</_NovolisRaylibCopyRid>
+    </PropertyGroup>
     <ItemGroup>
-      <_NovolisRaylibNativeRuntime Include="$(MSBuildThisFileDirectory)..\runtimes\win-x64\native\*" Condition="$([MSBuild]::IsOSPlatform('Windows'))" />
-      <_NovolisRaylibNativeRuntime Include="$(MSBuildThisFileDirectory)..\runtimes\linux-x64\native\*" Condition="$([MSBuild]::IsOSPlatform('Linux'))" />
-      <_NovolisRaylibNativeRuntime Include="$(MSBuildThisFileDirectory)..\runtimes\osx-x64\native\*" Condition="$([MSBuild]::IsOSPlatform('OSX'))" />
+      <_NovolisRaylibNativeRuntime Include="$(MSBuildThisFileDirectory)..\runtimes\$(_NovolisRaylibCopyRid)\native\*"
+                                   Condition="'$(_NovolisRaylibCopyRid)' != ''" />
     </ItemGroup>
     <Copy
       SourceFiles="@(_NovolisRaylibNativeRuntime)"

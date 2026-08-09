@@ -1,5 +1,27 @@
 {
   "stepId": "step_02_native",
-  "status": "Pending",
-  "pipelineVersion": "1"
+  "status": "Succeeded",
+  "startedUtc": "2026-08-09T08:50:28.0107151+00:00",
+  "durationMs": 51416,
+  "pipelineVersion": "1",
+  "inputs": {
+    "codegen/pipeline/raylib6/versions.json": "23fbffd47a4a3e031862ab30db3020aee731d91e88cfce450e1d97e78a5b22ad"
+  },
+  "outputs": [
+    {
+      "path": "artifacts/novolis_raylib_trace.dll",
+      "sha256": "e1f46c6a1395541246a074288f39fbbcb944337dc45063e9f680608527fb254f",
+      "bytes": 11264
+    },
+    {
+      "path": "artifacts/novolis_imgui.dll",
+      "sha256": "5c8f2e60622f7f1cc6aad553f9301b9ce4d8d84eb9c0af81196a42e9b2906188",
+      "bytes": 1281024
+    },
+    {
+      "path": "artifacts/novolis_raygui.dll",
+      "sha256": "a23e9484932e8a913643ff224b3df716469432f2776f8f94ac8cdb94076d095a",
+      "bytes": 87040
+    }
+  ]
 }

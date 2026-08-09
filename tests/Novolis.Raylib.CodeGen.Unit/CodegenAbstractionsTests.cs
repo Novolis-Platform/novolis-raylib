@@ -50,6 +50,10 @@ public sealed class PipelinePathsExtendedTests
                 .Contains("raylib6-platform");
             await Assert.That(PipelinePaths.RaylibNativeAndroidArm64Dir(repoRoot))
                 .Contains("android-arm64");
+            await Assert.That(PipelinePaths.RaylibNativeLinuxX64Dir(repoRoot))
+                .Contains("linux-x64");
+            await Assert.That(PipelinePaths.BuildLinuxShimsScript(repoRoot))
+                .EndsWith("build-linux-shims.sh");
         }
         finally
         {

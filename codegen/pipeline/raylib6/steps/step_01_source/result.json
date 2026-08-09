@@ -1,8 +1,8 @@
 {
   "stepId": "step_01_source",
   "status": "Succeeded",
-  "startedUtc": "2026-05-24T00:18:30.0214534+00:00",
-  "durationMs": 971,
+  "startedUtc": "2026-08-09T08:50:14.0735375+00:00",
+  "durationMs": 430,
   "pipelineVersion": "1",
   "inputs": {
     "codegen/pipeline/raylib6/versions.json": "23fbffd47a4a3e031862ab30db3020aee731d91e88cfce450e1d97e78a5b22ad"
@@ -10,8 +10,8 @@
   "outputs": [
     {
       "path": "artifacts/raylib-6/include/raylib.h",
-      "sha256": "1842111e48260e622d0ff2e6f4ac6141508d6f369791265ba518e7502c760ccf",
-      "bytes": 136325
+      "sha256": "047e7255f93f8c34039cab906ad76136706b5c7b4c5b5b065d84141963ee9b6b",
+      "bytes": 134582
     },
     {
       "path": "artifacts/raygui-6/raygui.h",
@@ -22,6 +22,11 @@
       "path": "artifacts/raylib-6/prebuilt/win-x64/raylib.dll",
       "sha256": "c62606798c3f736b479db7721aed884102060541b743fd81be3e687ac6de3e67",
       "bytes": 1905152
+    },
+    {
+      "path": "artifacts/raylib-6/prebuilt/linux-x64/libraylib.so",
+      "sha256": "1041653dd5c1cb8c67494fa398a296520d3ffec20cf1bf71b1eaa4b96ac61aee",
+      "bytes": 2100056
     },
     {
       "path": "artifacts/raylib-cimgui/cimgui-1.92.1-docking/cimgui.h",

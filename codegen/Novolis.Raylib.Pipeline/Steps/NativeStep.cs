@@ -78,6 +78,8 @@ internal sealed class NativeStep : IPipelineStep
             await context.Log.WriteLineAsync($"Copied {source} -> {dest}");
         }
 
+        await StageDesktopRuntimesAsync(context, cancellationToken);
+
         var stepDir = context.StepDir(Id);
         var outputs = StepFileFingerprint.DescribeOutputs(ExpectedOutputPaths(context), repoRoot, stepDir);
         return new StepExecutionResult
@@ -86,6 +88,108 @@ internal sealed class NativeStep : IPipelineStep
             Inputs = StepFileFingerprint.HashFiles(InputPaths(context), repoRoot),
             Outputs = outputs,
         };
+    }
+
+    private static async Task StageDesktopRuntimesAsync(PipelineContext context, CancellationToken cancellationToken)
+    {
+        var repoRoot = context.RepoRoot;
+
+        // Host RID shims + prebuilt raylib → checked-in Native/runtimes (packaged by CI).
+        if (OperatingSystem.IsWindows())
+        {
+            var win = PipelinePaths.RaylibNativeWinX64Dir(repoRoot);
+            Directory.CreateDirectory(win);
+            CopyIfExists(Path.Combine(PipelinePaths.RaylibPrebuiltWinDir(repoRoot), "raylib.dll"), Path.Combine(win, "raylib.dll"), context);
+            CopyIfExists(Path.Combine(PipelinePaths.NativeShimOutDir(repoRoot, "raylib6-platform"), "novolis_raylib_trace.dll"), Path.Combine(win, "novolis_raylib_trace.dll"), context);
+            CopyIfExists(Path.Combine(PipelinePaths.NativeShimOutDir(repoRoot, "raylib6-with-imgui"), "novolis_imgui.dll"), Path.Combine(win, "novolis_imgui.dll"), context);
+        }
+        else if (OperatingSystem.IsLinux())
+        {
+            await StageLinuxFromHostBuildAsync(context);
+        }
+        else if (OperatingSystem.IsMacOS())
+        {
+            var osx = PipelinePaths.RaylibNativeOsxX64Dir(repoRoot);
+            Directory.CreateDirectory(osx);
+            CopyIfExists(Path.Combine(PipelinePaths.RaylibPrebuiltOsxDir(repoRoot), "libraylib.dylib"), Path.Combine(osx, "libraylib.dylib"), context);
+            CopyIfExists(Path.Combine(PipelinePaths.NativeShimOutDir(repoRoot, "raylib6-platform"), "libnovolis_raylib_trace.dylib"), Path.Combine(osx, "libnovolis_raylib_trace.dylib"), context);
+            CopyIfExists(Path.Combine(PipelinePaths.NativeShimOutDir(repoRoot, "raylib6-with-imgui"), "libnovolis_imgui.dylib"), Path.Combine(osx, "libnovolis_imgui.dylib"), context);
+        }
+
+        // Always stage libraylib.so when the linux prebuilt was fetched (even on Windows).
+        var linuxSo = Path.Combine(PipelinePaths.RaylibPrebuiltLinuxDir(repoRoot), "libraylib.so");
+        if (File.Exists(linuxSo))
+        {
+            var linuxDir = PipelinePaths.RaylibNativeLinuxX64Dir(repoRoot);
+            Directory.CreateDirectory(linuxDir);
+            File.Copy(linuxSo, Path.Combine(linuxDir, "libraylib.so"), overwrite: true);
+            await context.Log.WriteLineAsync($"Staged {linuxSo} -> {linuxDir}");
+        }
+
+        // Windows maintainers: build linux shims via WSL so the nupkg is complete for Novolis OS.
+        if (OperatingSystem.IsWindows())
+            await TryBuildLinuxShimsViaWslAsync(context, cancellationToken);
+    }
+
+    private static async Task StageLinuxFromHostBuildAsync(PipelineContext context)
+    {
+        var repoRoot = context.RepoRoot;
+        var linux = PipelinePaths.RaylibNativeLinuxX64Dir(repoRoot);
+        Directory.CreateDirectory(linux);
+        CopyIfExists(Path.Combine(PipelinePaths.RaylibPrebuiltLinuxDir(repoRoot), "libraylib.so"), Path.Combine(linux, "libraylib.so"), context);
+        CopyIfExists(Path.Combine(PipelinePaths.NativeShimOutDir(repoRoot, "raylib6-platform"), "libnovolis_raylib_trace.so"), Path.Combine(linux, "libnovolis_raylib_trace.so"), context);
+        CopyIfExists(Path.Combine(PipelinePaths.NativeShimOutDir(repoRoot, "raylib6-with-imgui"), "libnovolis_imgui.so"), Path.Combine(linux, "libnovolis_imgui.so"), context);
+        await Task.CompletedTask;
+    }
+
+    private static async Task TryBuildLinuxShimsViaWslAsync(PipelineContext context, CancellationToken cancellationToken)
+    {
+        var script = PipelinePaths.BuildLinuxShimsScript(context.RepoRoot);
+        if (!File.Exists(script))
+        {
+            await context.Log.WriteLineAsync($"WARN: missing {script}; linux shim .so files not built.");
+            return;
+        }
+
+        // Normalize LF for bash.
+        var text = await File.ReadAllTextAsync(script, cancellationToken);
+        var lf = text.Replace("\r\n", "\n", StringComparison.Ordinal).Replace('\r', '\n');
+        if (!string.Equals(text, lf, StringComparison.Ordinal))
+            await File.WriteAllTextAsync(script, lf, cancellationToken);
+
+        var wslCheck = await ProcessRunner.RunAsync(context, "wsl", "-e true", context.RepoRoot, cancellationToken);
+        if (wslCheck != 0)
+        {
+            await context.Log.WriteLineAsync("WARN: WSL unavailable — staged libraylib.so only; build linux shims on Linux or install WSL.");
+            return;
+        }
+
+        await context.Log.WriteLineAsync("Building linux-x64 shims via WSL...");
+        var unixScript = script.Replace('\\', '/');
+        if (unixScript.Length >= 2 && unixScript[1] == ':')
+            unixScript = "/mnt/" + char.ToLowerInvariant(unixScript[0]) + unixScript[2..];
+
+        var code = await ProcessRunner.RunAsync(
+            context,
+            "wsl",
+            $"-e bash \"{unixScript}\"",
+            context.RepoRoot,
+            cancellationToken);
+        if (code != 0)
+            throw new InvalidOperationException($"build-linux-shims.sh failed via WSL (exit {code})");
+    }
+
+    private static void CopyIfExists(string source, string dest, PipelineContext context)
+    {
+        if (!File.Exists(source))
+        {
+            context.Log.WriteLine($"WARN: missing {source}");
+            return;
+        }
+
+        Directory.CreateDirectory(Path.GetDirectoryName(dest)!);
+        File.Copy(source, dest, overwrite: true);
+        context.Log.WriteLine($"Staged {source} -> {dest}");
     }
 
     private static async Task EnsureRaylibDefAsync(PipelineContext context, CancellationToken cancellationToken)

@@ -21,10 +21,9 @@ internal sealed class SourceStep : IPipelineStep
         {
             PipelinePaths.RaylibHeaderPath(context.RepoRoot),
             PipelinePaths.RayguiHeaderPath(context.RepoRoot),
+            Path.Combine(PipelinePaths.RaylibPrebuiltWinDir(context.RepoRoot), "raylib.dll"),
+            Path.Combine(PipelinePaths.RaylibPrebuiltLinuxDir(context.RepoRoot), "libraylib.so"),
         };
-
-        if (OperatingSystem.IsWindows())
-            list.Add(Path.Combine(PipelinePaths.RaylibPrebuiltWinDir(context.RepoRoot), "raylib.dll"));
 
         var cimgui = Path.Combine(
             PipelinePaths.RaylibCimguiRoot(context.RepoRoot),
@@ -54,30 +53,34 @@ internal sealed class SourceStep : IPipelineStep
 
         using var http = new HttpClient { Timeout = TimeSpan.FromMinutes(5) };
 
-        if (OperatingSystem.IsWindows())
-        {
-            if (json.Prebuilt is null || !json.Prebuilt.TryGetValue("windows-x64", out var url) || string.IsNullOrEmpty(url))
-                throw new InvalidOperationException("versions.json missing prebuilt.windows-x64");
+        // Fetch desktop prebuilts for every RID we package — not only the host OS —
+        // so Windows maintainers can stage linux-x64 natives for Novolis OS / RID publish.
+        if (json.Prebuilt is null)
+            throw new InvalidOperationException("versions.json missing prebuilt map");
 
+        if (json.Prebuilt.TryGetValue("windows-x64", out var winUrl) && !string.IsNullOrEmpty(winUrl))
+        {
             var zipPath = Path.Combine(raylibRoot, "download_win.zip");
-            await context.Log.WriteLineAsync($"Downloading {url}");
-            await DownloadToFileAsync(http, url, zipPath, cancellationToken);
+            await context.Log.WriteLineAsync($"Downloading {winUrl}");
+            await DownloadToFileAsync(http, winUrl, zipPath, cancellationToken);
             ExtractZipDllAndIncludes(zipPath, raylibRoot);
             File.Delete(zipPath);
-            await context.Log.WriteLineAsync($"Extracted raylib prebuilt under {raylibRoot}");
+            await context.Log.WriteLineAsync($"Extracted windows-x64 raylib prebuilt under {raylibRoot}");
         }
-        else if (OperatingSystem.IsLinux())
-        {
-            if (json.Prebuilt is null || !json.Prebuilt.TryGetValue("linux-x64", out var url) || string.IsNullOrEmpty(url))
-                throw new InvalidOperationException("versions.json missing prebuilt.linux-x64");
+        else
+            throw new InvalidOperationException("versions.json missing prebuilt.windows-x64");
 
+        if (json.Prebuilt.TryGetValue("linux-x64", out var linuxUrl) && !string.IsNullOrEmpty(linuxUrl))
+        {
             var tarPath = Path.Combine(raylibRoot, "download_linux.tar.gz");
-            await context.Log.WriteLineAsync($"Downloading {url}");
-            await DownloadToFileAsync(http, url, tarPath, cancellationToken);
+            await context.Log.WriteLineAsync($"Downloading {linuxUrl}");
+            await DownloadToFileAsync(http, linuxUrl, tarPath, cancellationToken);
             ExtractLinuxTarGz(tarPath, raylibRoot);
             File.Delete(tarPath);
-            await context.Log.WriteLineAsync($"Extracted raylib prebuilt under {raylibRoot}");
+            await context.Log.WriteLineAsync($"Extracted linux-x64 raylib prebuilt under {raylibRoot}");
         }
+        else
+            throw new InvalidOperationException("versions.json missing prebuilt.linux-x64");
 
         if (json.RayguiHeaderUrl is { } rayguiUrl)
         {
@@ -154,34 +157,57 @@ internal sealed class SourceStep : IPipelineStep
         Directory.CreateDirectory(prebuiltRoot);
         Directory.CreateDirectory(includeRoot);
 
+        string? extractedSo = null;
+
         using var fileStream = File.OpenRead(tarGzPath);
         using var gzip = new System.IO.Compression.GZipStream(fileStream, System.IO.Compression.CompressionMode.Decompress);
         using var reader = new System.Formats.Tar.TarReader(gzip);
 
         while (reader.GetNextEntry() is { } entry)
         {
-            if (entry.EntryType is not (System.Formats.Tar.TarEntryType.RegularFile or System.Formats.Tar.TarEntryType.V7RegularFile))
-                continue;
-
             var name = entry.Name.Replace('\\', '/');
-            if (name.EndsWith("/libraylib.so", StringComparison.OrdinalIgnoreCase) ||
-                name.EndsWith("libraylib.so", StringComparison.OrdinalIgnoreCase))
-            {
-                entry.ExtractToFile(Path.Combine(prebuiltRoot, "libraylib.so"), overwrite: true);
-                continue;
-            }
+            var fileName = Path.GetFileName(name);
 
-            if (name.Contains("/include/", StringComparison.OrdinalIgnoreCase) && name.EndsWith(".h", StringComparison.OrdinalIgnoreCase))
+            // Official linux tarball ships libraylib.so as a symlink; extract the real SONAME object.
+            if (entry.EntryType is System.Formats.Tar.TarEntryType.RegularFile or System.Formats.Tar.TarEntryType.V7RegularFile)
             {
-                var fileName = Path.GetFileName(name);
-                if (fileName.Length > 0)
+                if (fileName.StartsWith("libraylib.so", StringComparison.OrdinalIgnoreCase))
+                {
+                    var dest = Path.Combine(prebuiltRoot, fileName);
+                    entry.ExtractToFile(dest, overwrite: true);
+                    // Prefer the fully versioned .so (real ELF); fall back to unversioned if present as a file.
+                    if (fileName.Contains(".so.", StringComparison.Ordinal) ||
+                        extractedSo is null ||
+                        fileName.Equals("libraylib.so", StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (fileName.Contains(".so.", StringComparison.Ordinal) || extractedSo is null)
+                            extractedSo = dest;
+                    }
+
+                    continue;
+                }
+
+                if (name.Contains("/include/", StringComparison.OrdinalIgnoreCase) &&
+                    name.EndsWith(".h", StringComparison.OrdinalIgnoreCase) &&
+                    fileName.Length > 0)
+                {
                     entry.ExtractToFile(Path.Combine(includeRoot, fileName), overwrite: true);
+                }
             }
         }
 
-        if (!File.Exists(Path.Combine(prebuiltRoot, "libraylib.so")) &&
-            !File.Exists(Path.Combine(includeRoot, "raylib.h")))
-            throw new InvalidOperationException("libraylib.so or raylib headers not found in linux archive.");
+        var canonical = Path.Combine(prebuiltRoot, "libraylib.so");
+        if (extractedSo is not null)
+        {
+            if (!string.Equals(extractedSo, canonical, StringComparison.OrdinalIgnoreCase))
+                File.Copy(extractedSo, canonical, overwrite: true);
+        }
+
+        if (!File.Exists(canonical))
+            throw new InvalidOperationException("libraylib.so not found in linux archive (expected lib/libraylib.so*).");
+
+        if (!File.Exists(Path.Combine(includeRoot, "raylib.h")))
+            throw new InvalidOperationException("raylib.h not found in linux archive include/.");
     }
 
     private static async Task DownloadToFileAsync(HttpClient http, string url, string path, CancellationToken ct)

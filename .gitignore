@@ -9,6 +9,12 @@ temp/
 codegen/vendor/raylib-6/prebuilt/
 codegen/pipeline/raylib6/steps/*/artifacts/
 codegen/native/raylib6-with-raygui/build/
+codegen/native/raylib6-platform/build/
+codegen/native/raylib6-platform/build-linux/
+codegen/native/raylib6-platform/out/
+codegen/native/raylib6-with-imgui/build/
+codegen/native/raylib6-with-imgui/build-linux/
+codegen/native/raylib6-with-imgui/out/
 codegen/native/raylib6-android-host/build*/
 codegen/native/raylib6-android-host/out/
 *.dll
