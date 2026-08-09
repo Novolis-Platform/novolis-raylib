@@ -112,6 +112,7 @@ public static partial class RaylibBindingManifests
                     new("DrawCubeWiresV", "void DrawCubeWiresV(Vector3 position, Vector3 size, Color color)", "Raylib6Native.DrawCubeWiresV(position, size, color.ToRaylibColor())", "Draw cube wires (Vector version)"),
                     new("DrawSphere", "void DrawSphere(Vector3 centerPos, float radius, Color color)", "Raylib6Native.DrawSphere(centerPos, radius, color.ToRaylibColor())", "Draw sphere"),
                     new("DrawSphereWires", "void DrawSphereWires(Vector3 centerPos, float radius, int rings, int slices, Color color)", "Raylib6Native.DrawSphereWires(centerPos, radius, rings, slices, color.ToRaylibColor())", "Draw sphere wires"),
+                    new("DrawTriangle", "void DrawTriangle(Vector3 v1, Vector3 v2, Vector3 v3, Color color)", "Raylib6Native.DrawTriangle3D(v1, v2, v3, color.ToRaylibColor())", "Draw a filled triangle in 3D (CCW)"),
                     new("DrawLine", "void DrawLine(Vector3 startPos, Vector3 endPos, Color color)", "Raylib6Native.DrawLine3D(startPos, endPos, color.ToRaylibColor())", "Draw a line in 3D world space"),
                     new("DrawCylinder", "void DrawCylinder(Vector3 position, float radiusTop, float radiusBottom, float height, int slices, Color color)", "Raylib6Native.DrawCylinder(position, radiusTop, radiusBottom, height, slices, color.ToRaylibColor())", "Draw a cylinder/cone"),
                     new("DrawGrid", "void DrawGrid(int slices, float spacing)", "Raylib6Native.DrawGrid(slices, spacing)", "Draw a grid (centered at (0, 0, 0))"),

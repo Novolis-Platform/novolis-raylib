@@ -199,6 +199,11 @@ internal static class RaylibInteropEmitter
                 sb.AppendLine($"    internal static partial void {name}(Vector3 startPos, Vector3 endPos, RaylibColor color);");
                 sb.AppendLine();
                 break;
+            case "void_vector3_vector3_vector3_color":
+                Li(sb, suppress, utf8, policy);
+                sb.AppendLine($"    internal static partial void {name}(Vector3 v1, Vector3 v2, Vector3 v3, RaylibColor color);");
+                sb.AppendLine();
+                break;
             case "void_vector3_float_color":
                 Li(sb, suppress, utf8, policy);
                 sb.AppendLine($"    internal static partial void {name}(Vector3 centerPos, float radius, RaylibColor color);");
