@@ -84,11 +84,37 @@ public static class RaylibOffscreenTestHarness
         }
     }
 
+    /// <summary>
+    /// Linux CI runners often have no X11/Wayland. Calling into raylib then segfaults instead of
+    /// throwing, so skip before <see cref="AudioDevice.Init"/> / <see cref="Window.Init"/>.
+    /// </summary>
+    private static bool TryGetMissingDisplaySkipReason(out string reason)
+    {
+        if (!OperatingSystem.IsLinux())
+        {
+            reason = "";
+            return false;
+        }
+
+        if (!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("DISPLAY"))
+            || !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("WAYLAND_DISPLAY")))
+        {
+            reason = "";
+            return false;
+        }
+
+        reason = "No DISPLAY or WAYLAND_DISPLAY (GLFW cannot initialize on this Linux host).";
+        return true;
+    }
+
     private static RaylibOffscreenTestRunResult RunCore(
         IRaylibFrameRenderer frameRenderer,
         RaylibOffscreenTestOptions options,
         CancellationToken cancellationToken)
     {
+        if (TryGetMissingDisplaySkipReason(out var displaySkip))
+            return RaylibOffscreenTestRunResult.Skipped(displaySkip);
+
         using var glfwLock = RaylibGlfwTestSync.Enter();
         Logger.SetTraceLogLevel(TraceLogLevel.Warning);
         AudioDevice.Init();
