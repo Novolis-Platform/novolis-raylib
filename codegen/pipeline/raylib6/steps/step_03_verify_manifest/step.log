@@ -1,4 +1,4 @@
-# step_03_verify_manifest — 2026-08-09T18:58:37.6745242+00:00
+# step_03_verify_manifest — 2026-09-18T10:19:26.6060243+00:00
 # force=False
 
-verify-raylib-manifest: OK
+SKIPPED: outputs up to date
