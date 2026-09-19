@@ -113,7 +113,12 @@ public sealed class GoldenStorySpec
     /// <param name="specPath">Absolute path to write.</param>
     public void SaveToFile(string specPath)
     {
-        var json = JsonSerializer.Serialize(this, JsonOptions);
+        var json = JsonSerializer.Serialize(this, JsonOptions).Replace("\r\n", "\n");
+        if (!json.EndsWith('\n'))
+            json += "\n";
+        if (File.Exists(specPath) && File.ReadAllText(specPath).Replace("\r\n", "\n") == json)
+            return;
+
         File.WriteAllText(specPath, json);
     }
 

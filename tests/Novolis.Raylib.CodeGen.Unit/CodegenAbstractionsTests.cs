@@ -104,6 +104,7 @@ public sealed class RaylibVector3Tests
     }
 }
 
+[NotInParallel("raylib-debug-capture-gate")]
 public sealed class RaylibDebugCaptureGateTests
 {
     [Test]

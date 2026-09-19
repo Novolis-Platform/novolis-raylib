@@ -13,6 +13,7 @@ public sealed class RaylibManifestInputPathsTests
         await Assert.That(files.Count).IsGreaterThan(0);
         await Assert.That(files.Any(f => f.EndsWith("Raylib6InteropManifest.cs", StringComparison.OrdinalIgnoreCase))).IsTrue();
         await Assert.That(files.Any(f => f.EndsWith("FacadesManifest.cs", StringComparison.OrdinalIgnoreCase))).IsTrue();
+        await Assert.That(files.Any(IsBuildIntermediate)).IsFalse();
     }
 
     [Test]
@@ -22,6 +23,13 @@ public sealed class RaylibManifestInputPathsTests
         var first = RaylibManifestInputPaths.AllManifestSourceFiles(repoRoot);
         var second = RaylibManifestInputPaths.AllManifestSourceFiles(repoRoot);
         await Assert.That(first).IsEquivalentTo(second);
+    }
+
+    private static bool IsBuildIntermediate(string path)
+    {
+        var normalized = path.Replace('\\', '/');
+        return normalized.Contains("/obj/", StringComparison.OrdinalIgnoreCase)
+               || normalized.Contains("/bin/", StringComparison.OrdinalIgnoreCase);
     }
 
     private static string FindRepoRoot()

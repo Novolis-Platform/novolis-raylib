@@ -2,6 +2,7 @@ using Novolis.Raylib.Runtime.Presentation;
 
 namespace Novolis.Raylib.Runtime.Unit;
 
+[NotInParallel("raylib-presentation-hooks")]
 public sealed class RaylibPresentationHooksTests
 {
     [Test]

@@ -12,10 +12,14 @@
   </Target>
 
   <ItemGroup>
-    <RaylibCodegenInput Include="$(RaylibCodegenRepoRoot)codegen\Novolis.Raylib.Manifests\**\*.cs" />
-    <RaylibCodegenInput Include="$(RaylibCodegenRepoRoot)codegen\Novolis.Raylib.CodeGen\**\*.cs" />
-    <RaylibCodegenInput Include="$(RaylibCodegenRepoRoot)codegen\Novolis.Raylib.CodeGen.Abstractions\**\*.cs" />
-    <RaylibCodegenInput Include="$(RaylibCodegenRepoRoot)codegen\Novolis.Raylib.CodeGen.Hooks\**\*.cs" />
+    <RaylibCodegenInput Include="$(RaylibCodegenRepoRoot)codegen\Novolis.Raylib.Manifests\**\*.cs"
+                        Exclude="$(RaylibCodegenRepoRoot)codegen\Novolis.Raylib.Manifests\**\obj\**;$(RaylibCodegenRepoRoot)codegen\Novolis.Raylib.Manifests\**\bin\**" />
+    <RaylibCodegenInput Include="$(RaylibCodegenRepoRoot)codegen\Novolis.Raylib.CodeGen\**\*.cs"
+                        Exclude="$(RaylibCodegenRepoRoot)codegen\Novolis.Raylib.CodeGen\**\obj\**;$(RaylibCodegenRepoRoot)codegen\Novolis.Raylib.CodeGen\**\bin\**" />
+    <RaylibCodegenInput Include="$(RaylibCodegenRepoRoot)codegen\Novolis.Raylib.CodeGen.Abstractions\**\*.cs"
+                        Exclude="$(RaylibCodegenRepoRoot)codegen\Novolis.Raylib.CodeGen.Abstractions\**\obj\**;$(RaylibCodegenRepoRoot)codegen\Novolis.Raylib.CodeGen.Abstractions\**\bin\**" />
+    <RaylibCodegenInput Include="$(RaylibCodegenRepoRoot)codegen\Novolis.Raylib.CodeGen.Hooks\**\*.cs"
+                        Exclude="$(RaylibCodegenRepoRoot)codegen\Novolis.Raylib.CodeGen.Hooks\**\obj\**;$(RaylibCodegenRepoRoot)codegen\Novolis.Raylib.CodeGen.Hooks\**\bin\**" />
     <RaylibCodegenOutput Include="$(RaylibCodegenRepoRoot)src\Novolis.Raylib.Bindings\Interop\*.g.cs" />
     <RaylibCodegenOutput Include="$(RaylibCodegenRepoRoot)src\Novolis.Raylib.Runtime\Rendering\*.g.cs" />
     <RaylibCodegenOutput Include="$(RaylibCodegenRepoRoot)src\Novolis.Raylib.Runtime\Windowing\*.g.cs" />
