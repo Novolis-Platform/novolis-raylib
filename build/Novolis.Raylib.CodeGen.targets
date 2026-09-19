@@ -20,6 +20,8 @@
                         Exclude="$(RaylibCodegenRepoRoot)codegen\Novolis.Raylib.CodeGen.Abstractions\**\obj\**;$(RaylibCodegenRepoRoot)codegen\Novolis.Raylib.CodeGen.Abstractions\**\bin\**" />
     <RaylibCodegenInput Include="$(RaylibCodegenRepoRoot)codegen\Novolis.Raylib.CodeGen.Hooks\**\*.cs"
                         Exclude="$(RaylibCodegenRepoRoot)codegen\Novolis.Raylib.CodeGen.Hooks\**\obj\**;$(RaylibCodegenRepoRoot)codegen\Novolis.Raylib.CodeGen.Hooks\**\bin\**" />
+    <RaylibCodegenInput Include="$(RaylibCodegenRepoRoot)Directory.Packages.props"
+                        Condition="Exists('$(RaylibCodegenRepoRoot)Directory.Packages.props')" />
     <RaylibCodegenOutput Include="$(RaylibCodegenRepoRoot)src\Novolis.Raylib.Bindings\Interop\*.g.cs" />
     <RaylibCodegenOutput Include="$(RaylibCodegenRepoRoot)src\Novolis.Raylib.Runtime\Rendering\*.g.cs" />
     <RaylibCodegenOutput Include="$(RaylibCodegenRepoRoot)src\Novolis.Raylib.Runtime\Windowing\*.g.cs" />
