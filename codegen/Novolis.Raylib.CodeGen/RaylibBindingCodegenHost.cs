@@ -82,45 +82,33 @@ public sealed class RaylibBindingCodegenHost : IBindingCodegenHost
             .RequireCompanion("src/Novolis.Raylib.Runtime/Gui/GuiControls.cs", "ImGui controls layer")
             .RequireCompanion("src/Novolis.Raylib.Raygui/RayGuiControls.cs", "Raygui controls layer")
             .AddJob(
-                new BindingEmitJob(
+                BindingEmitJob.LibraryImport(
                     "raylib interop",
-                    FragmentKind.InteropExports,
                     "raylib6",
-                    new LibraryImportEmitter(),
-                    new EmitTarget(
-                        "Raylib6Native",
-                        EmitStrategy.LibraryImport,
-                        "src/Novolis.Raylib.Bindings/Interop/Raylib6Native.g.cs",
-                        "Novolis.Raylib.Interop",
-                        "Novolis.Raylib.Bindings",
-                        LibraryConstantName: "RaylibDll",
-                        TypeSummary: "Low-level raylib 6 entry points (manifest-generated <c>[LibraryImport]</c>).",
-                        StructSummary: "Blittable layout for raylib C struct (generated from manifest).")))
+                    "Raylib6Native",
+                    "src/Novolis.Raylib.Bindings/Interop/Raylib6Native.g.cs",
+                    "Novolis.Raylib.Interop",
+                    "Novolis.Raylib.Bindings",
+                    libraryConstantName: "RaylibDll",
+                    typeSummary: "Low-level raylib 6 entry points (manifest-generated <c>[LibraryImport]</c>).",
+                    structSummary: "Blittable layout for raylib C struct (generated from manifest)."))
             .AddJob(
-                new BindingEmitJob(
+                BindingEmitJob.DynamicExports(
                     "imgui interop",
-                    FragmentKind.ShimExports,
                     "imgui",
-                    new DynamicExportsEmitter(),
-                    new EmitTarget(
-                        "ImguiShimExports",
-                        EmitStrategy.DynamicExports,
-                        "src/Novolis.Raylib.Bindings/Interop/ImguiShimExports.g.cs",
-                        "Novolis.Raylib.Interop",
-                        "Novolis.Raylib.Bindings")))
+                    "ImguiShimExports",
+                    "src/Novolis.Raylib.Bindings/Interop/ImguiShimExports.g.cs",
+                    "Novolis.Raylib.Interop",
+                    "Novolis.Raylib.Bindings"))
             .AddJob(
-                new BindingEmitJob(
+                BindingEmitJob.DynamicExports(
                     "raygui interop",
-                    FragmentKind.ShimExports,
                     "raygui",
-                    new DynamicExportsEmitter(),
-                    new EmitTarget(
-                        "RayguiShimExports",
-                        EmitStrategy.DynamicExports,
-                        "src/Novolis.Raylib.Raygui/Interop/RayguiShimExports.g.cs",
-                        "Novolis.Raylib.Interop",
-                        "Novolis.Raylib.Raygui"),
-                    Optional: true))
+                    "RayguiShimExports",
+                    "src/Novolis.Raylib.Raygui/Interop/RayguiShimExports.g.cs",
+                    "Novolis.Raylib.Interop",
+                    "Novolis.Raylib.Raygui",
+                    optional: true))
             .AddJob(
                 new BindingEmitJob(
                     "raylib debug hooks",
@@ -179,21 +167,16 @@ public sealed class RaylibBindingCodegenHost : IBindingCodegenHost
         foreach (var type in fragment.Types)
         {
             project.AddJob(
-                new BindingEmitJob(
+                BindingEmitJob.FacadeForward(
                     $"{fragmentId} {type.Name}",
-                    FragmentKind.FacadeTypes,
                     fragmentId,
-                    new FacadeForwardEmitter(documentation),
-                    new EmitTarget(
-                        type.Name,
-                        EmitStrategy.FacadeForward,
-                        Path.Combine(root, type.Folder, $"{type.Name}.g.cs"),
-                        type.Namespace,
-                        assemblyName,
-                        FacadeMethodImpl: facadeMethodImpl),
-                    Optional: optional,
-                    FormatPolicy: BindingFormatPolicy.NormalizeWhitespace,
-                    Slice: type.Name));
+                    type.Name,
+                    Path.Combine(root, type.Folder, $"{type.Name}.g.cs"),
+                    type.Namespace,
+                    assemblyName,
+                    facadeMethodImpl: facadeMethodImpl,
+                    documentation: documentation,
+                    optional: optional));
         }
     }
 
