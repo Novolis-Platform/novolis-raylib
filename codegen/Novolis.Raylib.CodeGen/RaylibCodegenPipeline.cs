@@ -29,7 +29,7 @@ public sealed class RaylibCodegenPipeline
         {
             Environment = CodegenEnvironment.Physical(_repoRoot),
             Manifests = RaylibBindingManifestSource.Instance,
-            IncludeRaygui = true,
+            IncludeOptional = true,
             VerifyManifest = verifyManifest,
             RegenerateHint = CodegenHeaders.RegenerateHint,
         };

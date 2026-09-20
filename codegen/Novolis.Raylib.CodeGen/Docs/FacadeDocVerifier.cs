@@ -21,15 +21,14 @@ public static class FacadeDocVerifier
 
             foreach (var typeSpec in fragment.Types)
             {
-                var type = RaylibManifestMapping.ToFacadeType(typeSpec);
-                if (string.IsNullOrWhiteSpace(FacadeDocResolver.ResolveTypeSummary(type)))
-                    errors.Add($"{fragmentId}: {type.Name} missing typeSummary");
+                if (string.IsNullOrWhiteSpace(FacadeDocResolver.ResolveTypeSummary(typeSpec)))
+                    errors.Add($"{fragmentId}: {typeSpec.Name} missing typeSummary");
 
-                foreach (var method in type.Methods ?? [])
+                foreach (var method in typeSpec.Methods)
                 {
-                    var summary = FacadeDocResolver.ResolveMethodSummary(type, method, raylibComments, rayguiComments);
+                    var summary = FacadeDocResolver.ResolveMethodSummary(typeSpec, method, raylibComments, rayguiComments);
                     if (string.IsNullOrWhiteSpace(summary))
-                        errors.Add($"{fragmentId}: {type.Name}.{method.Name} missing summary");
+                        errors.Add($"{fragmentId}: {typeSpec.Name}.{method.Name} missing summary");
                 }
             }
         }

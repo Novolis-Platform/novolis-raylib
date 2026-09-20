@@ -76,12 +76,12 @@ public sealed class RaylibBindingParityTests
                 var before = committed[relativePath];
                 var after = await File.ReadAllTextAsync(fullPath);
                 await Assert.That(CompilationUnitComparer.AreStructurallyEquivalent(before, after)).IsTrue()
-                    .Because($"T1 parity failed for {relativePath} (IncludeRaygui=false)");
+                    .Because($"T1 parity failed for {relativePath} (IncludeOptional=false)");
             }
 
             await Assert.That(File.Exists(Path.Combine(root, "src/Novolis.Raylib.Raygui/Interop/RayguiShimExports.g.cs")))
                 .IsTrue()
-                .Because("optional raygui outputs should remain untouched when IncludeRaygui=false");
+                .Because("optional raygui outputs should remain untouched when IncludeOptional=false");
             await Assert.That(await File.ReadAllTextAsync(Path.Combine(root, "src/Novolis.Raylib.Raygui/Interop/RayguiShimExports.g.cs")))
                 .IsEqualTo(committed["src/Novolis.Raylib.Raygui/Interop/RayguiShimExports.g.cs"]);
         }
@@ -99,7 +99,7 @@ public sealed class RaylibBindingParityTests
         {
             Environment = CodegenEnvironment.Physical(repoRoot),
             Manifests = RaylibBindingManifestSource.Instance,
-            IncludeRaygui = includeRaygui,
+            IncludeOptional = includeRaygui,
             VerifyManifest = verifyManifest,
             RegenerateHint = "dotnet run --project codegen/Novolis.Raylib.Pipeline -- run generate",
         };

@@ -26,8 +26,28 @@ public sealed class RaylibCodegenPipelineTests
         var committedShaLine = committed.Split('\n').First(l => l.Contains("// ManifestSha256:", StringComparison.Ordinal));
         await Assert.That(committedShaLine).Contains(manifestSha256);
 
-        var policy = RaylibManifestMapping.ToPolicy(interop.Policy);
-        var emitted = RaylibInteropEmitter.Emit(interop, manifestSha256, policy);
+        var context = new BindingEmitContext
+        {
+            Environment = CodegenEnvironment.Physical(root),
+            OutputPath = Path.Combine(root, "generated", "Raylib6Native.g.cs"),
+            Fragment = interop,
+            ManifestSha256 = manifestSha256,
+            RegenerateHint = "dotnet run --project codegen/Novolis.Raylib.Pipeline -- run generate",
+        };
+        var emitted = new LibraryImportEmitter().Emit(
+            new EmitRequest(
+                interop,
+                manifestSha256,
+                new EmitTarget(
+                    "Raylib6Native",
+                    EmitStrategy.LibraryImport,
+                    "generated/Raylib6Native.g.cs",
+                    "Novolis.Raylib.Interop",
+                    "Novolis.Raylib.Bindings",
+                    LibraryConstantName: "RaylibDll",
+                    TypeSummary: "Low-level raylib 6 entry points (manifest-generated <c>[LibraryImport]</c>).",
+                    StructSummary: "Blittable layout for raylib C struct (generated from manifest)."),
+                context));
         await Assert.That(emitted).Contains($"// ManifestSha256: {manifestSha256}");
         await Assert.That(emitted).Contains("internal static partial void BeginDrawing();");
     }

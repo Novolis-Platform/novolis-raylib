@@ -67,7 +67,7 @@ public sealed class RaylibManifestVerifierEdgeTests
                     "RLAPI void InitWindow(int w, int h, const char* t);\n",
             });
         var manifests = CodegenTestEnvironment.Manifests(
-            CodegenTestEnvironment.InteropFragment(new InteropImportSpec("MissingSymbol", "void_v")));
+            CodegenTestEnvironment.InteropFragment(new InteropImportSpec("MissingSymbol", NativeSignature.Create(NativeType.Void))));
         var code = RaylibManifestVerifier.Verify(env, manifests);
         await Assert.That(code).IsEqualTo(4);
     }

@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using Novolis.CodeGen.Bindings;
 
 namespace Novolis.Raylib.CodeGen;
 
@@ -98,6 +99,9 @@ internal static partial class FacadeDocResolver
         return DefaultTypeSummaries.TryGetValue(type.Name, out var summary) ? summary : null;
     }
 
+    public static string? ResolveTypeSummary(FacadeTypeSpec type) =>
+        ResolveTypeSummary(ToDefinition(type));
+
     public static string ResolveMethodSummary(
         FacadeTypeDefinition type,
         FacadeMethodDefinition method,
@@ -126,6 +130,23 @@ internal static partial class FacadeDocResolver
         var displayName = nativeName ?? method.Name;
         return $"Wraps raylib {displayName}. See {RaylibCheatsheetUrl}.";
     }
+
+    public static string ResolveMethodSummary(
+        FacadeTypeSpec type,
+        FacadeMethodSpec method,
+        IReadOnlyDictionary<string, string> raylibComments,
+        IReadOnlyDictionary<string, string> rayguiComments) =>
+        ResolveMethodSummary(
+            ToDefinition(type),
+            new FacadeMethodDefinition
+            {
+                Name = method.Name,
+                Signature = method.Signature,
+                Body = method.Body,
+                Summary = method.Summary,
+            },
+            raylibComments,
+            rayguiComments);
 
     public static string? TryResolveNativeSymbol(FacadeTypeDefinition type, FacadeMethodDefinition method)
     {
@@ -160,4 +181,13 @@ internal static partial class FacadeDocResolver
 
         return null;
     }
+
+    private static FacadeTypeDefinition ToDefinition(FacadeTypeSpec type) =>
+        new()
+        {
+            Name = type.Name,
+            Namespace = type.Namespace,
+            Folder = type.Folder,
+            TypeSummary = type.TypeSummary,
+        };
 }

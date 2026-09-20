@@ -1,6 +1,5 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
 using Novolis.CodeGen.Bindings;
 using Novolis.Raylib.CodeGen;
 using Novolis.Raylib.Interop;
@@ -16,42 +15,41 @@ public sealed class RaylibInteropReflectionTests
         var interop = RaylibBindingManifestSource.Instance.GetRequired<InteropExportsFragment>(
             FragmentKind.InteropExports,
             "raylib6");
-        var names = interop.Imports.Select(i => i.Name).ToList();
+        var names = interop.Imports.Select(import => import.Name).ToList();
 
         var methods = typeof(Raylib6Native)
             .GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
-            .Where(m => m.IsDefined(typeof(LibraryImportAttribute), inherit: false))
+            .Where(method => method.IsDefined(typeof(LibraryImportAttribute), inherit: false))
             .ToArray();
 
         await Assert.That(methods.Length).IsEqualTo(names.Count);
         foreach (var name in names)
         {
-            var m = typeof(Raylib6Native).GetMethod(name, BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
-            await Assert.That(m).IsNotNull();
-            await Assert.That(m!.IsDefined(typeof(LibraryImportAttribute), inherit: false)).IsTrue();
+            var method = typeof(Raylib6Native).GetMethod(
+                name,
+                BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+            await Assert.That(method).IsNotNull();
+            await Assert.That(method!.IsDefined(typeof(LibraryImportAttribute), inherit: false)).IsTrue();
         }
     }
 
     [Test]
-    public async Task Raylib_each_manifest_template_is_implemented_in_generator()
+    public async Task Raylib_manifest_uses_complete_typed_c_abi_signatures()
     {
-        var root = RepoTestPaths.TryRepositoryRoot()
-                   ?? throw new InvalidOperationException("Could not resolve repository root.");
-
         var interop = RaylibBindingManifestSource.Instance.GetRequired<InteropExportsFragment>(
             FragmentKind.InteropExports,
             "raylib6");
-        var templates = interop.Imports.Select(i => i.Template).ToHashSet(StringComparer.Ordinal);
 
-        var genPath = Path.Combine(root, "codegen", "Novolis.Raylib.CodeGen", "Emit", "RaylibInteropEmitter.cs");
-        var gen = await File.ReadAllTextAsync(genPath);
-        var caseLabels = new HashSet<string>(
-            Regex.Matches(gen, @"case\s+""([^""]+)""\s*:")
-                .Select(m => m.Groups[1].Value),
-            StringComparer.Ordinal);
+        await Assert.That(interop.Imports).IsNotEmpty();
+        foreach (var import in interop.Imports)
+        {
+            await Assert.That(import.Signature.ReturnType).IsNotNull();
+            await Assert.That(import.Signature.Parameters.All(parameter => !string.IsNullOrWhiteSpace(parameter.Name))).IsTrue();
+        }
 
-        foreach (var t in templates)
-            await Assert.That(caseLabels.Contains(t)).IsTrue();
+        var beginMode = interop.Imports.Single(import => import.Name == "BeginMode3D");
+        await Assert.That(beginMode.Signature.Parameters[0].Name).IsEqualTo("camera");
+        await Assert.That(beginMode.Signature.Parameters[0].Type.CSharpTypeName).IsEqualTo("Camera");
     }
 
     [Test]
@@ -59,20 +57,21 @@ public sealed class RaylibInteropReflectionTests
     {
         var root = RepoTestPaths.TryRepositoryRoot()
                    ?? throw new InvalidOperationException("Could not resolve repository root.");
-
         var interop = RaylibBindingManifestSource.Instance.GetRequired<InteropExportsFragment>(
             FragmentKind.InteropExports,
             "raylib6");
-        var expected = interop.Sha256Hex();
 
-        var genPath = Path.Combine(
+        var generatedPath = Path.Combine(
             root,
-            "src", "Novolis.Raylib.Bindings", "Interop",
+            "src",
+            "Novolis.Raylib.Bindings",
+            "Interop",
             "Raylib6Native.g.cs");
-        var gen = await File.ReadAllTextAsync(genPath);
-        var line = gen.Split('\n').FirstOrDefault(l => l.Contains("// ManifestSha256:", StringComparison.Ordinal));
+        var generated = await File.ReadAllTextAsync(generatedPath);
+        var line = generated.Split('\n').FirstOrDefault(value => value.Contains("// ManifestSha256:", StringComparison.Ordinal));
+
         await Assert.That(line).IsNotNull();
-        await Assert.That(line!.Contains(expected, StringComparison.Ordinal)).IsTrue();
+        await Assert.That(line!).Contains(interop.Sha256Hex());
     }
 
     [Test]
@@ -81,45 +80,17 @@ public sealed class RaylibInteropReflectionTests
         var raygui = RaylibBindingManifestSource.Instance.GetRequired<ShimExportsFragment>(
             FragmentKind.ShimExports,
             "raygui");
-        var exports = raygui.Exports.Select(e => e.Export).ToList();
-
-        var ptrFields = typeof(RayguiShimExports)
+        var fields = typeof(RayguiShimExports)
             .GetFields(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
-            .Where(f => f.Name.EndsWith("_ptr", StringComparison.Ordinal))
+            .Where(field => field.Name.EndsWith("_ptr", StringComparison.Ordinal))
             .ToArray();
 
-        await Assert.That(ptrFields.Length).IsEqualTo(exports.Count);
-        foreach (var ex in exports)
-            await Assert.That(ptrFields.Any(f => f.Name == $"{ex}_ptr")).IsTrue();
-    }
-
-    [Test]
-    public async Task Raygui_each_manifest_template_is_implemented_in_generator()
-    {
-        var root = RepoTestPaths.TryRepositoryRoot()
-                   ?? throw new InvalidOperationException("Could not resolve repository root.");
-
-        var raygui = RaylibBindingManifestSource.Instance.GetRequired<ShimExportsFragment>(
-            FragmentKind.ShimExports,
-            "raygui");
-        var templates = raygui.Exports.Select(e => e.Template).ToHashSet(StringComparer.Ordinal);
-
-        var genPath = Path.Combine(root, "codegen", "Novolis.Raylib.CodeGen", "Emit", "RayguiInteropEmitter.cs");
-        var gen = await File.ReadAllTextAsync(genPath);
-        var blockStart = gen.IndexOf(
-            "static (string delegateType, string exportName) TemplateToDelegate",
-            StringComparison.Ordinal);
-        await Assert.That(blockStart).IsGreaterThanOrEqualTo(0);
-        var throwIdx = gen.IndexOf("_ => throw new InvalidOperationException", blockStart, StringComparison.Ordinal);
-        await Assert.That(throwIdx).IsGreaterThanOrEqualTo(0);
-        var block = gen.Substring(blockStart, throwIdx - blockStart + 80);
-        var caseLabels = new HashSet<string>(
-            Regex.Matches(block, @"""([a-z0-9_]+)""\s*=>")
-                .Select(m => m.Groups[1].Value),
-            StringComparer.Ordinal);
-
-        foreach (var t in templates)
-            await Assert.That(caseLabels.Contains(t)).IsTrue();
+        await Assert.That(fields.Length).IsEqualTo(raygui.Exports.Count);
+        await Assert.That(raygui.EmbeddedTypes).IsNotNull();
+        await Assert.That(raygui.EmbeddedTypes!.Count).IsEqualTo(1);
+        await Assert.That(raygui.EmbeddedTypes![0].Name).IsEqualTo("RayguiRectangle");
+        foreach (var export in raygui.Exports)
+            await Assert.That(fields.Any(field => field.Name == $"{export.Export}_ptr")).IsTrue();
     }
 
     [Test]
@@ -128,44 +99,14 @@ public sealed class RaylibInteropReflectionTests
         var imgui = RaylibBindingManifestSource.Instance.GetRequired<ShimExportsFragment>(
             FragmentKind.ShimExports,
             "imgui");
-        var exports = imgui.Exports.Select(e => e.Export).ToList();
-
-        var ptrFields = typeof(ImguiShimExports)
+        var fields = typeof(ImguiShimExports)
             .GetFields(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
-            .Where(f => f.Name.EndsWith("_ptr", StringComparison.Ordinal))
+            .Where(field => field.Name.EndsWith("_ptr", StringComparison.Ordinal))
             .ToArray();
 
-        await Assert.That(ptrFields.Length).IsEqualTo(exports.Count);
-        foreach (var ex in exports)
-            await Assert.That(ptrFields.Any(f => f.Name == $"{ex}_ptr")).IsTrue();
-    }
-
-    [Test]
-    public async Task Imgui_each_manifest_template_is_implemented_in_generator()
-    {
-        var root = RepoTestPaths.TryRepositoryRoot()
-                   ?? throw new InvalidOperationException("Could not resolve repository root.");
-
-        var imgui = RaylibBindingManifestSource.Instance.GetRequired<ShimExportsFragment>(
-            FragmentKind.ShimExports,
-            "imgui");
-        var templates = imgui.Exports.Select(e => e.Template).ToHashSet(StringComparer.Ordinal);
-
-        var genPath = Path.Combine(root, "codegen", "Novolis.Raylib.CodeGen", "Emit", "ImguiInteropEmitter.cs");
-        var gen = await File.ReadAllTextAsync(genPath);
-        var blockStart = gen.IndexOf(
-            "static (string delegateType, string exportName) TemplateToDelegate",
-            StringComparison.Ordinal);
-        await Assert.That(blockStart).IsGreaterThanOrEqualTo(0);
-        var throwIdx = gen.IndexOf("_ => throw new InvalidOperationException", blockStart, StringComparison.Ordinal);
-        await Assert.That(throwIdx).IsGreaterThanOrEqualTo(0);
-        var block = gen.Substring(blockStart, throwIdx - blockStart + 80);
-        var caseLabels = new HashSet<string>(
-            Regex.Matches(block, @"""([a-z0-9_]+)""\s*=>")
-                .Select(m => m.Groups[1].Value),
-            StringComparer.Ordinal);
-
-        foreach (var t in templates)
-            await Assert.That(caseLabels.Contains(t)).IsTrue();
+        await Assert.That(fields.Length).IsEqualTo(imgui.Exports.Count);
+        await Assert.That(imgui.Exports.All(export => export.Signature.Parameters is not null)).IsTrue();
+        foreach (var export in imgui.Exports)
+            await Assert.That(fields.Any(field => field.Name == $"{export.Export}_ptr")).IsTrue();
     }
 }

@@ -12,22 +12,15 @@ namespace Novolis.Raylib.CodeGen.Unit;
 public sealed class RaylibInteropOptimizationTests
 {
     [Test]
-    public async Task Interop_policy_suppresses_gc_for_frame_loop_templates()
+    public async Task Interop_policy_keeps_function_level_marshalling_configuration()
     {
         var interop = RaylibBindingManifestSource.Instance.GetRequired<InteropExportsFragment>(
             FragmentKind.InteropExports,
             "raylib6");
-        var policy = RaylibManifestMapping.ToPolicy(interop.Policy);
-
-        var beginDrawing = RaylibManifestMapping.ToImport(
-            interop.Imports.Single(i => i.Name == "BeginDrawing"));
-        var exportImage = RaylibManifestMapping.ToImport(
-            interop.Imports.Single(i => i.Name == "ExportImageToMemory"));
-
-        await Assert.That(policy.ShouldSuppressGcTransition(beginDrawing)).IsTrue();
-        await Assert.That(policy.ShouldSuppressGcTransition(exportImage)).IsFalse();
-        await Assert.That(policy.UseDisableRuntimeMarshalling).IsTrue();
-        await Assert.That(policy.FacadeMethodImpl).IsEqualTo("AggressiveInlining");
+        await Assert.That(interop.Policy.SuppressGcTransitionByFunction).IsEmpty();
+        await Assert.That(interop.Policy.NeverSuppressGcTransition).Contains("ExportImageToMemory");
+        await Assert.That(interop.Policy.UseDisableRuntimeMarshalling).IsTrue();
+        await Assert.That(interop.Policy.FacadeMethodImpl).IsEqualTo("AggressiveInlining");
     }
 
     [Test]

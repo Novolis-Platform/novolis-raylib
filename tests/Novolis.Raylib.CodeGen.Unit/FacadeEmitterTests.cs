@@ -1,4 +1,4 @@
-using Novolis.Raylib.CodeGen;
+using Novolis.CodeGen.Bindings;
 
 namespace Novolis.Raylib.CodeGen.Unit;
 
@@ -7,30 +7,41 @@ public sealed class FacadeEmitterTests
     [Test]
     public async Task Facade_emitter_writes_type_and_method_summaries_before_method_impl()
     {
-        var type = new FacadeTypeDefinition
-        {
-            Name = "Graphics",
-            Namespace = "Novolis.Raylib.Rendering",
-            Folder = "Rendering",
-            TypeSummary = "2D drawing.",
-            Methods =
+        var fragment = new FacadeTypesFragment(
+            "facades",
             [
-                new FacadeMethodDefinition
-                {
-                    Name = "BeginDrawing",
-                    Signature = "void BeginDrawing()",
-                    Body = "Raylib6Native.BeginDrawing()",
-                    Summary = "Setup canvas (framebuffer) to start drawing",
-                },
-            ],
+                new FacadeTypeSpec(
+                    "Graphics",
+                    "Novolis.Raylib.Rendering",
+                    "Rendering",
+                    "2D drawing.",
+                    [],
+                    [new FacadeMethodSpec(
+                        "BeginDrawing",
+                        "void BeginDrawing()",
+                        "Raylib6Native.BeginDrawing()",
+                        "Setup canvas (framebuffer) to start drawing")]),
+            ]);
+        var context = new BindingEmitContext
+        {
+            Environment = CodegenEnvironment.Physical(Path.GetTempPath()),
+            OutputPath = Path.Combine(Path.GetTempPath(), "Graphics.g.cs"),
+            Fragment = fragment,
+            ManifestSha256 = "test",
+            RegenerateHint = "dotnet run --project codegen/Novolis.Raylib.Pipeline -- run generate",
         };
-
-        var emitted = FacadeEmitter.EmitType(
-            type,
-            manifestSha256: "test",
-            raylibComments: new Dictionary<string, string>(),
-            rayguiComments: new Dictionary<string, string>(),
-            facadeMethodImpl: "AggressiveInlining");
+        var emitted = new FacadeForwardEmitter().Emit(
+            new EmitRequest(
+                fragment,
+                "test",
+                new EmitTarget(
+                    "Graphics",
+                    EmitStrategy.FacadeForward,
+                    "Graphics.g.cs",
+                    "Novolis.Raylib.Rendering",
+                    "Novolis.Raylib.Runtime",
+                    FacadeMethodImpl: "AggressiveInlining"),
+                context));
 
         await Assert.That(emitted).Contains("/// 2D drawing.");
         await Assert.That(emitted).Contains("/// Setup canvas (framebuffer) to start drawing");

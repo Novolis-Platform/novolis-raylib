@@ -12,18 +12,18 @@ public static partial class RaylibBindingManifests
         ModuleFileName: "novolis_imgui",
         Exports: new ShimExportSpec[]
         {
-            new("novolis_rlimgui_setup", "void_int"),
-            new("novolis_rlimgui_shutdown", "void_void"),
-            new("novolis_rlimgui_begin", "void_void"),
-            new("novolis_rlimgui_end", "void_void"),
-            new("novolis_igBegin", "int_utf8_ptrint_int"),
-            new("novolis_igEnd", "void_void"),
-            new("novolis_igButton", "int_utf8"),
-            new("novolis_igText", "void_utf8"),
-            new("novolis_igCheckbox", "int_utf8_ptrint"),
-            new("novolis_igSliderFloat", "int_utf8_ptrfloat_float_float"),
-            new("novolis_igSameLine", "void_float_float"),
-            new("novolis_igSeparator", "void_void"),
+            new("novolis_rlimgui_setup", RaylibNativeSignatures.ImguiVoidInt),
+            new("novolis_rlimgui_shutdown", RaylibNativeSignatures.VoidVoid),
+            new("novolis_rlimgui_begin", RaylibNativeSignatures.VoidVoid),
+            new("novolis_rlimgui_end", RaylibNativeSignatures.VoidVoid),
+            new("novolis_igBegin", RaylibNativeSignatures.ImguiIntUtf8OutIntInt),
+            new("novolis_igEnd", RaylibNativeSignatures.VoidVoid),
+            new("novolis_igButton", RaylibNativeSignatures.ImguiIntUtf8),
+            new("novolis_igText", RaylibNativeSignatures.ImguiVoidUtf8),
+            new("novolis_igCheckbox", RaylibNativeSignatures.ImguiIntUtf8OutInt),
+            new("novolis_igSliderFloat", RaylibNativeSignatures.ImguiIntUtf8OutFloatFloatFloat),
+            new("novolis_igSameLine", RaylibNativeSignatures.ImguiVoidFloatFloat),
+            new("novolis_igSeparator", RaylibNativeSignatures.VoidVoid),
         }
     );
 }

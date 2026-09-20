@@ -32,7 +32,7 @@ public sealed class RaylibManifestSuggesterUnitTests
         const string repoRoot = @"C:\novolis\raylib-test";
         var env = CodegenTestEnvironment.CreateMock(repoRoot, new Dictionary<string, string>());
         var manifests = CodegenTestEnvironment.Manifests(
-            CodegenTestEnvironment.InteropFragment(new InteropImportSpec("InitWindow", "void_v")));
+            CodegenTestEnvironment.InteropFragment(new InteropImportSpec("InitWindow", NativeSignature.Create(NativeType.Void))));
         var code = RaylibManifestSuggester.Suggest(env, manifests);
         await Assert.That(code).IsEqualTo(2);
     }
@@ -49,7 +49,7 @@ public sealed class RaylibManifestSuggesterUnitTests
                     "RLAPI void InitWindow(int w, int h, const char* t);\nRLAPI void CloseWindow(void);\n",
             });
         var manifests = CodegenTestEnvironment.Manifests(
-            CodegenTestEnvironment.InteropFragment(new InteropImportSpec("InitWindow", "void_v")));
+            CodegenTestEnvironment.InteropFragment(new InteropImportSpec("InitWindow", NativeSignature.Create(NativeType.Void))));
         var code = RaylibManifestSuggester.Suggest(env, manifests);
         await Assert.That(code).IsEqualTo(0);
     }
