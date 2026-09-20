@@ -157,7 +157,7 @@ public sealed class RaylibManifestVerifierTests
         const string repoRoot = @"C:\novolis\pipeline-test";
         var env = PipelineTestEnvironment.CreateMock(repoRoot, new Dictionary<string, string>());
         var code = RaylibManifestVerifier.Verify(env, PipelineTestEnvironment.Manifests(
-            PipelineTestEnvironment.Interop(new InteropImportSpec("InitWindow", "void_v"))));
+            PipelineTestEnvironment.Interop(new InteropImportSpec("InitWindow", NativeSignature.Create(NativeType.Void)))));
         await Assert.That(code).IsEqualTo(0);
     }
 
@@ -175,7 +175,7 @@ public sealed class RaylibManifestVerifierTests
         var code = RaylibManifestVerifier.Verify(
             env,
             PipelineTestEnvironment.Manifests(
-                PipelineTestEnvironment.Interop(new InteropImportSpec("MissingSymbol", "void_v"))));
+                PipelineTestEnvironment.Interop(new InteropImportSpec("MissingSymbol", NativeSignature.Create(NativeType.Void)))));
         await Assert.That(code).IsEqualTo(4);
     }
 
@@ -193,7 +193,7 @@ public sealed class RaylibManifestVerifierTests
         var code = RaylibManifestVerifier.Verify(
             env,
             PipelineTestEnvironment.Manifests(
-                PipelineTestEnvironment.Interop(new InteropImportSpec("InitWindow", "void_v"))));
+                PipelineTestEnvironment.Interop(new InteropImportSpec("InitWindow", NativeSignature.Create(NativeType.Void)))));
         await Assert.That(code).IsEqualTo(0);
     }
 }
