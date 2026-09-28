@@ -11,8 +11,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
-    <PackageReference Include="Novolis.CodeGen.Bindings" />
-    <PackageReference Include="Novolis.CodeGen.Bindings.Roslyn" />
+    <LibraryReference Include="Novolis.CodeGen.Bindings" />
+    <LibraryReference Include="Novolis.CodeGen.Bindings.Roslyn" />
   </ItemGroup>
 
   <ItemGroup>
