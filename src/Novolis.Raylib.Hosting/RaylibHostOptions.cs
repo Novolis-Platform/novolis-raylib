@@ -23,13 +23,3 @@ public sealed class RaylibHostOptions
     /// <summary>Fixed timestep for <see cref="IFixedUpdateSystem"/> when using <see cref="RaylibLoopModel.EventLoop"/>.</summary>
     public float FixedTimestepSeconds { get; set; } = 1f / 60f;
 }
-
-/// <summary>Hosted loop scheduling model.</summary>
-public enum RaylibLoopModel
-{
-    /// <summary>Render-driven loop: update systems run before each frame draw.</summary>
-    RenderLoop,
-
-    /// <summary>Event-driven loop with accumulated fixed updates.</summary>
-    EventLoop,
-}

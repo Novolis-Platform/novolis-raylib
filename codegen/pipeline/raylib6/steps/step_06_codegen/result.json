@@ -1,98 +1,93 @@
 {
   "stepId": "step_06_codegen",
   "status": "Succeeded",
-  "startedUtc": "2026-09-18T10:25:34.7017893+00:00",
-  "durationMs": 1345,
+  "startedUtc": "2026-09-30T09:42:56.7051318+00:00",
+  "durationMs": 1196,
   "pipelineVersion": "1",
   "inputs": {
-    "codegen/Novolis.Raylib.Manifests/AssemblyInfo.cs": "338f98d2d0f313f8824ede9a90ac687b8408f5b26529f9a96944c93dc9aef811",
-    "codegen/Novolis.Raylib.Manifests/FacadesManifest.cs": "15f3f316c248af4fbdab3de9992603a50f0a8d36cdcd7b04b48eab16fa0ac925",
-    "codegen/Novolis.Raylib.Manifests/GuiManifest.cs": "8abf17f69f1e54bf8384ccac5faa7325a657c8c3b53da1bfca0091fb6fa7f766",
-    "codegen/Novolis.Raylib.Manifests/HudManifest.cs": "cf53fd23f567596d3f771267951a5fe4b42fed4da7d96333bbed57769f6428a1",
-    "codegen/Novolis.Raylib.Manifests/ImguiShimManifest.cs": "d0d08c460a5f06a346c6ae6eb767dff8bb5bdf97a235cc83a2ae73a93fc3d60f",
-    "codegen/Novolis.Raylib.Manifests/RayguiFacadeManifest.cs": "fcb590df74f168b99092b1e4ce50d128a1f187b1ecf8ba200bc8e0cdfd2f234f",
-    "codegen/Novolis.Raylib.Manifests/RayguiShimManifest.cs": "8fa07399c5b157f5599192d45465db6fa0d88d1903e09ebbcbea6267757d4860",
-    "codegen/Novolis.Raylib.Manifests/Raylib6InteropManifest.cs": "9972f905ee0db0eae95ba4617006a46f4e0c9aad64fe11c01291ee0bd90987de",
-    "codegen/Novolis.Raylib.Manifests/RaylibBindingManifestSource.cs": "2277bb53038bd8bf03b127774b8eb87575655cd289daa9195b12037cbc512058",
-    "codegen/Novolis.Raylib.Manifests/RaylibDebugManifest.cs": "8d18165eb9e54ec47570ef096c9aa4ab83fb7151c051350d4ab6736a7372c375",
-    "codegen/Novolis.Raylib.Manifests/RaylibManifestInputPaths.cs": "7f5f627ab8cb29888d22735af1b853bb89f190d99098f37ae42384e5a8f4716d",
-    "codegen/Novolis.Raylib.Manifests/obj/Debug/net10.0/.NETCoreApp,Version=v10.0.AssemblyAttributes.cs": "93d67476196ebfc80d1d7d8844b91146cfd678d105f5ce635eb900ca40610c9b",
-    "codegen/Novolis.Raylib.Manifests/obj/Debug/net10.0/Novolis.Raylib.Manifests.AssemblyInfo.cs": "2534bb0fa4866c94eb22376e3f316cf281a9840f81c6cc88da9a5bb3cae189ae",
-    "codegen/Novolis.Raylib.Manifests/obj/Debug/net10.0/Novolis.Raylib.Manifests.GlobalUsings.g.cs": "a3c6048bb4d922b1799a9977f84362a3787b68810cac67aa86ac3aa23295f227",
-    "codegen/Novolis.Raylib.Manifests/obj/Release/net10.0/.NETCoreApp,Version=v10.0.AssemblyAttributes.cs": "93d67476196ebfc80d1d7d8844b91146cfd678d105f5ce635eb900ca40610c9b",
-    "codegen/Novolis.Raylib.Manifests/obj/Release/net10.0/Novolis.Raylib.Manifests.AssemblyInfo.cs": "bf5ef4f1b94b2825bea97a25b82d2ee218785ac0171dbeeced5e3b8613df52f2",
-    "codegen/Novolis.Raylib.Manifests/obj/Release/net10.0/Novolis.Raylib.Manifests.GlobalUsings.g.cs": "a3c6048bb4d922b1799a9977f84362a3787b68810cac67aa86ac3aa23295f227"
+    "codegen/Novolis.Raylib.Manifests/AssemblyInfo.cs": "c57c9fef858a32613b17c697dda2e8466c65aa89a826eab7c9ae4c6bafa07539",
+    "codegen/Novolis.Raylib.Manifests/FacadesManifest.cs": "e78079dcc9da0372ba1a1ed394fdd70fba361707962a95146a56ac63f578c5a1",
+    "codegen/Novolis.Raylib.Manifests/GuiManifest.cs": "aba9d1a33a78357e452aa4edcf790ee2ff34f7e52349a75ae4e45647264ddb8c",
+    "codegen/Novolis.Raylib.Manifests/HudManifest.cs": "8f6675faca007d31172a541c38d09df66315742237ee6f403de5032184670b69",
+    "codegen/Novolis.Raylib.Manifests/ImguiShimManifest.cs": "7dcdedcd38c9d4dfcb4228b6c767ea099caaa459a17c43839c188d3727d797c7",
+    "codegen/Novolis.Raylib.Manifests/RayguiFacadeManifest.cs": "9b318d676ab7a08b4bd507a39920ee23f78a8277574a40d240c8dffa372c36af",
+    "codegen/Novolis.Raylib.Manifests/RayguiShimManifest.cs": "90bf84d0bca0fbe94258594ea777ddf0e5c2f42d92b78e256d8692bafba7d98a",
+    "codegen/Novolis.Raylib.Manifests/Raylib6InteropManifest.cs": "59c620c0196ed48480cb4730ed8f8538a579f936d04d524affe471040229fba6",
+    "codegen/Novolis.Raylib.Manifests/RaylibBindingManifestSource.cs": "0071504213803b0ee832b1ff04c0a1d500d7de79f4c083e2bbedcb251148dadb",
+    "codegen/Novolis.Raylib.Manifests/RaylibDebugManifest.cs": "01f261d946798d7d4eb7874e3dd2ad986a191ff8c760c57fd85eb62d6ef1cc88",
+    "codegen/Novolis.Raylib.Manifests/RaylibManifestInputPaths.cs": "f0733da7eb43debf67a4ad35e3f56ae81a4720c6d59e680a1dd040db90162082",
+    "codegen/Novolis.Raylib.Manifests/RaylibNativeSignatures.cs": "358147e2277f6fb1daceac41efd5e22f66ff2bb99066ab3ccc65347d99b9013a"
   },
   "outputs": [
     {
       "path": "src/Novolis.Raylib.Bindings/Interop/ImguiShimExports.g.cs",
-      "sha256": "58a3657186cdf91fbff7dde83d8bde51ea82641c4efb8ba4eeaee97ce720b2eb",
-      "bytes": 5392
+      "sha256": "a2c5b31e9e83755e763930e6ab0dd9da1aa91cdf8620583e227b1a428cb872b0",
+      "bytes": 5269
     },
     {
       "path": "src/Novolis.Raylib.Bindings/Interop/Raylib6Native.g.cs",
-      "sha256": "79d0e1ed66cb14ed6f9730bf38253dc35a9b3fe80cf0fe51ff665dd685debcef",
-      "bytes": 9449
+      "sha256": "aff59e690f94e3d633978bd8b822a2b71e7c9eaceb0a85901767453b2b2edf15",
+      "bytes": 9261
     },
     {
       "path": "src/Novolis.Raylib.Bindings/Interop/RaylibDebugFrameHooks.g.cs",
-      "sha256": "b1cc13c5df724574f5bd68a78242c5ddd4eaba07da6bf0bebd5700b81fa5c266",
-      "bytes": 2198
+      "sha256": "6f01a46bc268c0fac83421ee2fce2840336114bba7e1116e6c85197e1b6e7b57",
+      "bytes": 2142
     },
     {
       "path": "src/Novolis.Raylib.Runtime/Rendering/Graphics.g.cs",
-      "sha256": "65419cce8b36050159880931713d25ceefa5a105c7133a37a797e9254227c788",
-      "bytes": 4052
+      "sha256": "209729386892addc6f97dc112391d2d7c1457eaf224af79ec2d245c979604bb7",
+      "bytes": 3970
     },
     {
       "path": "src/Novolis.Raylib.Runtime/Rendering/Textures.g.cs",
-      "sha256": "8bef1b4a2d77446dae192098bff38c52765678624c3817eef6c1c7b27576d9fc",
-      "bytes": 1916
+      "sha256": "14e05ec131149979dff0d0a47bd6363b126619776d35c23eee0a3f017f18cace",
+      "bytes": 1875
     },
     {
       "path": "src/Novolis.Raylib.Runtime/Rendering/World.g.cs",
-      "sha256": "fd9ed9514021681781b03876d45fe953c48852faef26fce08b07420e33789694",
-      "bytes": 4731
+      "sha256": "845c7475e9c19acb3e85dbd70e295c8a9c3de78caeb663a6f6d9ef15ee6abc93",
+      "bytes": 4644
     },
     {
       "path": "src/Novolis.Raylib.Runtime/Windowing/Window.g.cs",
-      "sha256": "530efa1416fbe25e2326a71b20d6aa571c5a6b18fb227e53a26a99e4204550e0",
-      "bytes": 3810
+      "sha256": "df620c65630fb84844f80ef28e6751644627841ee4276093f85f0a4fbae37caa",
+      "bytes": 3725
     },
     {
       "path": "src/Novolis.Raylib.Runtime/Interact/Input.g.cs",
-      "sha256": "e3c4b4828ad626e58f3fe2eba15fe6cde8b0921a5142b036f38624cb181cc3fc",
-      "bytes": 3718
+      "sha256": "358a0b230031849b25d79032f5f726351b558b827ee28b2b6059d760d0fc2c18",
+      "bytes": 3633
     },
     {
       "path": "src/Novolis.Raylib.Runtime/Timing/Time.g.cs",
-      "sha256": "506aee91084aaa044ead88d92e7102e6310aa616f32b637fb6f185730f46e366",
-      "bytes": 865
+      "sha256": "20dbacd8a238c38263f9d4af29ea57a53586f8ffe6c57f6aa41b2d129f77380d",
+      "bytes": 841
     },
     {
       "path": "src/Novolis.Raylib.Runtime/Audio/AudioDevice.g.cs",
-      "sha256": "e9d51a334b33e506bd4f98111b7efc3a91765047c9a544170b79ca2a38a21e22",
-      "bytes": 844
+      "sha256": "d40922ab25a0b2eb62bb7f734725427a80da47f8bbb92a3ac3b0c14a8e00936e",
+      "bytes": 820
     },
     {
       "path": "src/Novolis.Raylib.Runtime/Hud/Hud.g.cs",
-      "sha256": "b69ea0c46541cd0a89c9422431737b5e6ae6ae4050a3a0e402296ac672c2726e",
-      "bytes": 3554
+      "sha256": "b7bfa5003c4b9cb565f8806468cb21e64dc78a4bf7b89ea92976a72c5e195723",
+      "bytes": 3483
     },
     {
       "path": "src/Novolis.Raylib.Runtime/Gui/Gui.g.cs",
-      "sha256": "40901db22208f5e6b12a404b5e6b6fe99aaf92fbd73876a128ac9a71ca4a12f2",
-      "bytes": 3261
+      "sha256": "d23f50a7284d3d9996f98008bede301f144ba2526385f11b7ebdae2883e80324",
+      "bytes": 3188
     },
     {
       "path": "src/Novolis.Raylib.Raygui/Interop/RayguiShimExports.g.cs",
-      "sha256": "8bf4dd39e877407bb7b675cbdc59d701479db049b7b260889ceb3d3a94710340",
-      "bytes": 9804
+      "sha256": "d9c32ab6512321cae5700781d33a895d3769c2ba95ee081ffb4bcc648de6b507",
+      "bytes": 9564
     },
     {
       "path": "src/Novolis.Raylib.Raygui/RayGui/RayGui.g.cs",
-      "sha256": "0f30d85ae62e1426ec493901890578ea78484e95f62ca726d502ea7bc980b73b",
-      "bytes": 4362
+      "sha256": "1eb341b68e590006bb066fd1a1a0c1d42e274eb31cd09ad08feeeb882e8c93d5",
+      "bytes": 4268
     }
   ]
 }

@@ -26,29 +26,3 @@ public static class RaylibInteropDebugRuntime
         return new RaylibInteropDebugLoopResult(r.Ok, r.Width, r.Height, r.FramesPresented);
     }
 }
-
-/// <inheritdoc cref="RaylibDebug.LoopOptions"/>
-public sealed class RaylibInteropDebugLoopOptions
-{
-    /// <inheritdoc cref="RaylibDebug.LoopOptions.Width"/>
-    public int Width { get; init; } = 320;
-
-    /// <inheritdoc cref="RaylibDebug.LoopOptions.Height"/>
-    public int Height { get; init; } = 240;
-
-    /// <inheritdoc cref="RaylibDebug.LoopOptions.WindowTitle"/>
-    public string WindowTitle { get; init; } = "Novolis.Raylib.InteropDebug";
-
-    /// <inheritdoc cref="RaylibDebug.LoopOptions.HideWindow"/>
-    public bool HideWindow { get; init; }
-
-    /// <inheritdoc cref="RaylibDebug.LoopOptions.MaxFrames"/>
-    public int MaxFrames { get; init; } = 3;
-}
-
-/// <inheritdoc cref="RaylibDebug.LoopResult"/>
-/// <param name="Ok">Whether the window initialized successfully.</param>
-/// <param name="Width">Window width used.</param>
-/// <param name="Height">Window height used.</param>
-/// <param name="FramesPresented">Number of frames presented.</param>
-public readonly record struct RaylibInteropDebugLoopResult(bool Ok, int Width, int Height, int FramesPresented);

@@ -1,0 +1,192 @@
+﻿using System.Drawing;
+using System.Numerics;
+using Novolis.Raylib.Abstractions;
+using Novolis.Raylib.Interact;
+using Novolis.Raylib.Rendering;
+using Novolis.Raylib.Shell;
+
+namespace Novolis.Raylib.Game;
+
+/// <summary>Per-frame drawing and input helpers for <c>RayGame.Run</c>.</summary>
+public sealed class RayGameContext
+{
+    private int _width;
+    private int _height;
+    private float _dt;
+
+    internal RayGameContext(int width, int height)
+    {
+        _width = width;
+        _height = height;
+    }
+
+    /// <summary>Current drawable width in pixels (updates when the window is resized).</summary>
+    public int Width => _width;
+
+    /// <summary>Current drawable height in pixels.</summary>
+    public int Height => _height;
+
+    /// <summary>Elapsed time for the current frame in seconds.</summary>
+    public float DeltaSeconds => _dt;
+
+    internal void SetScreen(int width, int height, float dt)
+    {
+        _width = width;
+        _height = height;
+        _dt = dt;
+    }
+
+    /// <summary>Clears the framebuffer via the HUD layer.</summary>
+    public void Clear(Color color) => Hud.Clear(color);
+
+    /// <summary>Begins 3D rendering with the given camera.</summary>
+    public void BeginWorld(Camera camera) => World.Begin(camera);
+
+    /// <summary>Ends the active 3D pass.</summary>
+    public void EndWorld() => World.End();
+
+    /// <summary>Draws an axis-aligned cube (ship-style placeholder).</summary>
+    public void DrawShipBox(Vector3 position, Vector3 size, Color color) =>
+        World.DrawCubeV(position, size, color);
+
+    /// <summary>Draws wireframe cube edges.</summary>
+    public void DrawShipWires(Vector3 position, Vector3 size, Color color) =>
+        World.DrawCubeWiresV(position, size, color);
+
+    /// <summary>Draws a 3D line segment.</summary>
+    public void DrawBolt(Vector3 from, Vector3 to, Color color) =>
+        World.DrawLine(from, to, color);
+
+    /// <summary>Draws a bolt with a midpoint sphere glow.</summary>
+    public void DrawLaserBolt(Vector3 from, Vector3 to, Color color)
+    {
+        World.DrawLine(from, to, color);
+        var dir = Vector3.Normalize(to - from);
+        var mid = from + dir * (Vector3.Distance(from, to) * 0.5f);
+        World.DrawSphere(mid, 0.12f, color);
+    }
+
+    /// <summary>Draws a filled sphere in world space.</summary>
+    public void DrawGlowSphere(Vector3 center, float radius, Color color) =>
+        World.DrawSphere(center, radius, color);
+
+    /// <summary>Draws a wireframe sphere in world space.</summary>
+    public void DrawGlowSphereWires(Vector3 center, float radius, Color color) =>
+        World.DrawSphereWires(center, radius, 8, 12, color);
+
+    /// <summary>Loads a texture from a file path.</summary>
+    public Texture LoadTexture(string path) => Textures.Load(path);
+
+    /// <summary>Unloads a texture from GPU memory.</summary>
+    public void UnloadTexture(Texture texture) => Textures.Unload(texture);
+
+    /// <summary>Returns whether a texture handle is valid.</summary>
+    public bool IsTextureValid(Texture texture) => Textures.IsValid(texture);
+
+    /// <summary>Draws a texture region in screen space (HUD).</summary>
+    public void DrawHudTexture(Texture texture, RectangleF dest, Color tint) =>
+        Hud.DrawTexturePro(texture, new RectangleF(0, 0, texture.Width, texture.Height), dest, default, 0f, tint);
+
+    /// <summary>Draws an XZ plane in the active 3D pass.</summary>
+    public void DrawPlane(Vector3 center, Vector2 size, Color color) =>
+        World.DrawPlane(center, size, color);
+
+    /// <summary>Draws a camera-facing billboard in the active 3D pass.</summary>
+    public void DrawBillboard(Camera camera, Texture texture, Vector3 position, float scale, Color tint) =>
+        World.DrawBillboard(camera, texture, position, scale, tint);
+
+    /// <summary>Draws a billboard with source rect and size in the active 3D pass.</summary>
+    public void DrawBillboardPro(
+        Camera camera,
+        Texture texture,
+        RectangleF source,
+        Vector3 position,
+        Vector2 size,
+        Color tint,
+        Vector3? up = null,
+        Vector2? origin = null,
+        float rotation = 0f) =>
+        World.DrawBillboardPro(
+            camera,
+            texture,
+            source,
+            position,
+            up ?? Vector3.UnitY,
+            size,
+            origin ?? Vector2.Zero,
+            rotation,
+            tint);
+
+    /// <summary>Draws text in screen space.</summary>
+    public void HudText(string text, int x, int y, int fontSize, Color color) =>
+        Hud.Text(text, x, y, fontSize, color);
+
+    /// <summary>Draws a filled screen rectangle.</summary>
+    public void HudRect(int x, int y, int w, int h, Color color) =>
+        Hud.Rect(x, y, w, h, color);
+
+    /// <summary>Draws a screen-space line.</summary>
+    public void HudLine(int x1, int y1, int x2, int y2, Color color) =>
+        Hud.Line(x1, y1, x2, y2, color);
+
+    /// <summary>Returns whether the key is held down this frame.</summary>
+    public bool IsKeyDown(KeyboardKey key) => Input.IsKeyDown(key);
+
+    /// <summary>Returns whether the key was pressed this frame.</summary>
+    public bool IsKeyPressed(KeyboardKey key) => Input.IsKeyPressed(key);
+
+    /// <summary>Returns whether the mouse button is held down.</summary>
+    public bool IsMouseDown(MouseButton button) => Input.IsMouseButtonDown(button);
+
+    /// <summary>Returns whether the mouse button was pressed this frame.</summary>
+    public bool IsMousePressed(MouseButton button) => Input.IsMouseButtonPressed(button);
+
+    /// <summary>Mouse movement since the last frame.</summary>
+    public Vector2 MouseDelta => Input.GetMouseDelta();
+
+    /// <summary>Hides and locks the cursor (first-person style).</summary>
+    public void DisableCursor() => Input.DisableCursor();
+
+    /// <summary>Shows the cursor.</summary>
+    public void EnableCursor() => Input.EnableCursor();
+
+    /// <summary>Alias for <see cref="HudText"/>.</summary>
+    public void Text(string text, int x, int y, int fontSize, Color color) =>
+        HudText(text, x, y, fontSize, color);
+
+    /// <summary>Alias for <see cref="HudRect"/>.</summary>
+    public void Rect(int x, int y, int w, int h, Color color) =>
+        HudRect(x, y, w, h, color);
+
+    /// <summary>Draws a heightfield grid as wire segments between vertex samples.</summary>
+    public void DrawHeightfieldWires(
+        ReadOnlySpan<Vector3> vertices,
+        int cellsX,
+        int cellsZ,
+        Color cellDiagonalColor,
+        Color gridLineColor)
+    {
+        var stride = cellsX + 1;
+        for (var z = 0; z < cellsZ; z++)
+        {
+            for (var x = 0; x < cellsX; x++)
+            {
+                var i00 = z * stride + x;
+                var i10 = i00 + 1;
+                var i01 = i00 + stride;
+                DrawBolt(vertices[i00], vertices[i10], cellDiagonalColor);
+                DrawBolt(vertices[i00], vertices[i01], cellDiagonalColor);
+            }
+        }
+
+        for (var x = 0; x <= cellsX; x++)
+        {
+            for (var z = 0; z < cellsZ; z++)
+            {
+                var a = vertices[z * stride + x];
+                var b = vertices[(z + 1) * stride + x];
+                DrawBolt(a, b, gridLineColor);
+            }
+        }
+    }
+}

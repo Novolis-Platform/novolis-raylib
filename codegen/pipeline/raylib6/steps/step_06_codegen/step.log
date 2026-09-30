@@ -1,11 +1,17 @@
-# step_06_codegen — 2026-09-18T10:25:34.7017893+00:00
+# step_06_codegen — 2026-09-30T09:42:56.7051318+00:00
 # force=False
 
-emit: raylib interop
-emit: imgui interop
-emit: raygui interop
-emit: debug hooks
-emit: facades
-emit: hud
-emit: gui
-emit: raygui
+emit: raylib interop -> src/Novolis.Raylib.Bindings/Interop/Raylib6Native.g.cs
+emit: imgui interop -> src/Novolis.Raylib.Bindings/Interop/ImguiShimExports.g.cs
+emit: raygui interop -> src/Novolis.Raylib.Raygui/Interop/RayguiShimExports.g.cs
+emit: raylib debug hooks -> src/Novolis.Raylib.Bindings/Interop/RaylibDebugFrameHooks.g.cs
+emit: facades Graphics -> src/Novolis.Raylib.Runtime\Rendering\Graphics.g.cs
+emit: facades Window -> src/Novolis.Raylib.Runtime\Windowing\Window.g.cs
+emit: facades Input -> src/Novolis.Raylib.Runtime\Interact\Input.g.cs
+emit: facades World -> src/Novolis.Raylib.Runtime\Rendering\World.g.cs
+emit: facades Textures -> src/Novolis.Raylib.Runtime\Rendering\Textures.g.cs
+emit: facades Time -> src/Novolis.Raylib.Runtime\Timing\Time.g.cs
+emit: facades AudioDevice -> src/Novolis.Raylib.Runtime\Audio\AudioDevice.g.cs
+emit: hud Hud -> src/Novolis.Raylib.Runtime\Hud\Hud.g.cs
+emit: gui Gui -> src/Novolis.Raylib.Runtime\Gui\Gui.g.cs
+emit: raygui RayGui -> src/Novolis.Raylib.Raygui\RayGui\RayGui.g.cs
