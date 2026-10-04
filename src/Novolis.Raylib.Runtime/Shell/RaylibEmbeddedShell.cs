@@ -28,7 +28,7 @@ public static class RaylibEmbeddedShell
         ArgumentNullException.ThrowIfNull(frameRenderer);
         ArgumentNullException.ThrowIfNull(onFrame);
 
-        using var glfwLock = RaylibGlfwProcessSync.Enter();
+        using var glfwLock = RaylibGlfwProcessSync.Enter(RaylibGlfwProcessSync.EmbeddedHostTimeout);
         Logger.SetTraceLogLevel(TraceLogLevel.Warning);
         AudioDevice.Init();
 

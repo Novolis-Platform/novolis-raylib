@@ -11,38 +11,98 @@ namespace Novolis.Raylib.Shell;
 
 /// <summary>
 /// Persistent hidden GLFW host for on-demand single-frame rendering (UI bridges).
+/// Only one instance may exist per process — GLFW / raylib is not multi-window safe here.
 /// </summary>
 public sealed class RaylibEmbeddedHost : IDisposable
 {
+    private static int s_activeHosts;
+
     private RaylibGlfwProcessSync.LockScope _glfwScope;
     private RaylibEmbeddedOptions _options;
     private byte[] _buffer;
     private bool _initialized;
     private bool _disposed;
+    private bool _ownsProcessSlot;
 
     private RaylibEmbeddedHost(RaylibGlfwProcessSync.LockScope glfwScope, RaylibEmbeddedOptions options, byte[] buffer)
     {
         _glfwScope = glfwScope;
         _options = options;
         _buffer = buffer;
+        _ownsProcessSlot = true;
     }
+
+    /// <summary>True when this process already has an embedded GLFW host.</summary>
+    public static bool IsProcessHostActive => Volatile.Read(ref s_activeHosts) != 0;
 
     /// <summary>Creates and initializes a hidden Raylib window (process-wide GLFW lock held for host lifetime).</summary>
     public static RaylibEmbeddedHost Create(RaylibEmbeddedOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
-        var glfwScope = RaylibGlfwProcessSync.Enter();
-        Logger.SetTraceLogLevel(TraceLogLevel.Warning);
-        AudioDevice.Init();
+        return CreateCore(options, static host =>
+        {
+            Logger.SetTraceLogLevel(TraceLogLevel.Warning);
+            AudioDevice.Init();
+            try
+            {
+                host.InitializeWindow();
+            }
+            catch
+            {
+                AudioDevice.Close();
+                throw;
+            }
+        });
+    }
 
-        var width = Math.Max(64, options.Width);
-        var height = Math.Max(64, options.Height);
-        var host = new RaylibEmbeddedHost(
-            glfwScope,
-            options,
-            new byte[width * height * 4]);
-        host.InitializeWindow();
-        return host;
+    /// <summary>Same lock + process-slot contract as <see cref="Create"/>, with a caller-supplied initialize step (tests).</summary>
+    internal static RaylibEmbeddedHost CreateCore(RaylibEmbeddedOptions options, Action<RaylibEmbeddedHost> initialize)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+        ArgumentNullException.ThrowIfNull(initialize);
+
+        if (Interlocked.CompareExchange(ref s_activeHosts, 1, 0) != 0)
+        {
+            throw new InvalidOperationException(
+                "Only one Raylib embedded GLFW host may run per process.");
+        }
+
+        var lockHeld = false;
+        RaylibGlfwProcessSync.LockScope glfwScope = default;
+        try
+        {
+            glfwScope = RaylibGlfwProcessSync.Enter(RaylibGlfwProcessSync.EmbeddedHostTimeout);
+            lockHeld = true;
+
+            var width = Math.Max(64, options.Width);
+            var height = Math.Max(64, options.Height);
+            var host = new RaylibEmbeddedHost(
+                glfwScope,
+                options,
+                new byte[width * height * 4]);
+            initialize(host);
+            return host;
+        }
+        catch
+        {
+            if (lockHeld)
+                glfwScope.Dispose();
+
+            Interlocked.Exchange(ref s_activeHosts, 0);
+            throw;
+        }
+    }
+
+    /// <summary>Holds the process slot without opening a window (unit tests).</summary>
+    internal static IDisposable OccupyProcessSlotForTests()
+    {
+        if (Interlocked.CompareExchange(ref s_activeHosts, 1, 0) != 0)
+        {
+            throw new InvalidOperationException(
+                "Only one Raylib embedded GLFW host may run per process.");
+        }
+
+        return new ProcessSlotReleaser();
     }
 
     /// <summary>Current framebuffer width in pixels.</summary>
@@ -126,9 +186,11 @@ public sealed class RaylibEmbeddedHost : IDisposable
 
         AudioDevice.Close();
         _glfwScope.Dispose();
+        if (_ownsProcessSlot)
+            Interlocked.Exchange(ref s_activeHosts, 0);
     }
 
-    private void InitializeWindow()
+    internal void InitializeWindow()
     {
         if (_initialized)
             return;
@@ -148,5 +210,18 @@ public sealed class RaylibEmbeddedHost : IDisposable
 
         Time.SetTargetFPS(Math.Clamp(_options.TargetFps, 1, 240));
         _initialized = true;
+    }
+
+    private sealed class ProcessSlotReleaser : IDisposable
+    {
+        private int _released;
+
+        public void Dispose()
+        {
+            if (Interlocked.Exchange(ref _released, 1) != 0)
+                return;
+
+            Interlocked.Exchange(ref s_activeHosts, 0);
+        }
     }
 }
