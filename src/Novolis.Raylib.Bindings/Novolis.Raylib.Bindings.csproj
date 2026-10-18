@@ -102,6 +102,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <LibraryReference Include="Novolis.MSBuild.CodeGen" />
     <ProjectReference Include="..\Novolis.Raylib.Native\Novolis.Raylib.Native.csproj">
       <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
       <Version>$(NovolisPlatformVersion)</Version>
