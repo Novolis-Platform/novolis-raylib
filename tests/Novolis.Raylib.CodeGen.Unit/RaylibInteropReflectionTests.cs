@@ -94,6 +94,47 @@ public sealed class RaylibInteropReflectionTests
     }
 
     [Test]
+    public async Task Raygui_control_results_remain_integer_abi_with_bool_facade_projection()
+    {
+        var raygui = RaylibBindingManifestSource.Instance.GetRequired<ShimExportsFragment>(
+            FragmentKind.ShimExports,
+            "raygui");
+        var resultExports = new[]
+        {
+            "GuiPanel",
+            "GuiGroupBox",
+            "GuiLine",
+            "GuiLabel",
+            "GuiStatusBar",
+            "GuiDummyRec",
+            "GuiButton",
+            "GuiLabelButton",
+            "GuiToggle",
+            "GuiCheckBox",
+            "GuiComboBox",
+            "GuiSlider",
+            "GuiSliderBar",
+            "GuiProgressBar",
+        };
+
+        foreach (var exportName in resultExports)
+        {
+            var export = raygui.Exports.Single(item => item.Export == exportName);
+            await Assert.That(export.Signature.ReturnType.CSharpTypeName).IsEqualTo("int");
+        }
+
+        var facade = RaylibBindingManifestSource.Instance.GetRequired<FacadeTypesFragment>(
+            FragmentKind.FacadeTypes,
+            "raygui");
+        var rayGui = facade.Types.Single(type => type.Name == "RayGui");
+        foreach (var methodName in new[] { "Panel", "Button", "Toggle", "CheckBox", "ComboBox", "Slider", "SliderBar", "ProgressBar" })
+        {
+            var method = rayGui.Methods.Single(method => method.Name == methodName);
+            await Assert.That(method.Signature).StartsWith("bool ");
+        }
+    }
+
+    [Test]
     public async Task Imgui_function_count_matches_export_pointer_fields()
     {
         var imgui = RaylibBindingManifestSource.Instance.GetRequired<ShimExportsFragment>(
@@ -108,5 +149,22 @@ public sealed class RaylibInteropReflectionTests
         await Assert.That(imgui.Exports.All(export => export.Signature.Parameters is not null)).IsTrue();
         foreach (var export in imgui.Exports)
             await Assert.That(fields.Any(field => field.Name == $"{export.Export}_ptr")).IsTrue();
+    }
+
+    [Test]
+    public async Task RayCimgui_compatibility_header_covers_pinned_api_drift()
+    {
+        var root = RepoTestPaths.TryRepositoryRoot()
+                   ?? throw new InvalidOperationException("Could not resolve repository root.");
+        var headerPath = Path.Combine(
+            root,
+            "codegen",
+            "native",
+            "raylib6-with-imgui",
+            "raycimgui_compat.h");
+        var header = await File.ReadAllTextAsync(headerPath);
+
+        await Assert.That(header).Contains("#define igGetContentRegionAvail(out)");
+        await Assert.That(header).Contains("#define CmdListsCount CmdLists.Size");
     }
 }

@@ -9,7 +9,7 @@
     <AssemblyName>Novolis.Raylib.Raygui</AssemblyName>
     <PackageId>Novolis.Raylib.Raygui</PackageId>
     <IsPackable>true</IsPackable>
-    <Description>raygui widgets add-on for Novolis.Raylib (optional; requires novolis_raygui native).</Description>
+    <Description>raygui 5.0 widgets add-on for Novolis.Raylib (optional; requires novolis_raygui native).</Description>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,10 +24,17 @@
   </ItemGroup>
 
   <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
-    <None Include="$(MSBuildThisFileDirectory)..\..\native\raylib6-with-raygui\out\novolis_raygui.dll"
+    <None Include="$(MSBuildThisFileDirectory)..\..\codegen\native\raylib6-with-raygui\out\novolis_raygui.dll"
           Link="novolis_raygui.dll"
           CopyToOutputDirectory="PreserveNewest"
-          Condition="Exists('$(MSBuildThisFileDirectory)..\..\native\raylib6-with-raygui\out\novolis_raygui.dll')" />
+          Condition="Exists('$(MSBuildThisFileDirectory)..\..\codegen\native\raylib6-with-raygui\out\novolis_raygui.dll')" />
+  </ItemGroup>
+
+  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+    <None Include="$(MSBuildThisFileDirectory)..\..\codegen\native\raylib6-with-raygui\out\libnovolis_raygui.so"
+          Link="libnovolis_raygui.so"
+          CopyToOutputDirectory="PreserveNewest"
+          Condition="Exists('$(MSBuildThisFileDirectory)..\..\codegen\native\raylib6-with-raygui\out\libnovolis_raygui.so')" />
   </ItemGroup>
 
 </Project>

@@ -6,7 +6,7 @@
 
 # Novolis.Raylib.Bindings
 
-Generated P/Invoke for raylib 6 and the raygui shim, plus hand-edited public wrappers.
+Generated P/Invoke for raylib 6.2 and the raygui 5.0 shim, plus hand-edited public wrappers.
 
 **Application authors:** use **`Novolis.Raylib.Runtime`** façades (`Graphics`, `World`, `Hud`, `Gui`). This package is for advanced scenarios and is pulled in transitively.
 

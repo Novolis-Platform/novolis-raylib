@@ -1,6 +1,8 @@
 # Codegen
 
-Bindings are generated from JSON manifests under `codegen/pipeline/raylib6/`.
+Bindings are generated from C# manifest fragments under
+`codegen/Novolis.Raylib.Manifests/`. The pinned upstream versions and
+download hashes live in `codegen/pipeline/raylib6/versions.json`.
 
 ## Linear pipeline
 
@@ -12,8 +14,9 @@ Maintainer flow is a **step pipeline** under `codegen/pipeline/raylib6/steps/`. 
 
 | Step | Role |
 |------|------|
-| `step_01_source` | Fetch raylib, raygui, raylib-cimgui into `artifacts/` |
-| `step_02_native` | CMake build shims; copy DLLs into `artifacts/` |
+| `step_01_source` | Fetch verified raylib 6.2, raygui 5.0, cimgui, ImGui, and ray-cimgui sources into `artifacts/` |
+| `step_02_native` | CMake build shims; copy native outputs into `artifacts/` and checked-in RID runtimes |
+| `step_02a_android` | Build and stage Android arm64 `libraylib.a` plus the NativeActivity host |
 | `step_03_verify_manifest` | Manifest imports vs `raylib.h` |
 | `step_04_enrich_docs` | Fill façade summaries from headers |
 | `step_05_verify_docs` | Fail on missing docs |
@@ -38,18 +41,18 @@ On failure: open the first `steps/*/result.json` with `"status": "Failed"`, then
 - **Façades, Hud, Gui** → `src/Novolis.Raylib.Runtime/**/*.g.cs`
 - **RayGui add-on** → `src/Novolis.Raylib.Raygui/**/*.g.cs`
 
-Manifests:
+Manifest fragments:
 
 | File | Output |
 |------|--------|
-| `raylib-exports.manifest.json` | `Raylib6Native.g.cs` |
-| `imgui-exports.manifest.json` | `ImguiShimExports.g.cs` (Bindings) |
-| `raygui-exports.manifest.json` | `RayguiShimExports.g.cs` (Raygui add-on) |
-| `raylib-debug.manifest.json` | `RaylibDebugFrameHooks.g.cs` |
-| `facades.manifest.json` | `Graphics`, `World`, `Window`, … |
-| `hud.manifest.json` | `Hud` (screen-space 2D) |
-| `gui.manifest.json` | `Gui` (Dear ImGui) |
-| `raygui.manifest.json` | `RayGui` (optional raygui add-on) |
+| `Raylib6InteropManifest.cs` | `Raylib6Native.g.cs` |
+| `ImguiShimManifest.cs` | `ImguiShimExports.g.cs` (Bindings) |
+| `RayguiShimManifest.cs` | `RayguiShimExports.g.cs` (Raygui add-on) |
+| `RaylibDebugManifest.cs` | `RaylibDebugFrameHooks.g.cs` |
+| `FacadesManifest.cs` | `Graphics`, `World`, `Window`, … |
+| `HudManifest.cs` | `Hud` (screen-space 2D) |
+| `GuiManifest.cs` | `Gui` (Dear ImGui) |
+| `RayguiFacadeManifest.cs` | `RayGui` (optional raygui add-on) |
 
 Regenerate bindings only:
 

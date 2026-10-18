@@ -45,7 +45,7 @@ public sealed class RaylibCodegenPipelineTests
                     "Novolis.Raylib.Interop",
                     "Novolis.Raylib.Bindings",
                     LibraryConstantName: "RaylibDll",
-                    TypeSummary: "Low-level raylib 6 entry points (manifest-generated <c>[LibraryImport]</c>).",
+                    TypeSummary: "Low-level raylib 6.2 entry points (manifest-generated <c>[LibraryImport]</c>).",
                     StructSummary: "Blittable layout for raylib C struct (generated from manifest)."),
                 context));
         await Assert.That(emitted).Contains($"// ManifestSha256: {manifestSha256}");

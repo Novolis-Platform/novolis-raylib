@@ -4,7 +4,7 @@ using Novolis.Raylib.Interop;
 namespace Novolis.Raylib;
 
 /// <summary>
-/// Loads <c>novolis_raygui</c> (raygui built against raylib 6; see <c>native/raylib6-with-raygui</c>).
+/// Loads <c>novolis_raygui</c> (raygui 5.0 built against raylib 6.2; see <c>native/raylib6-with-raygui</c>).
 /// </summary>
 public static class RayguiShimHost
 {
@@ -46,7 +46,7 @@ public static class RayguiShimHost
             {
                 NativeLibrary.Free(module);
                 _failureMessage =
-                    $"Raygui shim export binding failed ({ShimLibraryName}): {bindError}. Regenerate interop and rebuild native.";
+                    $"Raygui shim export binding failed ({ShimLibraryName}): {bindError}. Regenerate interop and rebuild native with 'dotnet run --project codegen/Novolis.Raylib.Pipeline -- run maintainer'.";
                 _state = StateFailed;
                 throw new InvalidOperationException(_failureMessage);
             }
@@ -59,7 +59,7 @@ public static class RayguiShimHost
     private static string BuildShimLoadFailureMessage(string shimPath, string baseDir)
     {
         var fileName = Path.GetFileName(shimPath);
-        return $"Required raygui native shim was not loaded: expected '{fileName}' in '{baseDir}'. Run: dotnet run pipeline/raylib6/run.cs native";
+        return $"Required raygui native shim was not loaded: expected '{fileName}' in '{baseDir}'. Run: dotnet run --project codegen/Novolis.Raylib.Pipeline -- run maintainer";
     }
 
     private static string ShimLibraryName =>

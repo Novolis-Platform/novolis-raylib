@@ -8,7 +8,7 @@
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
     <PackageId>Novolis.Raylib.Native</PackageId>
     <IsPackable>true</IsPackable>
-    <Description>raylib 6, ImGui shim, and trace forwarder native binaries per RID (desktop); android-arm64 static libraylib.a + NativeActivity host .so (transitive; do not reference directly).</Description>
+    <Description>raylib 6.2, ImGui shim, and trace forwarder native binaries per RID (desktop); android-arm64 static libraylib.a + NativeActivity host .so (transitive; do not reference directly).</Description>
   </PropertyGroup>
 
   <ItemGroup>

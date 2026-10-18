@@ -7,8 +7,8 @@ public static partial class RaylibBindingManifests
     public static ShimExportsFragment RayguiShim { get; } = new(
         Id: "raygui",
         SchemaVersion: 1,
-        Header: "codegen/vendor/raygui-6/raygui.h",
-        Description: "Curated RAYGUIAPI exports bound via the novolis_raygui function-pointer shim.",
+        Header: "codegen/pipeline/raylib6/steps/step_01_source/artifacts/raygui/raygui.h",
+        Description: "Curated raygui 5.0 exports bound via the novolis_raygui function-pointer shim.",
         ModuleFileName: "novolis_raygui",
         Exports: new ShimExportSpec[]
         {

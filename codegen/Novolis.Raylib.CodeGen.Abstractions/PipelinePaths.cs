@@ -43,7 +43,7 @@ public static class PipelinePaths
         StepArtifactsDir(repoRoot, "step_01_source");
 
     public static string RaylibRoot(string repoRoot) =>
-        Path.Combine(SourceArtifactsDir(repoRoot), "raylib-6");
+        Path.Combine(SourceArtifactsDir(repoRoot), "raylib");
 
     public static string RaylibIncludeDir(string repoRoot) =>
         Path.Combine(RaylibRoot(repoRoot), "include");
@@ -61,7 +61,7 @@ public static class PipelinePaths
         Path.Combine(RaylibRoot(repoRoot), "prebuilt", "osx");
 
     public static string RayguiRoot(string repoRoot) =>
-        Path.Combine(SourceArtifactsDir(repoRoot), "raygui-6");
+        Path.Combine(SourceArtifactsDir(repoRoot), "raygui");
 
     public static string RayguiHeaderPath(string repoRoot) =>
         Path.Combine(RayguiRoot(repoRoot), "raygui.h");
@@ -83,6 +83,12 @@ public static class PipelinePaths
 
     public static string RaylibNativeLinuxX64Dir(string repoRoot) =>
         Path.Combine(repoRoot, "src", "Novolis.Raylib.Native", "runtimes", "linux-x64", "native");
+
+    public static string RayguiNativeWinX64Dir(string repoRoot) =>
+        Path.Combine(repoRoot, "src", "Novolis.Raylib.Raygui.Native", "runtimes", "win-x64", "native");
+
+    public static string RayguiNativeLinuxX64Dir(string repoRoot) =>
+        Path.Combine(repoRoot, "src", "Novolis.Raylib.Raygui.Native", "runtimes", "linux-x64", "native");
 
     public static string RaylibNativeOsxX64Dir(string repoRoot) =>
         Path.Combine(repoRoot, "src", "Novolis.Raylib.Native", "runtimes", "osx-x64", "native");

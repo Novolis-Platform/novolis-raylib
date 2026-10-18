@@ -6,7 +6,7 @@
 
 # Novolis.Raylib
 
-One-line install for the full Novolis Raylib stack: [raylib](https://www.raylib.com/) 6, raygui, generated façades, Game and Hosting entry APIs.
+One-line install for the full Novolis Raylib stack: [raylib](https://www.raylib.com/) 6.2, raygui 5.0, generated façades, Game and Hosting entry APIs.
 
 ## Install
 
@@ -56,5 +56,5 @@ Set `NOVOLIS_RAYLIB_HEADLESS=1` to skip the blocking window loop (samples and te
 
 ## Support
 
-Pre-release (`0.1.x-alpha`). Windows is the primary CI platform; Linux/macOS RIDs are packaged when vendor prebuilts exist.
+Pre-release (`0.1.x-alpha`). Windows and Linux x64 are supported desktop RIDs; Android arm64 is supported through the NativeActivity host. macOS is not currently packaged.
 

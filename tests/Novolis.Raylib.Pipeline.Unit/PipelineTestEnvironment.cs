@@ -51,7 +51,7 @@ internal static class PipelineTestEnvironment
             "steps",
             "step_01_source",
             "artifacts",
-            "raylib-6",
+            "raylib",
             "include",
             "raylib.h");
 

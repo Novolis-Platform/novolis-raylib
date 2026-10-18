@@ -1,0 +1,68 @@
+# step_02a_android — 2026-10-18T12:45:35.8932438+00:00
+# force=True
+
+Using NDK: C:\Users\frank\AppData\Local\Android\Sdk\ndk\android-ndk-r27c
+Cloning https://github.com/raysan5/raylib.git (tag 6.2) -> d:\novolis\novolis-raylib\codegen\pipeline\raylib6\steps\step_02a_android\artifacts\raylib
+$ git clone --depth 1 --branch 6.2 "https://github.com/raysan5/raylib.git" "d:\novolis\novolis-raylib\codegen\pipeline\raylib6\steps\step_02a_android\artifacts\raylib"
+Cloning into 'd:\novolis\novolis-raylib\codegen\pipeline\raylib6\steps\step_02a_android\artifacts\raylib'...
+Note: switching to '02566453880e06bec97f5b8160fa6fe1e98397ca'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+
+$ git -C "d:\novolis\novolis-raylib\codegen\pipeline\raylib6\steps\step_02a_android\artifacts\raylib" checkout --detach 02566453880e06bec97f5b8160fa6fe1e98397ca
+HEAD is now at 0256645 Updated Npp autocomplete data
+
+$ cmake -S "d:\novolis\novolis-raylib\codegen\pipeline\raylib6\steps\step_02a_android\artifacts\raylib" -B "d:\novolis\novolis-raylib\codegen\pipeline\raylib6\steps\step_02a_android\artifacts\raylib-build-android-arm64" -G Ninja -DCMAKE_TOOLCHAIN_FILE="C:\Users\frank\AppData\Local\Android\Sdk\ndk\android-ndk-r27c\build\cmake\android.toolchain.cmake" -DANDROID_ABI=arm64-v8a -DANDROID_PLATFORM=android-24 -DPLATFORM=Android -DBUILD_SHARED_LIBS=OFF -DBUILD_EXAMPLES=OFF -DCMAKE_BUILD_TYPE=Release
+-- Testing if -Werror=pointer-arith can be used -- compiles
+-- Testing if -Werror=implicit-function-declaration can be used -- compiles
+-- Testing if -fno-strict-aliasing can be used -- compiles
+-- Testing if -ffunction-sections can be used -- compiles
+-- Testing if -funwind-tables can be used -- compiles
+-- Testing if -fstack-protector-strong can be used -- compiles
+-- Testing if -Wa,--noexecstack can be used -- compiles
+-- Testing if -no-canonical-prefixes can be used -- compiles
+-- Using external GLFW
+-- Audio Backend: miniaudio
+-- Building raylib static library
+-- Generated build type: Release
+-- Compiling with the flags:
+--   PLATFORM=PLATFORM_ANDROID
+--   GRAPHICS=GRAPHICS_API_OPENGL_ES2
+-- Configuring done (0.1s)
+-- Generating done (0.0s)
+-- Build files have been written to: D:/novolis/novolis-raylib/codegen/pipeline/raylib6/steps/step_02a_android/artifacts/raylib-build-android-arm64
+
+$ cmake --build "d:\novolis\novolis-raylib\codegen\pipeline\raylib6\steps\step_02a_android\artifacts\raylib-build-android-arm64" --config Release
+[1/7] Building C object raylib/CMakeFiles/raylib.dir/rshapes.c.o
+[2/7] Building C object raylib/CMakeFiles/raylib.dir/rtext.c.o
+[3/7] Building C object raylib/CMakeFiles/raylib.dir/rcore.c.o
+[4/7] Building C object raylib/CMakeFiles/raylib.dir/rtextures.c.o
+[5/7] Building C object raylib/CMakeFiles/raylib.dir/rmodels.c.o
+[6/7] Building C object raylib/CMakeFiles/raylib.dir/raudio.c.o
+[7/7] Linking C static library raylib\libraylib.a
+
+$ cmake -S "d:\novolis\novolis-raylib\codegen\native\raylib6-android-host" -B "d:\novolis\novolis-raylib\codegen\native\raylib6-android-host\build-android-arm64" -G Ninja -DCMAKE_TOOLCHAIN_FILE="C:\Users\frank\AppData\Local\Android\Sdk\ndk\android-ndk-r27c\build\cmake\android.toolchain.cmake" -DANDROID_ABI=arm64-v8a -DANDROID_PLATFORM=android-24 -DCMAKE_BUILD_TYPE=Release -DRAYLIB_ANDROID_LIB="d:\novolis\novolis-raylib\codegen\pipeline\raylib6\steps\step_02a_android\artifacts\raylib-build-android-arm64\raylib\libraylib.a" -DRAYLIB_ANDROID_INCLUDE="d:\novolis\novolis-raylib\codegen\pipeline\raylib6\steps\step_02a_android\artifacts\raylib\src"
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: D:/novolis/novolis-raylib/codegen/native/raylib6-android-host/build-android-arm64
+
+$ cmake --build "d:\novolis\novolis-raylib\codegen\native\raylib6-android-host\build-android-arm64" --config Release
+[1/2] Building C object CMakeFiles/novolis_raylib_android.dir/main.c.o
+[2/2] Linking C shared library D:\novolis\novolis-raylib\codegen\native\raylib6-android-host\out\libnovolis_raylib_android.so
+
+Staged d:\novolis\novolis-raylib\src\Novolis.Raylib.Native\runtimes\android-arm64\native\libraylib.a
+Staged d:\novolis\novolis-raylib\src\Novolis.Raylib.Native\runtimes\android-arm64\native\libnovolis_raylib_android.so

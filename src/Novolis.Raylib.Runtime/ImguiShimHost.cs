@@ -46,7 +46,7 @@ public static class ImguiShimHost
             {
                 NativeLibrary.Free(module);
                 _failureMessage =
-                    $"ImGui shim export binding failed ({ShimLibraryName}): {bindError}. Regenerate interop and rebuild native (see pipeline/raylib6/BUILDING.txt).";
+                    $"ImGui shim export binding failed ({ShimLibraryName}): {bindError}. Regenerate interop and rebuild native with 'dotnet run --project codegen/Novolis.Raylib.Pipeline -- run maintainer' (see pipeline/raylib6/BUILDING.txt).";
                 _state = StateFailed;
                 throw new InvalidOperationException(_failureMessage);
             }
@@ -60,7 +60,7 @@ public static class ImguiShimHost
         var fileName = Path.GetFileName(shimPath);
         return
             $"Required ImGui native shim was not loaded: expected '{fileName}' in '{baseDir}'. "
-            + "Run: dotnet run pipeline/raylib6/run.cs all";
+            + "Run: dotnet run --project codegen/Novolis.Raylib.Pipeline -- run maintainer";
     }
 
     private static string ShimLibraryName =>

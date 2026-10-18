@@ -7,8 +7,8 @@ public static partial class RaylibBindingManifests
     public static InteropExportsFragment Raylib6Interop { get; } = new(
         Id: "raylib6",
         SchemaVersion: 2,
-        Header: "codegen/vendor/raylib-6/include/raylib.h",
-        Description: "Authoritative raylib 6 LibraryImport surface.",
+        Header: "codegen/pipeline/raylib6/steps/step_01_source/artifacts/raylib/include/raylib.h",
+        Description: "Authoritative raylib 6.2 LibraryImport surface.",
         DllName: "raylib",
         Policy: new(
             SuppressGcTransitionByFunction: [],

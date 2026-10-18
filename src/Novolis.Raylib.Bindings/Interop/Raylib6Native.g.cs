@@ -32,7 +32,7 @@ internal struct Raylib6NativeTexture
     public int Format;
 }
 
-/// <summary>Low-level raylib 6 entry points (manifest-generated <c>[LibraryImport]</c>).</summary>
+/// <summary>Low-level raylib 6.2 entry points (manifest-generated <c>[LibraryImport]</c>).</summary>
 internal static partial class Raylib6Native
 {
     private const string RaylibDll = "raylib";

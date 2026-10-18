@@ -70,7 +70,7 @@ internal static class CodegenTestEnvironment
             "steps",
             "step_01_source",
             "artifacts",
-            "raylib-6",
+            "raylib",
             "include",
             "raylib.h");
 }

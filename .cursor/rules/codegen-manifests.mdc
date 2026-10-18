@@ -1,6 +1,6 @@
 ---
-description: Manifest-driven codegen — edit JSON, then regenerate
-globs: codegen/pipeline/raylib6/**/*.json,codegen/**/*
+description: Manifest-driven codegen — edit C# fragments, then regenerate
+globs: codegen/Novolis.Raylib.Manifests/**/*.cs,codegen/**/*
 alwaysApply: false
 ---
 
@@ -8,8 +8,8 @@ alwaysApply: false
 
 | Goal | Edit | Then |
 |------|------|------|
-| New raylib import | `raylib-exports.manifest.json` | `generate` |
-| Public API method | `facades.manifest.json`, `hud.manifest.json`, or `gui.manifest.json` | `generate` |
+| New raylib import | `Raylib6InteropManifest.cs` | `generate` |
+| Public API method | `FacadesManifest.cs`, `HudManifest.cs`, or `GuiManifest.cs` | `generate` |
 | Roslyn transform | `codegen/Novolis.Raylib.CodeGen.Hooks/*.cs` | `generate` |
 | New interop template | `RaylibInteropEmitter.cs` + manifest row | `generate` |
 

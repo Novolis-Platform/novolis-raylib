@@ -28,8 +28,10 @@ RayGui (`novolis_raygui`) ships in **`Novolis.Raylib.Raygui.Native`** when you r
 |-----|--------|
 | `win-x64` | `raylib.dll`, `novolis_raylib_trace.dll`, `novolis_imgui.dll` |
 | `linux-x64` | `libraylib.so`, `libnovolis_raylib_trace.so`, `libnovolis_imgui.so` |
-| `osx-x64` | `libraylib.dylib`, `libnovolis_raylib_trace.dylib`, `libnovolis_imgui.dylib` |
 | `android-arm64` | `libraylib.a` (static), `libnovolis_raylib_android.so` (NativeActivity host; static-links raylib) |
+
+macOS (`osx-x64`) is not currently packaged. The conditional macOS slots remain reserved
+for a future raylib 6.2 macOS build and are not a supported target of this pipeline.
 
 ### Android notes
 

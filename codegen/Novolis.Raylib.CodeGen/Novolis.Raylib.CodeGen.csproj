@@ -7,7 +7,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>Novolis.Raylib.CodeGen</RootNamespace>
     <AssemblyName>Novolis.Raylib.CodeGen</AssemblyName>
-    <Description>Roslyn raylib 6 + raygui bindings codegen.</Description>
+    <Description>Roslyn raylib 6.2 + raygui 5.0 bindings codegen.</Description>
   </PropertyGroup>
 
   <ItemGroup>

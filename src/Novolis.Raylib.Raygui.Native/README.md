@@ -27,7 +27,9 @@ dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_02_native
 
 ## API
 
-No C# API. Ships `runtimes/{win-x64,linux-x64,osx-x64}/native/novolis_raygui.*`.
+No C# API. Ships `runtimes/{win-x64,linux-x64}/native/novolis_raygui.*`.
+macOS (`osx-x64`) is not currently packaged because the raylib 6.2 macOS native build
+is not part of the supported maintainer matrix.
 
 ## Related
 

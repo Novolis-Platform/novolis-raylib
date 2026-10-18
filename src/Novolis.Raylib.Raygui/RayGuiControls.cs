@@ -82,10 +82,10 @@ public static unsafe class RayGuiControls
             _ = RayguiShimExports.GuiLabel_ptr(ToRaygui(bounds), label);
     }
 
-    /// <summary>Draws a titled panel.</summary>
+    /// <summary>Draws a titled panel and projects raygui's integer result to a Boolean.</summary>
     /// <param name="bounds">Panel bounds.</param>
     /// <param name="title">Panel title.</param>
-    /// <returns>Whether the panel is expanded/visible.</returns>
+    /// <returns><see langword="true"/> when raygui reports a non-zero interaction result.</returns>
     public static bool Panel(RectangleF bounds, string title)
     {
         RayguiShimHost.EnsureInitialized();
@@ -111,11 +111,11 @@ public static unsafe class RayGuiControls
             _ = RayguiShimExports.GuiGroupBox_ptr(ToRaygui(bounds), text);
     }
 
-    /// <summary>Draws a toggle control.</summary>
+    /// <summary>Draws a toggle control and projects raygui's integer result to a Boolean.</summary>
     /// <param name="bounds">Widget bounds.</param>
     /// <param name="label">Label text.</param>
     /// <param name="active">Checked state; updated when toggled.</param>
-    /// <returns>Whether the value changed this frame.</returns>
+    /// <returns><see langword="true"/> when raygui reports a non-zero result.</returns>
     public static bool Toggle(RectangleF bounds, string label, ref bool active)
     {
         RayguiShimHost.EnsureInitialized();
@@ -134,11 +134,11 @@ public static unsafe class RayGuiControls
         }
     }
 
-    /// <summary>Draws a checkbox.</summary>
+    /// <summary>Draws a checkbox and projects raygui's integer result to a Boolean.</summary>
     /// <param name="bounds">Widget bounds.</param>
     /// <param name="label">Label text.</param>
     /// <param name="active">Checked state; updated when toggled.</param>
-    /// <returns>Whether the value changed this frame.</returns>
+    /// <returns><see langword="true"/> when raygui reports a non-zero result.</returns>
     public static bool CheckBox(RectangleF bounds, string label, ref bool active)
     {
         RayguiShimHost.EnsureInitialized();
@@ -157,11 +157,11 @@ public static unsafe class RayGuiControls
         }
     }
 
-    /// <summary>Draws a combo box.</summary>
+    /// <summary>Draws a combo box, preserving the selected index and projecting raygui's integer result to a Boolean.</summary>
     /// <param name="bounds">Widget bounds.</param>
     /// <param name="text">Items text (raygui format).</param>
     /// <param name="active">Selected index; updated when changed.</param>
-    /// <returns>Whether the selection changed this frame.</returns>
+    /// <returns><see langword="true"/> when raygui reports a non-zero result.</returns>
     public static bool ComboBox(RectangleF bounds, string text, ref int active)
     {
         RayguiShimHost.EnsureInitialized();
@@ -174,13 +174,13 @@ public static unsafe class RayGuiControls
             return RayguiShimExports.GuiComboBox_ptr(ToRaygui(bounds), label, activePtr) != 0;
     }
 
-    /// <summary>Draws a float slider with label.</summary>
+    /// <summary>Draws a float slider with label and projects raygui's integer result to a Boolean.</summary>
     /// <param name="bounds">Widget bounds.</param>
     /// <param name="label">Label text.</param>
     /// <param name="value">Current value; updated when dragged.</param>
     /// <param name="min">Minimum value.</param>
     /// <param name="max">Maximum value.</param>
-    /// <returns>Whether the value changed this frame.</returns>
+    /// <returns><see langword="true"/> when raygui reports a non-zero result.</returns>
     public static bool Slider(RectangleF bounds, string label, ref float value, float min, float max)
     {
         RayguiShimHost.EnsureInitialized();
@@ -193,13 +193,13 @@ public static unsafe class RayGuiControls
             return RayguiShimExports.GuiSlider_ptr(ToRaygui(bounds), textLeft, textLeft, valuePtr, min, max) != 0;
     }
 
-    /// <summary>Draws a slider bar (value bar style).</summary>
+    /// <summary>Draws a slider bar (value bar style) and projects raygui's integer result to a Boolean.</summary>
     /// <param name="bounds">Widget bounds.</param>
     /// <param name="label">Label text.</param>
     /// <param name="value">Current value; updated when dragged.</param>
     /// <param name="min">Minimum value.</param>
     /// <param name="max">Maximum value.</param>
-    /// <returns>Whether the value changed this frame.</returns>
+    /// <returns><see langword="true"/> when raygui reports a non-zero result.</returns>
     public static bool SliderBar(RectangleF bounds, string label, ref float value, float min, float max)
     {
         RayguiShimHost.EnsureInitialized();
@@ -212,13 +212,13 @@ public static unsafe class RayGuiControls
             return RayguiShimExports.GuiSliderBar_ptr(ToRaygui(bounds), textLeft, textLeft, valuePtr, min, max) != 0;
     }
 
-    /// <summary>Draws a progress bar.</summary>
+    /// <summary>Draws a progress bar and projects raygui's integer result to a Boolean.</summary>
     /// <param name="bounds">Widget bounds.</param>
     /// <param name="label">Label text.</param>
     /// <param name="value">Current value; updated when dragged.</param>
     /// <param name="min">Minimum value.</param>
     /// <param name="max">Maximum value.</param>
-    /// <returns>Whether the value changed this frame.</returns>
+    /// <returns><see langword="true"/> when raygui reports a non-zero result.</returns>
     public static bool ProgressBar(RectangleF bounds, string label, ref float value, float min, float max)
     {
         RayguiShimHost.EnsureInitialized();

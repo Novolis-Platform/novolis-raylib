@@ -1,4 +1,4 @@
-raylib 6 + raygui pipeline (Novolis.Raylib)
+raylib 6.2 + raygui 5.0 pipeline (Novolis.Raylib)
 =========================================
 
 Linear step pipeline with committed `result.json` + `step.log` per step under
@@ -23,27 +23,29 @@ Extend codegen behavior with hooks in codegen/Novolis.Raylib.CodeGen.Hooks/
 Steps
 -----
 
-1) step_01_source — vendor headers + prebuilt raylib, raygui.h, raylib-cimgui
+1) step_01_source — verified raylib 6.2 prebuilts, raygui 5.0, cimgui 1.92.9dock, ImGui, and ray-cimgui
    dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_01_source
 
-2) step_02_native — CMake shims (trace, ImGui, raygui) → step_02_native/artifacts/
+2) step_02_native — CMake desktop shims (trace, ImGui, raygui) → step_02_native/artifacts/
    dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_02_native
 
-3) step_03_verify_manifest — manifest imports vs raylib.h
+3) step_02a_android — Android arm64 static raylib + NativeActivity host
 
-4) step_04_enrich_docs / step_05_verify_docs — façade XML doc enrichment
+4) step_03_verify_manifest — manifest imports vs raylib.h
 
-5) step_06_codegen — Raylib6Native.g.cs, façades, Hud, Gui, RayGui (*.g.cs)
+5) step_04_enrich_docs / step_05_verify_docs — façade XML doc enrichment
 
-6) step_07_drift — git diff on pipeline manifests + generated C#
+6) step_06_codegen — Raylib6Native.g.cs, façades, Hud, Gui, RayGui (*.g.cs)
 
-7) step_08_build — Release build Bindings + Runtime (agent-verify profile)
+7) step_07_drift — git diff on pipeline manifests + generated C#
+
+8) step_08_build — Release build Bindings + Runtime (agent-verify profile)
 
 Outputs
 -------
-- codegen/pipeline/raylib6/steps/step_01_source/artifacts/raylib-6/
+- codegen/pipeline/raylib6/steps/step_01_source/artifacts/raylib/
 - codegen/pipeline/raylib6/steps/step_02_native/artifacts/*.dll
-- codegen/pipeline/raylib6/*.manifest.json → src/**/Interop/*.g.cs and Runtime/**/*.g.cs
+- codegen/Novolis.Raylib.Manifests/*.cs → src/**/Interop/*.g.cs and Runtime/**/*.g.cs
 
 Build .NET:
 

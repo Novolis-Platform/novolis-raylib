@@ -10,8 +10,8 @@
 </p>
 
 <p align="center">
-  <strong>Raylib 6 for modern .NET</strong><br/>
-  Multi-package Raylib 6 + raygui bindings, game API, hosting, and testing.
+  <strong>Raylib 6.2 for modern .NET</strong><br/>
+  Multi-package Raylib 6.2 + raygui 5.0 bindings, game API, hosting, and testing.
 </p>
 
 <p align="center">
@@ -61,7 +61,7 @@ For NuGet.org and Visual Studio, the **embedded** README.md inside each package 
 <!-- novolis-package-index:end -->
 # Novolis.Raylib
 
-Multi-package .NET bindings for [raylib](https://www.raylib.com/) 6 + raygui.
+Multi-package .NET bindings for [raylib](https://www.raylib.com/) 6.2 + raygui 5.0.
 
 ## Install
 
@@ -114,7 +114,7 @@ flowchart TB
 | **Novolis.Raylib.Runtime** | Generated façades (`Graphics`, `World`, `Hud`, `Gui`, …), window shell, logging, debug | Bindings, Abstractions, Native (assets) |
 | **Novolis.Raylib.Bindings** | Generated P/Invoke + shared types (`Camera`, `Texture`, …) | Native (assets) |
 | **Novolis.Raylib.Abstractions** | Frame/shell contracts (transitive) | Native (assets) |
-| **Novolis.Raylib.Native** | `raylib` + `novolis_raygui` binaries per RID (no managed code) | — |
+| **Novolis.Raylib.Native** | `raylib`, ImGui, and trace binaries per RID (no managed code) | — |
 | **Novolis.Raylib.Capture** | Per-frame framebuffer streaming (`FrameCaptureSession`) | Runtime |
 | **Novolis.Raylib.Testing** | Offscreen harness, golden QA, deterministic clock (tests only) | Novolis.Raylib, Capture |
 
@@ -124,7 +124,7 @@ flowchart TB
 dotnet add package Novolis.Raylib.Capture
 ```
 
-**Native assets:** `Novolis.Raylib.Native` packs prebuilt `raylib` from `codegen/pipeline/raylib6/steps/step_01_source/artifacts/` plus shims from `step_02_native/artifacts/` (built via maintainer pipeline). That is separate from **`Novolis.Raylib.Bindings`**, which holds the C# interop.
+**Native assets:** `Novolis.Raylib.Native` and `Novolis.Raylib.Raygui.Native` pack checked-in runtime assets. The maintainer pipeline refreshes those assets from the verified sources under `codegen/pipeline/raylib6/`; CI does not depend on ignored pipeline artifacts. That is separate from **`Novolis.Raylib.Bindings`**, which holds the C# interop.
 
 **Not published:** Roslyn codegen under `codegen/` (see [docs/codegen.md](docs/codegen.md)).
 

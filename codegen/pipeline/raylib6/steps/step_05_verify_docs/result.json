@@ -1,15 +1,24 @@
 {
   "stepId": "step_05_verify_docs",
   "status": "Succeeded",
-  "startedUtc": "2026-05-24T00:19:36.546736+00:00",
-  "durationMs": 4,
+  "startedUtc": "2026-10-18T12:51:29.8169454+00:00",
+  "durationMs": 8,
   "pipelineVersion": "1",
   "inputs": {
-    "codegen/pipeline/raylib6/steps/step_01_source/artifacts/raylib-6/include/raylib.h": "1842111e48260e622d0ff2e6f4ac6141508d6f369791265ba518e7502c760ccf",
-    "codegen/pipeline/raylib6/steps/step_01_source/artifacts/raygui-6/raygui.h": "36491f2067a5ff18e366f950dde2945bbcf9f75c1ab560ff9c8ca3ab6c7d0145",
-    "codegen/pipeline/raylib6/facades.manifest.json": "f3c88e0e8244512cf130f0ff29b862755f849b2b1701d23d00f25870374c1452",
-    "codegen/pipeline/raylib6/hud.manifest.json": "fbebec821bd81035234330c3e6b8a12b352e637dee42387aefead84a8109548b",
-    "codegen/pipeline/raylib6/gui.manifest.json": "0b5e7be3893bc052947b3f8e1562f09bb92dec436710f852864fc729d5d7ec8e"
+    "codegen/pipeline/raylib6/steps/step_01_source/artifacts/raylib/include/raylib.h": "7cb38915fa10786af6284abb68d56f1508bf3da2e74d93b9874950981c1fbab9",
+    "codegen/pipeline/raylib6/steps/step_01_source/artifacts/raygui/raygui.h": "9428525eef081eaec45f8fedbb68199bcbe876f2ce927d5e2a69e811a01ae3a9",
+    "codegen/Novolis.Raylib.Manifests/AssemblyInfo.cs": "c57c9fef858a32613b17c697dda2e8466c65aa89a826eab7c9ae4c6bafa07539",
+    "codegen/Novolis.Raylib.Manifests/FacadesManifest.cs": "e78079dcc9da0372ba1a1ed394fdd70fba361707962a95146a56ac63f578c5a1",
+    "codegen/Novolis.Raylib.Manifests/GuiManifest.cs": "aba9d1a33a78357e452aa4edcf790ee2ff34f7e52349a75ae4e45647264ddb8c",
+    "codegen/Novolis.Raylib.Manifests/HudManifest.cs": "8f6675faca007d31172a541c38d09df66315742237ee6f403de5032184670b69",
+    "codegen/Novolis.Raylib.Manifests/ImguiShimManifest.cs": "89ec1a3f59270ba31021f8552dd5eb21b14683d19c5df3378cbefa0103c98ab5",
+    "codegen/Novolis.Raylib.Manifests/RayguiFacadeManifest.cs": "ca3153f86d5d3681784b4aa00c2161ac19e2bfe653cfb4580eafc46cb23565a5",
+    "codegen/Novolis.Raylib.Manifests/RayguiShimManifest.cs": "4558032430880d80e1be6dea9988b40a2b014d83e62800ff4e932cf9bbf1316a",
+    "codegen/Novolis.Raylib.Manifests/Raylib6InteropManifest.cs": "c3b9dac0cca29ba64e1b9dd827472dba845f2446d75911b78a987d7100b71fed",
+    "codegen/Novolis.Raylib.Manifests/RaylibBindingManifestSource.cs": "0071504213803b0ee832b1ff04c0a1d500d7de79f4c083e2bbedcb251148dadb",
+    "codegen/Novolis.Raylib.Manifests/RaylibDebugManifest.cs": "01f261d946798d7d4eb7874e3dd2ad986a191ff8c760c57fd85eb62d6ef1cc88",
+    "codegen/Novolis.Raylib.Manifests/RaylibManifestInputPaths.cs": "f0733da7eb43debf67a4ad35e3f56ae81a4720c6d59e680a1dd040db90162082",
+    "codegen/Novolis.Raylib.Manifests/RaylibNativeSignatures.cs": "358147e2277f6fb1daceac41efd5e22f66ff2bb99066ab3ccc65347d99b9013a"
   },
   "outputs": []
 }

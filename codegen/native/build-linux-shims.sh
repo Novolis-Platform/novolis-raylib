@@ -4,11 +4,12 @@
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
-RAYLIB_ROOT="$REPO_ROOT/codegen/pipeline/raylib6/steps/step_01_source/artifacts/raylib-6"
+RAYLIB_ROOT="$REPO_ROOT/codegen/pipeline/raylib6/steps/step_01_source/artifacts/raylib"
 PREBUILT="$RAYLIB_ROOT/prebuilt/linux-x64"
 HEADER_DIR="$RAYLIB_ROOT/include"
 STAGE="$REPO_ROOT/src/Novolis.Raylib.Native/runtimes/linux-x64/native"
 PLATFORM_DIR="$REPO_ROOT/codegen/native/raylib6-platform"
+RAYGUI_DIR="$REPO_ROOT/codegen/native/raylib6-with-raygui"
 IMGUI_DIR="$REPO_ROOT/codegen/native/raylib6-with-imgui"
 
 if [[ ! -f "$PREBUILT/libraylib.so" ]]; then
@@ -56,10 +57,14 @@ build_shim() {
 }
 
 build_shim "$PLATFORM_DIR"
+build_shim "$RAYGUI_DIR"
 
 mkdir -p "$STAGE"
 cp -f "$PREBUILT/libraylib.so" "$STAGE/libraylib.so"
 cp -f "$PLATFORM_DIR/out/libnovolis_raylib_trace.so" "$STAGE/libnovolis_raylib_trace.so"
+RAYGUI_STAGE="$REPO_ROOT/src/Novolis.Raylib.Raygui.Native/runtimes/linux-x64/native"
+mkdir -p "$RAYGUI_STAGE"
+cp -f "$RAYGUI_DIR/out/libnovolis_raygui.so" "$RAYGUI_STAGE/libnovolis_raygui.so"
 
 set +e
 build_shim "$IMGUI_DIR"

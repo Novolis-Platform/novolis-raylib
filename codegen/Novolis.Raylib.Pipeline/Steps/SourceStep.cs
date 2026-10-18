@@ -1,5 +1,6 @@
 using System.IO.Compression;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Text.Json;
 
 namespace Novolis.Raylib.Pipeline.Steps;
@@ -8,7 +9,7 @@ internal sealed class SourceStep : IPipelineStep
 {
     public string Id => "step_01_source";
 
-    public string Description => "Fetch raylib prebuilts, raygui header, and raylib-cimgui sources.";
+    public string Description => "Fetch and verify raylib 6.2 prebuilts, raygui 5.0, cimgui, ImGui, and ray-cimgui sources.";
 
     public IReadOnlyList<string> DependsOn => [];
 
@@ -17,6 +18,8 @@ internal sealed class SourceStep : IPipelineStep
 
     public IReadOnlyList<string> ExpectedOutputPaths(PipelineContext context)
     {
+        var manifest = ReadManifest(context.RepoRoot);
+        var cimguiSubdir = RequiredValue(manifest.CimguiBundledSubdir, "cimguiBundledSubdir");
         var list = new List<string>
         {
             PipelinePaths.RaylibHeaderPath(context.RepoRoot),
@@ -27,7 +30,7 @@ internal sealed class SourceStep : IPipelineStep
 
         var cimgui = Path.Combine(
             PipelinePaths.RaylibCimguiRoot(context.RepoRoot),
-            "cimgui-1.92.1-docking",
+            cimguiSubdir,
             "cimgui.h");
         list.Add(cimgui);
         return list;
@@ -35,21 +38,18 @@ internal sealed class SourceStep : IPipelineStep
 
     public async ValueTask<StepExecutionResult> ExecuteAsync(PipelineContext context, CancellationToken cancellationToken)
     {
-        var versionsPath = PipelinePaths.VersionsJson(context.RepoRoot);
-        var json = JsonSerializer.Deserialize<VersionsManifest>(
-            await File.ReadAllTextAsync(versionsPath, cancellationToken),
-            JsonSerializerOptions.Web)!;
+        var json = await ReadManifestAsync(context.RepoRoot, cancellationToken);
+        ValidateArchiveLayout(json);
 
         var artifacts = PipelinePaths.SourceArtifactsDir(context.RepoRoot);
-        Directory.CreateDirectory(artifacts);
-
-        MirrorLegacyVendorTrees(context);
+        ResetDirectory(artifacts);
 
         var raylibRoot = PipelinePaths.RaylibRoot(context.RepoRoot);
         var rayguiRoot = PipelinePaths.RayguiRoot(context.RepoRoot);
         var cimguiRoot = PipelinePaths.RaylibCimguiRoot(context.RepoRoot);
         Directory.CreateDirectory(raylibRoot);
         Directory.CreateDirectory(rayguiRoot);
+        Directory.CreateDirectory(cimguiRoot);
 
         using var http = new HttpClient { Timeout = TimeSpan.FromMinutes(5) };
 
@@ -63,6 +63,7 @@ internal sealed class SourceStep : IPipelineStep
             var zipPath = Path.Combine(raylibRoot, "download_win.zip");
             await context.Log.WriteLineAsync($"Downloading {winUrl}");
             await DownloadToFileAsync(http, winUrl, zipPath, cancellationToken);
+            VerifySha256(zipPath, RequiredChecksum(json, "prebuilt.windows-x64"));
             ExtractZipDllAndIncludes(zipPath, raylibRoot);
             File.Delete(zipPath);
             await context.Log.WriteLineAsync($"Extracted windows-x64 raylib prebuilt under {raylibRoot}");
@@ -75,6 +76,7 @@ internal sealed class SourceStep : IPipelineStep
             var tarPath = Path.Combine(raylibRoot, "download_linux.tar.gz");
             await context.Log.WriteLineAsync($"Downloading {linuxUrl}");
             await DownloadToFileAsync(http, linuxUrl, tarPath, cancellationToken);
+            VerifySha256(tarPath, RequiredChecksum(json, "prebuilt.linux-x64"));
             ExtractLinuxTarGz(tarPath, raylibRoot);
             File.Delete(tarPath);
             await context.Log.WriteLineAsync($"Extracted linux-x64 raylib prebuilt under {raylibRoot}");
@@ -82,27 +84,48 @@ internal sealed class SourceStep : IPipelineStep
         else
             throw new InvalidOperationException("versions.json missing prebuilt.linux-x64");
 
-        if (json.RayguiHeaderUrl is { } rayguiUrl)
-        {
-            var dest = PipelinePaths.RayguiHeaderPath(context.RepoRoot);
-            await context.Log.WriteLineAsync($"Downloading {rayguiUrl}");
-            await DownloadToFileAsync(http, rayguiUrl, dest, cancellationToken);
-            FixRayguiIncludesIfNeeded(dest);
-            await context.Log.WriteLineAsync($"Wrote {dest}");
-        }
+        var rayguiUrl = RequiredValue(json.RayguiHeaderUrl, "rayguiHeaderUrl");
+        var rayguiDest = PipelinePaths.RayguiHeaderPath(context.RepoRoot);
+        await context.Log.WriteLineAsync($"Downloading {rayguiUrl}");
+        await DownloadToFileAsync(http, rayguiUrl, rayguiDest, cancellationToken);
+        VerifySha256(rayguiDest, RequiredChecksum(json, "raygui-header"));
+        FixRayguiIncludesIfNeeded(rayguiDest);
+        await context.Log.WriteLineAsync($"Wrote {rayguiDest}");
 
-        if (json.RaylibCimguiRepoUrl is { } raylibCimguiRepo)
+        var raylibCimguiArchiveUrl = RequiredValue(json.RaylibCimguiArchiveUrl, "raylibCimguiArchiveUrl");
+        var cimguiArchiveUrl = RequiredValue(json.CimguiArchiveUrl, "cimguiArchiveUrl");
+        var imguiArchiveUrl = RequiredValue(json.ImguiArchiveUrl, "imguiArchiveUrl");
         {
-            await EnsureGitCloneAsync(
-                context,
-                raylibCimguiRepo,
-                cimguiRoot,
-                json.RaylibCimguiGitRef ?? "1.92.1-docking",
-                recursive: true,
-                cancellationToken);
-            var bundledCimgui = Path.Combine(cimguiRoot, json.CimguiBundledSubdir ?? "cimgui-1.92.1-docking");
-            if (!File.Exists(Path.Combine(bundledCimgui, "cimgui.h")))
+            var raylibCimguiArchive = Path.Combine(cimguiRoot, "raylib-cimgui.tar.gz");
+            await context.Log.WriteLineAsync($"Downloading {raylibCimguiArchiveUrl}");
+            await DownloadToFileAsync(http, raylibCimguiArchiveUrl, raylibCimguiArchive, cancellationToken);
+            VerifySha256(raylibCimguiArchive, RequiredChecksum(json, "raylib-cimgui-archive"));
+            ExtractTarGzArchive(raylibCimguiArchive, cimguiRoot);
+            File.Delete(raylibCimguiArchive);
+
+            var cimguiSubdir = RequiredValue(json.CimguiBundledSubdir, "cimguiBundledSubdir");
+            var bundledCimgui = Path.Combine(cimguiRoot, cimguiSubdir);
+            var cimguiArchive = Path.Combine(cimguiRoot, "cimgui.tar.gz");
+            await context.Log.WriteLineAsync($"Downloading {cimguiArchiveUrl}");
+            await DownloadToFileAsync(http, cimguiArchiveUrl, cimguiArchive, cancellationToken);
+            VerifySha256(cimguiArchive, RequiredChecksum(json, "cimgui-archive"));
+            ExtractTarGzArchive(cimguiArchive, bundledCimgui);
+            File.Delete(cimguiArchive);
+
+            var imguiSubdir = RequiredValue(json.ImguiBundledSubdir, "imguiBundledSubdir");
+            var imguiRoot = Path.Combine(bundledCimgui, imguiSubdir);
+            var imguiArchive = Path.Combine(cimguiRoot, "imgui.tar.gz");
+            await context.Log.WriteLineAsync($"Downloading {imguiArchiveUrl}");
+            await DownloadToFileAsync(http, imguiArchiveUrl, imguiArchive, cancellationToken);
+            VerifySha256(imguiArchive, RequiredChecksum(json, "imgui-archive"));
+            ExtractTarGzArchive(imguiArchive, imguiRoot);
+            File.Delete(imguiArchive);
+
+            var cimguiHeader = Path.Combine(bundledCimgui, "cimgui.h");
+            if (!File.Exists(cimguiHeader))
                 throw new InvalidOperationException($"Missing bundled cimgui at {bundledCimgui}.");
+            if (!File.Exists(Path.Combine(imguiRoot, "imgui.cpp")))
+                throw new InvalidOperationException($"Missing ImGui sources at {imguiRoot}.");
             await context.Log.WriteLineAsync($"raylib-cimgui ready at {cimguiRoot}");
         }
 
@@ -116,37 +139,112 @@ internal sealed class SourceStep : IPipelineStep
         };
     }
 
-    private static void MirrorLegacyVendorTrees(PipelineContext context)
+    private static VersionsManifest ReadManifest(string repoRoot)
     {
-        var repoRoot = context.RepoRoot;
-        var pairs = new[]
+        var manifest = JsonSerializer.Deserialize<VersionsManifest>(
+            File.ReadAllText(PipelinePaths.VersionsJson(repoRoot)),
+            JsonSerializerOptions.Web);
+        return manifest ?? throw new InvalidOperationException("versions.json could not be deserialized.");
+    }
+
+    private static async Task<VersionsManifest> ReadManifestAsync(
+        string repoRoot,
+        CancellationToken cancellationToken)
+    {
+        var manifest = JsonSerializer.Deserialize<VersionsManifest>(
+            await File.ReadAllTextAsync(PipelinePaths.VersionsJson(repoRoot), cancellationToken),
+            JsonSerializerOptions.Web);
+        return manifest ?? throw new InvalidOperationException("versions.json could not be deserialized.");
+    }
+
+    private static string RequiredValue(string? value, string name) =>
+        string.IsNullOrWhiteSpace(value)
+            ? throw new InvalidOperationException($"versions.json missing {name}.")
+            : value;
+
+    private static string RequiredChecksum(VersionsManifest manifest, string name)
+    {
+        if (manifest.Sha256 is null ||
+            !manifest.Sha256.TryGetValue(name, out var checksum) ||
+            string.IsNullOrWhiteSpace(checksum))
         {
-            (Path.Combine(PipelinePaths.VendorRoot(repoRoot), "raylib-6"), PipelinePaths.RaylibRoot(repoRoot)),
-            (Path.Combine(PipelinePaths.VendorRoot(repoRoot), "raygui-6"), PipelinePaths.RayguiRoot(repoRoot)),
-            (Path.Combine(PipelinePaths.VendorRoot(repoRoot), "raylib-cimgui"), PipelinePaths.RaylibCimguiRoot(repoRoot)),
+            throw new InvalidOperationException($"versions.json missing sha256.{name}.");
+        }
+
+        return checksum;
+    }
+
+    private static void ValidateArchiveLayout(VersionsManifest manifest)
+    {
+        var required = new[]
+        {
+            "prebuilt.windows-x64",
+            "prebuilt.linux-x64",
+            "raylib-cimgui",
+            "cimgui",
+            "imgui",
         };
 
-        foreach (var (source, dest) in pairs)
+        foreach (var key in required)
         {
-            if (!Directory.Exists(source) || Directory.Exists(dest) && Directory.EnumerateFileSystemEntries(dest).Any())
-                continue;
-
-            context.Log.WriteLine($"Mirroring legacy {source} -> {dest}");
-            CopyDirectory(source, dest);
+            if (manifest.ArchiveLayout is null ||
+                !manifest.ArchiveLayout.TryGetValue(key, out var layout) ||
+                string.IsNullOrWhiteSpace(layout))
+            {
+                throw new InvalidOperationException($"versions.json missing archiveLayout.{key}.");
+            }
         }
     }
 
-    private static void CopyDirectory(string source, string dest)
+    private static void ResetDirectory(string path)
     {
-        Directory.CreateDirectory(dest);
-        foreach (var dir in Directory.GetDirectories(source, "*", SearchOption.AllDirectories))
-            Directory.CreateDirectory(dir.Replace(source, dest, StringComparison.OrdinalIgnoreCase));
+        if (Directory.Exists(path))
+            Directory.Delete(path, recursive: true);
 
-        foreach (var file in Directory.GetFiles(source, "*", SearchOption.AllDirectories))
+        Directory.CreateDirectory(path);
+    }
+
+    private static void VerifySha256(string path, string expected)
+    {
+        using var stream = File.OpenRead(path);
+        var actual = Convert.ToHexString(SHA256.HashData(stream));
+        if (!string.Equals(actual, expected, StringComparison.OrdinalIgnoreCase))
         {
-            var target = file.Replace(source, dest, StringComparison.OrdinalIgnoreCase);
-            Directory.CreateDirectory(Path.GetDirectoryName(target)!);
-            File.Copy(file, target, overwrite: true);
+            throw new InvalidOperationException(
+                $"SHA-256 mismatch for {path}. Expected {expected}, actual {actual}.");
+        }
+    }
+
+    private static void ExtractTarGzArchive(string tarGzPath, string destRoot)
+    {
+        var fullRoot = Path.GetFullPath(destRoot);
+        var rootPrefix = fullRoot.EndsWith(Path.DirectorySeparatorChar)
+            ? fullRoot
+            : fullRoot + Path.DirectorySeparatorChar;
+        Directory.CreateDirectory(fullRoot);
+
+        using var fileStream = File.OpenRead(tarGzPath);
+        using var gzip = new GZipStream(fileStream, CompressionMode.Decompress);
+        using var reader = new System.Formats.Tar.TarReader(gzip);
+
+        while (reader.GetNextEntry() is { } entry)
+        {
+            var name = entry.Name.Replace('\\', '/');
+            var separator = name.IndexOf('/');
+            if (separator < 0 || separator == name.Length - 1)
+                continue;
+
+            var relative = name[(separator + 1)..];
+            var destination = Path.GetFullPath(
+                Path.Combine(fullRoot, relative.Replace('/', Path.DirectorySeparatorChar)));
+            if (!destination.StartsWith(rootPrefix, StringComparison.OrdinalIgnoreCase))
+                throw new InvalidOperationException($"Archive entry escapes extraction root: {entry.Name}");
+
+            if (entry.EntryType is System.Formats.Tar.TarEntryType.RegularFile or System.Formats.Tar.TarEntryType.V7RegularFile)
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(destination)!);
+                entry.ExtractToFile(destination, overwrite: true);
+            }
         }
     }
 
@@ -273,39 +371,21 @@ internal sealed class SourceStep : IPipelineStep
         File.WriteAllText(path, text);
     }
 
-    private static async Task EnsureGitCloneAsync(
-        PipelineContext context,
-        string repoUrl,
-        string destDir,
-        string gitRef,
-        bool recursive,
-        CancellationToken cancellationToken)
-    {
-        if (File.Exists(Path.Combine(destDir, "src", "raycimgui.c")) || File.Exists(Path.Combine(destDir, "rlcimgui.c")))
-        {
-            await context.Log.WriteLineAsync($"Skipping clone; already present: {destDir}");
-            return;
-        }
-
-        if (Directory.Exists(destDir))
-            Directory.Delete(destDir, recursive: true);
-
-        var cloneArgs = new List<string> { "clone", "--depth", "1", "--branch", gitRef, repoUrl, destDir };
-        if (recursive)
-            cloneArgs.Insert(1, "--recursive");
-
-        var args = string.Join(' ', cloneArgs.Select(a => a.Contains(' ') ? $"\"{a}\"" : a));
-        var code = await ProcessRunner.RunAsync(context, "git", args, context.RepoRoot, cancellationToken);
-        if (code != 0)
-            throw new InvalidOperationException($"git clone failed for {repoUrl} (exit {code})");
-    }
-
     private sealed class VersionsManifest
     {
+        public string? CimguiArchiveUrl { get; set; }
+        public string? CimguiGitCommit { get; set; }
+        public string? CimguiGitRef { get; set; }
+        public Dictionary<string, string>? ArchiveLayout { get; set; }
+        public string? ImguiArchiveUrl { get; set; }
+        public string? ImguiBundledSubdir { get; set; }
+        public string? ImguiGitCommit { get; set; }
         public string? RaylibCimguiGitRef { get; set; }
-        public string? RaylibCimguiRepoUrl { get; set; }
+        public string? RaylibCimguiGitCommit { get; set; }
+        public string? RaylibCimguiArchiveUrl { get; set; }
         public string? CimguiBundledSubdir { get; set; }
         public Dictionary<string, string>? Prebuilt { get; set; }
         public string? RayguiHeaderUrl { get; set; }
+        public Dictionary<string, string>? Sha256 { get; set; }
     }
 }

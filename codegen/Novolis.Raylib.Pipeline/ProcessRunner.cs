@@ -20,6 +20,7 @@ internal static class ProcessRunner
             Arguments = arguments,
             WorkingDirectory = workingDirectory,
             UseShellExecute = false,
+            CreateNoWindow = true,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
         };

@@ -5,11 +5,11 @@ set(CMAKE_C_STANDARD 99)
 
 if(NOT DEFINED RAYLIB_NATIVE_DIR)
   get_filename_component(_REPO "${CMAKE_CURRENT_SOURCE_DIR}/../../.." ABSOLUTE)
-  set(RAYLIB_NATIVE_DIR "${_REPO}/codegen/pipeline/raylib6/steps/step_01_source/artifacts/raylib-6/prebuilt/win-x64" CACHE PATH "Directory containing raylib.dll (run pipeline step_01_source).")
+  set(RAYLIB_NATIVE_DIR "${_REPO}/codegen/pipeline/raylib6/steps/step_01_source/artifacts/raylib/prebuilt/win-x64" CACHE PATH "Directory containing raylib.dll (run pipeline step_01_source).")
 endif()
 
 get_filename_component(REPO_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../../.." ABSOLUTE)
-set(RAYLIB_HEADER_DIR "${REPO_ROOT}/codegen/pipeline/raylib6/steps/step_01_source/artifacts/raylib-6/include")
+set(RAYLIB_HEADER_DIR "${REPO_ROOT}/codegen/pipeline/raylib6/steps/step_01_source/artifacts/raylib/include")
 
 if(NOT EXISTS "${RAYLIB_HEADER_DIR}/raylib.h")
     message(FATAL_ERROR "Missing ${RAYLIB_HEADER_DIR}/raylib.h — run: dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_01_source")

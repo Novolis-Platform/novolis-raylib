@@ -41,14 +41,19 @@ internal sealed class AndroidNativeStep : IPipelineStep
         var versionsPath = PipelinePaths.VersionsJson(context.RepoRoot);
         using var versionsDoc = JsonDocument.Parse(await File.ReadAllTextAsync(versionsPath, cancellationToken));
         var tag = versionsDoc.RootElement.TryGetProperty("raylibGitTag", out var tagEl)
-            ? tagEl.GetString() ?? "6.0"
-            : "6.0";
+            ? tagEl.GetString() ?? "6.2"
+            : "6.2";
+        var commit = versionsDoc.RootElement.TryGetProperty("raylibGitCommit", out var commitEl)
+            ? commitEl.GetString()
+            : null;
+        if (string.IsNullOrWhiteSpace(commit))
+            throw new InvalidOperationException("versions.json is missing raylibGitCommit.");
 
         var artifacts = PipelinePaths.AndroidNativeArtifactsDir(context.RepoRoot);
         Directory.CreateDirectory(artifacts);
 
         var raylibSrc = Path.Combine(artifacts, "raylib");
-        await EnsureRaylibSourceAsync(context, raylibSrc, tag, cancellationToken);
+        await EnsureRaylibSourceAsync(context, raylibSrc, tag, commit!, cancellationToken);
 
         var raylibBuild = Path.Combine(artifacts, "raylib-build-android-arm64");
         Directory.CreateDirectory(raylibBuild);
@@ -160,20 +165,46 @@ internal sealed class AndroidNativeStep : IPipelineStep
         return null;
     }
 
+    private static void DeleteDirectoryForRefresh(string path)
+    {
+        foreach (var file in Directory.EnumerateFiles(path, "*", SearchOption.AllDirectories))
+            File.SetAttributes(file, FileAttributes.Normal);
+
+        foreach (var directory in Directory.EnumerateDirectories(path, "*", SearchOption.AllDirectories))
+            File.SetAttributes(directory, FileAttributes.Normal);
+
+        File.SetAttributes(path, FileAttributes.Normal);
+        Directory.Delete(path, recursive: true);
+    }
+
     private static async Task EnsureRaylibSourceAsync(
         PipelineContext context,
         string dest,
         string tag,
+        string commit,
         CancellationToken cancellationToken)
     {
-        if (File.Exists(Path.Combine(dest, "src", "raylib.h")))
+        var header = Path.Combine(dest, "src", "raylib.h");
+        var gitHead = Path.Combine(dest, ".git", "HEAD");
+        if (File.Exists(header) && File.Exists(gitHead))
         {
-            await context.Log.WriteLineAsync($"raylib sources present at {dest}");
-            return;
+            var pinCode = await ProcessRunner.RunAsync(
+                context,
+                "git",
+                $"-C \"{dest}\" checkout --detach {commit}",
+                context.RepoRoot,
+                cancellationToken);
+            if (pinCode == 0)
+            {
+                await context.Log.WriteLineAsync($"raylib sources present and pinned at {commit}: {dest}");
+                return;
+            }
+
+            await context.Log.WriteLineAsync($"Existing raylib checkout could not pin to {commit}; recloning.");
         }
 
         if (Directory.Exists(dest))
-            Directory.Delete(dest, recursive: true);
+            DeleteDirectoryForRefresh(dest);
 
         var url = "https://github.com/raysan5/raylib.git";
         await context.Log.WriteLineAsync($"Cloning {url} (tag {tag}) -> {dest}");
@@ -185,5 +216,14 @@ internal sealed class AndroidNativeStep : IPipelineStep
             cancellationToken);
         if (code != 0 || !File.Exists(Path.Combine(dest, "src", "raylib.h")))
             throw new InvalidOperationException($"Failed to clone raylib {tag} into {dest} (exit {code})");
+
+        code = await ProcessRunner.RunAsync(
+            context,
+            "git",
+            $"-C \"{dest}\" checkout --detach {commit}",
+            context.RepoRoot,
+            cancellationToken);
+        if (code != 0)
+            throw new InvalidOperationException($"Failed to pin raylib {tag} to commit {commit} (exit {code})");
     }
 }

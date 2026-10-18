@@ -6,9 +6,9 @@ Build-time Roslyn tooling for `Novolis.Raylib.Bindings`. These projects are **ne
 
 | Project | Role |
 |---------|------|
-| `pipeline/raylib6/` (this folder) | Manifests, step folders (`result.json`, `step.log`, gitignored `artifacts/`) |
+| `pipeline/raylib6/` (this folder) | Version pins, step folders (`result.json`, `step.log`, gitignored `artifacts/`) |
 | `native/` (this folder) | CMake shims (trace, ImGui, raygui) |
-| `vendor/` (this folder) | Legacy vendor mirror (optional; sources live under `pipeline/.../artifacts/`) |
+| `vendor/` (this folder) | Legacy compatibility mirror; the maintainer pipeline uses verified sources under `pipeline/.../artifacts/` |
 | `Novolis.Raylib.Pipeline` | Linear maintainer pipeline (`run maintainer`, step folders + `result.json`) |
 | `Novolis.Raylib.CodeGen` | Roslyn emitters: `verify`, `suggest-raylib`, `hooks list` |
 | `Novolis.Raylib.CodeGen.Abstractions` | `IRaylibCodegenHook`, `IPipelineStep`, `PipelinePaths` |
@@ -18,7 +18,7 @@ Build-time Roslyn tooling for `Novolis.Raylib.Bindings`. These projects are **ne
 # Regenerate committed *.g.cs under src/ (after manifest or hook edits)
 dotnet run --project codegen/Novolis.Raylib.Pipeline -- run generate
 
-# Full maintainer flow (fetch, native shims, codegen, drift)
+# Full maintainer flow (fetch, desktop/Android native shims, codegen, drift)
 dotnet run --project codegen/Novolis.Raylib.Pipeline -- run maintainer
 
 # CI/agent gate: drift check + Release build

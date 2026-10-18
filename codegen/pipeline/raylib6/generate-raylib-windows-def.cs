@@ -1,13 +1,16 @@
 // Maintainer: emit a .def for raylib.dll so MSVC lib.exe can build an import library for the raygui shim.
-// Usage (repo root): dotnet run tools/raylib6-pipeline/generate-raylib-windows-def.cs -- <path-to-raylib.dll> <output.def>
+// Usage (repo root): dotnet run --file codegen/pipeline/raylib6/generate-raylib-windows-def.cs -- <path-to-raylib.dll> <output.def>
 #:sdk Microsoft.NET.Sdk
 #:property TargetFramework=net10.0
 #:property PublishAot=false
 #:property PackAsTool=false
 #:property ImplicitUsings=enable
 #:property Nullable=enable
+#:property ImportDirectoryBuildProps=false
+#:property EnableSourceLink=false
 #:property ManagePackageVersionsCentrally=false
-#:package PeNet@4.1.2
+#:package PeNet@6.1.2
+#:package System.Security.Cryptography.Pkcs@10.0.13
 
 using System.Text;
 using PeNet;
@@ -16,10 +19,10 @@ if (args is ["-h"] or ["--help"])
 {
 	Console.WriteLine("""
 		Usage:
-		  dotnet run tools/raylib6-pipeline/generate-raylib-windows-def.cs -- <path-to-raylib.dll> <output.def>
+		  dotnet run --file codegen/pipeline/raylib6/generate-raylib-windows-def.cs -- <path-to-raylib.dll> <output.def>
 
 		Emits a module-definition file listing exports from the given raylib.dll.
-		Used by tools/native/raylib6-with-raygui (Windows) to build raylib_import.lib via MSVC lib.exe.
+		Used by codegen/native/raylib6-with-raygui (Windows) to build raylib_import.lib via MSVC lib.exe.
 		""");
 	return 0;
 }

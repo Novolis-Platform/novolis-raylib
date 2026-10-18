@@ -1,12 +1,36 @@
 {
-  "raylibGitTag": "6.0",
-  "rayguiGitTag": "4.0",
-  "cimguiBundledSubdir": "cimgui-1.92.1-docking",
+  "raylibGitTag": "6.2",
+  "raylibGitCommit": "02566453880e06bec97f5b8160fa6fe1e98397ca",
+  "rayguiGitTag": "5.0",
+  "rayguiGitCommit": "020a61bebcbe288b4414de3416e219ef40af847a",
+  "cimguiBundledSubdir": "cimgui-1.92.9dock",
+  "cimguiGitRef": "1.92.9dock",
+  "cimguiGitCommit": "cd61f1ae57a27b00c79af6ab0c12caf76fae212d",
+  "imguiBundledSubdir": "imgui",
+  "imguiGitCommit": "b334d19b667958ed970000073644d911fae17e57",
   "raylibCimguiGitRef": "1.92.1-docking",
+  "raylibCimguiGitCommit": "dc7f7806656be502f5a7c211b19dc48769b0382a",
   "prebuilt": {
-    "windows-x64": "https://github.com/raysan5/raylib/releases/download/6.0/raylib-6.0_win64_msvc16.zip",
-    "linux-x64": "https://github.com/raysan5/raylib/releases/download/6.0/raylib-6.0_linux_amd64.tar.gz"
+    "windows-x64": "https://github.com/raysan5/raylib/releases/download/6.2/raylib-6.2_win64_msvc16.zip",
+    "linux-x64": "https://github.com/raysan5/raylib/releases/download/6.2/raylib-6.2_linux_amd64.tar.gz"
   },
-  "rayguiHeaderUrl": "https://raw.githubusercontent.com/raysan5/raygui/4.0/src/raygui.h",
-  "raylibCimguiRepoUrl": "https://github.com/cilazoglu/ray-cimgui.git"
+  "rayguiHeaderUrl": "https://raw.githubusercontent.com/raysan5/raygui/5.0/src/raygui.h",
+  "raylibCimguiArchiveUrl": "https://github.com/cilazoglu/ray-cimgui/archive/refs/tags/1.92.1-docking.tar.gz",
+  "cimguiArchiveUrl": "https://github.com/cimgui/cimgui/archive/refs/tags/1.92.9dock.tar.gz",
+  "imguiArchiveUrl": "https://github.com/ocornut/imgui/archive/b334d19b667958ed970000073644d911fae17e57.tar.gz",
+  "archiveLayout": {
+    "prebuilt.windows-x64": "*/raylib.dll and */include/raylib*.h",
+    "prebuilt.linux-x64": "*/lib/libraylib.so* and */include/raylib*.h",
+    "raylib-cimgui": "*/src/raycimgui.c and */cimgui-1.92.9dock/cimgui.h",
+    "cimgui": "*/cimgui.h and */CMakeLists.txt",
+    "imgui": "*/imgui.cpp and */imgui.h"
+  },
+  "sha256": {
+    "prebuilt.windows-x64": "8467B5DD6DB4D7AB942F3148A3D30D93BE6ED9B2FAB88069D177E59604268EBD",
+    "prebuilt.linux-x64": "586BBC32F3596D439382B1C5DBC6C1C573EB7E1D00FE92BE7D4DEB116883720D",
+    "raygui-header": "9428525EEF081EAEC45F8FEDBB68199BCBE876F2CE927D5E2A69E811A01AE3A9",
+    "raylib-cimgui-archive": "D954F3DA4A012D89A2B4CB946EE45C7F2A38BABC529D9BE8733A5BDD22B4549A",
+    "cimgui-archive": "F4B652EEB563AC35D926482FE3E552EDAB207E619390FE455EE938A687F0E2AE",
+    "imgui-archive": "0C96A84A00290C3C2166ACACEDE2935338590FE095E5923DB6E2995DC9CDE9AA"
+  }
 }

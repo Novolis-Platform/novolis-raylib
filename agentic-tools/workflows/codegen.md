@@ -2,7 +2,7 @@
 
 ## When you must run codegen
 
-- Any edit under `codegen/pipeline/raylib6/*.manifest.json`
+- Any edit under `codegen/Novolis.Raylib.Manifests/`
 - Any edit under `codegen/Novolis.Raylib.CodeGen.Hooks/`
 - Any task that mentions new raylib exports, façades, `Hud`, `Gui`, or interop
 
@@ -21,23 +21,23 @@ Commit **manifest and generated `*.g.cs` in the same commit**. After maintainer 
 
 ## Where output goes
 
-| Manifest | Generated into |
+| Manifest fragment | Generated into |
 |----------|----------------|
-| `raylib-exports.manifest.json` | `src/Novolis.Raylib.Bindings/Interop/Raylib6Native.g.cs` |
-| `imgui-exports.manifest.json` | `Bindings/Interop/ImguiShimExports.g.cs` |
-| `raygui-exports.manifest.json` | `Raygui/Interop/RayguiShimExports.g.cs` (add-on) |
-| `raylib-debug.manifest.json` | `Bindings/Interop/RaylibDebugFrameHooks.g.cs` |
-| `facades.manifest.json` | `Runtime/Rendering`, `Windowing`, `Interact`, … |
-| `hud.manifest.json` | `Runtime/Hud/Hud.g.cs` |
-| `gui.manifest.json` | `Runtime/Gui/Gui.g.cs` (Dear ImGui) |
-| `raygui.manifest.json` | `Raygui/RayGui/RayGui.g.cs` (add-on) |
+| `Raylib6InteropManifest.cs` | `src/Novolis.Raylib.Bindings/Interop/Raylib6Native.g.cs` |
+| `ImguiShimManifest.cs` | `src/Novolis.Raylib.Bindings/Interop/ImguiShimExports.g.cs` |
+| `RayguiShimManifest.cs` | `src/Novolis.Raylib.Raygui/Interop/RayguiShimExports.g.cs` (add-on) |
+| `RaylibDebugManifest.cs` | `src/Novolis.Raylib.Bindings/Interop/RaylibDebugFrameHooks.g.cs` |
+| `FacadesManifest.cs` | `src/Novolis.Raylib.Runtime/Rendering`, `Windowing`, `Interact`, … |
+| `HudManifest.cs` | `src/Novolis.Raylib.Runtime/Hud/Hud.g.cs` |
+| `GuiManifest.cs` | `src/Novolis.Raylib.Runtime/Gui/Gui.g.cs` (Dear ImGui) |
+| `RayguiFacadeManifest.cs` | `src/Novolis.Raylib.Raygui/RayGui/RayGui.g.cs` (add-on) |
 
-Vendor sources live under `codegen/pipeline/raylib6/steps/step_01_source/artifacts/` (legacy mirror under `codegen/vendor/`).
+Verified vendor sources live under `codegen/pipeline/raylib6/steps/step_01_source/artifacts/`; `codegen/vendor/` is retained only as a legacy compatibility mirror.
 
 ## Adding a raylib function
 
-1. Add import row to `raylib-exports.manifest.json` (`name` + `template`).
-2. If public API needed, add method to `facades.manifest.json` (or `hud` / `gui`).
+1. Add an import row to `Raylib6InteropManifest.cs`.
+2. If public API is needed, add a method to `FacadesManifest.cs` (or `HudManifest.cs` / `GuiManifest.cs`).
 3. If template missing, extend `RaylibInteropEmitter` in `codegen/Novolis.Raylib.CodeGen/Emit/`.
 4. Run `generate` + `agent.verify`.
 

@@ -1,0 +1,24 @@
+{
+  "stepId": "step_02a_android",
+  "status": "Succeeded",
+  "startedUtc": "2026-10-18T12:45:35.8932438+00:00",
+  "durationMs": 14135,
+  "pipelineVersion": "1",
+  "inputs": {
+    "codegen/pipeline/raylib6/versions.json": "b8fae7912a0314dc35bfd62d9395ca0e7d9bb229ce109f28e194447f26fecd82",
+    "codegen/native/raylib6-android-host/main.c": "d2725f10ff2b84595310e4b4049f3616a891719d004a48e3b87da6af4a72c847",
+    "codegen/native/raylib6-android-host/CMakeLists.txt": "142e207dbf6f903656309c14b7300500d4002ec2c8764a4db59797581e026567"
+  },
+  "outputs": [
+    {
+      "path": "src/Novolis.Raylib.Native/runtimes/android-arm64/native/libraylib.a",
+      "sha256": "b242f683eb3362048f589604c41ec486add067b338167bb7a9f75d5f4a12672b",
+      "bytes": 12481684
+    },
+    {
+      "path": "src/Novolis.Raylib.Native/runtimes/android-arm64/native/libnovolis_raylib_android.so",
+      "sha256": "4ea45d93f656daaf45c7604187b1c201dcb6c35d210f19645ca737d6498793f8",
+      "bytes": 2917240
+    }
+  ]
+}

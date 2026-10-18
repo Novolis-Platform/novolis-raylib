@@ -6,26 +6,43 @@ set(CMAKE_CXX_STANDARD 11)
 
 if(NOT DEFINED RAYLIB_NATIVE_DIR)
   get_filename_component(_REPO "${CMAKE_CURRENT_SOURCE_DIR}/../../.." ABSOLUTE)
-  set(RAYLIB_NATIVE_DIR "${_REPO}/codegen/pipeline/raylib6/steps/step_01_source/artifacts/raylib-6/prebuilt/win-x64" CACHE PATH "Directory containing raylib.dll")
+  set(RAYLIB_NATIVE_DIR "${_REPO}/codegen/pipeline/raylib6/steps/step_01_source/artifacts/raylib/prebuilt/win-x64" CACHE PATH "Directory containing raylib.dll")
 endif()
 
 get_filename_component(REPO_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../../.." ABSOLUTE)
-set(RAYLIB_HEADER_DIR "${REPO_ROOT}/codegen/pipeline/raylib6/steps/step_01_source/artifacts/raylib-6/include")
+set(RAYLIB_HEADER_DIR "${REPO_ROOT}/codegen/pipeline/raylib6/steps/step_01_source/artifacts/raylib/include")
 set(RAYLIB_CIMGUI_PATH "${REPO_ROOT}/codegen/pipeline/raylib6/steps/step_01_source/artifacts/raylib-cimgui")
-set(CIMGUI_PATH "${RAYLIB_CIMGUI_PATH}/cimgui-1.92.1-docking")
+if(NOT DEFINED CIMGUI_PATH)
+  file(GLOB _CIMGUI_CANDIDATES LIST_DIRECTORIES true "${RAYLIB_CIMGUI_PATH}/cimgui-*")
+  set(_CIMGUI_DIRECTORIES)
+  foreach(_candidate IN LISTS _CIMGUI_CANDIDATES)
+    if(IS_DIRECTORY "${_candidate}" AND EXISTS "${_candidate}/CMakeLists.txt")
+      list(APPEND _CIMGUI_DIRECTORIES "${_candidate}")
+    endif()
+  endforeach()
+  list(SORT _CIMGUI_DIRECTORIES COMPARE NATURAL ORDER DESCENDING)
+  if(_CIMGUI_DIRECTORIES)
+    list(GET _CIMGUI_DIRECTORIES 0 CIMGUI_PATH)
+  else()
+    message(FATAL_ERROR "No cimgui source directory found under ${RAYLIB_CIMGUI_PATH} — run step_01_source to fetch the pinned source.")
+  endif()
+endif()
 
 if(NOT EXISTS "${RAYLIB_HEADER_DIR}/raylib.h")
     message(FATAL_ERROR "Missing ${RAYLIB_HEADER_DIR}/raylib.h — run: dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_01_source")
 endif()
 if(NOT EXISTS "${CIMGUI_PATH}/cimgui.h")
-    message(FATAL_ERROR "Missing ${CIMGUI_PATH}/cimgui.h — run fetch-sources (clones cimgui with imgui submodule)")
+    message(FATAL_ERROR "Missing ${CIMGUI_PATH}/cimgui.h — run step_01_source to fetch the pinned cimgui and ImGui sources")
 endif()
 if(NOT EXISTS "${RAYLIB_CIMGUI_PATH}/src/raycimgui.c")
-    message(FATAL_ERROR "Missing ${RAYLIB_CIMGUI_PATH}/src/raycimgui.c — run fetch-sources (cilazoglu/ray-cimgui)")
+    message(FATAL_ERROR "Missing ${RAYLIB_CIMGUI_PATH}/src/raycimgui.c — run step_01_source to fetch the pinned ray-cimgui source")
 endif()
 
 set(IMGUI_STATIC "yes" CACHE STRING "" FORCE)
 add_subdirectory("${CIMGUI_PATH}" "${CMAKE_BINARY_DIR}/cimgui-build" EXCLUDE_FROM_ALL)
+if(TARGET cimgui)
+  set_target_properties(cimgui PROPERTIES POSITION_INDEPENDENT_CODE ON)
+endif()
 
 add_library(novolis_imgui SHARED
     novolis_imgui_exports.cpp
@@ -39,6 +56,14 @@ target_include_directories(novolis_imgui PRIVATE
     "${CIMGUI_PATH}"
     "${CIMGUI_PATH}/imgui"
     "${RAYLIB_CIMGUI_PATH}/src")
+set(RAYCIMGUI_SOURCE "${RAYLIB_CIMGUI_PATH}/src/raycimgui.c")
+if(MSVC)
+  set_source_files_properties("${RAYCIMGUI_SOURCE}" PROPERTIES
+    COMPILE_OPTIONS "/FI${CMAKE_CURRENT_SOURCE_DIR}/raycimgui_compat.h")
+else()
+  set_source_files_properties("${RAYCIMGUI_SOURCE}" PROPERTIES
+    COMPILE_OPTIONS "-include;${CMAKE_CURRENT_SOURCE_DIR}/raycimgui_compat.h")
+endif()
 
 if(WIN32)
   if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../raylib6-with-raygui/generated/raylib.win-x64.def")

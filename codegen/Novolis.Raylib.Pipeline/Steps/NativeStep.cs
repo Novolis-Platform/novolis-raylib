@@ -27,6 +27,12 @@ internal sealed class NativeStep : IPipelineStep
     public async ValueTask<StepExecutionResult> ExecuteAsync(PipelineContext context, CancellationToken cancellationToken)
     {
         var repoRoot = context.RepoRoot;
+        if (OperatingSystem.IsMacOS())
+        {
+            throw new PlatformNotSupportedException(
+                "macOS native packaging is not supported by the raylib 6.2 pipeline yet; supported desktop RIDs are win-x64 and linux-x64.");
+        }
+
         if (OperatingSystem.IsWindows())
             await EnsureRaylibDefAsync(context, cancellationToken);
 
@@ -42,7 +48,12 @@ internal sealed class NativeStep : IPipelineStep
                 : OperatingSystem.IsLinux()
                     ? PipelinePaths.RaylibPrebuiltLinuxDir(repoRoot)
                     : PipelinePaths.RaylibPrebuiltOsxDir(repoRoot);
-            var configureArgs = $"-S \"{nativeDir}\" -B \"{buildDir}\" -DRAYLIB_NATIVE_DIR=\"{raylibNativeDir}\" -DRAYLIB_HEADER_DIR=\"{PipelinePaths.RaylibIncludeDir(repoRoot)}\"";
+            var msbuildGlobals = OperatingSystem.IsWindows()
+                ? " -DCMAKE_VS_GLOBALS=\"ImportDirectoryBuildProps=false;ImportDirectoryBuildTargets=false\""
+                : string.Empty;
+            var configureArgs =
+                $"-S \"{nativeDir}\" -B \"{buildDir}\" -DRAYLIB_NATIVE_DIR=\"{raylibNativeDir}\" " +
+                $"-DRAYLIB_HEADER_DIR=\"{PipelinePaths.RaylibIncludeDir(repoRoot)}\"{msbuildGlobals}";
             var configureCode = await ProcessRunner.RunAsync(context, "cmake", configureArgs, repoRoot, cancellationToken);
             if (configureCode != 0)
             {
@@ -102,6 +113,12 @@ internal sealed class NativeStep : IPipelineStep
             CopyIfExists(Path.Combine(PipelinePaths.RaylibPrebuiltWinDir(repoRoot), "raylib.dll"), Path.Combine(win, "raylib.dll"), context);
             CopyIfExists(Path.Combine(PipelinePaths.NativeShimOutDir(repoRoot, "raylib6-platform"), "novolis_raylib_trace.dll"), Path.Combine(win, "novolis_raylib_trace.dll"), context);
             CopyIfExists(Path.Combine(PipelinePaths.NativeShimOutDir(repoRoot, "raylib6-with-imgui"), "novolis_imgui.dll"), Path.Combine(win, "novolis_imgui.dll"), context);
+            var raygui = PipelinePaths.RayguiNativeWinX64Dir(repoRoot);
+            Directory.CreateDirectory(raygui);
+            CopyIfExists(
+                Path.Combine(PipelinePaths.NativeShimOutDir(repoRoot, "raylib6-with-raygui"), "novolis_raygui.dll"),
+                Path.Combine(raygui, "novolis_raygui.dll"),
+                context);
         }
         else if (OperatingSystem.IsLinux())
         {
@@ -139,6 +156,12 @@ internal sealed class NativeStep : IPipelineStep
         CopyIfExists(Path.Combine(PipelinePaths.RaylibPrebuiltLinuxDir(repoRoot), "libraylib.so"), Path.Combine(linux, "libraylib.so"), context);
         CopyIfExists(Path.Combine(PipelinePaths.NativeShimOutDir(repoRoot, "raylib6-platform"), "libnovolis_raylib_trace.so"), Path.Combine(linux, "libnovolis_raylib_trace.so"), context);
         CopyIfExists(Path.Combine(PipelinePaths.NativeShimOutDir(repoRoot, "raylib6-with-imgui"), "libnovolis_imgui.so"), Path.Combine(linux, "libnovolis_imgui.so"), context);
+        var raygui = PipelinePaths.RayguiNativeLinuxX64Dir(repoRoot);
+        Directory.CreateDirectory(raygui);
+        CopyIfExists(
+            Path.Combine(PipelinePaths.NativeShimOutDir(repoRoot, "raylib6-with-raygui"), "libnovolis_raygui.so"),
+            Path.Combine(raygui, "libnovolis_raygui.so"),
+            context);
         await Task.CompletedTask;
     }
 
@@ -198,7 +221,7 @@ internal sealed class NativeStep : IPipelineStep
         var rayguiDir = Path.Combine(PipelinePaths.NativeRoot(repoRoot), "raylib6-with-raygui");
         var defPath = Path.Combine(rayguiDir, "generated", "raylib.win-x64.def");
         var raylibDll = Path.Combine(PipelinePaths.RaylibPrebuiltWinDir(repoRoot), "raylib.dll");
-        if (!File.Exists(raylibDll) || File.Exists(defPath))
+        if (!File.Exists(raylibDll))
             return;
 
         var gen = Path.Combine(PipelinePaths.PipelineRaylibDir(repoRoot), "generate-raylib-windows-def.cs");
@@ -209,7 +232,7 @@ internal sealed class NativeStep : IPipelineStep
         var code = await ProcessRunner.RunAsync(
             context,
             "dotnet",
-            $"run \"{gen}\" -- \"{raylibDll}\" \"{defPath}\"",
+            $"run --file \"{gen}\" -p:ImportDirectoryBuildProps=false -p:ImportDirectoryBuildTargets=false -p:ManagePackageVersionsCentrally=false -- \"{raylibDll}\" \"{defPath}\"",
             repoRoot,
             cancellationToken);
         if (code != 0)

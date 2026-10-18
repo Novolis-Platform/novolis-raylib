@@ -1,0 +1,7 @@
+<Project>
+  <!-- Native CMake-generated MSBuild probes must not inherit .NET repository props. -->
+  <PropertyGroup>
+    <ImportDirectoryBuildProps>false</ImportDirectoryBuildProps>
+    <ImportDirectoryBuildTargets>false</ImportDirectoryBuildTargets>
+  </PropertyGroup>
+</Project>

@@ -4,7 +4,7 @@ Guidance for AI agents and contributors working in **novolis-raylib**.
 
 ## What this repo is
 
-Multi-package **.NET 10** bindings for [raylib](https://www.raylib.com/) 6 and raygui, published as NuGet packages under the `Novolis.Raylib.*` id prefix. Bindings are **manifest-driven**: JSON under `codegen/pipeline/raylib6/` drives Roslyn codegen. **Interop** (`*.g.cs` in `Novolis.Raylib.Bindings`) and **public API** (façades, `Hud`, `Gui` in `Novolis.Raylib.Runtime`) are generated. Hand-crafted shell/debug live in `Runtime/` beside generated code.
+Multi-package **.NET 10** bindings for [raylib](https://www.raylib.com/) 6.2 and raygui 5.0, published as NuGet packages under the `Novolis.Raylib.*` id prefix. Bindings are **manifest-driven**: C# fragments under `codegen/Novolis.Raylib.Manifests/` drive Roslyn codegen, while `codegen/pipeline/raylib6/versions.json` pins upstream sources. **Interop** (`*.g.cs` in `Novolis.Raylib.Bindings`) and **public API** (façades, `Hud`, `Gui` in `Novolis.Raylib.Runtime`) are generated. Hand-crafted shell/debug live in `Runtime/` beside generated code.
 
 **Consumer entry point:** `Novolis.Raylib` (meta package). Do not tell app authors to reference `Novolis.Raylib.Native` or `Novolis.Raylib.Abstractions` directly.
 
@@ -41,7 +41,7 @@ dotnet run --project codegen/Novolis.Raylib.Pipeline -- run agent-verify
 | `codegen/Novolis.Raylib.CodeGen/` | Roslyn emitters: `verify`, `suggest-raylib`, `hooks list` (not published) |
 | `codegen/Novolis.Raylib.Pipeline/` | Linear maintainer pipeline (`run maintainer`, `run generate`, step folders) |
 | `codegen/Novolis.Raylib.CodeGen.Hooks/` | `IRaylibCodegenHook` implementations (not published) |
-| `codegen/pipeline/raylib6/` | Manifests + `steps/` (result.json, step.log, artifacts/) |
+| `codegen/pipeline/raylib6/` | Version pins + `steps/` (result.json, step.log, artifacts/) |
 | `codegen/pipeline/raylib6/steps/step_01_source/artifacts/` | Fetched raylib, raygui, raylib-cimgui (gitignored under artifacts/) |
 | `codegen/native/raylib6-platform/` | Trace forwarder (`novolis_raylib_trace`) |
 | `codegen/native/raylib6-with-imgui/` | ImGui shim (`novolis_imgui.dll`) |
@@ -91,7 +91,7 @@ Hand-written shell code lives in `Runtime/` (`Shell/`, `Debug/`, …). Shared ty
 
 ## Codegen rules (read before touching bindings)
 
-1. **Source of truth:** `codegen/pipeline/raylib6/*.manifest.json` (exports, raygui, debug hooks, façades).
+1. **Source of truth:** C# fragments under `codegen/Novolis.Raylib.Manifests/` (exports, raygui, debug hooks, façades).
 2. **Generated output:** `src/Novolis.Raylib.Bindings/Interop/*.g.cs` and `src/Novolis.Raylib.Runtime/**/*.g.cs` — each file has `ManifestSha256` in the header.
 3. **Regenerate:**
    ```bash
@@ -109,7 +109,7 @@ Hand-written shell code lives in `Runtime/` (`Shell/`, `Debug/`, …). Shared ty
    CI job `codegen-drift` runs the same check on Ubuntu.
 6. **MSBuild:** `build/Novolis.Raylib.CodeGen.targets` runs codegen before `CoreCompile` on `Novolis.Raylib.Bindings` when manifests/hooks change. Packing sets `RunRaylibCodegen=false`.
 
-To add a raylib export: update `raylib-exports.manifest.json` (and façade manifest if needed), run `generate`, commit both manifest and `*.g.cs` changes together.
+To add a raylib export: update the relevant C# manifest fragment (and façade fragment if needed), run `generate`, commit both manifest and `*.g.cs` changes together.
 
 ## Build and test
 
@@ -119,8 +119,11 @@ To add a raylib export: update `raylib-exports.manifest.json` (and façade manif
 # Fetch vendor headers/DLL (required before first build)
 dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_01_source
 
-# Windows: build native shims (trace, ImGui, optional raygui)
+# Windows: build desktop native shims (trace, ImGui, raygui) and Linux x64 assets via WSL
 dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_02_native
+
+# Android arm64: build static raylib and the NativeActivity host (NDK + Ninja required)
+dotnet run --project codegen/Novolis.Raylib.Pipeline -- run step_02a_android
 
 dotnet build Novolis.Raylib.slnx -c Release
 dotnet test Novolis.Raylib.slnx -c Release --filter "Category!=Native"

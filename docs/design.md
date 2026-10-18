@@ -1,6 +1,6 @@
 # Design
 
-Multi-package Raylib 6 + raygui bindings, game API, hosting, and testing.
+Multi-package Raylib 6.2 + raygui 5.0 bindings, game API, hosting, and testing.
 
 Published docs: [https://novolis-platform.github.io/.github/novolis-raylib/](https://novolis-platform.github.io/.github/novolis-raylib/)
 

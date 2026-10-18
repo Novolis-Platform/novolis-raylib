@@ -82,7 +82,7 @@ public sealed class RaylibBindingCodegenHost : IBindingCodegenHost
                     "Novolis.Raylib.Interop",
                     "Novolis.Raylib.Bindings",
                     libraryConstantName: "RaylibDll",
-                    typeSummary: "Low-level raylib 6 entry points (manifest-generated <c>[LibraryImport]</c>).",
+                    typeSummary: "Low-level raylib 6.2 entry points (manifest-generated <c>[LibraryImport]</c>).",
                     structSummary: "Blittable layout for raylib C struct (generated from manifest)."))
             .AddJob(
                 BindingEmitJob.DynamicExports(

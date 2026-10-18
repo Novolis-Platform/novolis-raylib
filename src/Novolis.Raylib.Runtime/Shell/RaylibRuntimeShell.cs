@@ -8,7 +8,7 @@ using Novolis.Raylib.Windowing;
 namespace Novolis.Raylib.Shell;
 
 /// <summary>
-/// raylib 6 window + render loop. Call <c>RunShellFrame</c> with an <see cref="IRaylibFrameRenderer"/>.
+/// raylib 6.2 window + render loop. Call <c>RunShellFrame</c> with an <see cref="IRaylibFrameRenderer"/>.
 /// Set <c>NOVOLIS_RAYLIB_HEADLESS</c> to skip window creation (CI or headless hosts).
 /// </summary>
 public static class RaylibRuntimeShell

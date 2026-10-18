@@ -1,6 +1,7 @@
 # step_01_source
 
-Downloads pinned raylib prebuilts, raygui header, and raylib-cimgui (git clone) into `artifacts/`.
+Downloads and verifies pinned raylib 6.2 prebuilts, raygui 5.0, cimgui 1.92.9dock,
+the matching ImGui submodule, and ray-cimgui into `artifacts/`.
 
 ## Inputs
 
@@ -8,10 +9,10 @@ Downloads pinned raylib prebuilts, raygui header, and raylib-cimgui (git clone) 
 
 ## Outputs (under `artifacts/`)
 
-- `raylib-6/include/raylib.h`
-- `raylib-6/prebuilt/win-x64/raylib.dll` (Windows)
-- `raygui-6/raygui.h`
-- `raylib-cimgui/` (with bundled cimgui)
+- `raylib/include/raylib.h`
+- `raylib/prebuilt/win-x64/raylib.dll` (Windows)
+- `raygui/raygui.h`
+- `raylib-cimgui/` (with bundled cimgui and ImGui sources)
 
 ## Refresh
 

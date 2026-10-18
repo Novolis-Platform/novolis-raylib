@@ -6,7 +6,7 @@
 
 # Novolis.Raylib.Raygui
 
-Optional add-on: **raygui** rectangle widgets via `RayGuiControls` and the legacy `RayGui` façade.
+Optional add-on: **raygui 5.0** rectangle widgets via `RayGuiControls` and the legacy `RayGui` façade.
 
 Install alongside `Novolis.Raylib` when you need raygui-style controls. Core `Gui` in Runtime uses Dear ImGui.
 

@@ -56,7 +56,7 @@ internal static class Program
     private static void PrintHelp()
     {
         Console.WriteLine("""
-            Novolis.Raylib — raylib 6 Roslyn codegen + pipeline
+            Novolis.Raylib — raylib 6.2 Roslyn codegen + pipeline
 
             Commands:
               generate       — emit interop + façades (same as: pipeline run generate)

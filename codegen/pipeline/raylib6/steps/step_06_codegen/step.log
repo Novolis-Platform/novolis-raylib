@@ -1,5 +1,5 @@
-# step_06_codegen — 2026-09-30T09:42:56.7051318+00:00
-# force=False
+# step_06_codegen — 2026-10-18T12:47:57.8284241+00:00
+# force=True
 
 emit: raylib interop -> src/Novolis.Raylib.Bindings/Interop/Raylib6Native.g.cs
 emit: imgui interop -> src/Novolis.Raylib.Bindings/Interop/ImguiShimExports.g.cs

@@ -50,8 +50,7 @@ public static class RaylibTraceHost
         var fileName = Path.GetFileName(shimPath);
         return
             $"Required raylib trace native module was not loaded: expected '{fileName}' in the application base directory '{baseDir}'. "
-            + "From the repository root run: dotnet run pipeline/raylib6/run.cs all "
-            + "(or fetch-sources then: dotnet run pipeline/raylib6/run.cs native). "
+            + "From the repository root run: dotnet run --project codegen/Novolis.Raylib.Pipeline -- run maintainer. "
             + "See pipeline/raylib6/BUILDING.txt.";
     }
 

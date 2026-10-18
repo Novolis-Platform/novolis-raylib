@@ -7,8 +7,8 @@ public static partial class RaylibBindingManifests
     public static ShimExportsFragment ImguiShim { get; } = new(
         Id: "imgui",
         SchemaVersion: 1,
-        Header: "codegen/vendor/raylib-cimgui/cimgui-1.92.1-docking/cimgui.h",
-        Description: "Curated novolis_imgui shim exports (cimgui + raylib-cimgui).",
+        Header: "codegen/pipeline/raylib6/steps/step_01_source/artifacts/raylib-cimgui/cimgui-1.92.9dock/cimgui.h",
+        Description: "Curated novolis_imgui shim exports (cimgui 1.92.9 docking + ray-cimgui).",
         ModuleFileName: "novolis_imgui",
         Exports: new ShimExportSpec[]
         {

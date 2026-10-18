@@ -10,7 +10,7 @@
     <AssemblyName>Novolis.Raylib.Bindings</AssemblyName>
     <PackageId>Novolis.Raylib.Bindings</PackageId>
     <IsPackable>true</IsPackable>
-    <Description>Generated raylib 6 + ImGui P/Invoke (manifest-driven; do not hand-edit Interop/*.g.cs).</Description>
+    <Description>Generated raylib 6.2 + ImGui P/Invoke (manifest-driven; do not hand-edit Interop/*.g.cs).</Description>
     <IncludeRaygui Condition="'$(IncludeRaygui)' == ''">false</IncludeRaygui>
     <PipelineStep01>$(MSBuildThisFileDirectory)..\..\codegen\pipeline\raylib6\steps\step_01_source\artifacts</PipelineStep01>
     <PipelineStep02>$(MSBuildThisFileDirectory)..\..\codegen\pipeline\raylib6\steps\step_02_native\artifacts</PipelineStep02>
@@ -29,10 +29,10 @@
           Link="raylib.dll"
           CopyToOutputDirectory="PreserveNewest"
           Condition="Exists('$(_RaylibNativeRuntimes)\win-x64\native\raylib.dll')" />
-    <None Include="$(PipelineStep01)\raylib-6\prebuilt\win-x64\raylib.dll"
+    <None Include="$(PipelineStep01)\raylib\prebuilt\win-x64\raylib.dll"
           Link="raylib.dll"
           CopyToOutputDirectory="PreserveNewest"
-          Condition="!Exists('$(_RaylibNativeRuntimes)\win-x64\native\raylib.dll') and Exists('$(PipelineStep01)\raylib-6\prebuilt\win-x64\raylib.dll')" />
+          Condition="!Exists('$(_RaylibNativeRuntimes)\win-x64\native\raylib.dll') and Exists('$(PipelineStep01)\raylib\prebuilt\win-x64\raylib.dll')" />
     <None Include="$(_RaylibNativeRuntimes)\win-x64\native\novolis_raylib_trace.dll"
           Link="novolis_raylib_trace.dll"
           CopyToOutputDirectory="PreserveNewest"
@@ -72,10 +72,10 @@
           Link="libraylib.so"
           CopyToOutputDirectory="PreserveNewest"
           Condition="Exists('$(_RaylibNativeRuntimes)\linux-x64\native\libraylib.so')" />
-    <None Include="$(PipelineStep01)\raylib-6\prebuilt\linux-x64\libraylib.so"
+    <None Include="$(PipelineStep01)\raylib\prebuilt\linux-x64\libraylib.so"
           Link="libraylib.so"
           CopyToOutputDirectory="PreserveNewest"
-          Condition="!Exists('$(_RaylibNativeRuntimes)\linux-x64\native\libraylib.so') and Exists('$(PipelineStep01)\raylib-6\prebuilt\linux-x64\libraylib.so')" />
+          Condition="!Exists('$(_RaylibNativeRuntimes)\linux-x64\native\libraylib.so') and Exists('$(PipelineStep01)\raylib\prebuilt\linux-x64\libraylib.so')" />
     <None Include="$(_RaylibNativeRuntimes)\linux-x64\native\libnovolis_raylib_trace.so"
           Link="libnovolis_raylib_trace.so"
           CopyToOutputDirectory="PreserveNewest"
