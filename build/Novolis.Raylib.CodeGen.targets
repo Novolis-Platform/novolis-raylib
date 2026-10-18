@@ -5,12 +5,6 @@
     <RunRaylibCodegen Condition="'$(RunRaylibCodegen)' == ''">true</RunRaylibCodegen>
   </PropertyGroup>
 
-  <Target Name="DisableRaylibCodegenForPack" BeforeTargets="GenerateRaylibBindings" Condition="'$(IsPacking)' == 'true'">
-    <PropertyGroup>
-      <RunRaylibCodegen>false</RunRaylibCodegen>
-    </PropertyGroup>
-  </Target>
-
   <ItemGroup>
     <RaylibCodegenInput Include="$(RaylibCodegenRepoRoot)codegen\Novolis.Raylib.Manifests\**\*.cs"
                         Exclude="$(RaylibCodegenRepoRoot)codegen\Novolis.Raylib.Manifests\**\obj\**;$(RaylibCodegenRepoRoot)codegen\Novolis.Raylib.Manifests\**\bin\**" />
@@ -35,14 +29,19 @@
     <RaylibCodegenOutput Include="$(RaylibCodegenRepoRoot)src\Novolis.Raylib.Raygui\RayGui\RayGui.g.cs" />
   </ItemGroup>
 
+  <!-- The shared package owns execution, incrementality, and output checks. -->
+  <ItemGroup>
+    <NovolisCodeGen Include="RaylibBindings">
+      <ToolProject>$(RaylibCodegenProject)</ToolProject>
+      <Arguments>run generate</Arguments>
+      <WorkingDirectory>$(RaylibCodegenRepoRoot)</WorkingDirectory>
+      <InputFiles>@(RaylibCodegenInput)</InputFiles>
+      <OutputFiles>@(RaylibCodegenOutput)</OutputFiles>
+      <RunOnBuild>$(RunRaylibCodegen)</RunOnBuild>
+      <RunOnPack>false</RunOnPack>
+    </NovolisCodeGen>
+  </ItemGroup>
+
   <Target Name="GenerateRaylibBindings"
-          BeforeTargets="CoreCompile"
-          Condition="'$(RunRaylibCodegen)' == 'true' and '$(DesignTimeBuild)' != 'true'"
-          Inputs="@(RaylibCodegenInput)"
-          Outputs="@(RaylibCodegenOutput)">
-    <Exec Command="dotnet run --project &quot;$(RaylibCodegenProject)&quot; -- run generate"
-          WorkingDirectory="$(RaylibCodegenRepoRoot)"
-          StandardOutputImportance="high"
-          StandardErrorImportance="high" />
-  </Target>
+          DependsOnTargets="NovolisGenerateCode" />
 </Project>
