@@ -57,6 +57,10 @@ public sealed class RayGameContext
     public void DrawBolt(Vector3 from, Vector3 to, Color color) =>
         World.DrawLine(from, to, color);
 
+    /// <summary>Draws a filled triangle in the active 3D pass.</summary>
+    public void DrawTriangle(Vector3 v1, Vector3 v2, Vector3 v3, Color color) =>
+        World.DrawTriangle(v1, v2, v3, color);
+
     /// <summary>Draws a bolt with a midpoint sphere glow.</summary>
     public void DrawLaserBolt(Vector3 from, Vector3 to, Color color)
     {
